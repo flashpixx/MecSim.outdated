@@ -28,11 +28,16 @@ public class Test_BeliefBase
     private IBeliefBaseMask<Literal> generateJasonTestset()
     {
         final IBeliefBaseMask.IGenerator l_generator = new CJasonBeliefBaseGenerator();
-        final IBeliefBaseMask<Literal> l_root = new CBeliefBase<>( new CBeliefStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>() ).createMask( "aa1" );
+        final IBeliefBaseMask<Literal> l_root = new CBeliefBase<>( new CBeliefStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>() ).createMask( "root" );
 
 
-        l_root.add( new CLiteral( ASSyntax.createLiteral( "test1" ) ) );
-        l_root.add( new CPath( "aa2/bb1/cc1/dd1" ), new CLiteral( ASSyntax.createLiteral( "test2" ) ), l_generator );
+        l_root.add( new CLiteral( ASSyntax.createLiteral( "onroot" ) ) );
+        //l_root.add( new CPath( "sub1" ), new CLiteral( ASSyntax.createLiteral( "onsub1" ) ), l_generator );
+        //l_root.add( new CPath( "sub2" ), new CLiteral( ASSyntax.createLiteral( "onsub2" ) ), l_generator );
+        //l_root.add( new CPath( "sub1/subsub1.1" ), new CLiteral( ASSyntax.createLiteral( "onsubsub1.1" ) ), l_generator );
+        //l_root.add( new CPath( "sub3/subsub2.1/subsubsub2.1.1" ), new CLiteral( ASSyntax.createLiteral( "onsubsubsub2.1.1" ) ), l_generator );
+
+        l_root.add( new CPath( "a/b" ), new CLiteral( ASSyntax.createLiteral( "xxx" ) ), l_generator );
 
         return l_root;
     }

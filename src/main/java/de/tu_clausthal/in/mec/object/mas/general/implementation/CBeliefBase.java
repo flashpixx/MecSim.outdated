@@ -67,6 +67,24 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         m_storage = p_storage;
     }
 
+    @Override
+    public int hashCode()
+    {
+        return 23 * m_storage.hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+    @Override
+    public void add( final ILiteral<T> p_literal )
+    {
+        m_storage.addElement( p_literal.getFunctor().get(), p_literal );
+    }
+
     /**
      * mask of a beliefbase
      *
@@ -184,12 +202,13 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             return m_parent != null;
         }
 
-        @Override
-        public int hashCode()
-        {
-            return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
-        }
-
+        /*
+                @Override
+                public int hashCode()
+                {
+                    return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
+                }
+        */
         @Override
         public void add( final ILiteral<P> p_literal )
         {
@@ -213,6 +232,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
          * @param p_mask curretn path
          * @param p_path current path
          * @return path
+         *
          * @tparam Q type of the beliefbase elements
          */
         private static <Q> CPath getFQNPath( final IBeliefBaseMask<Q> p_mask, final CPath p_path )
@@ -309,16 +329,11 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         @Override
         public String toString()
         {
-            return "{ name : " + m_name + ", parent " + ( m_parent == null ? "null" : m_parent.hashCode() ) + " # " + this.hashCode() + ", fqn : " +
+            return "{ name : " + m_name + ", parent " + ( m_parent == null ? "null" : m_parent.hashCode() ) + " # " + this.hashCode() + " # " +
+                   this.hasParent() + ", fqn : " +
                    this.getFQNPath() + ", storage : " + m_beliefbase
                            .getStorage() + " }";
         }
-    }
-
-    @Override
-    public void add( final ILiteral<T> p_literal )
-    {
-        m_storage.addElement( p_literal.getFunctor().get(), p_literal );
     }
 
     @Override
@@ -379,16 +394,8 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         m_storage.clear();
     }
 
-    @Override
-    public int hashCode()
-    {
-        return 23 * m_storage.hashCode();
-    }
 
-    @Override
-    public boolean equals( final Object p_object )
-    {
-        return this.hashCode() == p_object.hashCode();
-    }
+
+
 
 }

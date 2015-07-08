@@ -35,9 +35,8 @@ import java.util.Stack;
 
 
 /**
- * internal storage of the data
+ * non-thread-safe storage of the data
  *
- * @note not thread-safe
  * @tparam N element type
  * @tparam M mask type
  */

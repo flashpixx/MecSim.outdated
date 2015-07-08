@@ -187,23 +187,24 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         @Override
         public Set<ILiteral<P>> get( final CPath p_path )
         {
-            return descend( p_path, this ).get();
+            return walk( p_path, this ).get();
         }
 
         /**
          * returns a mask on the recursive descend
          *
+         * @note a path can contains ".." to use the parent object
          * @param p_path path
          * @param p_root start / root node
          * @tparam Q literal type
          * @return mask
          */
-        private static <Q> IBeliefBaseMask<Q> descend( final CPath p_path, final IBeliefBaseMask<Q> p_root )
+        private static <Q> IBeliefBaseMask<Q> walk( final CPath p_path, final IBeliefBaseMask<Q> p_root )
         {
             if ((p_path == null) || (p_path.isEmpty()))
                 return p_root;
 
-            final IBeliefBaseMask<Q> l_mask = p_root.getStorage().getMask( p_path.get( 0 ) );
+            final IBeliefBaseMask<Q> l_mask = "..".equals( p_path.get( 0 ) ) ? p_root.getParent() : p_root.getStorage().getMask( p_path.get( 0 ) );
             if (l_mask == null)
                 throw new IllegalStateException( CCommon.getResourceString( CMask.class, "pathelementnotfound", p_path.get(0), p_path ) );
 

@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
@@ -181,6 +182,31 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         public IBeliefBaseMask<P> getParent()
         {
             return m_parent;
+        }
+
+        @Override
+        public Set<ILiteral<P>> get( final CPath p_path )
+        {
+            if ((p_path != null) && (p_path.size() > 0))
+            {
+                final IBeliefBaseMask<P> l_mask = m_self.getStorage().getMask( p_path.get( 0 ) );
+                if (l_mask == null)
+                    throw new IllegalStateException( CCommon.getResourceString( this, "pathelementnotfound", p_path.get(0), p_path ) );
+
+                return l_mask.get( p_path.getSubPath( 1 ));
+            }
+
+            return this.get();
+        }
+
+        @Override
+        public Set<ILiteral<P>> get()
+        {
+             return new HashSet<ILiteral<P>>()
+            {{
+            for( final ILiteral<P> l_item : m_self )
+                add( l_item );
+                }};
         }
 
         @Override

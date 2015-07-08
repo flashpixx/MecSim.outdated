@@ -44,10 +44,6 @@ import java.util.Set;
 public class CBeliefBase<T> implements IBeliefBase<T>
 {
     /**
-     * reference to the parent
-     */
-    private final IBeliefBaseMask<T> m_parent;
-    /**
      * storage with data
      */
     protected final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage;
@@ -58,17 +54,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
      */
     public CBeliefBase()
     {
-        this( null, new CBeliefStorage<>() );
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_parent parent element
-     */
-    public CBeliefBase( final IBeliefBaseMask<T> p_parent )
-    {
-        this( p_parent, new CBeliefStorage<>() );
+        this( new CBeliefStorage<>() );
     }
 
     /**
@@ -78,19 +64,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
      */
     public CBeliefBase( final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {
-        this( null, p_storage );
-    }
-
-    /**
-     * ctor - creates a beliefbase and sets the parent
-     *
-     * @param p_parent
-     * @param p_storage storage
-     */
-    public CBeliefBase( final IBeliefBaseMask<T> p_parent, final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
-    {
         m_storage = p_storage;
-        m_parent = p_parent;
     }
 
 
@@ -248,10 +222,12 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         public String getName()
         {
             return m_name;
-        }        @Override
+        }
+
+        @Override
         public void add( final IBeliefBaseMask<P> p_mask )
         {
-            m_self.add( p_mask );
+            m_self.add( p_mask.clone( this ) );
         }
 
         @Override
@@ -265,6 +241,12 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         public IBeliefBaseMask<P> createMask( final String p_name )
         {
             return m_self.createMask( p_name );
+        }
+
+        @Override
+        public IBeliefBaseMask<P> createMask( final String p_name, final IBeliefBaseMask<P> p_parent )
+        {
+            return m_self.createMask( p_name, p_parent );
         }
 
         @Override
@@ -333,7 +315,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public void add( final IBeliefBaseMask<T> p_mask )
     {
-        m_storage.addMask( p_mask.getName(), p_mask.clone( m_parent ) );
+        m_storage.addMask( p_mask.getName(), p_mask );
     }
 
     @Override
@@ -351,7 +333,13 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public final IBeliefBaseMask<T> createMask( final String p_name )
     {
-        return new CMask<T>( p_name, m_parent, this );
+        return this.createMask( p_name, null );
+    }
+
+    @Override
+    public IBeliefBaseMask<T> createMask( final String p_name, final IBeliefBaseMask<T> p_parent )
+    {
+        return new CMask<T>( p_name, p_parent, this );
     }
 
 
@@ -374,4 +362,15 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         m_storage.clear();
     }
 
+    @Override
+    public int hashCode()
+    {
+        return 79*m_storage.hashCode();
+    }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
 }

@@ -49,13 +49,6 @@ public class CDefaultCarFactory extends ICarFactory
      */
     protected final AbstractRealDistribution m_deceleration;
     /**
-     * inspector map
-     */
-    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
-    {{
-            putAll( CDefaultCarFactory.super.inspect() );
-        }};
-    /**
      * max-speed distribution *
      */
     protected final AbstractRealDistribution m_lingerdistribution;
@@ -67,7 +60,13 @@ public class CDefaultCarFactory extends ICarFactory
      * speed distribution
      */
     protected final Double m_speedfactor;
-
+    /**
+     * inspector map
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( CDefaultCarFactory.super.inspect() );
+        }};
 
     /**
      * ctor
@@ -101,6 +100,12 @@ public class CDefaultCarFactory extends ICarFactory
     }
 
     @Override
+    public Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
+
+    @Override
     protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
     {
         try
@@ -120,12 +125,5 @@ public class CDefaultCarFactory extends ICarFactory
             CLogger.error( l_exception );
         }
         return null;
-    }
-
-
-    @Override
-    public Map<String, Object> inspect()
-    {
-        return m_inspect;
     }
 }

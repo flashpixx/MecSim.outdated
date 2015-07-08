@@ -69,7 +69,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
      */
     private transient CGraphHopper m_graph = new CGraphHopper( m_unit.getCellSize() );
 
-
     @Override
     public final void afterStepObject( final int p_currentstep, final ICar p_object )
     {
@@ -198,22 +197,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws exception on loading the data
-     * @throws ClassNotFoundException throws exception on deserialization error
-     * @bug incomplete
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
-    {
-        p_stream.defaultReadObject();
-
-        m_graph = new CGraphHopper( m_unit.getCellSize() );
-        //m_graph.disableWeight();
-    }
-
-    /**
      * sets the drive model
      *
      * @param p_model model
@@ -230,6 +213,22 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
     }
 
     /**
+     * read call of serialize interface
+     *
+     * @param p_stream stream
+     * @throws IOException throws exception on loading the data
+     * @throws ClassNotFoundException throws exception on deserialization error
+     * @bug incomplete
+     */
+    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
+    {
+        p_stream.defaultReadObject();
+
+        m_graph = new CGraphHopper( m_unit.getCellSize() );
+        //m_graph.disableWeight();
+    }
+
+    /**
      * write call of serialize interface
      *
      * @param p_stream stream
@@ -243,7 +242,6 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         // write active graph weights
         p_stream.writeObject( m_graph.getActiveWeights() );
     }
-
 
     /**
      * enum for representating a driving model

@@ -92,4 +92,5 @@ public abstract class IDefaultAtom<T> implements IAtom<T>
     {
         return m_type.isAssignableFrom( p_class );
     }
+
 }

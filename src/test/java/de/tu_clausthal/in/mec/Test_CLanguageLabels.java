@@ -113,7 +113,7 @@ public class Test_CLanguageLabels
         }
         catch ( final ParseException l_exception )
         {
-            fail( l_exception.getMessage() );
+            fail( p_file.toFile() + ": " + l_exception.getMessage() );
         }
     }
 

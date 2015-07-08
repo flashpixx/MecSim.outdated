@@ -384,7 +384,6 @@ public class CConfiguration
      */
     private ResourceBundle.Control m_reader = new UTF8Control();
 
-
     /**
      * private Ctor to avoid manual instantiation with manifest reading
      */
@@ -423,16 +422,6 @@ public class CConfiguration
     }
 
     /**
-     * creates the configuration directories
-     */
-    private void createDirectories() throws IOException
-    {
-        for ( final File l_dir : m_location.values() )
-            if ( !l_dir.exists() && !l_dir.mkdirs() )
-                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
-    }
-
-    /**
      * returns the data items of the configuration
      *
      * @return configuration map
@@ -440,20 +429,6 @@ public class CConfiguration
     public CNameHashMap.CImmutable get()
     {
         return m_configuration;
-    }
-
-    /**
-     * returns a path relative to the root directory
-     *
-     * @param p_dir directories
-     * @return full file
-     */
-    private File getBasePath( final String... p_dir )
-    {
-        if ( !m_location.containsKey( "root" ) )
-            throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
-
-        return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
     }
 
     /**
@@ -587,6 +562,51 @@ public class CConfiguration
     }
 
     /**
+     * write method of the configuration
+     */
+    public void write()
+    {
+        try
+        {
+            this.createDirectories();
+
+            // remove manifest from config
+            final Map<String, Object> l_output = m_configuration.toHashMap();
+            l_output.remove( "manifest" );
+
+            FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( l_output ) );
+        }
+        catch ( final IOException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+    }
+
+    /**
+     * creates the configuration directories
+     */
+    private void createDirectories() throws IOException
+    {
+        for ( final File l_dir : m_location.values() )
+            if ( !l_dir.exists() && !l_dir.mkdirs() )
+                throw new IOException( CCommon.getResourceString( this, "notcreate", l_dir.getAbsolutePath() ) );
+    }
+
+    /**
+     * returns a path relative to the root directory
+     *
+     * @param p_dir directories
+     * @return full file
+     */
+    private File getBasePath( final String... p_dir )
+    {
+        if ( !m_location.containsKey( "root" ) )
+            throw new IllegalStateException( CCommon.getResourceString( this, "rootnotfound" ) );
+
+        return new File( m_location.get( "root" ) + File.separator + StringUtils.join( p_dir, File.separator ) );
+    }
+
+    /**
      * sets the configuration values with semantic check
      *
      * @param p_input input map
@@ -670,23 +690,211 @@ public class CConfiguration
     }
 
     /**
-     * write method of the configuration
+     * class type check
      */
-    public void write()
+    protected class CClassType extends ICheck<Object>
     {
-        try
+        /**
+         * class type *
+         */
+        private final Class<?> m_class;
+
+        /**
+         * ctor
+         *
+         * @param p_class class type
+         */
+        public CClassType( final Class<?> p_class )
         {
-            this.createDirectories();
-
-            // remove manifest from config
-            final Map<String, Object> l_output = m_configuration.toHashMap();
-            l_output.remove( "manifest" );
-
-            FileUtils.writeStringToFile( this.getLocation( "root", c_filename ), CCommon.toJson( l_output ) );
+            m_class = p_class;
         }
-        catch ( final IOException l_exception )
+
+        @Override
+        public boolean isCorrect( final Object p_value )
         {
-            CLogger.error( l_exception );
+            if ( p_value == null )
+                return true;
+
+            return m_class.isInstance( p_value );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text", m_class );
+        }
+    }
+
+    /**
+     * collection empty check
+     */
+    protected class CCollectionNotEmpty extends ICheck<Collection>
+    {
+        @Override
+        public boolean isCorrect( final Collection p_value )
+        {
+            return ( p_value != null ) & ( !p_value.isEmpty() );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text" );
+        }
+    }
+
+    /**
+     * collection contains check
+     *
+     * @tparam T type of the collection values
+     */
+    protected class CContains<T> extends ICheck<T>
+    {
+        /**
+         * collection *
+         */
+        private final Collection<T> m_collection;
+
+        /**
+         * ctor - set the collection
+         *
+         * @param p_collection collection
+         */
+        public CContains( final Collection<T> p_collection )
+        {
+            m_collection = p_collection;
+        }
+
+        @Override
+        public boolean isCorrect( final T p_value )
+        {
+            return m_collection.contains( p_value );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text", m_collection );
+        }
+    }
+
+    /**
+     * numeric greater check
+     */
+    protected class CGreater extends ICheck<Number>
+    {
+        /**
+         * bound
+         */
+        private final Number m_bound;
+
+        /**
+         * ctor - set the bound
+         *
+         * @param p_bound
+         */
+        public CGreater( final Number p_bound )
+        {
+            m_bound = p_bound;
+        }
+
+        @Override
+        public boolean isCorrect( final Number p_value )
+        {
+            return p_value.doubleValue() > m_bound.doubleValue();
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text", m_bound );
+        }
+    }
+
+    /**
+     * numeric in range check
+     */
+    protected class CInRange extends ICheck<Number>
+    {
+        /**
+         * lower bound *
+         */
+        private final Number m_lower;
+        /**
+         * upper bound *
+         */
+        private final Number m_upper;
+
+        /**
+         * ctor - set upper & lower bound
+         *
+         * @param p_lower lower bound
+         * @param p_upper upper bound
+         */
+        public CInRange( final Number p_lower, final Number p_upper )
+        {
+            m_upper = p_upper;
+            m_lower = p_lower;
+        }
+
+        @Override
+        public boolean isCorrect( final Number p_value )
+        {
+            return ( m_lower.doubleValue() <= p_value.doubleValue() ) && ( p_value.doubleValue() <= m_upper.doubleValue() );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text", m_lower, m_upper );
+        }
+    }
+
+    /**
+     * string empty check
+     */
+    protected class CStringNotEmpty extends ICheck<String>
+    {
+        @Override
+        public boolean isCorrect( final String p_value )
+        {
+            return ( p_value != null ) & ( !p_value.isEmpty() );
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text" );
+        }
+    }
+
+    /**
+     * check class
+     *
+     * @tparam T parameter of the check
+     */
+    protected abstract class ICheck<T>
+    {
+        /**
+         * check of a correct value
+         *
+         * @param p_value value
+         * @return boolean flag
+         */
+        public boolean isCorrect( final T p_value )
+        {
+            return true;
+        }
+
+        /**
+         * complement of ccorrect check
+         *
+         * @param p_value check value
+         * @return boolean
+         */
+        public boolean isWrong( final T p_value )
+        {
+            return !this.isCorrect( p_value );
         }
     }
 
@@ -736,218 +944,6 @@ public class CConfiguration
             }
 
             return null;
-        }
-    }
-
-
-    /**
-     * check class
-     *
-     * @tparam T parameter of the check
-     */
-    protected abstract class ICheck<T>
-    {
-        /**
-         * check of a correct value
-         *
-         * @param p_value value
-         * @return boolean flag
-         */
-        public boolean isCorrect( final T p_value )
-        {
-            return true;
-        }
-
-        /**
-         * complement of ccorrect check
-         *
-         * @param p_value check value
-         * @return boolean
-         */
-        public boolean isWrong( final T p_value )
-        {
-            return !this.isCorrect( p_value );
-        }
-    }
-
-
-    /**
-     * string empty check
-     */
-    protected class CStringNotEmpty extends ICheck<String>
-    {
-        @Override
-        public boolean isCorrect( final String p_value )
-        {
-            return ( p_value != null ) & ( !p_value.isEmpty() );
-        }
-
-        @Override
-        public String toString()
-        {
-            return CCommon.getResourceString( this, "text" );
-        }
-    }
-
-    /**
-     * collection empty check
-     */
-    protected class CCollectionNotEmpty extends ICheck<Collection>
-    {
-        @Override
-        public boolean isCorrect( final Collection p_value )
-        {
-            return ( p_value != null ) & ( !p_value.isEmpty() );
-        }
-
-        @Override
-        public String toString()
-        {
-            return CCommon.getResourceString( this, "text" );
-        }
-    }
-
-    /**
-     * numeric in range check
-     */
-    protected class CInRange extends ICheck<Number>
-    {
-        /**
-         * lower bound *
-         */
-        private final Number m_lower;
-        /**
-         * upper bound *
-         */
-        private final Number m_upper;
-
-        /**
-         * ctor - set upper & lower bound
-         *
-         * @param p_lower lower bound
-         * @param p_upper upper bound
-         */
-        public CInRange( final Number p_lower, final Number p_upper )
-        {
-            m_upper = p_upper;
-            m_lower = p_lower;
-        }
-
-        @Override
-        public boolean isCorrect( final Number p_value )
-        {
-            return ( m_lower.doubleValue() <= p_value.doubleValue() ) && ( p_value.doubleValue() <= m_upper.doubleValue() );
-        }
-
-        @Override
-        public String toString()
-        {
-            return CCommon.getResourceString( this, "text", m_lower, m_upper );
-        }
-    }
-
-    /**
-     * numeric greater check
-     */
-    protected class CGreater extends ICheck<Number>
-    {
-        /**
-         * bound
-         */
-        private final Number m_bound;
-
-        /**
-         * ctor - set the bound
-         *
-         * @param p_bound
-         */
-        public CGreater( final Number p_bound )
-        {
-            m_bound = p_bound;
-        }
-
-        @Override
-        public boolean isCorrect( final Number p_value )
-        {
-            return p_value.doubleValue() > m_bound.doubleValue();
-        }
-
-        @Override
-        public String toString()
-        {
-            return CCommon.getResourceString( this, "text", m_bound );
-        }
-    }
-
-    /**
-     * collection contains check
-     *
-     * @tparam T type of the collection values
-     */
-    protected class CContains<T> extends ICheck<T>
-    {
-        /**
-         * collection *
-         */
-        private final Collection<T> m_collection;
-
-        /**
-         * ctor - set the collection
-         *
-         * @param p_collection collection
-         */
-        public CContains( final Collection<T> p_collection )
-        {
-            m_collection = p_collection;
-        }
-
-        @Override
-        public boolean isCorrect( final T p_value )
-        {
-            return m_collection.contains( p_value );
-        }
-
-        @Override
-        public String toString()
-        {
-            return CCommon.getResourceString( this, "text", m_collection );
-        }
-    }
-
-    /**
-     * class type check
-     */
-    protected class CClassType extends ICheck<Object>
-    {
-        /**
-         * class type *
-         */
-        private final Class<?> m_class;
-
-
-        /**
-         * ctor
-         *
-         * @param p_class class type
-         */
-        public CClassType( final Class<?> p_class )
-        {
-            m_class = p_class;
-        }
-
-        @Override
-        public boolean isCorrect( final Object p_value )
-        {
-            if ( p_value == null )
-                return true;
-
-            return m_class.isInstance( p_value );
-        }
-
-        @Override
-        public String toString()
-        {
-            return CCommon.getResourceString( this, "text", m_class );
         }
     }
 

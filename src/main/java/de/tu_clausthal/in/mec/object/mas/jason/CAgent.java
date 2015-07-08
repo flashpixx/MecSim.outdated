@@ -208,7 +208,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
         }
     }
 
-
     /**
      * ctor
      *
@@ -220,7 +219,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
     {
         this( p_namepath, p_asl, null );
     }
-
 
     /**
      * ctor
@@ -242,6 +240,12 @@ public class CAgent<T> implements IVoidAgent<Literal>
     public final Map<String, IAction> getActions()
     {
         return m_action;
+    }
+
+    @Override
+    public IBeliefBaseMask<Literal> getBeliefs()
+    {
+        return m_beliefbaserootmask;
     }
 
     @Override
@@ -277,7 +281,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_beliefbaserootmask.add( p_mask );
     }
 
-
     @Override
     public final void release()
     {
@@ -299,12 +302,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
     public void unregisterMask( final CPath p_path )
     {
 
-    }
-
-    @Override
-    public IBeliefBaseMask<Literal> getBeliefs()
-    {
-        return m_beliefbaserootmask;
     }
 
     @Override
@@ -334,6 +331,49 @@ public class CAgent<T> implements IVoidAgent<Literal>
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
         m_architecture.cycle( p_currentstep );
+    }
+
+    /**
+     * class of an own Jason agent to handle Jason stdlib internal action includes
+     *
+     * @note we do the initialization process manually, because some internal actions are removed from the default
+     * behaviour
+     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
+     */
+    protected class CJasonAgent extends Agent
+    {
+
+        /**
+         * ctor - for building a "blank / empty" agent
+         *
+         * @param p_asl ASL file
+         * @param p_architecture architecture
+         */
+        public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
+        {
+            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
+            this.setBB( new DefaultBeliefBase() );
+            this.setPL( new PlanLibrary() );
+            this.initDefaultFunctions();
+
+
+            try
+            {
+                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
+                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
+
+                // create internal actions map - reset the map and overwrite not useable actions with placeholder
+                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, c_overwriteaction );
+            }
+            catch ( final Throwable l_throwable )
+            {
+                CLogger.error( l_throwable );
+            }
+
+            this.load( p_asl.toString() );
+            MindInspectorWeb.get().registerAg( this );
+        }
+
     }
 
     /**
@@ -425,49 +465,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
             this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();
         }
-    }
-
-    /**
-     * class of an own Jason agent to handle Jason stdlib internal action includes
-     *
-     * @note we do the initialization process manually, because some internal actions are removed from the default
-     * behaviour
-     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
-     */
-    protected class CJasonAgent extends Agent
-    {
-
-        /**
-         * ctor - for building a "blank / empty" agent
-         *
-         * @param p_asl ASL file
-         * @param p_architecture architecture
-         */
-        public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
-        {
-            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setBB( new DefaultBeliefBase() );
-            this.setPL( new PlanLibrary() );
-            this.initDefaultFunctions();
-
-
-            try
-            {
-                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
-                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
-
-                // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, c_overwriteaction );
-            }
-            catch ( final Throwable l_throwable )
-            {
-                CLogger.error( l_throwable );
-            }
-
-            this.load( p_asl.toString() );
-            MindInspectorWeb.get().registerAg( this );
-        }
-
     }
 
 }

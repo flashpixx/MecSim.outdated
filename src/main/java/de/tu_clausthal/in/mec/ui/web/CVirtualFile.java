@@ -53,7 +53,6 @@ public class CVirtualFile implements IVirtualLocation
      */
     private final String m_uri;
 
-
     /**
      * ctor
      *

@@ -80,7 +80,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
      */
     private final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
 
-
     /**
      * ctor create the samples
      *
@@ -182,39 +181,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
     public final boolean contains( final N p_object )
     {
         return m_objects.containsKey( p_object );
-    }
-
-    /**
-     * filter point list to create a list of points which stores monoton increase points
-     *
-     * @param p_input input point list
-     * @param p_epsilon epsilon value of the monotonic increase
-     * @return point list array
-     */
-    private final PointListArray filterPointList( final PointList p_input, final double p_epsilon )
-    {
-        final ArrayList<Double> l_x = new ArrayList<>();
-        final ArrayList<Double> l_y = new ArrayList<>();
-
-        l_x.add( p_input.getLatitude( 0 ) );
-        l_y.add( p_input.getLongitude( 0 ) );
-
-        // convert point list to arrays and beware static increase
-        for ( int i = 1; i < p_input.size() - 1; i++ )
-            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) && ( Math.abs(
-                    l_y.get(
-                            l_y.size() - 1
-                    ) - p_input.getLongitude( i )
-            ) >= p_epsilon ) )
-            {
-                l_x.add( p_input.getLatitude( i ) );
-                l_y.add( p_input.getLongitude( i ) );
-            }
-
-        l_x.add( p_input.getLatitude( p_input.size() - 1 ) );
-        l_y.add( p_input.getLongitude( p_input.size() - 1 ) );
-
-        return new PointListArray( l_x, l_y );
     }
 
     /**
@@ -426,6 +392,39 @@ public class CEdge<N, T> implements Comparable<CEdge>
     }
 
     /**
+     * filter point list to create a list of points which stores monoton increase points
+     *
+     * @param p_input input point list
+     * @param p_epsilon epsilon value of the monotonic increase
+     * @return point list array
+     */
+    private final PointListArray filterPointList( final PointList p_input, final double p_epsilon )
+    {
+        final ArrayList<Double> l_x = new ArrayList<>();
+        final ArrayList<Double> l_y = new ArrayList<>();
+
+        l_x.add( p_input.getLatitude( 0 ) );
+        l_y.add( p_input.getLongitude( 0 ) );
+
+        // convert point list to arrays and beware static increase
+        for ( int i = 1; i < p_input.size() - 1; i++ )
+            if ( ( Math.abs( l_x.get( l_x.size() - 1 ) - p_input.getLatitude( i ) ) >= p_epsilon ) && ( Math.abs(
+                    l_y.get(
+                            l_y.size() - 1
+                    ) - p_input.getLongitude( i )
+            ) >= p_epsilon ) )
+            {
+                l_x.add( p_input.getLatitude( i ) );
+                l_y.add( p_input.getLongitude( i ) );
+            }
+
+        l_x.add( p_input.getLatitude( p_input.size() - 1 ) );
+        l_y.add( p_input.getLongitude( p_input.size() - 1 ) );
+
+        return new PointListArray( l_x, l_y );
+    }
+
+    /**
      * class for storing the interpolation data *
      */
     protected class PointListArray
@@ -439,7 +438,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
          * y values
          */
         private final double[] m_ypoints;
-
 
         /**
          * ctor creates from two arraylists the data structure
@@ -461,7 +459,6 @@ public class CEdge<N, T> implements Comparable<CEdge>
                 m_ypoints[i] = p_ypoints.get( i );
             }
         }
-
 
         /**
          * returns a double array with x values

@@ -68,82 +68,6 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
      * traverse into the map
      *
      * @param p_path path of the items
-     * @param p_map browsing map
-     * @return object
-     *
-     * @tparam T type
-     */
-    @SuppressWarnings( "unchecked" )
-    private static <T> T get( final CPath p_path, final Map<String, Object> p_map )
-    {
-        if ( p_path.isEmpty() )
-            return null;
-
-        final Object l_return = p_map.get( p_path.get( 0 ) );
-        if ( p_path.size() == 1 )
-            return (T) l_return;
-        if ( l_return instanceof Map )
-            return (T) get( p_path.getSubPath( 1 ), (Map) l_return );
-
-        return (T) l_return;
-    }
-
-    /**
-     * static traverse to set data
-     *
-     * @param p_path path
-     * @param p_currentindex current path index
-     * @param p_value value
-     * @param p_map current map
-     * @tparam T value type
-     */
-    @SuppressWarnings( "unchecked" )
-    private static <T> void set( final CPath p_path, final int p_currentindex, final T p_value, final Map<String, Object> p_map )
-    {
-        if ( p_currentindex >= p_path.size() )
-            return;
-
-        // check if last element
-        if ( p_currentindex == p_path.size() - 1 )
-            p_map.put( p_path.get( p_currentindex ), p_value );
-        else
-        {
-            if ( !p_map.containsKey( p_path.get( p_currentindex ) ) )
-                throw new IllegalStateException( CCommon.getResourceString( CNameHashMap.class, "notfound", p_path ) );
-
-            final Object l_return = p_map.get( p_path.get( p_currentindex ) );
-            if ( l_return instanceof Map )
-                set( p_path, p_currentindex + 1, p_value, (Map) l_return );
-        }
-    }
-
-    /**
-     * check if a path exists
-     *
-     * @param p_path path
-     * @param p_map browsing map
-     * @return boolean
-     */
-    @SuppressWarnings( "unchecked" )
-    private static boolean traverseContainsKey( final CPath p_path, final Map<String, Object> p_map )
-    {
-        if ( p_path.isEmpty() )
-            return false;
-        if ( !p_map.containsKey( p_path.get( 0 ) ) )
-            return false;
-
-        // get return value - if a map is found and the path does not contain one element, start traversing, otherwise break
-        final Object l_return = p_map.get( p_path.get( 0 ) );
-        if ( ( l_return instanceof Map ) && ( p_path.size() > 1 ) )
-            return traverseContainsKey( p_path.getSubPath( 1 ), (Map) l_return );
-
-        return p_path.size() == 1;
-    }
-
-    /**
-     * traverse into the map
-     *
-     * @param p_path path of the items
      * @return object
      *
      * @tparam T type
@@ -295,6 +219,82 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
     public boolean traverseContainsKey( final CPath p_key )
     {
         return traverseContainsKey( p_key, this );
+    }
+
+    /**
+     * traverse into the map
+     *
+     * @param p_path path of the items
+     * @param p_map browsing map
+     * @return object
+     *
+     * @tparam T type
+     */
+    @SuppressWarnings( "unchecked" )
+    private static <T> T get( final CPath p_path, final Map<String, Object> p_map )
+    {
+        if ( p_path.isEmpty() )
+            return null;
+
+        final Object l_return = p_map.get( p_path.get( 0 ) );
+        if ( p_path.size() == 1 )
+            return (T) l_return;
+        if ( l_return instanceof Map )
+            return (T) get( p_path.getSubPath( 1 ), (Map) l_return );
+
+        return (T) l_return;
+    }
+
+    /**
+     * static traverse to set data
+     *
+     * @param p_path path
+     * @param p_currentindex current path index
+     * @param p_value value
+     * @param p_map current map
+     * @tparam T value type
+     */
+    @SuppressWarnings( "unchecked" )
+    private static <T> void set( final CPath p_path, final int p_currentindex, final T p_value, final Map<String, Object> p_map )
+    {
+        if ( p_currentindex >= p_path.size() )
+            return;
+
+        // check if last element
+        if ( p_currentindex == p_path.size() - 1 )
+            p_map.put( p_path.get( p_currentindex ), p_value );
+        else
+        {
+            if ( !p_map.containsKey( p_path.get( p_currentindex ) ) )
+                throw new IllegalStateException( CCommon.getResourceString( CNameHashMap.class, "notfound", p_path ) );
+
+            final Object l_return = p_map.get( p_path.get( p_currentindex ) );
+            if ( l_return instanceof Map )
+                set( p_path, p_currentindex + 1, p_value, (Map) l_return );
+        }
+    }
+
+    /**
+     * check if a path exists
+     *
+     * @param p_path path
+     * @param p_map browsing map
+     * @return boolean
+     */
+    @SuppressWarnings( "unchecked" )
+    private static boolean traverseContainsKey( final CPath p_path, final Map<String, Object> p_map )
+    {
+        if ( p_path.isEmpty() )
+            return false;
+        if ( !p_map.containsKey( p_path.get( 0 ) ) )
+            return false;
+
+        // get return value - if a map is found and the path does not contain one element, start traversing, otherwise break
+        final Object l_return = p_map.get( p_path.get( 0 ) );
+        if ( ( l_return instanceof Map ) && ( p_path.size() > 1 ) )
+            return traverseContainsKey( p_path.getSubPath( 1 ), (Map) l_return );
+
+        return p_path.size() == 1;
     }
 
     /**

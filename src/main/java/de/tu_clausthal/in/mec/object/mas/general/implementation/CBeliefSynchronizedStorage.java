@@ -42,5 +42,4 @@ public class CBeliefSynchronizedStorage<N, M extends Iterable<N>> extends CBelie
      **/
     protected final Map<String, M> m_masks = new ConcurrentHashMap<>();
 
-
 }

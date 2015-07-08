@@ -39,7 +39,6 @@ public class CTimeProfile implements IGenerator
      */
     final int[] m_histogram;
 
-
     /**
      * ctor
      *

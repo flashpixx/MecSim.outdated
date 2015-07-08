@@ -75,20 +75,6 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
     }
 
     /**
-     * adds an literal to the element
-     *
-     * @param p_literal
-     */
-    private void addElement( final ILiteral<Literal> p_literal )
-    {
-        final Set<ILiteral<Literal>> l_set = m_elements.getOrDefault( p_literal.getFunctor().get(), new HashSet<>() );
-        if ( !m_elements.containsKey( p_literal.getFunctor().get() ) )
-            m_elements.put( p_literal.getFunctor().get(), l_set );
-
-        l_set.add( p_literal );
-    }
-
-    /**
      * method for registering incoming messages
      *
      * @param p_messages current incoming messages
@@ -145,6 +131,20 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
             catch ( final Exception l_exception )
             {
             }
+    }
+
+    /**
+     * adds an literal to the element
+     *
+     * @param p_literal
+     */
+    private void addElement( final ILiteral<Literal> p_literal )
+    {
+        final Set<ILiteral<Literal>> l_set = m_elements.getOrDefault( p_literal.getFunctor().get(), new HashSet<>() );
+        if ( !m_elements.containsKey( p_literal.getFunctor().get() ) )
+            m_elements.put( p_literal.getFunctor().get(), l_set );
+
+        l_set.add( p_literal );
     }
 
 }

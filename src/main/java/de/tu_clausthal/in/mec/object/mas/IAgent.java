@@ -39,6 +39,14 @@ public interface IAgent<T> extends Painter, IReceiver
 {
 
     /**
+     * returns the root beliefmask to get access
+     * of all beliefs
+     *
+     * @return root belief mask
+     */
+    public IBeliefBaseMask<T> getBeliefs();
+
+    /**
      * returns the current cycle
      *
      * @return cycle number
@@ -93,13 +101,5 @@ public interface IAgent<T> extends Painter, IReceiver
      * @param p_path path of the mask (last element is the mask name)
      */
     public void unregisterMask( final CPath p_path );
-
-    /**
-     * returns the root beliefmask to get access
-     * of all beliefs
-     *
-     * @return root belief mask
-     */
-    public IBeliefBaseMask<T> getBeliefs();
 
 }

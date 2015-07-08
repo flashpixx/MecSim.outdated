@@ -71,7 +71,6 @@ public class CMethodBind extends IAction
     {
     }
 
-
     /**
      * ctor bind an object
      *
@@ -124,6 +123,27 @@ public class CMethodBind extends IAction
         {
             throw new IllegalArgumentException( l_throwable.getMessage() );
         }
+    }
+
+    /**
+     * adds a new bind object
+     *
+     * @param p_name name
+     * @param p_object bind object
+     */
+    public final void push( final String p_name, final Object p_object )
+    {
+        m_bind.put( p_name, new CReflection.CMethodCache( p_object, c_filter ) );
+    }
+
+    /**
+     * removes an object from the bind
+     *
+     * @param p_name name
+     */
+    public final void remove( final String p_name )
+    {
+        m_bind.remove( p_name );
     }
 
     /**
@@ -289,26 +309,5 @@ public class CMethodBind extends IAction
 
         // call invoker
         return p_returntype.cast( p_object.get( p_methodname ).getHandle().invoke( p_object.getObject() ) );
-    }
-
-    /**
-     * adds a new bind object
-     *
-     * @param p_name name
-     * @param p_object bind object
-     */
-    public final void push( final String p_name, final Object p_object )
-    {
-        m_bind.put( p_name, new CReflection.CMethodCache( p_object, c_filter ) );
-    }
-
-    /**
-     * removes an object from the bind
-     *
-     * @param p_name name
-     */
-    public final void remove( final String p_name )
-    {
-        m_bind.remove( p_name );
     }
 }

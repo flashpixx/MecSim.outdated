@@ -50,8 +50,6 @@ public class CFieldBind extends IAction
      * add field filter *
      */
     private static final CFieldFilter c_filter = new CFieldFilter();
-
-
     /**
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual

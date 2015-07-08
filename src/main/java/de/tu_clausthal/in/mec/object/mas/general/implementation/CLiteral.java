@@ -45,10 +45,6 @@ public class CLiteral<T> implements ILiteral<T>
      */
     protected final ITermCollection m_annotations;
     /**
-     * the literals functor
-     */
-    private IAtom<String> m_functor;
-    /**
      * the original agent specific literal (i.e. Jason, Goal, 2APL)
      */
     protected final T m_literal;
@@ -56,7 +52,10 @@ public class CLiteral<T> implements ILiteral<T>
      * the literal values
      */
     protected final ITermCollection m_values;
-
+    /**
+     * the literals functor
+     */
+    private IAtom<String> m_functor;
 
     /**
      * ctor
@@ -97,7 +96,6 @@ public class CLiteral<T> implements ILiteral<T>
         m_values = p_values;
         m_annotations = p_annotations;
     }
-
 
     @Override
     public ILiteral<T> clone( final CPath p_prefix )

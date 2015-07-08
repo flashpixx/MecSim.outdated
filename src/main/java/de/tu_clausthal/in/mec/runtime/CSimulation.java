@@ -129,24 +129,6 @@ public class CSimulation
     }
 
     /**
-     * UI method - gets the layer name from the map
-     *
-     * @param p_data input data
-     * @return layer name
-     */
-    private String getLayerName( final Map<String, Object> p_data )
-    {
-        if ( !p_data.containsKey( "id" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
-
-        final String l_id = (String) p_data.get( "id" );
-        if ( !m_world.containsKey( l_id ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_id ) );
-
-        return l_id;
-    }
-
-    /**
      * returns event manager
      */
     public CMessageSystem getMessageSystem()
@@ -327,6 +309,24 @@ public class CSimulation
             CLogger.error( l_exception.getMessage() );
             throw new IOException( l_exception.getMessage() );
         }
+    }
+
+    /**
+     * UI method - gets the layer name from the map
+     *
+     * @param p_data input data
+     * @return layer name
+     */
+    private String getLayerName( final Map<String, Object> p_data )
+    {
+        if ( !p_data.containsKey( "id" ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "nolayername" ) );
+
+        final String l_id = (String) p_data.get( "id" );
+        if ( !m_world.containsKey( l_id ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "layernotexists", l_id ) );
+
+        return l_id;
     }
 
     /**

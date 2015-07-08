@@ -57,7 +57,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     private final String m_rowname;
 
-
     /**
      * ctor
      */
@@ -65,7 +64,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
     {
         this( "row", "col" );
     }
-
 
     /**
      * ctor
@@ -125,7 +123,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
         m_keys.add( p_column );
         this.put( new ImmutablePair<>( p_row, p_column ), p_value );
     }
-
 
     /**
      * serializer for Json access

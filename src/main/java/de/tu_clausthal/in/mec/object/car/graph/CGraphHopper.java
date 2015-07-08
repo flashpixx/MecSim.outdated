@@ -86,7 +86,6 @@ public class CGraphHopper extends GraphHopper
      */
     private CCombine<EWeight> m_weight;
 
-
     /**
      * ctor
      *
@@ -96,7 +95,6 @@ public class CGraphHopper extends GraphHopper
     {
         this( "CAR", p_cellsize );
     }
-
 
     /**
      * ctor
@@ -185,34 +183,6 @@ public class CGraphHopper extends GraphHopper
     {
         for ( final IWeighting l_item : m_weight.values() )
             l_item.setActive( false );
-    }
-
-    /**
-     * downloads the OSM data
-     *
-     * @return download file with full path
-     */
-    private final File downloadOSMData()
-    {
-        try
-        {
-            final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
-            final URL l_url = new URL( CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/url" ) );
-
-            CLogger.out( CCommon.getResourceString( this, "download", l_url, l_output ) );
-
-            final ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
-            final FileOutputStream l_stream = new FileOutputStream( l_output );
-            l_stream.getChannel().transferFrom( l_channel, 0, Long.MAX_VALUE );
-
-            return l_output;
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-        }
-        return null;
-
     }
 
     /**
@@ -429,6 +399,33 @@ public class CGraphHopper extends GraphHopper
         return m_weight.containsKey( p_weight ) && ( m_weight.get( p_weight ).isActive() );
     }
 
+    /**
+     * downloads the OSM data
+     *
+     * @return download file with full path
+     */
+    private final File downloadOSMData()
+    {
+        try
+        {
+            final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
+            final URL l_url = new URL( CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/url" ) );
+
+            CLogger.out( CCommon.getResourceString( this, "download", l_url, l_output ) );
+
+            final ReadableByteChannel l_channel = Channels.newChannel( l_url.openStream() );
+            final FileOutputStream l_stream = new FileOutputStream( l_output );
+            l_stream.getChannel().transferFrom( l_channel, 0, Long.MAX_VALUE );
+
+            return l_output;
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( l_exception.getMessage() );
+        }
+        return null;
+
+    }
 
     /**
      * weight names

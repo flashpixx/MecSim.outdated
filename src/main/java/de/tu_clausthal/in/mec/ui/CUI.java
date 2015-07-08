@@ -133,6 +133,29 @@ public class CUI extends Application
     }
 
     /**
+     * returns a tab / node
+     *
+     * @param p_name name of the tab
+     * @return node or null
+     *
+     * @tparam T node type
+     */
+    @SuppressWarnings( "unchecked" )
+    public final <T extends Node> T get( final String p_name )
+    {
+        return (T) m_content.get( p_name );
+    }
+
+    @Override
+    public final void start( final Stage p_stage ) throws Exception
+    {
+        CSimulation.getInstance().getStorage().add( "ui", this );
+        this.stageInitialization( p_stage );
+        this.stageLayoutInitialization( p_stage );
+        CBootstrap.afterStageInit( this );
+    }
+
+    /**
      * creates a new pop window
      *
      * @param p_title title
@@ -171,20 +194,6 @@ public class CUI extends Application
         m_tabpane.getTabs().add( l_tab );
 
         return l_tab;
-    }
-
-    /**
-     * returns a tab / node
-     *
-     * @param p_name name of the tab
-     * @return node or null
-     *
-     * @tparam T node type
-     */
-    @SuppressWarnings( "unchecked" )
-    public final <T extends Node> T get( final String p_name )
-    {
-        return (T) m_content.get( p_name );
     }
 
     /**
@@ -247,15 +256,6 @@ public class CUI extends Application
         );
         p_stage.sizeToScene();
         p_stage.show();
-    }
-
-    @Override
-    public final void start( final Stage p_stage ) throws Exception
-    {
-        CSimulation.getInstance().getStorage().add( "ui", this );
-        this.stageInitialization( p_stage );
-        this.stageLayoutInitialization( p_stage );
-        CBootstrap.afterStageInit( this );
     }
 
 }

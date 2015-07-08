@@ -89,7 +89,6 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
      */
     private final int m_websocketheartbeat;
 
-
     /**
      * ctor - starts the HTTP server
      *
@@ -124,159 +123,6 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     }
 
     /**
-     * converts a Java string to the URL specification
-     *
-     * @param p_raw Java raw string
-     * @return modfied string
-     *
-     * @warning only lower-case chars, number and underscore are allowed
-     */
-    private static String toURLFormat( final String p_raw )
-    {
-        return p_raw.toLowerCase().replaceAll( "[^a-z0-9_]", "" );
-    }
-
-    /**
-     * dynamic method binding
-     *
-     * @param p_object bind object
-     * @param p_method method object
-     * @param p_uriclass class name
-     */
-    private void bindDynamicMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
-    {
-        String l_methodname = p_method.getMethod().getName().toLowerCase();
-        if ( !l_methodname.contains( c_webdynamic ) )
-            return;
-        l_methodname = l_methodname.replace( c_webdynamic, "" );
-        if ( l_methodname.isEmpty() )
-            return;
-
-        m_virtuallocation.add(
-                new CVirtualDynamicMethod(
-                        m_websocketheartbeat, p_object, p_method, p_uriclass + this.getURIBase( p_object ) + toURLFormat(
-                        l_methodname
-                )
-                )
-        );
-    }
-
-    /**
-     * static method binding
-     *
-     * @param p_object bind object
-     * @param p_method method object
-     * @param p_uriclass class name
-     */
-    private void bindStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
-    {
-        String l_methodname = p_method.getMethod().getName().toLowerCase();
-        if ( !l_methodname.contains( c_webstatic ) )
-            return;
-        l_methodname = l_methodname.replace( c_webstatic, "" );
-        if ( l_methodname.isEmpty() )
-            return;
-
-        m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + toURLFormat( l_methodname ) ) );
-    }
-
-    /**
-     * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
-     */
-    @SuppressWarnings( "unchecked" )
-    private String getMimeType( final URL p_url )
-    {
-        final Collection l_types = m_mimetype.getMimeTypes( p_url );
-        if ( l_types.size() == 1 )
-            return l_types.iterator().next().toString();
-
-        for ( final Object l_item : l_types )
-        {
-            final MimeType l_type = (MimeType) l_item;
-            if ( !l_type.toString().startsWith( "application/" ) )
-                return l_type.toString();
-        }
-        return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
-    }
-
-    /**
-     * returns URI base if exists
-     *
-     * @param p_object object
-     * @return empty string or URI
-     */
-    private String getURIBase( final Object p_object )
-    {
-        // try to read basepart
-        String l_uribase = "";
-        try
-        {
-            final Object l_data = CReflection.getClassMethod( p_object.getClass(), c_weburibase ).getMethod().invoke( p_object );
-            if ( l_data instanceof String )
-                l_uribase = toURLFormat( l_data.toString() );
-
-            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
-            {
-                if ( l_uribase.startsWith( c_seperator ) )
-                    l_uribase = l_uribase.substring( 1 );
-                if ( !l_uribase.endsWith( c_seperator ) )
-                    l_uribase += c_seperator;
-            }
-        }
-        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
-        {
-        }
-
-        return l_uribase;
-    }
-
-    /**
-     * generates HTTP response of file & directory calls
-     *
-     * @param p_location location object
-     * @param p_session session object
-     * @return response
-     *
-     * @throws Throwable on error
-     */
-    private Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
-    {
-        final Response l_response;
-
-        final URL l_physicalfile = p_location.<URL>get( p_session );
-        final String l_mimetype = this.getMimeType( l_physicalfile );
-        CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
-
-        switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
-        {
-            case "htm":
-            case "html":
-                l_response = new Response(
-                        Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader(
-                        l_physicalfile.openStream()
-                ).getEncoding() ), l_physicalfile.openStream()
-                );
-                break;
-
-            case "md":
-                if ( p_location.getMarkDownRenderer() != null )
-                    l_response = new Response(
-                            Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML(
-                            m_markdown, l_physicalfile
-                    )
-                    );
-                else
-                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-                break;
-
-            default:
-                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
-        }
-
-        return l_response;
-    }
-
-    /**
      * returns the virtual-location object
      *
      * @return location
@@ -284,21 +130,6 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
     public final CVirtualLocation getVirtualLocation()
     {
         return m_virtuallocation;
-    }
-
-    /**
-     * generates HTTP response of a static method calls
-     *
-     * @param p_location location object
-     * @param p_session session object
-     * @return response
-     *
-     * @throws Throwable on error
-     */
-    private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
-    {
-        CLogger.info( p_session.getUri() );
-        return p_location.<Response>get( p_session );
     }
 
     @Override
@@ -462,6 +293,174 @@ public class CServer extends NanoHTTPD implements IWebSocketFactory
             CLogger.error( l_throwable );
             return this.setDefaultHeader( new Response( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable ), p_session );
         }
+    }
+
+    /**
+     * converts a Java string to the URL specification
+     *
+     * @param p_raw Java raw string
+     * @return modfied string
+     *
+     * @warning only lower-case chars, number and underscore are allowed
+     */
+    private static String toURLFormat( final String p_raw )
+    {
+        return p_raw.toLowerCase().replaceAll( "[^a-z0-9_]", "" );
+    }
+
+    /**
+     * dynamic method binding
+     *
+     * @param p_object bind object
+     * @param p_method method object
+     * @param p_uriclass class name
+     */
+    private void bindDynamicMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
+    {
+        String l_methodname = p_method.getMethod().getName().toLowerCase();
+        if ( !l_methodname.contains( c_webdynamic ) )
+            return;
+        l_methodname = l_methodname.replace( c_webdynamic, "" );
+        if ( l_methodname.isEmpty() )
+            return;
+
+        m_virtuallocation.add(
+                new CVirtualDynamicMethod(
+                        m_websocketheartbeat, p_object, p_method, p_uriclass + this.getURIBase( p_object ) + toURLFormat(
+                        l_methodname
+                )
+                )
+        );
+    }
+
+    /**
+     * static method binding
+     *
+     * @param p_object bind object
+     * @param p_method method object
+     * @param p_uriclass class name
+     */
+    private void bindStaticMethod( final Object p_object, final CReflection.CMethod p_method, final String p_uriclass )
+    {
+        String l_methodname = p_method.getMethod().getName().toLowerCase();
+        if ( !l_methodname.contains( c_webstatic ) )
+            return;
+        l_methodname = l_methodname.replace( c_webstatic, "" );
+        if ( l_methodname.isEmpty() )
+            return;
+
+        m_virtuallocation.add( new CVirtualStaticMethod( p_object, p_method, p_uriclass + this.getURIBase( p_object ) + toURLFormat( l_methodname ) ) );
+    }
+
+    /**
+     * reads the mime-type of an URL - first try to detect a mime-type which has no "application" prefix
+     */
+    @SuppressWarnings( "unchecked" )
+    private String getMimeType( final URL p_url )
+    {
+        final Collection l_types = m_mimetype.getMimeTypes( p_url );
+        if ( l_types.size() == 1 )
+            return l_types.iterator().next().toString();
+
+        for ( final Object l_item : l_types )
+        {
+            final MimeType l_type = (MimeType) l_item;
+            if ( !l_type.toString().startsWith( "application/" ) )
+                return l_type.toString();
+        }
+        return MimeUtil2.UNKNOWN_MIME_TYPE.toString();
+    }
+
+    /**
+     * returns URI base if exists
+     *
+     * @param p_object object
+     * @return empty string or URI
+     */
+    private String getURIBase( final Object p_object )
+    {
+        // try to read basepart
+        String l_uribase = "";
+        try
+        {
+            final Object l_data = CReflection.getClassMethod( p_object.getClass(), c_weburibase ).getMethod().invoke( p_object );
+            if ( l_data instanceof String )
+                l_uribase = toURLFormat( l_data.toString() );
+
+            if ( ( l_uribase != null ) && ( !l_uribase.isEmpty() ) )
+            {
+                if ( l_uribase.startsWith( c_seperator ) )
+                    l_uribase = l_uribase.substring( 1 );
+                if ( !l_uribase.endsWith( c_seperator ) )
+                    l_uribase += c_seperator;
+            }
+        }
+        catch ( final IllegalArgumentException | IllegalAccessException | InvocationTargetException l_exception )
+        {
+        }
+
+        return l_uribase;
+    }
+
+    /**
+     * generates HTTP response of file & directory calls
+     *
+     * @param p_location location object
+     * @param p_session session object
+     * @return response
+     *
+     * @throws Throwable on error
+     */
+    private Response getVirtualDirFile( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    {
+        final Response l_response;
+
+        final URL l_physicalfile = p_location.<URL>get( p_session );
+        final String l_mimetype = this.getMimeType( l_physicalfile );
+        CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
+
+        switch ( FilenameUtils.getExtension( l_physicalfile.toString() ) )
+        {
+            case "htm":
+            case "html":
+                l_response = new Response(
+                        Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader(
+                        l_physicalfile.openStream()
+                ).getEncoding() ), l_physicalfile.openStream()
+                );
+                break;
+
+            case "md":
+                if ( p_location.getMarkDownRenderer() != null )
+                    l_response = new Response(
+                            Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML(
+                            m_markdown, l_physicalfile
+                    )
+                    );
+                else
+                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                break;
+
+            default:
+                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+        }
+
+        return l_response;
+    }
+
+    /**
+     * generates HTTP response of a static method calls
+     *
+     * @param p_location location object
+     * @param p_session session object
+     * @return response
+     *
+     * @throws Throwable on error
+     */
+    private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
+    {
+        CLogger.info( p_session.getUri() );
+        return p_location.<Response>get( p_session );
     }
 
     /**

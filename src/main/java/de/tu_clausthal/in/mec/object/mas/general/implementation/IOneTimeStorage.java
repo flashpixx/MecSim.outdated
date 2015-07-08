@@ -41,7 +41,6 @@ public abstract class IOneTimeStorage<N, M extends Iterable<N>> extends CImmutab
         this.updating();
     }
 
-
     /**
      * updates the element structure
      */

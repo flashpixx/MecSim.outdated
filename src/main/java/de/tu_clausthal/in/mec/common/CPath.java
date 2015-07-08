@@ -65,7 +65,6 @@ public class CPath implements Iterable<CPath>
         m_path.addAll( Arrays.asList( p_varargs ) );
     }
 
-
     /**
      * copy-ctor
      *
@@ -273,21 +272,6 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
-     * splits the string data
-     *
-     * @param p_fqn full path
-     */
-    private void initialize( final String p_fqn )
-    {
-        for ( final String l_item : p_fqn.split( m_separator ) )
-            if ( !l_item.isEmpty() )
-                m_path.add( l_item );
-
-        if ( m_path.size() == 0 )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
-    }
-
-    /**
      * check if the path is empty
      *
      * @return empty flag
@@ -410,6 +394,21 @@ public class CPath implements Iterable<CPath>
                 return false;
 
         return true;
+    }
+
+    /**
+     * splits the string data
+     *
+     * @param p_fqn full path
+     */
+    private void initialize( final String p_fqn )
+    {
+        for ( final String l_item : p_fqn.split( m_separator ) )
+            if ( !l_item.isEmpty() )
+                m_path.add( l_item );
+
+        if ( m_path.size() == 0 )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
     }
 
 }

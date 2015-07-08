@@ -42,12 +42,10 @@ public class CInspector
      */
     private final CSocketStorage m_communicator = new CSocketStorage();
 
-
     public CInspector()
     {
         CSimulation.getInstance().getStorage().add( "inspector", this );
     }
-
 
     /**
      * sets a new object

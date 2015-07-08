@@ -245,6 +245,18 @@ public class CCommon
         throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( CCommon.class, "jasontodefaultjava", p_term ) );
     }
 
+    /**
+     * creates a Jason literal with optional data
+     *
+     * @param p_name name of the literal
+     * @param p_data data of the literal
+     * @return literal object
+     */
+    @SuppressWarnings( "unchecked" )
+    public static Literal getLiteral( final String p_name, final Object p_data )
+    {
+        return ASSyntax.createLiteral( p_name, getTerm( p_data ) );
+    }
 
     /**
      * converts a Double into a number object with correct type structure
@@ -271,7 +283,6 @@ public class CCommon
         throw new IllegalArgumentException( "class unknown" );
     }
 
-
     /**
      * returns an atom
      *
@@ -282,20 +293,6 @@ public class CCommon
     {
         return ASSyntax.createAtom( getLiteralName( p_atom ) );
     }
-
-    /**
-     * creates a Jason literal with optional data
-     *
-     * @param p_name name of the literal
-     * @param p_data data of the literal
-     * @return literal object
-     */
-    @SuppressWarnings( "unchecked" )
-    public static Literal getLiteral( final String p_name, final Object p_data )
-    {
-        return ASSyntax.createLiteral( p_name, getTerm( p_data ) );
-    }
-
 
     /**
      * checks a literal name and convert it to the correct syntax

@@ -51,7 +51,6 @@ public class CMethodFilter implements CReflection.IMethodFilter
         ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
     }
 
-
     @Retention( RetentionPolicy.RUNTIME )
     @Target( ElementType.METHOD )
     public @interface CAgent

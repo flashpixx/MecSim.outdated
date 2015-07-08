@@ -71,7 +71,6 @@ public class COSMViewer extends JXMapViewer
      */
     private CompoundPainter<JXMapViewer> m_painter = new CompoundPainter<>();
 
-
     /**
      * ctor with loading configuration defaults and listener definition
      */
@@ -189,7 +188,6 @@ public class COSMViewer extends JXMapViewer
         m_clickablelayer = EClickableLayer.valueOf( (String) p_data.get( "id" ) );
     }
 
-
     /**
      * enum clickable layer
      */
@@ -231,7 +229,6 @@ public class COSMViewer extends JXMapViewer
             return m_stringvalue;
         }
     }
-
 
     /**
      * routing painter class

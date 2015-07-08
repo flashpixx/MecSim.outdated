@@ -129,7 +129,6 @@ public class CZoneTable<T, S>
             l_item.getRight().valueOf( 0 );
     }
 
-
     /**
      * interface of a validation class *
      */

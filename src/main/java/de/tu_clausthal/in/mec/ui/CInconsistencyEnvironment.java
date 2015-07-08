@@ -56,7 +56,6 @@ public class CInconsistencyEnvironment
      */
     private final String m_layername;
 
-
     /**
      * ctor
      *
@@ -137,7 +136,6 @@ public class CInconsistencyEnvironment
         return m_layername;
     }
 
-
     /**
      * enum with metric values
      */
@@ -155,6 +153,7 @@ public class CInconsistencyEnvironment
          * weighted difference metric
          **/
         WeightedDifference( CCommon.getResourceString( EMetric.class, "weighteddifference" ) );
+
         /**
          * language based name of the metric
          */

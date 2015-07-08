@@ -295,238 +295,6 @@ public class CReflection
         boolean filter( final Method p_method );
     }
 
-
-    /**
-     * class for storing method access
-     */
-    public static class CMethod
-    {
-        /**
-         * method handle *
-         */
-        private final MethodHandle m_handle;
-        /**
-         * method object *
-         */
-        private final Method m_method;
-
-
-        /**
-         * ctor
-         *
-         * @param p_method method object
-         */
-        public CMethod( final Method p_method ) throws IllegalAccessException
-        {
-            m_method = p_method;
-            m_handle = MethodHandles.lookup().unreflect( m_method );
-        }
-
-        /**
-         * returns the method handle object
-         *
-         * @return handle object
-         */
-        public final MethodHandle getHandle()
-        {
-            return m_handle;
-        }
-
-        /**
-         * returns the method object
-         *
-         * @return method object
-         */
-        public final Method getMethod()
-        {
-            return m_method;
-        }
-
-    }
-
-
-    /**
-     * structure for getter and setter method handles
-     */
-    public static class CGetSet
-    {
-
-        /**
-         * field of the property
-         */
-        private final Field m_field;
-        /**
-         * getter method handle *
-         */
-        private final MethodHandle m_getter;
-        /**
-         * setter method handle *
-         */
-        private final MethodHandle m_setter;
-
-
-        /**
-         * ctor
-         *
-         * @param p_field field of the getter / setter
-         * @param p_getter getter handle or null
-         * @param p_setter setter handle or null
-         */
-        public CGetSet( final Field p_field, final MethodHandle p_getter, final MethodHandle p_setter )
-        {
-            if ( p_field == null )
-                throw new IllegalArgumentException( CCommon.getResourceString( this, "fieldnotnull" ) );
-
-            m_field = p_field;
-            m_getter = p_getter;
-            m_setter = p_setter;
-        }
-
-
-        /**
-         * returns the field of the bind
-         *
-         * @return field
-         */
-        public final Field getField()
-        {
-            return m_field;
-        }
-
-        /**
-         * returns the getter
-         *
-         * @return handle
-         */
-        public final MethodHandle getGetter()
-        {
-            return m_getter;
-        }
-
-        /**
-         * returns the setter
-         *
-         * @return handle
-         */
-        public final MethodHandle getSetter()
-        {
-            return m_setter;
-        }
-
-        /**
-         * check getter exist
-         *
-         * @return bool flag
-         */
-        public final boolean hasGetter()
-        {
-            return m_getter != null;
-        }
-
-
-        /**
-         * check setter exist
-         *
-         * @return bool flag
-         */
-        public final boolean hasSetter()
-        {
-            return m_setter != null;
-        }
-
-    }
-
-
-    /**
-     * cache class of method invoker structure *
-     */
-    public static class CMethodCache<T>
-    {
-
-        /**
-         * cache map *
-         */
-        private final Map<Pair<String, Class<?>[]>, CMethod> m_cache = new HashMap<>();
-        /**
-         * method filter
-         */
-        private final IMethodFilter m_filter;
-        /**
-         * object reference *
-         */
-        private final T m_object;
-
-
-        /**
-         * ctor
-         *
-         * @param p_bind bind object
-         */
-        public CMethodCache( final T p_bind )
-        {
-            this( p_bind, null );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_bind bind object
-         * @param p_filter method filter object
-         */
-        public CMethodCache( final T p_bind, final IMethodFilter p_filter )
-        {
-            m_object = p_bind;
-            m_filter = p_filter;
-        }
-
-        /**
-         * get the method handle
-         *
-         * @param p_methodname method name
-         * @return handle
-         */
-        public final CMethod get( final String p_methodname ) throws IllegalAccessException
-        {
-            return this.get( p_methodname, null );
-        }
-
-        /**
-         * get the method handle
-         *
-         * @param p_methodname method name
-         * @param p_arguments method arguments
-         * @return handle
-         */
-        public final CMethod get( final String p_methodname, final Class<?>[] p_arguments ) throws IllegalAccessException
-        {
-            // check cache
-            final Pair<String, Class<?>[]> l_method = new ImmutablePair<String, Class<?>[]>( p_methodname, p_arguments );
-            if ( m_cache.containsKey( l_method ) )
-                return m_cache.get( l_method );
-
-            // get method and check filter
-            final CMethod l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
-            if ( ( m_filter != null ) && ( !m_filter.filter( l_handle.getMethod() ) ) )
-                throw new IllegalAccessException( CCommon.getResourceString( this, "access", p_methodname ) );
-
-            // add to cache
-            m_cache.put( l_method, l_handle );
-            return l_handle;
-        }
-
-        /**
-         * object getter
-         *
-         * @return bind object
-         */
-        public final T getObject()
-        {
-            return m_object;
-        }
-
-    }
-
-
     /**
      * class to represent a class index
      */
@@ -592,17 +360,6 @@ public class CReflection
         public Collection<Class<?>> getAll( final String p_class )
         {
             return m_classname.getCollection( p_class );
-        }
-
-        /**
-         * replaces a file name with path to a class name
-         *
-         * @param p_file filename
-         * @return class name
-         */
-        private String getClassnameFromFile( String p_file )
-        {
-            return p_file.replace( "." + c_classextension, "" ).replace( File.separator, ClassUtils.PACKAGE_SEPARATOR );
         }
 
         /**
@@ -681,6 +438,17 @@ public class CReflection
         }
 
         /**
+         * replaces a file name with path to a class name
+         *
+         * @param p_file filename
+         * @return class name
+         */
+        private String getClassnameFromFile( String p_file )
+        {
+            return p_file.replace( "." + c_classextension, "" ).replace( File.separator, ClassUtils.PACKAGE_SEPARATOR );
+        }
+
+        /**
          * checks a string class name with the ignore list
          *
          * @param p_classname class string name
@@ -708,6 +476,230 @@ public class CReflection
              * whitelisting items *
              */
             WhiteList
+        }
+
+    }
+
+    /**
+     * structure for getter and setter method handles
+     */
+    public static class CGetSet
+    {
+
+        /**
+         * field of the property
+         */
+        private final Field m_field;
+        /**
+         * getter method handle *
+         */
+        private final MethodHandle m_getter;
+        /**
+         * setter method handle *
+         */
+        private final MethodHandle m_setter;
+
+        /**
+         * ctor
+         *
+         * @param p_field field of the getter / setter
+         * @param p_getter getter handle or null
+         * @param p_setter setter handle or null
+         */
+        public CGetSet( final Field p_field, final MethodHandle p_getter, final MethodHandle p_setter )
+        {
+            if ( p_field == null )
+                throw new IllegalArgumentException( CCommon.getResourceString( this, "fieldnotnull" ) );
+
+            m_field = p_field;
+            m_getter = p_getter;
+            m_setter = p_setter;
+        }
+
+        /**
+         * returns the field of the bind
+         *
+         * @return field
+         */
+        public final Field getField()
+        {
+            return m_field;
+        }
+
+        /**
+         * returns the getter
+         *
+         * @return handle
+         */
+        public final MethodHandle getGetter()
+        {
+            return m_getter;
+        }
+
+        /**
+         * returns the setter
+         *
+         * @return handle
+         */
+        public final MethodHandle getSetter()
+        {
+            return m_setter;
+        }
+
+        /**
+         * check getter exist
+         *
+         * @return bool flag
+         */
+        public final boolean hasGetter()
+        {
+            return m_getter != null;
+        }
+
+
+        /**
+         * check setter exist
+         *
+         * @return bool flag
+         */
+        public final boolean hasSetter()
+        {
+            return m_setter != null;
+        }
+
+    }
+
+    /**
+     * class for storing method access
+     */
+    public static class CMethod
+    {
+        /**
+         * method handle *
+         */
+        private final MethodHandle m_handle;
+        /**
+         * method object *
+         */
+        private final Method m_method;
+
+        /**
+         * ctor
+         *
+         * @param p_method method object
+         */
+        public CMethod( final Method p_method ) throws IllegalAccessException
+        {
+            m_method = p_method;
+            m_handle = MethodHandles.lookup().unreflect( m_method );
+        }
+
+        /**
+         * returns the method handle object
+         *
+         * @return handle object
+         */
+        public final MethodHandle getHandle()
+        {
+            return m_handle;
+        }
+
+        /**
+         * returns the method object
+         *
+         * @return method object
+         */
+        public final Method getMethod()
+        {
+            return m_method;
+        }
+
+    }
+
+    /**
+     * cache class of method invoker structure *
+     */
+    public static class CMethodCache<T>
+    {
+
+        /**
+         * cache map *
+         */
+        private final Map<Pair<String, Class<?>[]>, CMethod> m_cache = new HashMap<>();
+        /**
+         * method filter
+         */
+        private final IMethodFilter m_filter;
+        /**
+         * object reference *
+         */
+        private final T m_object;
+
+        /**
+         * ctor
+         *
+         * @param p_bind bind object
+         */
+        public CMethodCache( final T p_bind )
+        {
+            this( p_bind, null );
+        }
+
+        /**
+         * ctor
+         *
+         * @param p_bind bind object
+         * @param p_filter method filter object
+         */
+        public CMethodCache( final T p_bind, final IMethodFilter p_filter )
+        {
+            m_object = p_bind;
+            m_filter = p_filter;
+        }
+
+        /**
+         * get the method handle
+         *
+         * @param p_methodname method name
+         * @return handle
+         */
+        public final CMethod get( final String p_methodname ) throws IllegalAccessException
+        {
+            return this.get( p_methodname, null );
+        }
+
+        /**
+         * get the method handle
+         *
+         * @param p_methodname method name
+         * @param p_arguments method arguments
+         * @return handle
+         */
+        public final CMethod get( final String p_methodname, final Class<?>[] p_arguments ) throws IllegalAccessException
+        {
+            // check cache
+            final Pair<String, Class<?>[]> l_method = new ImmutablePair<String, Class<?>[]>( p_methodname, p_arguments );
+            if ( m_cache.containsKey( l_method ) )
+                return m_cache.get( l_method );
+
+            // get method and check filter
+            final CMethod l_handle = CReflection.getClassMethod( m_object.getClass(), p_methodname, p_arguments );
+            if ( ( m_filter != null ) && ( !m_filter.filter( l_handle.getMethod() ) ) )
+                throw new IllegalAccessException( CCommon.getResourceString( this, "access", p_methodname ) );
+
+            // add to cache
+            m_cache.put( l_method, l_handle );
+            return l_handle;
+        }
+
+        /**
+         * object getter
+         *
+         * @return bind object
+         */
+        public final T getObject()
+        {
+            return m_object;
         }
 
     }

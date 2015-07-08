@@ -43,7 +43,6 @@ public class CTrafficJam implements IWeighting
      */
     private final CGraphHopper m_graph;
 
-
     /**
      * ctor
      *
@@ -53,7 +52,6 @@ public class CTrafficJam implements IWeighting
     {
         m_graph = p_graph;
     }
-
 
     @Override
     public final double getMinWeight( final double p_weight )

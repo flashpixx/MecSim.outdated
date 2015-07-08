@@ -42,7 +42,6 @@ public class CParticipant implements IParticipant
      */
     private final IReceiver m_owner;
 
-
     /**
      * ctor to registerObject an object *
      *

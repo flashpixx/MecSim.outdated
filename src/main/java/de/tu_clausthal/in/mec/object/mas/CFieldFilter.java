@@ -51,7 +51,6 @@ public class CFieldFilter implements CReflection.IFieldFilter
         ) ) || ( Modifier.isAbstract( p_field.getModifiers() ) ) ) );
     }
 
-
     /**
      * @todo define an own name
      */

@@ -44,7 +44,6 @@ public class CVoidSteppable extends IRunnable<IVoidSteppable>
      */
     private final ILayer m_layer;
 
-
     /**
      * ctor
      *
@@ -58,7 +57,6 @@ public class CVoidSteppable extends IRunnable<IVoidSteppable>
         m_layer = p_layer;
         m_iteration = p_iteration;
     }
-
 
     /**
      * run method to perform the action on runnable and callable interface

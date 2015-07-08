@@ -72,21 +72,6 @@ public class CMessageSystem implements IVoidSteppable
     }
 
     /**
-     * increments the message flow
-     *
-     * @param p_row row value of the adjacency matrix
-     * @param p_colum column value of the adjacency matrix
-     */
-    private void incrementMessageFlow( final CPath p_row, final CPath p_colum )
-    {
-        m_messageflow.set(
-                p_row, p_colum, ( m_messageflow.exist( p_row, p_colum ) ? m_messageflow.get(
-                        p_row, p_colum
-                ) : new Integer( -1 ) ) + 1
-        );
-    }
-
-    /**
      * pushs a message to the queue
      *
      * @param p_receiverpath receiver
@@ -221,13 +206,27 @@ public class CMessageSystem implements IVoidSteppable
     }
 
     /**
+     * increments the message flow
+     *
+     * @param p_row row value of the adjacency matrix
+     * @param p_colum column value of the adjacency matrix
+     */
+    private void incrementMessageFlow( final CPath p_row, final CPath p_colum )
+    {
+        m_messageflow.set(
+                p_row, p_colum, ( m_messageflow.exist( p_row, p_colum ) ? m_messageflow.get(
+                        p_row, p_colum
+                ) : new Integer( -1 ) ) + 1
+        );
+    }
+
+    /**
      * UI method - message counting information
      */
     private void web_dynamic_flow( final CWebSocket.EAction p_action, final CWebSocket.CCommunicator p_communicator, final CWebSocket.CFrame p_frame )
     {
         m_communicator.handshake( p_action, p_communicator );
     }
-
 
     /**
      * observer interface *

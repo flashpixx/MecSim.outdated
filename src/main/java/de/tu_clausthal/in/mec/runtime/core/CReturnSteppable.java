@@ -47,7 +47,6 @@ public class CReturnSteppable extends IRunnable<IReturnSteppable>
      */
     private final ILayer m_layer;
 
-
     /**
      * ctor for setting the object
      *
@@ -61,7 +60,6 @@ public class CReturnSteppable extends IRunnable<IReturnSteppable>
         m_layer = p_layer;
         m_iteration = p_iteration;
     }
-
 
     /**
      * run method to perform the action on runnable and callable interface

@@ -186,21 +186,6 @@ public class CWaypointEnvironment
         CSimulation.getInstance().getStorage().add( "waypoint", this );
     }
 
-
-    /**
-     * creates from a map object an distribution object
-     *
-     * @param p_object map object
-     * @return distribution object
-     */
-    private AbstractRealDistribution createDistribution( final CNameHashMap.CImmutable p_object )
-    {
-        return EDistribution.valueOf( p_object.<String>getOrDefault( "distribution", "" ) ).get(
-                p_object.<Number>get( "firstmomentum" ).doubleValue(),
-                p_object.<Number>get( "secondmomentum" ).doubleValue()
-        );
-    }
-
     /**
      * creates a waypoint
      *
@@ -221,6 +206,20 @@ public class CWaypointEnvironment
                         (Color) m_currentsettings.get( "color" ),
                         (String) m_currentsettings.get( "name" )
                 )
+        );
+    }
+
+    /**
+     * creates from a map object an distribution object
+     *
+     * @param p_object map object
+     * @return distribution object
+     */
+    private AbstractRealDistribution createDistribution( final CNameHashMap.CImmutable p_object )
+    {
+        return EDistribution.valueOf( p_object.<String>getOrDefault( "distribution", "" ) ).get(
+                p_object.<Number>get( "firstmomentum" ).doubleValue(),
+                p_object.<Number>get( "secondmomentum" ).doubleValue()
         );
     }
 
@@ -332,60 +331,138 @@ public class CWaypointEnvironment
 
     }
 
-
     /**
-     * enum for waypoints
+     * enum for distributions
      */
-    private enum EWaypoint
+    private enum EDistribution
     {
         /**
-         * random car waypoint
+         * normal distribution
          **/
-        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) ),
+        Normal(
+                CCommon.getResourceString( EDistribution.class, "normaldistribution" ), CCommon.getResourceString(
+                EDistribution.class, "normaldistributionleft"
+        ), CCommon.getResourceString( EDistribution.class, "normaldistributionright" )
+        ),
         /**
-         * path car waypoint
-         */
-        CarWaypointPah( CCommon.getResourceString( EWaypoint.class, "carwaypointpath" ) );
+         * uniform distribution
+         **/
+        Uniform(
+                CCommon.getResourceString( EDistribution.class, "uniformdistribution" ), CCommon.getResourceString(
+                EDistribution.class, "uniformdistributionleft"
+        ), CCommon.getResourceString( EDistribution.class, "uniformdistributionright" )
+        ),
+        /**
+         * exponential distribution
+         **/
+        Exponential(
+                CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
+                EDistribution.class, "exponentialdistributionleft"
+        )
+        );
+
 
         /**
-         * name of this waypoint type
+         * left / lower / first momentum description
+         **/
+        private final String m_firstmomentum;
+        /**
+         * right / higher / second momentum description
+         **/
+        private final String m_secondmomentum;
+        /**
+         * name of this distribution type
          */
         private final String m_text;
 
         /**
          * ctor
          *
-         * @param p_text language dependend name
+         * @param p_text language depend name,
+         * @param p_firstmomentum lower / first momentum language depend name
          */
-        private EWaypoint( final String p_text )
+        private EDistribution( final String p_text, final String p_firstmomentum )
         {
-            this.m_text = p_text;
+            this( p_text, p_firstmomentum, null );
         }
 
         /**
-         * returns the waypoint of the current settings
+         * ctor
          *
-         * @return waypoint
+         * @param p_text language depend name,
+         * @param p_firstmomentum lower / first momentum language depend name
+         * @param p_secondmomentum higher / second momentum language depend name
          */
-        @SuppressWarnings( "unchecked" )
-        public final IWayPoint<?> get( final Object... p_data )
+        private EDistribution( final String p_text, final String p_firstmomentum, final String p_secondmomentum )
         {
+            m_text = p_text;
+            m_firstmomentum = p_firstmomentum;
+            m_secondmomentum = p_secondmomentum;
+        }
 
+        /**
+         * returns a distribution object
+         *
+         * @param p_firstmomentum lower / first momentum
+         * @param p_secondmomentum higher / second momentum
+         * @return distribution
+         */
+        public final AbstractRealDistribution get( final double p_firstmomentum, final double p_secondmomentum )
+        {
             switch ( this )
             {
-                case CarWaypointPah:
-                    return new CCarPathWayPoint(
-                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Color) p_data[4], (String) p_data[5]
-                    );
+                case Uniform:
+                    return new UniformRealDistribution( p_firstmomentum, p_secondmomentum );
 
-                case CarWaypointRandom:
-                    return new CCarRandomWayPoint(
-                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Double) p_data[3], (Color) p_data[4], (String) p_data[5]
-                    );
+                case Normal:
+                    return new NormalDistribution( p_firstmomentum, p_secondmomentum );
+
+                case Exponential:
+                    return new ExponentialDistribution( p_firstmomentum );
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( EWaypoint.class, "unknownwaypoint" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unknowndistribution" ) );
             }
+        }
+
+        /**
+         * returns the label of the first momentum
+         *
+         * @return label
+         */
+        public final String getFirstMomentum()
+        {
+            return m_firstmomentum;
+        }
+
+        /**
+         * returns the label of the second momentum
+         *
+         * @return label
+         */
+        public final String getSecondMomentum()
+        {
+            return m_secondmomentum;
+        }
+
+        /**
+         * returns bool value that a first momentum is used
+         *
+         * @return flag
+         */
+        public final boolean hasFirstMomentum()
+        {
+            return m_firstmomentum != null;
+        }
+
+        /**
+         * returns bool value that a second momentum is used
+         *
+         * @return flag
+         */
+        public final boolean hasSecondMomentum()
+        {
+            return m_secondmomentum != null;
         }
 
         @Override
@@ -393,6 +470,7 @@ public class CWaypointEnvironment
         {
             return m_text;
         }
+
 
     }
 
@@ -498,7 +576,6 @@ public class CWaypointEnvironment
 
     }
 
-
     /**
      * generator enum
      */
@@ -511,7 +588,6 @@ public class CWaypointEnvironment
          */
         private final String m_text;
 
-
         /**
          * ctor
          *
@@ -521,7 +597,6 @@ public class CWaypointEnvironment
         {
             m_text = p_text;
         }
-
 
         /**
          * returns the generator object
@@ -552,138 +627,58 @@ public class CWaypointEnvironment
     }
 
     /**
-     * enum for distributions
+     * enum for waypoints
      */
-    private enum EDistribution
+    private enum EWaypoint
     {
         /**
-         * normal distribution
+         * random car waypoint
          **/
-        Normal(
-                CCommon.getResourceString( EDistribution.class, "normaldistribution" ), CCommon.getResourceString(
-                EDistribution.class, "normaldistributionleft"
-        ), CCommon.getResourceString( EDistribution.class, "normaldistributionright" )
-        ),
+        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) ),
         /**
-         * uniform distribution
-         **/
-        Uniform(
-                CCommon.getResourceString( EDistribution.class, "uniformdistribution" ), CCommon.getResourceString(
-                EDistribution.class, "uniformdistributionleft"
-        ), CCommon.getResourceString( EDistribution.class, "uniformdistributionright" )
-        ),
-        /**
-         * exponential distribution
-         **/
-        Exponential(
-                CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
-                EDistribution.class, "exponentialdistributionleft"
-        )
-        );
-
+         * path car waypoint
+         */
+        CarWaypointPah( CCommon.getResourceString( EWaypoint.class, "carwaypointpath" ) );
 
         /**
-         * left / lower / first momentum description
-         **/
-        private final String m_firstmomentum;
-        /**
-         * right / higher / second momentum description
-         **/
-        private final String m_secondmomentum;
-        /**
-         * name of this distribution type
+         * name of this waypoint type
          */
         private final String m_text;
 
-
         /**
          * ctor
          *
-         * @param p_text language depend name,
-         * @param p_firstmomentum lower / first momentum language depend name
+         * @param p_text language dependend name
          */
-        private EDistribution( final String p_text, final String p_firstmomentum )
+        private EWaypoint( final String p_text )
         {
-            this( p_text, p_firstmomentum, null );
+            this.m_text = p_text;
         }
 
         /**
-         * ctor
+         * returns the waypoint of the current settings
          *
-         * @param p_text language depend name,
-         * @param p_firstmomentum lower / first momentum language depend name
-         * @param p_secondmomentum higher / second momentum language depend name
+         * @return waypoint
          */
-        private EDistribution( final String p_text, final String p_firstmomentum, final String p_secondmomentum )
+        @SuppressWarnings( "unchecked" )
+        public final IWayPoint<?> get( final Object... p_data )
         {
-            m_text = p_text;
-            m_firstmomentum = p_firstmomentum;
-            m_secondmomentum = p_secondmomentum;
-        }
 
-        /**
-         * returns a distribution object
-         *
-         * @param p_firstmomentum lower / first momentum
-         * @param p_secondmomentum higher / second momentum
-         * @return distribution
-         */
-        public final AbstractRealDistribution get( final double p_firstmomentum, final double p_secondmomentum )
-        {
             switch ( this )
             {
-                case Uniform:
-                    return new UniformRealDistribution( p_firstmomentum, p_secondmomentum );
+                case CarWaypointPah:
+                    return new CCarPathWayPoint(
+                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Color) p_data[4], (String) p_data[5]
+                    );
 
-                case Normal:
-                    return new NormalDistribution( p_firstmomentum, p_secondmomentum );
-
-                case Exponential:
-                    return new ExponentialDistribution( p_firstmomentum );
+                case CarWaypointRandom:
+                    return new CCarRandomWayPoint(
+                            (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Double) p_data[3], (Color) p_data[4], (String) p_data[5]
+                    );
 
                 default:
-                    throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unknowndistribution" ) );
+                    throw new IllegalStateException( CCommon.getResourceString( EWaypoint.class, "unknownwaypoint" ) );
             }
-        }
-
-        /**
-         * returns the label of the first momentum
-         *
-         * @return label
-         */
-        public final String getFirstMomentum()
-        {
-            return m_firstmomentum;
-        }
-
-        /**
-         * returns the label of the second momentum
-         *
-         * @return label
-         */
-        public final String getSecondMomentum()
-        {
-            return m_secondmomentum;
-        }
-
-        /**
-         * returns bool value that a first momentum is used
-         *
-         * @return flag
-         */
-        public final boolean hasFirstMomentum()
-        {
-            return m_firstmomentum != null;
-        }
-
-        /**
-         * returns bool value that a second momentum is used
-         *
-         * @return flag
-         */
-        public final boolean hasSecondMomentum()
-        {
-            return m_secondmomentum != null;
         }
 
         @Override
@@ -691,7 +686,6 @@ public class CWaypointEnvironment
         {
             return m_text;
         }
-
 
     }
 

@@ -114,7 +114,6 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      */
     public IBeliefBaseMask<T> getParent();
 
-
     /**
      * interface for generating non-existing beliefbases
      */

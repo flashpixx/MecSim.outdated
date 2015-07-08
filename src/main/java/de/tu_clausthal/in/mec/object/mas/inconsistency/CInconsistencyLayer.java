@@ -104,7 +104,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_updatestep = 1;
     }
 
-
     /**
      * ctor - use stochastic algorithm
      *
@@ -123,53 +122,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
         m_updatestep = 1;
-    }
-
-    /**
-     * get the largest eigen vector with QR decomposition
-     *
-     * @param p_matrix matrix
-     * @return largest eigenvector (not normalized)
-     */
-    private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix )
-    {
-        final EigenvalueDecomposition l_eigen = new EigenvalueDecomposition( p_matrix );
-
-        // gets the position of the largest eigenvalue
-        final DoubleMatrix1D l_eigenvalues = l_eigen.getRealEigenvalues();
-
-        int l_position = 0;
-        for ( int i = 0; i < l_eigenvalues.size(); ++i )
-            if ( l_eigenvalues.get( i ) > l_eigenvalues.get( l_position ) )
-                l_position = i;
-
-        // gets the largest eigenvector
-        return l_eigen.getV().viewColumn( l_position );
-    }
-
-    /**
-     * get the largest eigen vector based on the perron-frobenius theorem
-     *
-     * @param p_matrix matrix
-     * @param p_iteration number of iterations
-     * @return largest eigenvector (not normalized)
-     *
-     * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
-     */
-    private static DoubleMatrix1D getPerronFrobenius( final DoubleMatrix2D p_matrix, final int p_iteration )
-    {
-        DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
-        for ( int i = 0; i < p_iteration; ++i )
-        {
-            l_probability = c_algebra.mult( p_matrix, l_probability );
-            l_probability.assign(
-                    Mult.div(
-                            c_algebra.norm2( l_probability )
-                    )
-            );
-        }
-
-        return l_probability;
     }
 
     /**
@@ -271,6 +223,73 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     }
 
     /**
+     * removes an object from the
+     * inconsistency structure
+     *
+     * @param p_object removing object
+     */
+    public boolean remove( final T p_object )
+    {
+        p_object.unregisterAction( c_invokeName );
+
+        m_data.remove( p_object );
+        return true;
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_name;
+    }
+
+    /**
+     * get the largest eigen vector with QR decomposition
+     *
+     * @param p_matrix matrix
+     * @return largest eigenvector (not normalized)
+     */
+    private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix )
+    {
+        final EigenvalueDecomposition l_eigen = new EigenvalueDecomposition( p_matrix );
+
+        // gets the position of the largest eigenvalue
+        final DoubleMatrix1D l_eigenvalues = l_eigen.getRealEigenvalues();
+
+        int l_position = 0;
+        for ( int i = 0; i < l_eigenvalues.size(); ++i )
+            if ( l_eigenvalues.get( i ) > l_eigenvalues.get( l_position ) )
+                l_position = i;
+
+        // gets the largest eigenvector
+        return l_eigen.getV().viewColumn( l_position );
+    }
+
+    /**
+     * get the largest eigen vector based on the perron-frobenius theorem
+     *
+     * @param p_matrix matrix
+     * @param p_iteration number of iterations
+     * @return largest eigenvector (not normalized)
+     *
+     * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
+     */
+    private static DoubleMatrix1D getPerronFrobenius( final DoubleMatrix2D p_matrix, final int p_iteration )
+    {
+        DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
+        for ( int i = 0; i < p_iteration; ++i )
+        {
+            l_probability = c_algebra.mult( p_matrix, l_probability );
+            l_probability.assign(
+                    Mult.div(
+                            c_algebra.norm2( l_probability )
+                    )
+            );
+        }
+
+        return l_probability;
+    }
+
+    /**
      * returns metric value
      *
      * @param p_first
@@ -301,26 +320,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     }
 
     /**
-     * removes an object from the
-     * inconsistency structure
-     *
-     * @param p_object removing object
-     */
-    public boolean remove( final T p_object )
-    {
-        p_object.unregisterAction( c_invokeName );
-
-        m_data.remove( p_object );
-        return true;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return m_name;
-    }
-
-    /**
      * numeric algorithm structure
      */
     public enum EAlgorithm
@@ -334,7 +333,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
          **/
         FixpointIteration
     }
-
 
     /**
      * class to create a bind between
@@ -354,7 +352,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         {
             m_bind = p_agent;
         }
-
 
         /**
          * returns the agent inconsistency value

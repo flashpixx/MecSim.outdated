@@ -289,7 +289,6 @@ public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IR
 
     }
 
-
     /**
      * interface for finishing *
      */

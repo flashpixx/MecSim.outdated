@@ -18,7 +18,6 @@ public abstract class IBindStorage<N, M extends Iterable<N>> extends IOneTimeSto
      * field filter
      */
     protected static final CFieldFilter c_filter = new CFieldFilter();
-
     /**
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
      * setter handles, so each bind can configurate individual
@@ -33,7 +32,6 @@ public abstract class IBindStorage<N, M extends Iterable<N>> extends IOneTimeSto
     {
     }
 
-
     /**
      * ctor - bind an object
      *
@@ -44,7 +42,6 @@ public abstract class IBindStorage<N, M extends Iterable<N>> extends IOneTimeSto
     {
         this.push( p_name, p_object );
     }
-
 
     /**
      * adds / binds an object

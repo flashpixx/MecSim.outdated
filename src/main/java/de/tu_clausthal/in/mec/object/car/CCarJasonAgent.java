@@ -31,7 +31,6 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
-import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
@@ -109,7 +108,6 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         );
     }
 
-
     /**
      * @param p_route driving route
      * @param p_speed initial speed
@@ -130,6 +128,47 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         m_objectpath = new CPath( "traffic", "car", CSimulation.getInstance().generateObjectName( p_objectname, this ) );
         for ( final String l_item : p_agent )
             this.bind( l_item );
+    }
+
+    @Override
+    public CPath getReceiverPath()
+    {
+        return m_objectpath;
+    }
+
+    @Override
+    public void receiveMessage( final Set<IMessage> p_messages )
+    {
+
+    }
+
+    @Override
+    @CMethodFilter.CAgent( bind = false )
+    public final Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
+
+    @Override
+    @CMethodFilter.CAgent( bind = false )
+    public final void release()
+    {
+        super.release();
+        for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
+        {
+            l_agent.release();
+            CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).remove( l_agent );
+        }
+    }
+
+    @Override
+    @CMethodFilter.CAgent( bind = false )
+    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+    {
+        // check speed, because agent can modify the speed value and the value should always in range
+        // [0,max-speed] other values are declared as final member
+        m_speed = Math.min( Math.max( 0, m_speed ), m_maxspeed );
+        super.step( p_currentstep, p_layer );
     }
 
     /**
@@ -177,48 +216,6 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
 
         return l_predecessor;
     }
-
-    @Override
-    public CPath getReceiverPath()
-    {
-        return m_objectpath;
-    }
-
-    @Override
-    public void receiveMessage( final Set<IMessage> p_messages )
-    {
-
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    public final Map<String, Object> inspect()
-    {
-        return m_inspect;
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    public final void release()
-    {
-        super.release();
-        for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
-        {
-            l_agent.release();
-            CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).remove( l_agent );
-        }
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
-    {
-        // check speed, because agent can modify the speed value and the value should always in range
-        // [0,max-speed] other values are declared as final member
-        m_speed = Math.min( Math.max( 0, m_speed ), m_maxspeed );
-        super.step( p_currentstep, p_layer );
-    }
-
 
     private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
     {

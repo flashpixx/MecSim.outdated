@@ -39,7 +39,6 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
      */
     protected final T m_object;
 
-
     /**
      * ctor for setting the object
      *
@@ -60,15 +59,15 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
         return m_object;
     }
 
-    /**
-     * run method to perform the action on runnable and callable interface
-     */
-    protected abstract void perform();
-
     @Override
     public final void run()
     {
         this.perform();
     }
+
+    /**
+     * run method to perform the action on runnable and callable interface
+     */
+    protected abstract void perform();
 
 }

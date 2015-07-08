@@ -61,7 +61,6 @@ public class CWebSocket extends WebSocket
      */
     private final Object m_object;
 
-
     /**
      * ctor
      *
@@ -106,26 +105,6 @@ public class CWebSocket extends WebSocket
         this.invokeMethod( EAction.Open, null );
     }
 
-
-    /**
-     * invokes the method
-     *
-     * @param p_action action of the call
-     * @param p_frame current frame or null
-     */
-    private void invokeMethod( final EAction p_action, final WebSocketFrame p_frame )
-    {
-        try
-        {
-            m_method.invoke( m_object, p_action, m_communicator, p_frame == null ? null : new CFrame( p_frame ) );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
-    }
-
-
     @Override
     protected final void onPong( final WebSocketFrame p_webSocketFrame )
     {
@@ -166,6 +145,23 @@ public class CWebSocket extends WebSocket
         }
     }
 
+    /**
+     * invokes the method
+     *
+     * @param p_action action of the call
+     * @param p_frame current frame or null
+     */
+    private void invokeMethod( final EAction p_action, final WebSocketFrame p_frame )
+    {
+        try
+        {
+            m_method.invoke( m_object, p_action, m_communicator, p_frame == null ? null : new CFrame( p_frame ) );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
+        }
+    }
 
     /**
      * enum to define action
@@ -237,7 +233,6 @@ public class CWebSocket extends WebSocket
          * origin data frame *
          */
         private final WebSocketFrame m_frame;
-
 
         /**
          * ctor

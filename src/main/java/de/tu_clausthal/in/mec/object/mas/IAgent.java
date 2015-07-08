@@ -94,4 +94,12 @@ public interface IAgent<T> extends Painter, IReceiver
      */
     public void unregisterMask( final CPath p_path );
 
+    /**
+     * returns the root beliefmask to get access
+     * of all beliefs
+     *
+     * @return root belief mask
+     */
+    public IBeliefBaseMask<T> getBeliefs();
+
 }

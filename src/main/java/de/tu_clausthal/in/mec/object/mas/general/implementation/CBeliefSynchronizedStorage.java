@@ -21,15 +21,26 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas;
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
-import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * interface of an agent with return-steppable interface
+ * thread-safe storage e.g. for shared-beliefs
  */
-public interface IReturnAgent<T> extends IAgent<T>, IReturnSteppable
+public class CBeliefSynchronizedStorage<N, M extends Iterable<N>> extends CBeliefStorage<N, M>
 {
+    /**
+     * thread-safe map with elements
+     **/
+    protected final Map<String, Set<N>> m_elements = new ConcurrentHashMap<>();
+    /**
+     * thread-safe map with masks
+     **/
+    protected final Map<String, M> m_masks = new ConcurrentHashMap<>();
+
 
 }

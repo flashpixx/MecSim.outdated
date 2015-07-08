@@ -49,6 +49,8 @@ public interface IMetric<T, N>
      * returns the selectors
      *
      * @return selector
+     *
+     * @tparam N returns a collection of belief selectors
      */
     public Collection<N> getSelector();
 

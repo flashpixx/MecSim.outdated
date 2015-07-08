@@ -58,18 +58,20 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
     public IBeliefBaseMask<T> createMask( final String p_name );
 
     /**
+     * returns the storage of the beliefbase
+     *
+     * @return storage
+     *
+     * @tparam L typecast
+     */
+    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
+
+    /**
      * checks if the structure empty
      *
      * @return empty boolean
      */
     public boolean isEmpty();
-
-    /**
-     * removes a literal in the current structure
-     *
-     * @param p_literal literal
-     */
-    public void remove( final ILiteral<T> p_literal );
 
     /**
      * removes a mask in the current structure
@@ -79,8 +81,14 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
     public void remove( final IBeliefBaseMask<T> p_mask );
 
     /**
+     * removes a literal in the current structure
+     *
+     * @param p_literal literal
+     */
+    public void remove( final ILiteral<T> p_literal );
+
+    /**
      * updates all items
      */
     public void update();
-
 }

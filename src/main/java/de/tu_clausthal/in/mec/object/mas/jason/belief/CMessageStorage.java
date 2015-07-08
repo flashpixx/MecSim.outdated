@@ -65,6 +65,7 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
      * ctor - with transition system specified
      *
      * @param p_transitionSystem agent transition system
+     * @param p_pathseparator path separator
      */
     public CMessageStorage( final TransitionSystem p_transitionSystem, final String p_pathseparator )
     {

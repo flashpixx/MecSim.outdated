@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
@@ -84,6 +85,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
      * ctor - creates a beliefbase and sets the parent
      *
      * @param p_parent
+     * @param p_storage storage
      */
     public CBeliefBase( final IBeliefBaseMask<T> p_parent, final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {
@@ -97,14 +99,6 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     {
         m_storage.addElement( p_literal.getFunctor().get(), p_literal );
     }
-
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
-    {
-        return (L) m_storage;
-    }
-
 
     @Override
     public Iterator<ILiteral<T>> iterator()
@@ -163,11 +157,83 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             getFQNPath( p_mask.getParent(), p_path );
         }
 
+        /**
+         * returns a mask on the recursive descend
+         *
+         * @param p_path path
+         * @param p_root start / root node
+         * @param p_generator generator object for new masks
+         * @return mask
+         *
+         * @note a path can contains ".." to use the parent object
+         * @tparam Q literal type
+         */
+        private static <Q> IBeliefBaseMask<Q> walk( final CPath p_path, final IBeliefBaseMask<Q> p_root, final IBeliefBaseMask.IGenerator<Q> p_generator )
+        {
+            if ( ( p_path == null ) || ( p_path.isEmpty() ) )
+                return p_root;
+
+            // get the next mask (on ".." the parent is returned otherwise the child is used)
+            IBeliefBaseMask<Q> l_mask = "..".equals( p_path.get( 0 ) ) ? p_root.getParent() : p_root.getStorage().getMask( p_path.get( 0 ) );
+
+            // if a generator is exists and the mask is null, a new mask is created
+            if ( ( p_generator != null ) && ( !( "..".equals( p_path.get( 0 ) ) ) ) )
+                l_mask = p_generator.create( p_path.get( 0 ) );
+
+            // if mask null an exception is thrown
+            if ( l_mask == null )
+                throw new IllegalArgumentException( CCommon.getResourceString( CMask.class, "pathelementnotfound", p_path.get( 0 ), p_path ) );
+
+            // recursive descend
+            return walk( p_path.getSubPath( 1 ), l_mask, p_generator  );
+        }
+
+        @Override
+        public void add( final CPath p_path, final ILiteral<P> p_literal )
+        {
+            this.add( p_path, p_literal, null );
+        }
+
+        @Override
+        public void add( final CPath p_path, final IBeliefBaseMask<P> p_mask )
+        {
+            this.add( p_path, p_mask, null );
+        }
+
+        @Override
+        public void add( final CPath p_path, final IBeliefBaseMask<P> p_mask, final IBeliefBaseMask.IGenerator<P> p_generator
+        )
+        {
+            walk( p_path, this, p_generator ).add( p_mask );
+        }
+
+        @Override
+        public void add( final CPath p_path, final ILiteral<P> p_literal, final IBeliefBaseMask.IGenerator<P> p_generator
+        )
+        {
+            walk( p_path, this, p_generator ).add( p_literal );
+        }
 
         @Override
         public IBeliefBaseMask<P> clone( final IBeliefBaseMask<P> p_parent )
         {
             return new CMask<>( m_name, p_parent, m_self );
+        }
+
+        @Override
+        public Set<ILiteral<P>> get( final CPath p_path )
+        {
+            return walk( p_path, this, null ).get();
+        }
+
+        @Override
+        public Set<ILiteral<P>> get()
+        {
+            return new HashSet<ILiteral<P>>()
+            {{
+                    for ( final ILiteral<P> l_item : m_self )
+                        add( l_item );
+                }};
         }
 
         @Override
@@ -182,6 +248,10 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         public String getName()
         {
             return m_name;
+        }        @Override
+        public void add( final IBeliefBaseMask<P> p_mask )
+        {
+            m_self.add( p_mask );
         }
 
         @Override
@@ -189,6 +259,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         {
             return m_parent;
         }
+
 
         @Override
         public IBeliefBaseMask<P> createMask( final String p_name )
@@ -220,12 +291,6 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
-        public void add( final IBeliefBaseMask<P> p_mask )
-        {
-            m_self.add( p_mask );
-        }
-
-        @Override
         public void remove( final IBeliefBaseMask<P> p_mask )
         {
             m_self.remove( p_mask );
@@ -250,12 +315,26 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
+        public <L extends IBeliefStorage<ILiteral<P>, IBeliefBaseMask<P>>> L getStorage()
+        {
+            return m_self.getStorage();
+        }
+
+        @Override
         public void clear()
         {
             m_self.clear();
         }
 
     }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
+    {
+        return (L) m_storage;
+    }
+
 
     @Override
     public void add( final IBeliefBaseMask<T> p_mask )
@@ -304,6 +383,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public int hashCode()
     {
-        return 15923 * m_parent.hashCode() + 26267 * m_storage.hashCode();
+        return 23 * m_parent.hashCode() + 67 * m_storage.hashCode();
     }
+
 }

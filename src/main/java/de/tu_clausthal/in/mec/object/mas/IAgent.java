@@ -24,14 +24,18 @@
 package de.tu_clausthal.in.mec.object.mas;
 
 
+import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import org.jxmapviewer.painter.Painter;
 
 
 /**
  * interface of an agent
+ *
+ * @tparam T literal type
  */
-public interface IAgent extends Painter, IReceiver
+public interface IAgent<T> extends Painter, IReceiver
 {
 
     /**
@@ -59,9 +63,17 @@ public interface IAgent extends Painter, IReceiver
      * register an object for running actions
      *
      * @param p_name binding name of the action
-     * @param p_object
+     * @param p_object binding object
      */
     public void registerAction( final String p_name, final Object p_object );
+
+    /**
+     * register a beliefbase mask
+     *
+     * @param p_path path in which the mask is added
+     * @param p_mask mask
+     */
+    public void registerMask( final CPath p_path, final IBeliefBaseMask<T> p_mask );
 
     /**
      * release agent call *
@@ -74,5 +86,20 @@ public interface IAgent extends Painter, IReceiver
      * @param p_name binding name of the action
      */
     public void unregisterAction( final String p_name );
+
+    /**
+     * unregister a beliefbase mask
+     *
+     * @param p_path path of the mask (last element is the mask name)
+     */
+    public void unregisterMask( final CPath p_path );
+
+    /**
+     * returns the root beliefmask to get access
+     * of all beliefs
+     *
+     * @return root belief mask
+     */
+    public IBeliefBaseMask<T> getBeliefs();
 
 }

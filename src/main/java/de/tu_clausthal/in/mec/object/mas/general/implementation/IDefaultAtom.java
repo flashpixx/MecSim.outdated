@@ -1,5 +1,6 @@
 package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
+
 import de.tu_clausthal.in.mec.object.mas.general.IAtom;
 
 

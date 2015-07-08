@@ -26,12 +26,49 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
+import java.util.Set;
+
 
 /**
  * mask of the path
  */
 public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
 {
+
+    /**
+     * adds a literal in the current structure
+     *
+     * @param p_path path
+     * @param p_literal literal
+     */
+    void add( final CPath p_path, final ILiteral<T> p_literal );
+
+    /**
+     * adds a mask in the current structure
+     *
+     * @param p_path path
+     * @param p_mask mask
+     */
+    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask );
+
+    /**
+     * adds a mask in the current structure
+     *
+     * @param p_path path
+     * @param p_mask mask
+     * @param p_generator beliefbase generator if beliefbase not exists
+     */
+    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IGenerator<T> p_generator );
+
+    /**
+     * adds a literal in the current structure
+     *
+     * @param p_path path
+     * @param p_literal literal
+     * @param p_generator beliefbase generator if beliefbase not exists
+     */
+    void add( final CPath p_path, final ILiteral<T> p_literal, final IGenerator<T> p_generator );
+
     /**
      * clones the current mask
      *
@@ -39,6 +76,22 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * @return new mask object
      */
     public IBeliefBaseMask<T> clone( final IBeliefBaseMask<T> p_parent );
+
+    /**
+     * gets a list of all literals
+     * of the path
+     *
+     * @param p_path path
+     * @return set with literal
+     */
+    public Set<ILiteral<T>> get( final CPath p_path );
+
+    /**
+     * gets a list of all literals
+     *
+     * @return set with literals
+     */
+    public Set<ILiteral<T>> get();
 
     /**
      * returns the full path
@@ -61,4 +114,12 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      */
     public IBeliefBaseMask<T> getParent();
 
+
+    /**
+     * interface for generating non-existing beliefbases
+     */
+    public interface IGenerator<Q>
+    {
+        public IBeliefBaseMask<Q> create( final String p_name );
+    }
 }

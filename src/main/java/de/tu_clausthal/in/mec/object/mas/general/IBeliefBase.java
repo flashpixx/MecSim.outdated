@@ -27,13 +27,4 @@ package de.tu_clausthal.in.mec.object.mas.general;
 public interface IBeliefBase<T> extends IBeliefBaseAction<T>
 {
 
-    /**
-     * returns the storage of the beliefbase
-     *
-     * @return storage
-     *
-     * @tparam L typecast
-     */
-    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
-
 }

@@ -241,7 +241,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             IBeliefBaseMask<Q> l_mask = "..".equals( p_path.get( 0 ) ) ? p_root.getParent() : p_root.getStorage().getMask( p_path.get( 0 ) );
 
             // if a generator is exists and the mask is null, a new mask is created and added to the current
-            if ( ( p_generator != null ) && ( !( "..".equals( p_path.get( 0 ) ) ) ) )
+            if ( ( l_mask == null ) && ( p_generator != null ) && ( !( "..".equals( p_path.get( 0 ) ) ) ) )
             {
                 l_mask = p_generator.create( p_path.get( 0 ) );
                 p_root.add( l_mask );

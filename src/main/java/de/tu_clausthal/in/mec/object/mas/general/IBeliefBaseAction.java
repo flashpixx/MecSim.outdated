@@ -58,15 +58,6 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
     public IBeliefBaseMask<T> createMask( final String p_name );
 
     /**
-     * returns a new mask of the belief base
-     *
-     * @param p_name name of the mask
-     * @param p_parent parent mask
-     * @return mask
-     */
-    public IBeliefBaseMask<T> createMask( final String p_name, final IBeliefBaseMask<T> p_parent );
-
-    /**
      * returns the storage of the beliefbase
      *
      * @return storage

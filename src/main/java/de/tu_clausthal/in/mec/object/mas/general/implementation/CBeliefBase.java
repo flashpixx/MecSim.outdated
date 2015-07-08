@@ -236,17 +236,10 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             return m_parent;
         }
 
-
         @Override
         public IBeliefBaseMask<P> createMask( final String p_name )
         {
             return m_self.createMask( p_name );
-        }
-
-        @Override
-        public IBeliefBaseMask<P> createMask( final String p_name, final IBeliefBaseMask<P> p_parent )
-        {
-            return m_self.createMask( p_name, p_parent );
         }
 
         @Override
@@ -339,13 +332,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public final IBeliefBaseMask<T> createMask( final String p_name )
     {
-        return this.createMask( p_name, null );
-    }
-
-    @Override
-    public IBeliefBaseMask<T> createMask( final String p_name, final IBeliefBaseMask<T> p_parent )
-    {
-        return new CMask<T>( p_name, p_parent, this );
+        return new CMask<T>( p_name, null, this );
     }
 
 

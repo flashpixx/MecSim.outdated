@@ -162,23 +162,30 @@ public class CBeliefBase<T> implements IBeliefBase<T>
          *
          * @param p_path path
          * @param p_root start / root node
+         * @param p_generator generator object for new masks
          * @return mask
          *
          * @note a path can contains ".." to use the parent object
          * @tparam Q literal type
          */
-        private static <Q> IBeliefBaseMask<Q> walk( final CPath p_path, final IBeliefBaseMask<Q> p_root, final IBaseGenerator<Q> p_generator )
+        private static <Q> IBeliefBaseMask<Q> walk( final CPath p_path, final IBeliefBaseMask<Q> p_root, final IBeliefBaseMask.IGenerator<Q> p_generator )
         {
             if ( ( p_path == null ) || ( p_path.isEmpty() ) )
                 return p_root;
 
+            // get the next mask (on ".." the parent is returned otherwise the child is used)
             IBeliefBaseMask<Q> l_mask = "..".equals( p_path.get( 0 ) ) ? p_root.getParent() : p_root.getStorage().getMask( p_path.get( 0 ) );
+
+            // if a generator is exists and the mask is null, a new mask is created
             if ( ( p_generator != null ) && ( !( "..".equals( p_path.get( 0 ) ) ) ) )
                 l_mask = p_generator.create( p_path.get( 0 ) );
-            if ( l_mask == null )
-                throw new IllegalStateException( CCommon.getResourceString( CMask.class, "pathelementnotfound", p_path.get( 0 ), p_path ) );
 
-            return l_mask;
+            // if mask null an exception is thrown
+            if ( l_mask == null )
+                throw new IllegalArgumentException( CCommon.getResourceString( CMask.class, "pathelementnotfound", p_path.get( 0 ), p_path ) );
+
+            // recursive descend
+            return walk( p_path.getSubPath( 1 ), l_mask, p_generator  );
         }
 
         @Override
@@ -194,14 +201,14 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
-        public void add( final CPath p_path, final IBeliefBaseMask<P> p_mask, final IBaseGenerator<P> p_generator
+        public void add( final CPath p_path, final IBeliefBaseMask<P> p_mask, final IBeliefBaseMask.IGenerator<P> p_generator
         )
         {
             walk( p_path, this, p_generator ).add( p_mask );
         }
 
         @Override
-        public void add( final CPath p_path, final ILiteral<P> p_literal, final IBaseGenerator<P> p_generator
+        public void add( final CPath p_path, final ILiteral<P> p_literal, final IBeliefBaseMask.IGenerator<P> p_generator
         )
         {
             walk( p_path, this, p_generator ).add( p_literal );
@@ -252,8 +259,6 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         {
             return m_parent;
         }
-
-
 
 
         @Override

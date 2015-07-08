@@ -58,7 +58,7 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * @param p_mask mask
      * @param p_generator beliefbase generator if beliefbase not exists
      */
-    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IBaseGenerator<T> p_generator );
+    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IGenerator<T> p_generator );
 
     /**
      * adds a literal in the current structure
@@ -67,7 +67,7 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * @param p_literal literal
      * @param p_generator beliefbase generator if beliefbase not exists
      */
-    void add( final CPath p_path, final ILiteral<T> p_literal, final IBaseGenerator<T> p_generator );
+    void add( final CPath p_path, final ILiteral<T> p_literal, final IGenerator<T> p_generator );
 
     /**
      * clones the current mask
@@ -118,7 +118,7 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
     /**
      * interface for generating non-existing beliefbases
      */
-    public interface IBaseGenerator<Q>
+    public interface IGenerator<Q>
     {
         public IBeliefBaseMask<Q> create( final String p_name );
     }

@@ -190,6 +190,18 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             return walk( p_path, this ).get();
         }
 
+        @Override
+        public void add( final CPath p_path, final ILiteral<P> p_literal )
+        {
+            walk( p_path, this ).add( p_literal );
+        }
+
+        @Override
+        public void add( final CPath p_path, final IBeliefBaseMask<P> p_mask )
+        {
+            walk( p_path, this ).add( p_mask );
+        }
+
         /**
          * returns a mask on the recursive descend
          *

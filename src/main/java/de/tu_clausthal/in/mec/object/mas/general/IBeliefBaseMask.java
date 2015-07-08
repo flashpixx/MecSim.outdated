@@ -115,6 +115,13 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
     public IBeliefBaseMask<T> getParent();
 
     /**
+     * returns if the mask has a parent
+     *
+     * @return boolean flag of the parent
+     */
+    public boolean hasParent();
+
+    /**
      * interface for generating non-existing beliefbases
      */
     public interface IGenerator<Q>

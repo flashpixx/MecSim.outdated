@@ -183,5 +183,9 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
         };
     }
 
-
+    @Override
+    public String toString()
+    {
+        return "{ literals : " + m_elements + ", masks : " + m_masks + " }";
+    }
 }

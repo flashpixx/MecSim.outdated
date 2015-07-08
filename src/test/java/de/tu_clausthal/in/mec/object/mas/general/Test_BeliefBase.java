@@ -4,14 +4,9 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
-import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -19,16 +14,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class Test_BeliefBase
 {
-    private class CJasonBeliefBaseGenerator implements IBeliefBaseMask.IGenerator
+    @Test
+    public void test_abcd()
     {
-
-        @Override
-        public IBeliefBaseMask<Literal> create( final String p_name )
-        {
-            return new CBeliefBase( new CBeliefStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>()).createMask( p_name );
-        }
+        System.out.println( this.generateJasonTestset() );
     }
-
 
     /**
      * initializes a predefined beliefbase
@@ -41,16 +31,20 @@ public class Test_BeliefBase
         final IBeliefBaseMask<Literal> l_root = new CBeliefBase<>( new CBeliefStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>() ).createMask( "aa1" );
 
 
-        l_root.add( new CPath( "aa1" ), new CLiteral( ASSyntax.createLiteral( "test1" ) ), l_generator );
-        l_root.add( new CPath("aa2/bb1/cc1/dd1"), new CLiteral( ASSyntax.createLiteral( "test2" ) ), l_generator );
+        l_root.add( new CLiteral( ASSyntax.createLiteral( "test1" ) ) );
+        l_root.add( new CPath( "aa2/bb1/cc1/dd1" ), new CLiteral( ASSyntax.createLiteral( "test2" ) ), l_generator );
 
         return l_root;
     }
 
-    @Test
-    public void test_abcd()
+    private class CJasonBeliefBaseGenerator implements IBeliefBaseMask.IGenerator
     {
-        System.out.println( this.generateJasonTestset() );
+
+        @Override
+        public IBeliefBaseMask<Literal> create( final String p_name )
+        {
+            return new CBeliefBase( new CBeliefStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>() ).createMask( p_name );
+        }
     }
 
 

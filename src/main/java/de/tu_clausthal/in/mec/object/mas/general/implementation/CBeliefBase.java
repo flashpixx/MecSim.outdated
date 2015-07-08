@@ -85,20 +85,31 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         /**
          * reference to the beliefbase context
          */
-        private final IBeliefBase<P> m_self;
+        private final IBeliefBase<P> m_beliefbase;
 
         /**
          * private ctpr
          *
          * @param p_name name of the mask
-         * @param p_parent reference to the parent mask
-         * @param p_self reference to the beliefbase context
+         * @param p_beliefbase reference to the beliefbase context
          */
-        private CMask( final String p_name, final IBeliefBaseMask<P> p_parent, final IBeliefBase<P> p_self )
+        private CMask( final String p_name, final IBeliefBase<P> p_beliefbase )
+        {
+            this( p_name, p_beliefbase, null );
+        }
+
+        /**
+         * private ctpr
+         *
+         * @param p_name name of the mask
+         * @param p_beliefbase reference to the beliefbase context
+         * @param p_parent reference to the parent mask
+         */
+        private CMask( final String p_name, final IBeliefBase<P> p_beliefbase, final IBeliefBaseMask<P> p_parent )
         {
             m_name = p_name;
+            m_beliefbase = p_beliefbase;
             m_parent = p_parent;
-            m_self = p_self;
         }
 
         @Override
@@ -130,7 +141,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         @Override
         public IBeliefBaseMask<P> clone( final IBeliefBaseMask<P> p_parent )
         {
-            return new CMask<>( m_name, p_parent, m_self );
+            return new CMask<>( m_name, m_beliefbase, p_parent );
         }
 
         @Override
@@ -144,7 +155,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         {
             return new HashSet<ILiteral<P>>()
             {{
-                    for ( final ILiteral<P> l_item : m_self )
+                    for ( final ILiteral<P> l_item : m_beliefbase )
                         add( l_item );
                 }};
         }
@@ -152,9 +163,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         @Override
         public CPath getFQNPath()
         {
-            final CPath l_path = new CPath();
-            getFQNPath( this, l_path );
-            return l_path;
+            return getFQNPath( this, new CPath() );
         }
 
         @Override
@@ -170,15 +179,21 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
+        public boolean hasParent()
+        {
+            return m_parent != null;
+        }
+
+        @Override
         public int hashCode()
         {
-            return 30697 * m_name.hashCode() + 68171 * m_self.hashCode();
+            return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
         }
 
         @Override
         public void add( final ILiteral<P> p_literal )
         {
-            m_self.add( p_literal );
+            m_beliefbase.add( p_literal );
         }
 
         @Override
@@ -186,7 +201,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         {
             final CPath l_path = this.getFQNPath();
             final Set<ILiteral<P>> l_items = new HashSet<>();
-            for ( final ILiteral<P> l_literal : m_self )
+            for ( final ILiteral<P> l_literal : m_beliefbase )
                 l_items.add( l_literal.clone( l_path ) );
 
             return l_items.iterator();
@@ -196,16 +211,14 @@ public class CBeliefBase<T> implements IBeliefBase<T>
          * static method to generate FQN path
          *
          * @param p_mask curretn path
-         * @param p_path return path
+         * @param p_path current path
+         * @return path
          * @tparam Q type of the beliefbase elements
          */
-        private static <Q> void getFQNPath( final IBeliefBaseMask<Q> p_mask, final CPath p_path )
+        private static <Q> CPath getFQNPath( final IBeliefBaseMask<Q> p_mask, final CPath p_path )
         {
-            if ( p_mask == null )
-                return;
-
             p_path.pushfront( p_mask.getName() );
-            getFQNPath( p_mask.getParent(), p_path );
+            return !p_mask.hasParent() ? p_path : getFQNPath( p_mask.getParent(), p_path );
         }
 
         /**
@@ -227,9 +240,12 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             // get the next mask (on ".." the parent is returned otherwise the child is used)
             IBeliefBaseMask<Q> l_mask = "..".equals( p_path.get( 0 ) ) ? p_root.getParent() : p_root.getStorage().getMask( p_path.get( 0 ) );
 
-            // if a generator is exists and the mask is null, a new mask is created
+            // if a generator is exists and the mask is null, a new mask is created and added to the current
             if ( ( p_generator != null ) && ( !( "..".equals( p_path.get( 0 ) ) ) ) )
+            {
                 l_mask = p_generator.create( p_path.get( 0 ) );
+                p_root.add( l_mask );
+            }
 
             // if mask null an exception is thrown
             if ( l_mask == null )
@@ -242,54 +258,61 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         @Override
         public void add( final IBeliefBaseMask<P> p_mask )
         {
-            m_self.add( p_mask.clone( this ) );
+            m_beliefbase.add( p_mask.clone( this ) );
         }
 
 
         @Override
         public IBeliefBaseMask<P> createMask( final String p_name )
         {
-            return m_self.createMask( p_name );
+            return m_beliefbase.createMask( p_name );
         }
 
 
         @Override
         public void remove( final ILiteral<P> p_literal )
         {
-            m_self.remove( p_literal );
+            m_beliefbase.remove( p_literal );
         }
 
         @Override
         public void remove( final IBeliefBaseMask<P> p_mask )
         {
-            m_self.remove( p_mask );
+            m_beliefbase.remove( p_mask );
         }
 
         @Override
         public boolean isEmpty()
         {
-            return m_self.isEmpty();
+            return m_beliefbase.isEmpty();
         }
 
 
         @Override
         public void update()
         {
-            m_self.update();
+            m_beliefbase.update();
         }
 
         @Override
         public <L extends IBeliefStorage<ILiteral<P>, IBeliefBaseMask<P>>> L getStorage()
         {
-            return m_self.getStorage();
+            return m_beliefbase.getStorage();
         }
 
         @Override
         public void clear()
         {
-            m_self.clear();
+            m_beliefbase.clear();
         }
 
+        @Override
+        public String toString()
+        {
+            return "{ name : " + m_name + ", parent " + ( m_parent == null ? "null" : m_parent.hashCode() ) + " # " + this.hashCode() + ", fqn : " +
+                   this.getFQNPath() + ", storage : " + m_beliefbase
+                           .getStorage() + " }";
+        }
     }
 
     @Override
@@ -333,7 +356,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public final IBeliefBaseMask<T> createMask( final String p_name )
     {
-        return new CMask<T>( p_name, null, this );
+        return new CMask<T>( p_name, this );
     }
 
 

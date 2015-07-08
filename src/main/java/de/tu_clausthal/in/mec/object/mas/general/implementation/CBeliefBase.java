@@ -285,6 +285,12 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
+        public int hashCode()
+        {
+            return 30697 * m_name.hashCode() + 68171 * m_self.hashCode();
+        }
+
+        @Override
         public void update()
         {
             m_self.update();
@@ -365,7 +371,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public int hashCode()
     {
-        return 79*m_storage.hashCode();
+        return 23 * m_storage.hashCode();
     }
 
     @Override
@@ -373,4 +379,5 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     {
         return this.hashCode() == p_object.hashCode();
     }
+
 }

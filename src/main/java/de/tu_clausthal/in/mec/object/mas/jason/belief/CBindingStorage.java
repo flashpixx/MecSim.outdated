@@ -64,7 +64,6 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
         super( p_name, p_object );
     }
 
-
     @Override
     protected void updating()
     {

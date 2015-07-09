@@ -32,12 +32,10 @@ public class Test_BeliefBase
 
 
         l_root.add( new CLiteral( ASSyntax.createLiteral( "onroot" ) ) );
-        //l_root.add( new CPath( "sub1" ), new CLiteral( ASSyntax.createLiteral( "onsub1" ) ), l_generator );
-        //l_root.add( new CPath( "sub2" ), new CLiteral( ASSyntax.createLiteral( "onsub2" ) ), l_generator );
-        //l_root.add( new CPath( "sub1/subsub1.1" ), new CLiteral( ASSyntax.createLiteral( "onsubsub1.1" ) ), l_generator );
-        //l_root.add( new CPath( "sub3/subsub2.1/subsubsub2.1.1" ), new CLiteral( ASSyntax.createLiteral( "onsubsubsub2.1.1" ) ), l_generator );
-
-        l_root.add( new CPath( "a/b" ), new CLiteral( ASSyntax.createLiteral( "xxx" ) ), l_generator );
+        l_root.add( new CPath( "sub1" ), new CLiteral( ASSyntax.createLiteral( "onsub1" ) ), l_generator );
+        l_root.add( new CPath( "sub2" ), new CLiteral( ASSyntax.createLiteral( "onsub2" ) ), l_generator );
+        l_root.add( new CPath( "sub1/subsub1.1" ), new CLiteral( ASSyntax.createLiteral( "onsubsub1.1" ) ), l_generator );
+        l_root.add( new CPath( "sub3/subsub3.1/subsubsub3.1.1" ), new CLiteral( ASSyntax.createLiteral( "onsubsubsub3.1.1" ) ), l_generator );
 
         return l_root;
     }

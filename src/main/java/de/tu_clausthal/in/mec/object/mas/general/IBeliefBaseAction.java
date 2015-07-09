@@ -40,9 +40,11 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
     /**
      * adds a mask into the current structure
      *
+     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @param p_mask mask
+     * @returns returns the added mask
      */
-    public void add( final IBeliefBaseMask<T> p_mask );
+    public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask );
 
     /**
      * clears all elements

@@ -41,24 +41,27 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * @param p_path path
      * @param p_literal literal
      */
-    void add( final CPath p_path, final ILiteral<T> p_literal );
+    public void add( final CPath p_path, final ILiteral<T> p_literal );
 
     /**
      * adds a mask in the current structure
      *
+     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @param p_path path
      * @param p_mask mask
      */
-    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask );
+    public IBeliefBaseMask<T> add( final CPath p_path, final IBeliefBaseMask<T> p_mask );
 
     /**
      * adds a mask in the current structure
      *
+     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @param p_path path
      * @param p_mask mask
      * @param p_generator beliefbase generator if beliefbase not exists
+     * @returns returns the added mask
      */
-    void add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IGenerator<T> p_generator );
+    public IBeliefBaseMask<T> add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IGenerator<T> p_generator );
 
     /**
      * adds a literal in the current structure

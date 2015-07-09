@@ -64,6 +64,8 @@ public class CBeliefBase<T> implements IBeliefBase<T>
      */
     public CBeliefBase( final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {
+        if ( p_storage == null )
+            throw new IllegalArgumentException( CCommon.getResourceString( CBeliefBase.class, "storageempty" ) );
         m_storage = p_storage;
     }
 
@@ -77,12 +79,6 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     public void add( final ILiteral<T> p_literal )
     {
         m_storage.addElement( p_literal.getFunctor().get(), p_literal );
-    }
-
-    @Override
-    public boolean equals( final Object p_object )
-    {
-        return this.hashCode() == p_object.hashCode();
     }
 
     /**
@@ -125,6 +121,11 @@ public class CBeliefBase<T> implements IBeliefBase<T>
          */
         private CMask( final String p_name, final IBeliefBase<P> p_beliefbase, final IBeliefBaseMask<P> p_parent )
         {
+            if ( ( p_name == null ) || ( p_name.isEmpty() ) )
+                throw new IllegalArgumentException( CCommon.getResourceString( CMask.class, "nameempty" ) );
+            if ( p_beliefbase == null )
+                throw new IllegalArgumentException( CCommon.getResourceString( CMask.class, "beliefbaseempty" ) );
+
             m_name = p_name;
             m_beliefbase = p_beliefbase;
             m_parent = p_parent;
@@ -213,12 +214,6 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             return l_items.iterator();
         }
 
-        @Override
-        public int hashCode()
-        {
-            return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
-        }
-
         /**
          * static method to generate FQN path
          *
@@ -235,9 +230,9 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
-        public void add( final ILiteral<P> p_literal )
+        public int hashCode()
         {
-            m_beliefbase.add( p_literal );
+            return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
         }
 
         /**
@@ -271,10 +266,25 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             return walk( p_path.getSubPath( 1 ), l_mask, p_generator );
         }
 
+        @Override
+        public void add( final ILiteral<P> p_literal )
+        {
+            m_beliefbase.add( p_literal );
+        }
+
 
         @Override
         public IBeliefBaseMask<P> add( final IBeliefBaseMask<P> p_mask )
         {
+            // check first, if a mask with an equal storage exists  on the path
+            for ( IBeliefBaseMask<P> l_mask = this; l_mask != null; )
+            {
+                if ( this.getStorage().equals( p_mask.getStorage() ) )
+                    throw new IllegalArgumentException( CCommon.getResourceString( CMask.class, "storageequal", p_mask.getName(), l_mask.getFQNPath() ) );
+
+                l_mask = l_mask.getParent();
+            }
+
             return m_beliefbase.add( p_mask.clone( this ) );
         }
 
@@ -329,6 +339,14 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             return "{ name : " + m_name + ", fqn : " + this.getFQNPath() + ", storage : " + m_beliefbase.getStorage() + " }";
         }
     }
+
+    @Override
+    public boolean equals( final Object p_object )
+    {
+        return this.hashCode() == p_object.hashCode();
+    }
+
+
 
 
     @Override

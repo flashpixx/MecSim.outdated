@@ -87,14 +87,15 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * @param p_path path
      * @return set with literal
      */
-    public Set<ILiteral<T>> get( final CPath p_path );
+    public Set<ILiteral<T>> getLiteral( final CPath p_path );
 
     /**
      * gets a list of all literals
      *
      * @return set with literals
      */
-    public Set<ILiteral<T>> get();
+    public Set<ILiteral<T>> getLiteral();
+
 
     /**
      * returns the full path

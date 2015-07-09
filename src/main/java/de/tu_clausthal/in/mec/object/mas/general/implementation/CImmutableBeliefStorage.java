@@ -31,12 +31,12 @@ public class CImmutableBeliefStorage<N, M extends Iterable<N>> extends CBeliefSt
 {
 
     @Override
-    public final void addElement( final String p_key, final N p_element )
+    public final void addMultiElement( final String p_key, final N p_element )
     {
     }
 
     @Override
-    public final void addMask( final String p_key, final M p_element )
+    public final void addSingleElement( final String p_key, final M p_element )
     {
     }
 
@@ -52,13 +52,13 @@ public class CImmutableBeliefStorage<N, M extends Iterable<N>> extends CBeliefSt
     }
 
     @Override
-    public final boolean removeElement( final String p_key, final N p_element )
+    public final boolean removeMultiElement( final String p_key, final N p_element )
     {
         return false;
     }
 
     @Override
-    public final boolean removeMask( final String p_key )
+    public final boolean removeSingleElement( final String p_key )
     {
         return false;
     }

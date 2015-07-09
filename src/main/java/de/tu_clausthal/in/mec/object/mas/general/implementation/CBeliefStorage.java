@@ -24,7 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefStorage;
+import de.tu_clausthal.in.mec.object.mas.general.IStorage;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,7 +40,7 @@ import java.util.Stack;
  * @tparam N element type
  * @tparam M mask type
  */
-public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<N, M>
+public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
 {
     /**
      * map with elements
@@ -49,10 +49,10 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     /**
      * map with masks
      **/
-    protected final Map<String, M> m_masks = new HashMap<>();
+    protected final Map<String, M> m_singleelements = new HashMap<>();
 
     @Override
-    public void addElement( final String p_key, final N p_element )
+    public void addMultiElement( final String p_key, final N p_element )
     {
         final Set<N> l_element;
 
@@ -68,26 +68,26 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     }
 
     @Override
-    public void addMask( final String p_key, final M p_element )
+    public void addSingleElement( final String p_key, final M p_element )
     {
-        m_masks.put( p_key, p_element );
+        m_singleelements.put( p_key, p_element );
     }
 
     @Override
     public void clear()
     {
         m_elements.clear();
-        m_masks.clear();
+        m_singleelements.clear();
     }
 
     @Override
     public final boolean contains( final String p_key )
     {
-        return m_elements.containsKey( p_key ) || m_masks.containsKey( p_key );
+        return m_elements.containsKey( p_key ) || m_singleelements.containsKey( p_key );
     }
 
     @Override
-    public final boolean containsElement( final String p_key )
+    public final boolean containsMultiElement( final String p_key )
     {
         final Set<N> l_elements = m_elements.get( p_key );
         if ( l_elements == null )
@@ -97,37 +97,37 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     }
 
     @Override
-    public final boolean containsMask( String p_key )
+    public final boolean containsSingleElement( String p_key )
     {
-        return m_masks.containsKey( p_key );
+        return m_singleelements.containsKey( p_key );
     }
 
     @Override
-    public final Set<N> getElement( final String p_key )
+    public final Set<N> getMultiElement( final String p_key )
     {
         return m_elements.get( p_key );
     }
 
     @Override
-    public final M getMask( final String p_key )
+    public final M getSingleElement( final String p_key )
     {
-        return m_masks.get( p_key );
+        return m_singleelements.get( p_key );
     }
 
     @Override
     public final boolean isEmpty()
     {
-        return m_elements.isEmpty() && m_masks.isEmpty();
+        return m_elements.isEmpty() && m_singleelements.isEmpty();
     }
 
     @Override
     public boolean remove( final String p_key )
     {
-        return ( m_masks.remove( p_key ) != null ) || ( m_elements.remove( p_key ) != null );
+        return ( m_singleelements.remove( p_key ) != null ) || ( m_elements.remove( p_key ) != null );
     }
 
     @Override
-    public boolean removeElement( final String p_key, final N p_element )
+    public boolean removeMultiElement( final String p_key, final N p_element )
     {
         final Set<N> l_element = m_elements.get( p_key );
         if ( l_element == null )
@@ -137,9 +137,9 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     }
 
     @Override
-    public boolean removeMask( final String p_key )
+    public boolean removeSingleElement( final String p_key )
     {
-        return m_masks.remove( p_key ) != null;
+        return m_singleelements.remove( p_key ) != null;
     }
 
     @Override
@@ -158,7 +158,7 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
                     for ( final Set<N> l_literals : m_elements.values() )
                         add( l_literals.iterator() );
 
-                    for ( final M l_mask : m_masks.values() )
+                    for ( final M l_mask : m_singleelements.values() )
                         add( l_mask.iterator() );
                 }};
 
@@ -186,6 +186,6 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IBeliefStorage<
     @Override
     public String toString()
     {
-        return "{ literals : " + m_elements + ", masks : " + m_masks + " }";
+        return "{ multi elements : " + m_elements + ", single elements : " + m_singleelements + " }";
     }
 }

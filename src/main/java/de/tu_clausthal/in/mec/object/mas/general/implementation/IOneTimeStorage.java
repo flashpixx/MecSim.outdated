@@ -35,7 +35,7 @@ public abstract class IOneTimeStorage<N, M extends Iterable<N>> extends CImmutab
     {
         // clear is final at the super, so clearing is run manually
         m_elements.clear();
-        m_masks.clear();
+        m_singleelements.clear();
 
         super.update();
         this.updating();

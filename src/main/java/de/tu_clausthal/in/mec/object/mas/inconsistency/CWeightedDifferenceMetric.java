@@ -80,8 +80,8 @@ public class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultMetric<
         final Set<ILiteral<?>> l_secondLiterals = new HashSet<>();
         for ( final CPath l_path : m_paths )
         {
-            l_firstLiterals.addAll( p_first.getBeliefs().get( l_path ) );
-            l_secondLiterals.addAll( p_second.getBeliefs().get( l_path ) );
+            l_firstLiterals.addAll( p_first.getBeliefs().getLiteral( l_path ) );
+            l_secondLiterals.addAll( p_second.getBeliefs().getLiteral( l_path ) );
         }
 
         // get size of union

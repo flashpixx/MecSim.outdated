@@ -31,12 +31,12 @@ public class CBeliefMaskStorage<N, M extends Iterable<N>> extends CBeliefStorage
 {
 
     @Override
-    public final void addElement( final String p_key, final N p_element )
+    public final void addMultiElement( final String p_key, final N p_element )
     {
     }
 
     @Override
-    public final boolean removeElement( final String p_key, final N p_element )
+    public final boolean removeMultiElement( final String p_key, final N p_element )
     {
         return false;
     }

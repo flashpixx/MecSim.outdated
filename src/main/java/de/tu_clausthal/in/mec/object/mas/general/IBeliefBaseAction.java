@@ -66,7 +66,7 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
      *
      * @tparam L typecast
      */
-    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
+    public <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
 
     /**
      * checks if the structure empty

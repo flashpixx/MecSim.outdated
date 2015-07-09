@@ -28,8 +28,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefStorage;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.IStorage;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     /**
      * storage with data
      */
-    protected final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage;
+    protected final IStorage<ILiteral<T>, IBeliefBaseMask<T>> m_storage;
 
 
     /**
@@ -62,7 +62,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
      *
      * @param p_storage storage
      */
-    public CBeliefBase( final IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
+    public CBeliefBase( final IStorage<ILiteral<T>, IBeliefBaseMask<T>> p_storage )
     {
         if ( p_storage == null )
             throw new IllegalArgumentException( CCommon.getResourceString( CBeliefBase.class, "storageempty" ) );
@@ -78,7 +78,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public void add( final ILiteral<T> p_literal )
     {
-        m_storage.addElement( p_literal.getFunctor().get(), p_literal );
+        m_storage.addMultiElement( p_literal.getFunctor().get(), p_literal );
     }
 
     /**
@@ -164,13 +164,13 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
-        public Set<ILiteral<P>> get( final CPath p_path )
+        public Set<ILiteral<P>> getLiteral( final CPath p_path )
         {
-            return walk( p_path, this, null ).get();
+            return walk( p_path, this, null ).getLiteral();
         }
 
         @Override
-        public Set<ILiteral<P>> get()
+        public Set<ILiteral<P>> getLiteral()
         {
             return new HashSet<ILiteral<P>>()
             {{
@@ -229,12 +229,6 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             return !p_mask.hasParent() ? p_path : getFQNPath( p_mask.getParent(), p_path );
         }
 
-        @Override
-        public int hashCode()
-        {
-            return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
-        }
-
         /**
          * returns a mask on the recursive descend
          *
@@ -252,7 +246,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
                 return p_root;
 
             // get the next mask (on ".." the parent is returned otherwise the child is used)
-            IBeliefBaseMask<Q> l_mask = "..".equals( p_path.get( 0 ) ) ? p_root.getParent() : p_root.getStorage().getMask( p_path.get( 0 ) );
+            IBeliefBaseMask<Q> l_mask = "..".equals( p_path.get( 0 ) ) ? p_root.getParent() : p_root.getStorage().getSingleElement( p_path.get( 0 ) );
 
             // if a generator is exists and the mask is null, a new mask is created and added to the current
             if ( ( l_mask == null ) && ( p_generator != null ) && ( !( "..".equals( p_path.get( 0 ) ) ) ) )
@@ -265,6 +259,14 @@ public class CBeliefBase<T> implements IBeliefBase<T>
             // recursive descend
             return walk( p_path.getSubPath( 1 ), l_mask, p_generator );
         }
+
+        @Override
+        public int hashCode()
+        {
+            return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
+        }
+
+
 
         @Override
         public void add( final ILiteral<P> p_literal )
@@ -322,7 +324,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
         }
 
         @Override
-        public <L extends IBeliefStorage<ILiteral<P>, IBeliefBaseMask<P>>> L getStorage()
+        public <L extends IStorage<ILiteral<P>, IBeliefBaseMask<P>>> L getStorage()
         {
             return m_beliefbase.getStorage();
         }
@@ -357,7 +359,7 @@ public class CBeliefBase<T> implements IBeliefBase<T>
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <L extends IBeliefStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
+    public <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
     {
         return (L) m_storage;
     }
@@ -366,20 +368,20 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask )
     {
-        m_storage.addMask( p_mask.getName(), p_mask );
+        m_storage.addSingleElement( p_mask.getName(), p_mask );
         return p_mask;
     }
 
     @Override
     public void remove( final ILiteral<T> p_literal )
     {
-        m_storage.removeElement( p_literal.getFunctor().get(), p_literal );
+        m_storage.removeMultiElement( p_literal.getFunctor().get(), p_literal );
     }
 
     @Override
     public void remove( final IBeliefBaseMask<T> p_mask )
     {
-        m_storage.removeMask( p_mask.getName() );
+        m_storage.removeSingleElement( p_mask.getName() );
     }
 
     @Override

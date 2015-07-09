@@ -29,8 +29,11 @@ import java.util.Set;
 
 /**
  * interface of a beliefbase storage
+ *
+ * @tparam N multiple elements
+ * @tparam M single elements
  */
-public interface IBeliefStorage<N, M> extends Iterable<N>
+public interface IStorage<N, M> extends Iterable<N>
 {
 
     /**
@@ -39,7 +42,7 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      * @param p_key key name
      * @param p_element element
      */
-    public void addElement( final String p_key, final N p_element );
+    public void addMultiElement( final String p_key, final N p_element );
 
     /**
      * adds a new mask
@@ -47,7 +50,7 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      * @param p_key key name
      * @param p_element mask element
      */
-    public void addMask( final String p_key, final M p_element );
+    public void addSingleElement( final String p_key, final M p_element );
 
     /**
      * clears all elements
@@ -68,7 +71,7 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      * @param p_key key name
      * @return exist boolean
      */
-    public boolean containsElement( final String p_key );
+    public boolean containsMultiElement( final String p_key );
 
     /**
      * checks if a mask exists
@@ -76,7 +79,7 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      * @param p_key key name
      * @return exist boolean
      */
-    public boolean containsMask( String p_key );
+    public boolean containsSingleElement( String p_key );
 
     /**
      * returns a set of elements
@@ -84,7 +87,7 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      * @param p_key key name
      * @return set
      */
-    public Set<N> getElement( final String p_key );
+    public Set<N> getMultiElement( final String p_key );
 
     /**
      * returns a mask
@@ -92,7 +95,7 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      * @param p_key key name
      * @return mask
      */
-    public M getMask( final String p_key );
+    public M getSingleElement( final String p_key );
 
     /**
      * checks if a storage is empty
@@ -116,7 +119,7 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      * @param p_element element
      * @return boolean flag, that the element is removed
      */
-    public boolean removeElement( final String p_key, final N p_element );
+    public boolean removeMultiElement( final String p_key, final N p_element );
 
     /**
      * removes a mask
@@ -124,7 +127,7 @@ public interface IBeliefStorage<N, M> extends Iterable<N>
      * @param p_key key name
      * @return boolean flag the element is removed
      */
-    public boolean removeMask( final String p_key );
+    public boolean removeSingleElement( final String p_key );
 
     /**
      * updates all items

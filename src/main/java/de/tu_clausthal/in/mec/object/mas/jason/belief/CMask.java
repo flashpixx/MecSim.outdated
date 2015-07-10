@@ -197,6 +197,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
             @Override
             public Literal next()
             {
+                // literal with path
                 return m_iterator.next().getLiteral();
             }
         };

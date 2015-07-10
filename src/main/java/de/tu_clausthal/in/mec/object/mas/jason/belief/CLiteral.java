@@ -36,6 +36,8 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.general.implemen
 
     /**
      * ctor with path specified
+     *
+     * @param p_literal Jason literal
      */
     public CLiteral( final Literal p_literal )
     {

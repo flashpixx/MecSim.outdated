@@ -33,6 +33,7 @@ import de.tu_clausthal.in.mec.object.mas.general.IStorage;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Stack;
 
 
 /**
@@ -40,7 +41,7 @@ import java.util.Set;
  *
  * @tparam P type of the beliefbase element
  */
-public class CMask<P> implements IBeliefBaseMask<P>
+public class CMask<T> implements IBeliefBaseMask<T>
 {
     /**
      * mask name
@@ -49,11 +50,11 @@ public class CMask<P> implements IBeliefBaseMask<P>
     /**
      * parent name
      */
-    private final IBeliefBaseMask<P> m_parent;
+    private final IBeliefBaseMask<T> m_parent;
     /**
      * reference to the beliefbase context
      */
-    private final IBeliefBase<P> m_beliefbase;
+    private final IBeliefBase<T> m_beliefbase;
 
     /**
      * ctor
@@ -61,7 +62,7 @@ public class CMask<P> implements IBeliefBaseMask<P>
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context
      */
-    public CMask( final String p_name, final IBeliefBase<P> p_beliefbase )
+    public CMask( final String p_name, final IBeliefBase<T> p_beliefbase )
     {
         this( p_name, p_beliefbase, null );
     }
@@ -73,7 +74,7 @@ public class CMask<P> implements IBeliefBaseMask<P>
      * @param p_beliefbase reference to the beliefbase context
      * @param p_parent reference to the parent mask
      */
-    public CMask( final String p_name, final IBeliefBase<P> p_beliefbase, final IBeliefBaseMask<P> p_parent )
+    public CMask( final String p_name, final IBeliefBase<T> p_beliefbase, final IBeliefBaseMask<T> p_parent )
     {
         if ( ( p_name == null ) || ( p_name.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CMask.class, "nameempty" ) );
@@ -86,65 +87,66 @@ public class CMask<P> implements IBeliefBaseMask<P>
     }
 
     @Override
-    public void add( final CPath p_path, final ILiteral<P> p_literal )
+    public void add( final CPath p_path, final ILiteral<T> p_literal )
     {
         this.add( p_path, p_literal, null );
     }
 
     @Override
-    public IBeliefBaseMask<P> add( final CPath p_path, final IBeliefBaseMask<P> p_mask )
+    public IBeliefBaseMask<T> add( final CPath p_path, final IBeliefBaseMask<T> p_mask )
     {
         return this.add( p_path, p_mask, null );
     }
 
     @Override
-    public IBeliefBaseMask<P> add( final CPath p_path, final IBeliefBaseMask<P> p_mask, final IGenerator<P> p_generator
+    public IBeliefBaseMask<T> add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IGenerator<T> p_generator
     )
     {
         return walk( p_path, this, p_generator ).add( p_mask );
     }
 
     @Override
-    public void add( final CPath p_path, final ILiteral<P> p_literal, final IGenerator<P> p_generator
+    public void add( final CPath p_path, final ILiteral<T> p_literal, final IGenerator<T> p_generator
     )
     {
         walk( p_path, this, p_generator ).add( p_literal );
     }
 
     @Override
-    public IBeliefBaseMask<P> clone( final IBeliefBaseMask<P> p_parent )
+    public IBeliefBaseMask<T> clone( final IBeliefBaseMask<T> p_parent )
     {
         return new CMask<>( m_name, m_beliefbase, p_parent );
     }
 
     @Override
-    public Set<ILiteral<P>> getLiterals( final CPath p_path )
+    public Set<ILiteral<T>> getLiterals( final CPath p_path )
     {
         return walk( p_path, this, null ).getLiterals();
     }
 
     @Override
-    public Set<ILiteral<P>> getLiterals()
+    public Set<ILiteral<T>> getLiterals()
     {
-        return new HashSet<ILiteral<P>>()
+        return new HashSet<ILiteral<T>>()
         {{
-                for ( final ILiteral<P> l_item : )
+                for ( final ILiteral<T> l_item : this )
                     add( l_item );
             }};
     }
 
     @Override
-    public Set<IBeliefBaseMask<P>> getMasks( final CPath p_path )
+    public Set<IBeliefBaseMask<T>> getMasks( final CPath p_path )
     {
-        return null;
+        return walk( p_path, this, null ).getMasks();
     }
 
     @Override
-    public Set<IBeliefBaseMask<P>> getMasks()
+    public Set<IBeliefBaseMask<T>> getMasks()
     {
-        return new HashSet<IBeliefBaseMask<P>>()
+        return new HashSet<IBeliefBaseMask<T>>()
         {{
-
+                for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
+                    add( l_iterator.next() );
             }};
     }
 
@@ -161,7 +163,7 @@ public class CMask<P> implements IBeliefBaseMask<P>
     }
 
     @Override
-    public IBeliefBaseMask<P> getParent()
+    public IBeliefBaseMask<T> getParent()
     {
         return m_parent;
     }
@@ -173,32 +175,39 @@ public class CMask<P> implements IBeliefBaseMask<P>
     }
 
     @Override
-    public Iterator<ILiteral<P>> iterator()
+    public Iterator<ILiteral<T>> iterator()
     {
         final CPath l_path = this.getFQNPath();
-        final Set<ILiteral<P>> l_items = new HashSet<>();
-        for ( final ILiteral<P> l_literal : m_beliefbase.getStorage().iteratorMultiElement() )
-            l_items.add( l_literal.clone( l_path ) );
 
-        /**
-         return new Iterator<ILiteral<P>>()
-         {
-         private final Stack<Iterator<P>> m_stack = new Stack<>();
+        return new Iterator<ILiteral<T>>()
+        {
+            private final Stack<Iterator<ILiteral<T>>> m_stack = new Stack<Iterator<ILiteral<T>>>()
+            {{
+                    add( m_beliefbase.getStorage().iteratorMultiElement() );
+                    for ( final Iterator<IBeliefBaseMask<T>> l_mask = m_beliefbase.getStorage().iteratorSingleElement(); l_mask.hasNext(); )
+                        add( l_mask.next().iterator() );
+                }};
 
-         @Override public boolean hasNext()
-         {
-         return false;
-         }
+            @Override
+            public boolean hasNext()
+            {
+                if ( m_stack.isEmpty() )
+                    return false;
+                if ( m_stack.peek().hasNext() )
+                    return true;
 
-         @Override public ILiteral<P> next()
-         {
-         return null;
-         }
-         };
-         */
+                m_stack.pop();
+                return this.hasNext();
+            }
 
-        return l_items.iterator();
+            @Override
+            public ILiteral<T> next()
+            {
+                return m_stack.peek().next().clone( l_path );
+            }
+        };
     }
+
 
     @Override
     public int hashCode()
@@ -213,16 +222,16 @@ public class CMask<P> implements IBeliefBaseMask<P>
     }
 
     @Override
-    public void add( final ILiteral<P> p_literal )
+    public void add( final ILiteral<T> p_literal )
     {
         m_beliefbase.add( p_literal );
     }
 
     @Override
-    public IBeliefBaseMask<P> add( final IBeliefBaseMask<P> p_mask )
+    public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask )
     {
         // check first, if a mask with an equal storage exists  on the path
-        for ( IBeliefBaseMask<P> l_mask = this; l_mask != null; )
+        for ( IBeliefBaseMask<T> l_mask = this; l_mask != null; )
         {
             if ( this.getStorage().equals( p_mask.getStorage() ) )
                 throw new IllegalArgumentException( CCommon.getResourceString( CMask.class, "storageequal", p_mask.getName(), l_mask.getFQNPath() ) );
@@ -240,13 +249,13 @@ public class CMask<P> implements IBeliefBaseMask<P>
     }
 
     @Override
-    public <E extends IBeliefBaseMask<P>> E createMask( final String p_name )
+    public <E extends IBeliefBaseMask<T>> E createMask( final String p_name )
     {
         return m_beliefbase.createMask( p_name );
     }
 
     @Override
-    public <L extends IStorage<ILiteral<P>, IBeliefBaseMask<P>>> L getStorage()
+    public <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
     {
         return m_beliefbase.getStorage();
     }
@@ -258,13 +267,13 @@ public class CMask<P> implements IBeliefBaseMask<P>
     }
 
     @Override
-    public void remove( final IBeliefBaseMask<P> p_mask )
+    public void remove( final IBeliefBaseMask<T> p_mask )
     {
         m_beliefbase.remove( p_mask );
     }
 
     @Override
-    public void remove( final ILiteral<P> p_literal )
+    public void remove( final ILiteral<T> p_literal )
     {
         m_beliefbase.remove( p_literal );
     }

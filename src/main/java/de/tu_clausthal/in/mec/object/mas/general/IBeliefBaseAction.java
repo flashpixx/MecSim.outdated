@@ -27,7 +27,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 /**
  * interface for equal method names on masks and beliefbases
  */
-public interface IBeliefBaseAction<T> extends Iterable<T>
+public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
 {
 
     /**

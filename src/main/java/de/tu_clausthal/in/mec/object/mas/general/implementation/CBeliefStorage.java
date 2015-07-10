@@ -40,7 +40,7 @@ import java.util.Stack;
  * @tparam N element type
  * @tparam M mask type
  */
-public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
+public class CBeliefStorage<N, M> implements IStorage<N, M>
 {
     /**
      * map with elements
@@ -50,50 +50,6 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
      * map with masks
      **/
     protected final Map<String, M> m_singleelements = new HashMap<>();
-
-    @Override
-    public Iterator<N> iteratorMultiElement()
-    {
-        return new Iterator<N>()
-        {
-            /**
-             * stack with all iterators
-             **/
-            private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
-            {{
-                    for ( final Set<N> l_item : m_multielements.values() )
-                        add( l_item.iterator() );
-                    for ( final M l_item : m_singleelements.values() )
-                        add( l_item.iterator() );
-                }};
-
-            @Override
-            public boolean hasNext()
-            {
-                if ( m_stack.isEmpty() )
-                    return false;
-
-                if ( m_stack.peek().hasNext() )
-                    return true;
-
-                m_stack.pop();
-                return this.hasNext();
-            }
-
-            @Override
-            public N next()
-            {
-                return m_stack.peek().next();
-            }
-        };
-    }
-
-    @Override
-    public Iterator<M> iteratorSingleElement()
-    {
-        return m_singleelements.values().iterator();
-    }
-
 
     @Override
     public void addMultiElement( final String p_key, final N p_element )
@@ -211,6 +167,47 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
     public int size()
     {
         return this.sizeMultiElement() + this.sizeSingleElement();
+    }
+
+    @Override
+    public Iterator<N> iteratorMultiElement()
+    {
+        return new Iterator<N>()
+        {
+            /**
+             * stack with all iterators
+             **/
+            private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
+            {{
+                    for ( final Set<N> l_item : m_multielements.values() )
+                        add( l_item.iterator() );
+                }};
+
+            @Override
+            public boolean hasNext()
+            {
+                if ( m_stack.isEmpty() )
+                    return false;
+
+                if ( m_stack.peek().hasNext() )
+                    return true;
+
+                m_stack.pop();
+                return this.hasNext();
+            }
+
+            @Override
+            public N next()
+            {
+                return m_stack.peek().next();
+            }
+        };
+    }
+
+    @Override
+    public Iterator<M> iteratorSingleElement()
+    {
+        return m_singleelements.values().iterator();
     }
 
     @Override

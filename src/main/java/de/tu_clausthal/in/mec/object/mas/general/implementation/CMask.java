@@ -175,40 +175,6 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
-    public Iterator<ILiteral<T>> iterator()
-    {
-        final CPath l_path = this.getFQNPath();
-
-        return new Iterator<ILiteral<T>>()
-        {
-            private final Stack<Iterator<ILiteral<T>>> m_stack = new Stack<Iterator<ILiteral<T>>>()
-            {{
-                    add( m_beliefbase.getStorage().iteratorMultiElement() );
-                    for ( final Iterator<IBeliefBaseMask<T>> l_mask = m_beliefbase.getStorage().iteratorSingleElement(); l_mask.hasNext(); )
-                        add( l_mask.next().iterator() );
-                }};
-
-            @Override
-            public boolean hasNext()
-            {
-                if ( m_stack.isEmpty() )
-                    return false;
-                if ( m_stack.peek().hasNext() )
-                    return true;
-
-                m_stack.pop();
-                return this.hasNext();
-            }
-
-            @Override
-            public ILiteral<T> next()
-            {
-                return m_stack.peek().next().clone( l_path );
-            }
-        };
-    }
-
-    @Override
     public int hashCode()
     {
         return 47 * m_name.hashCode() + 49 * m_beliefbase.hashCode();
@@ -299,6 +265,73 @@ public class CMask<T> implements IBeliefBaseMask<T>
     public int size()
     {
         return m_beliefbase.size();
+    }
+
+    @Override
+    public Iterator<ILiteral<T>> iteratorLiteral()
+    {
+        final CPath l_path = CMask.this.getFQNPath();
+        return new Iterator<ILiteral<T>>()
+        {
+
+            final Stack<Iterator<ILiteral<T>>> m_stack = new Stack<Iterator<ILiteral<T>>>()
+            {{
+                    add( CMask.this.getStorage().iteratorMultiElement() );
+                    for ( final Iterator<IBeliefBaseMask<T>> l_iterator = CMask.this.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
+                        add( l_iterator.next().iteratorLiteral() );
+                }};
+
+            @Override
+            public boolean hasNext()
+            {
+                if ( m_stack.isEmpty() )
+                    return false;
+                if ( m_stack.peek().hasNext() )
+                    return true;
+
+                m_stack.pop();
+                return this.hasNext();
+            }
+
+            @Override
+            public ILiteral<T> next()
+            {
+                return m_stack.peek().next().clone( l_path );
+            }
+
+        };
+    }
+
+    @Override
+    public Iterator<IBeliefBaseMask<T>> iteratorBeliefBaseMask()
+    {
+        return new Iterator<IBeliefBaseMask<T>>()
+        {
+            final Stack<Iterator<IBeliefBaseMask<T>>> m_stack = new Stack<Iterator<IBeliefBaseMask<T>>>()
+            {{
+                    add( CMask.this.getStorage().iteratorSingleElement() );
+                    for ( final Iterator<IBeliefBaseMask<T>> l_iterator = CMask.this.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
+                        add( l_iterator.next().iteratorBeliefBaseMask() );
+                }};
+
+            @Override
+            public boolean hasNext()
+            {
+                if ( m_stack.isEmpty() )
+                    return false;
+                if ( m_stack.peek().hasNext() )
+                    return true;
+
+                m_stack.pop();
+                return this.hasNext();
+            }
+
+            @Override
+            public IBeliefBaseMask<T> next()
+            {
+                return m_stack.peek().next();
+            }
+        };
     }
 
     /**

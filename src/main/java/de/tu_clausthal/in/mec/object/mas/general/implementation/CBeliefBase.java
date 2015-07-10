@@ -162,8 +162,15 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public Iterator<ILiteral<T>> iterator()
+    public Iterator<ILiteral<T>> iteratorMultiElement()
     {
         return m_storage.iteratorMultiElement();
     }
+
+    @Override
+    public Iterator<IBeliefBaseMask<T>> iteratorSingleElement()
+    {
+        return m_storage.iteratorSingleElement();
+    }
+
 }

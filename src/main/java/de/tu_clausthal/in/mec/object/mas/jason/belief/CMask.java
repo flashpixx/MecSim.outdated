@@ -34,6 +34,8 @@ import jason.bb.BeliefBase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.Iterator;
+
 
 /**
  * beliefbase mask that represent the Jason beliefbase
@@ -97,33 +99,27 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     }
 
     @Override
-    public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator pi )
+    public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator p_predicateIndicator )
     {
         return null;
     }
 
     @Override
-    public Iterator<Literal> getCandidateBeliefs( final Literal l, final Unifier u )
+    public Iterator<Literal> getCandidateBeliefs( final Literal p_literal, final Unifier p_unifier )
     {
         return null;
     }
 
     @Override
-    public Iterator<Literal> getRelevant( final Literal l )
+    public Iterator<Literal> getRelevant( final Literal p_literal )
     {
         return null;
     }
 
     @Override
-    public Literal contains( final Literal l )
+    public Literal contains( final Literal p_literal )
     {
         return null;
-    }
-
-    @Override
-    public int size()
-    {
-        return 0;
     }
 
     @Override
@@ -133,19 +129,19 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     }
 
     @Override
-    public boolean remove( final Literal l )
+    public boolean remove( final Literal p_literal )
     {
         return false;
     }
 
     @Override
-    public boolean abolish( final PredicateIndicator pi )
+    public boolean abolish( final PredicateIndicator p_predicateIndicator )
     {
         return false;
     }
 
     @Override
-    public Element getAsDOM( final Document document )
+    public Element getAsDOM( final Document p_document )
     {
         return null;
     }
@@ -155,4 +151,5 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     {
         return null;
     }
+
 }

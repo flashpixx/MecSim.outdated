@@ -38,20 +38,6 @@ public interface IStorage<N, M>
 {
 
     /**
-     * iterator over all multielements
-     *
-     * @return iterator
-     */
-    public Iterator<N> iteratorMultiElement();
-
-    /**
-     * iterator over all singlelements
-     *
-     * @return iterator
-     */
-    public Iterator<M> iteratorSingleElement();
-
-    /**
      * adds an element
      *
      * @param p_key key name
@@ -168,5 +154,20 @@ public interface IStorage<N, M>
      * number of all elements
      */
     public int size();
+
+    /**
+     * iterator over all multielements
+     *
+     * @return iterator
+     */
+    public Iterator<N> iteratorMultiElement();
+
+    /**
+     * iterator over all singlelements
+     *
+     * @return iterator
+     */
+    public Iterator<M> iteratorSingleElement();
+
 
 }

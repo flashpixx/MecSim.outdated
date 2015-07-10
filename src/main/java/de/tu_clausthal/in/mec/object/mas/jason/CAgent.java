@@ -29,7 +29,6 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBaseStorage;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefMaskStorage;
@@ -43,7 +42,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
-import jason.RevisionFailedException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.ActionExec;
@@ -449,6 +447,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
          */
         public final void cycle( final int p_currentstep )
         {
+            /*
             // update beliefbases
             m_beliefbases.get( "root" ).update();
 
@@ -468,7 +467,9 @@ public class CAgent<T> implements IVoidAgent<Literal>
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();
+            */
         }
+
     }
 
 }

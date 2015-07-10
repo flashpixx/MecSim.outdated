@@ -24,10 +24,13 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
+import java.util.Iterator;
+
+
 /**
  * interface for equal method names on masks and beliefbases
  */
-public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
+public interface IBeliefBaseAction<T>
 {
 
     /**
@@ -94,7 +97,6 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
      */
     public void update();
 
-
     /**
      * number of masks
      *
@@ -115,5 +117,20 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
      * @return size
      */
     public int size();
+
+    /**
+     * iterator over all multielements
+     *
+     * @return iterator
+     */
+    public Iterator<ILiteral<T>> iteratorLiteral();
+
+    /**
+     * iterator over all singlelements
+     *
+     * @return iterator
+     */
+    public Iterator<IBeliefBaseMask<T>> iteratorBeliefBaseMask();
+
 
 }

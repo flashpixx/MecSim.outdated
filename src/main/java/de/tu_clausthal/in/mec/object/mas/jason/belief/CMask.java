@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import jason.asSemantics.Agent;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.Literal;
@@ -95,12 +96,13 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Iterator<Literal> iterator()
     {
-        return null;
+        return this.literalIterator();
     }
 
     @Override
     public Iterator<Literal> getAll()
     {
+        // deprecated
         return null;
     }
 
@@ -119,6 +121,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Iterator<Literal> getRelevant( final Literal p_literal )
     {
+        // deprecated
         return null;
     }
 
@@ -131,7 +134,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Iterator<Literal> getPercepts()
     {
-        return null;
+        return this.literalIterator();
     }
 
     @Override
@@ -155,7 +158,35 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public BeliefBase clone()
     {
-        return null;
+        return this;
+    }
+
+    /**
+     * get literal iterator
+     *
+     * @return iterator
+     */
+    private Iterator<Literal> literalIterator()
+    {
+        return new Iterator<Literal>()
+        {
+            /**
+             * iterator
+             **/
+            final Iterator<ILiteral<Literal>> m_iterator = CMask.this.iteratorLiteral();
+
+            @Override
+            public boolean hasNext()
+            {
+                return m_iterator.hasNext();
+            }
+
+            @Override
+            public Literal next()
+            {
+                return m_iterator.next().getLiteral();
+            }
+        };
     }
 
 }

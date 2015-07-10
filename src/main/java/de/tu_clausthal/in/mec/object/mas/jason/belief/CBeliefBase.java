@@ -24,6 +24,8 @@
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.IStorage;
 import jason.asSyntax.Literal;
 
 
@@ -32,11 +34,41 @@ import jason.asSyntax.Literal;
  */
 public class CBeliefBase extends de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase<Literal>
 {
+    /**
+     * separator
+     */
+    private final String m_seperator;
+
+
+    /**
+     * ctor
+     *
+     * @param p_seperator separator
+     */
+    public CBeliefBase( final String p_seperator )
+    {
+        super();
+        m_seperator = p_seperator;
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_storage storage
+     * @param p_seperator separator
+     */
+    public CBeliefBase( final IStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>> p_storage, final String p_seperator
+    )
+    {
+        super( p_storage );
+        m_seperator = p_seperator;
+    }
+
     @Override
     @SuppressWarnings( "unchecked" )
     public <E extends IBeliefBaseMask<Literal>> E createMask( final String p_name )
     {
-        return (E) new CMask( p_name, this );
+        return (E) new CMask( p_name, this, m_seperator );
     }
 
 }

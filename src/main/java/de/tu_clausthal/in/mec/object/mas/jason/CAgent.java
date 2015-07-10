@@ -29,7 +29,6 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBaseStorage;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefMaskStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
@@ -37,6 +36,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
@@ -106,7 +106,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     /**
      * path seperator
      */
-    private static final String c_seperator = "::";
+    private static final String c_seperator = "_";
     /**
      * set with actions of this implementation
      */
@@ -189,9 +189,9 @@ public class CAgent<T> implements IVoidAgent<Literal>
         // create action bind & beliefbases with tree structure
         m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
 
-        m_beliefbases.add( c_beliefbaseroot, new CBeliefBase<>( new CBeliefMaskStorage<>() ) );
-        m_beliefbases.add( c_beliefbasemessage, new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
-        m_beliefbases.add( c_beliefbasebind, new CBeliefBase<>( new CBindingStorage() ) );
+        m_beliefbases.add( c_beliefbaseroot, new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ) );
+        m_beliefbases.add( c_beliefbasemessage, new CBeliefBase( new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator ) );
+        m_beliefbases.add( c_beliefbasebind, new CBeliefBase( new CBindingStorage(), c_seperator ) );
 
 
         m_beliefbaserootmask = m_beliefbases.get( c_beliefbaseroot ).createMask( c_beliefbaseroot );

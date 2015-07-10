@@ -171,6 +171,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
      * @throws JasonException throws an Jason exception
      * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
      * and all properties and methods will be bind to the agent with the source "self"
+     * @bug beliefbases
      */
     public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
@@ -194,9 +195,12 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_beliefbases.add( c_beliefbasemessage, new CBeliefBase<>( new CMessageStorage( m_agent.getTS(), c_seperator ) ) );
         m_beliefbases.add( c_beliefbasebind, new CBeliefBase<>( new CBindingStorage() ) );
 
+
         m_beliefbaserootmask = m_beliefbases.get( c_beliefbaseroot ).createMask( c_beliefbaseroot );
+        /*
         m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasebind ).createMask( c_beliefbasebind ) );
         m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasemessage ).createMask( c_beliefbasemessage ) );
+        */
 
         if ( p_bind != null )
         {

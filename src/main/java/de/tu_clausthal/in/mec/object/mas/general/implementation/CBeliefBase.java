@@ -136,7 +136,8 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public Iterator<T> iterator()
+    public Iterator<ILiteral<T>> iterator()
     {
+        return m_storage.iteratorMultiElement();
     }
 }

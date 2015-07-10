@@ -26,8 +26,13 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import jason.asSemantics.Agent;
+import jason.asSemantics.Unifier;
 import jason.asSyntax.Literal;
+import jason.asSyntax.PredicateIndicator;
 import jason.bb.BeliefBase;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 
 /**
@@ -59,5 +64,95 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     )
     {
         super( p_name, p_beliefbase, p_parent );
+    }
+
+    @Override
+    public void init( final Agent ag, final String[] args )
+    {
+
+    }
+
+    @Override
+    public void stop()
+    {
+
+    }
+
+    @Override
+    public boolean add( final Literal l )
+    {
+        return false;
+    }
+
+    @Override
+    public boolean add( final int index, final Literal l )
+    {
+        return false;
+    }
+
+    @Override
+    public Iterator<Literal> getAll()
+    {
+        return null;
+    }
+
+    @Override
+    public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator pi )
+    {
+        return null;
+    }
+
+    @Override
+    public Iterator<Literal> getCandidateBeliefs( final Literal l, final Unifier u )
+    {
+        return null;
+    }
+
+    @Override
+    public Iterator<Literal> getRelevant( final Literal l )
+    {
+        return null;
+    }
+
+    @Override
+    public Literal contains( final Literal l )
+    {
+        return null;
+    }
+
+    @Override
+    public int size()
+    {
+        return 0;
+    }
+
+    @Override
+    public Iterator<Literal> getPercepts()
+    {
+        return null;
+    }
+
+    @Override
+    public boolean remove( final Literal l )
+    {
+        return false;
+    }
+
+    @Override
+    public boolean abolish( final PredicateIndicator pi )
+    {
+        return false;
+    }
+
+    @Override
+    public Element getAsDOM( final Document document )
+    {
+        return null;
+    }
+
+    @Override
+    public BeliefBase clone()
+    {
+        return null;
     }
 }

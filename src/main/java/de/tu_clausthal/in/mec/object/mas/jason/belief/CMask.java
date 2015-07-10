@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
@@ -43,16 +44,22 @@ import java.util.Iterator;
  */
 public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementation.CMask<Literal> implements BeliefBase
 {
+    /**
+     * path separator
+     **/
+    private final String m_separator;
 
     /**
      * ctor
      *
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context
+     * @param p_separator separator
      */
-    public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase )
+    public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase, final String p_separator )
     {
         super( p_name, p_beliefbase );
+        m_separator = p_separator;
     }
 
     /**
@@ -61,16 +68,18 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context
      * @param p_parent reference to the parent mask
+     * @param p_separator separator
      */
     public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase,
-            final IBeliefBaseMask<Literal> p_parent
+            final IBeliefBaseMask<Literal> p_parent, final String p_separator
     )
     {
         super( p_name, p_beliefbase, p_parent );
+        m_separator = p_separator;
     }
 
     @Override
-    public void init( final Agent ag, final String[] args )
+    public void init( final Agent p_agent, final String[] p_args )
     {
 
     }
@@ -82,15 +91,19 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     }
 
     @Override
-    public boolean add( final Literal l )
+    public boolean add( final Literal p_literal )
     {
-        return false;
+        return this.add( 0, p_literal);
     }
 
     @Override
-    public boolean add( final int index, final Literal l )
+    public boolean add( final int p_index, final Literal p_literal )
     {
-        return false;
+        final CPath l_path = new CPath( m_separator, p_literal.getFunctor() );
+        l_path.setSeparator( CPath.DEFAULTSEPERATOR );
+
+        this.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( p_literal ) );
+        return true;
     }
 
     @Override

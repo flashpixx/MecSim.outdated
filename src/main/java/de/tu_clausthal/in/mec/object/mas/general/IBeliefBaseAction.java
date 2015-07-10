@@ -43,8 +43,8 @@ public interface IBeliefBaseAction<T>
     /**
      * adds a mask into the current structure
      *
-     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @param p_mask mask
+     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
      */
     public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask );
@@ -131,6 +131,5 @@ public interface IBeliefBaseAction<T>
      * @return iterator
      */
     public Iterator<IBeliefBaseMask<T>> iteratorBeliefBaseMask();
-
 
 }

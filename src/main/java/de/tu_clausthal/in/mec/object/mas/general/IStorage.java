@@ -169,5 +169,4 @@ public interface IStorage<N, M>
      */
     public Iterator<M> iteratorSingleElement();
 
-
 }

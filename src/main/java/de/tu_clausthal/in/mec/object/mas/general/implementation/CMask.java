@@ -273,7 +273,9 @@ public class CMask<T> implements IBeliefBaseMask<T>
         final CPath l_path = CMask.this.getFQNPath();
         return new Iterator<ILiteral<T>>()
         {
-
+            /**
+             * stack with iterators
+             **/
             final Stack<Iterator<ILiteral<T>>> m_stack = new Stack<Iterator<ILiteral<T>>>()
             {{
                     add( CMask.this.getStorage().iteratorMultiElement() );
@@ -307,6 +309,7 @@ public class CMask<T> implements IBeliefBaseMask<T>
     {
         return new Iterator<IBeliefBaseMask<T>>()
         {
+            /** stack with iterator **/
             final Stack<Iterator<IBeliefBaseMask<T>>> m_stack = new Stack<Iterator<IBeliefBaseMask<T>>>()
             {{
                     add( CMask.this.getStorage().iteratorSingleElement() );

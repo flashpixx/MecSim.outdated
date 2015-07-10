@@ -195,10 +195,8 @@ public class CAgent<T> implements IVoidAgent<Literal>
 
 
         m_beliefbaserootmask = m_beliefbases.get( c_beliefbaseroot ).createMask( c_beliefbaseroot );
-        /*
-        m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasebind ).createMask( c_beliefbasebind ) );
-        m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasemessage ).createMask( c_beliefbasemessage ) );
-        */
+        m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasebind ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind ) );
+        m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasemessage ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage ) );
 
         if ( p_bind != null )
         {

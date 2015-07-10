@@ -27,7 +27,7 @@ package de.tu_clausthal.in.mec.object.mas.general.implementation;
 /**
  * storage of a beliefbase for storing masks only
  */
-public class CBeliefMaskStorage<N, M extends Iterable<N>> extends CBeliefStorage<N, M>
+public class CBeliefMaskStorage<N, M> extends CBeliefStorage<N, M>
 {
 
     @Override

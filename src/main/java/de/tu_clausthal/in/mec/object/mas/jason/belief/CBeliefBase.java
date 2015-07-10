@@ -21,77 +21,22 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.jason.belief;
+
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import jason.asSyntax.Literal;
 
 
 /**
- * interface for equal method names on masks and beliefbases
+ * Jason specfic beliefbase
  */
-public interface IBeliefBaseAction<T> extends Iterable<T>
+public class CBeliefBase extends de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase<Literal>
 {
-
-    /**
-     * adds a literal in the current structure
-     *
-     * @param p_literal literal
-     */
-    public void add( final ILiteral<T> p_literal );
-
-    /**
-     * adds a mask into the current structure
-     *
-     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
-     * @param p_mask mask
-     * @returns returns the added mask
-     */
-    public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask );
-
-    /**
-     * clears all elements
-     */
-    public void clear();
-
-    /**
-     * returns a new mask of the belief base
-     *
-     * @param p_name name of the mask
-     * @return mask
-     */
-    public <E extends IBeliefBaseMask<T>> E createMask( final String p_name );
-
-    /**
-     * returns the storage of the beliefbase
-     *
-     * @return storage
-     *
-     * @tparam L typecast
-     */
-    public <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
-
-    /**
-     * checks if the structure empty
-     *
-     * @return empty boolean
-     */
-    public boolean isEmpty();
-
-    /**
-     * removes a mask in the current structure
-     *
-     * @param p_mask mask
-     */
-    public void remove( final IBeliefBaseMask<T> p_mask );
-
-    /**
-     * removes a literal in the current structure
-     *
-     * @param p_literal literal
-     */
-    public void remove( final ILiteral<T> p_literal );
-
-    /**
-     * updates all items
-     */
-    public void update();
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public <E extends IBeliefBaseMask<Literal>> E createMask( final String p_name )
+    {
+        return (E) new CMask( p_name, this );
+    }
 
 }

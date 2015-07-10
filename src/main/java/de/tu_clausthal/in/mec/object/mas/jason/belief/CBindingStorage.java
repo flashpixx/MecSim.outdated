@@ -85,13 +85,13 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
 
-                    final Set<ILiteral<Literal>> l_elements = m_elements.getOrDefault( l_literal.getFunctor(), new HashSet<>() );
+                    final Set<ILiteral<Literal>> l_elements = m_multielements.getOrDefault( l_literal.getFunctor(), new HashSet<>() );
                     l_elements.add(
                             new CLiteral(
                                     l_literal
                             )
                     );
-                    m_elements.put( l_literal.getFunctor(), l_elements );
+                    m_multielements.put( l_literal.getFunctor(), l_elements );
                 }
                 catch ( final Exception l_exception )
                 {

@@ -67,81 +67,76 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public int hashCode()
+    public final int hashCode()
     {
         return 23 * m_storage.hashCode();
     }
 
     @Override
-    public boolean equals( final Object p_object )
+    public final boolean equals( final Object p_object )
     {
         return this.hashCode() == p_object.hashCode();
     }
 
     @Override
-    public void add( final ILiteral<T> p_literal )
+    public final void add( final ILiteral<T> p_literal )
     {
         m_storage.addMultiElement( p_literal.getFunctor().get(), p_literal );
     }
 
     @Override
-    public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask )
+    public final IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask )
     {
         m_storage.addSingleElement( p_mask.getName(), p_mask );
         return p_mask;
     }
 
     @Override
-    public void clear()
+    public final void clear()
     {
         m_storage.clear();
     }
 
     @Override
-    public final IBeliefBaseMask<T> createMask( final String p_name )
+    @SuppressWarnings( "unchecked" )
+    public <E extends IBeliefBaseMask<T>> E createMask( final String p_name )
     {
-        return new CMask<T>( p_name, this );
+        return (E) new CMask<T>( p_name, this );
     }
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
+    public final <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage()
     {
         return (L) m_storage;
     }
 
     @Override
-    public boolean isEmpty()
+    public final boolean isEmpty()
     {
         return m_storage.isEmpty();
     }
 
     @Override
-    public void remove( final IBeliefBaseMask<T> p_mask )
+    public final void remove( final IBeliefBaseMask<T> p_mask )
     {
         m_storage.removeSingleElement( p_mask.getName() );
     }
 
     @Override
-    public void remove( final ILiteral<T> p_literal )
+    public final void remove( final ILiteral<T> p_literal )
     {
         m_storage.removeMultiElement( p_literal.getFunctor().get(), p_literal );
     }
 
     @Override
-    public void update()
+    public final void update()
     {
         m_storage.update();
     }
 
     @Override
-    public Iterator<ILiteral<T>> iterator()
+    public Iterator<T> iterator()
     {
-        return m_storage.iterator();
     }
-
-
-
-
-
 }

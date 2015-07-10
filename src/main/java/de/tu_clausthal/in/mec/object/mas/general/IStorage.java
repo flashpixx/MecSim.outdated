@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
+import java.util.Iterator;
 import java.util.Set;
 
 
@@ -33,8 +34,22 @@ import java.util.Set;
  * @tparam N multiple elements
  * @tparam M single elements
  */
-public interface IStorage<N, M> extends Iterable<N>
+public interface IStorage<N, M>
 {
+
+    /**
+     * iterator over all multielements
+     *
+     * @return iterator
+     */
+    public Iterator<N> iteratorMultiElement();
+
+    /**
+     * iterator over all singlelements
+     *
+     * @return iterator
+     */
+    public Iterator<M> iteratorSingleElement();
 
     /**
      * adds an element

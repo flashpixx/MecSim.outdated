@@ -140,9 +140,9 @@ public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefB
      */
     private void addElement( final ILiteral<Literal> p_literal )
     {
-        final Set<ILiteral<Literal>> l_set = m_elements.getOrDefault( p_literal.getFunctor().get(), new HashSet<>() );
-        if ( !m_elements.containsKey( p_literal.getFunctor().get() ) )
-            m_elements.put( p_literal.getFunctor().get(), l_set );
+        final Set<ILiteral<Literal>> l_set = m_multielements.getOrDefault( p_literal.getFunctor().get(), new HashSet<>() );
+        if ( !m_multielements.containsKey( p_literal.getFunctor().get() ) )
+            m_multielements.put( p_literal.getFunctor().get(), l_set );
 
         l_set.add( p_literal );
     }

@@ -1,3 +1,26 @@
+/**
+ * @cond LICENSE
+ * ######################################################################################
+ * # GPL License                                                                        #
+ * #                                                                                    #
+ * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
+ * # This program is free software: you can redistribute it and/or modify               #
+ * # it under the terms of the GNU General Public License as                            #
+ * # published by the Free Software Foundation, either version 3 of the                 #
+ * # License, or (at your option) any later version.                                    #
+ * #                                                                                    #
+ * # This program is distributed in the hope that it will be useful,                    #
+ * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
+ * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
+ * # GNU General Public License for more details.                                       #
+ * #                                                                                    #
+ * # You should have received a copy of the GNU General Public License                  #
+ * # along with this program. If not, see http://www.gnu.org/licenses/                  #
+ * ######################################################################################
+ * @endcond
+ */
+
 package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
 import de.tu_clausthal.in.mec.common.CCommon;
@@ -33,7 +56,7 @@ public class CMask<P> implements IBeliefBaseMask<P>
     private final IBeliefBase<P> m_beliefbase;
 
     /**
-     * private ctpr
+     * ctor
      *
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context
@@ -44,7 +67,7 @@ public class CMask<P> implements IBeliefBaseMask<P>
     }
 
     /**
-     * private ctpr
+     * private ctor
      *
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context
@@ -105,7 +128,7 @@ public class CMask<P> implements IBeliefBaseMask<P>
     {
         return new HashSet<ILiteral<P>>()
         {{
-                for ( final ILiteral<P> l_item : m_beliefbase )
+                for ( final ILiteral<P> l_item : )
                     add( l_item );
             }};
     }
@@ -154,8 +177,25 @@ public class CMask<P> implements IBeliefBaseMask<P>
     {
         final CPath l_path = this.getFQNPath();
         final Set<ILiteral<P>> l_items = new HashSet<>();
-        for ( final ILiteral<P> l_literal : m_beliefbase )
+        for ( final ILiteral<P> l_literal : m_beliefbase.getStorage().iteratorMultiElement() )
             l_items.add( l_literal.clone( l_path ) );
+
+        /**
+         return new Iterator<ILiteral<P>>()
+         {
+         private final Stack<Iterator<P>> m_stack = new Stack<>();
+
+         @Override public boolean hasNext()
+         {
+         return false;
+         }
+
+         @Override public ILiteral<P> next()
+         {
+         return null;
+         }
+         };
+         */
 
         return l_items.iterator();
     }
@@ -200,7 +240,7 @@ public class CMask<P> implements IBeliefBaseMask<P>
     }
 
     @Override
-    public IBeliefBaseMask<P> createMask( final String p_name )
+    public <E extends IBeliefBaseMask<P>> E createMask( final String p_name )
     {
         return m_beliefbase.createMask( p_name );
     }

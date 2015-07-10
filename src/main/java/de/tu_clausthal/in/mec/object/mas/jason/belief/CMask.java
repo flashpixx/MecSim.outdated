@@ -21,77 +21,43 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.jason.belief;
+
+
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import jason.asSyntax.Literal;
+import jason.bb.BeliefBase;
 
 
 /**
- * interface for equal method names on masks and beliefbases
+ * beliefbase mask that represent the Jason beliefbase
  */
-public interface IBeliefBaseAction<T> extends Iterable<T>
+public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementation.CMask<Literal> implements BeliefBase
 {
 
     /**
-     * adds a literal in the current structure
-     *
-     * @param p_literal literal
-     */
-    public void add( final ILiteral<T> p_literal );
-
-    /**
-     * adds a mask into the current structure
-     *
-     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
-     * @param p_mask mask
-     * @returns returns the added mask
-     */
-    public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask );
-
-    /**
-     * clears all elements
-     */
-    public void clear();
-
-    /**
-     * returns a new mask of the belief base
+     * ctor
      *
      * @param p_name name of the mask
-     * @return mask
+     * @param p_beliefbase reference to the beliefbase context
      */
-    public <E extends IBeliefBaseMask<T>> E createMask( final String p_name );
+    public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase )
+    {
+        super( p_name, p_beliefbase );
+    }
 
     /**
-     * returns the storage of the beliefbase
+     * private ctor
      *
-     * @return storage
-     *
-     * @tparam L typecast
+     * @param p_name name of the mask
+     * @param p_beliefbase reference to the beliefbase context
+     * @param p_parent reference to the parent mask
      */
-    public <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
-
-    /**
-     * checks if the structure empty
-     *
-     * @return empty boolean
-     */
-    public boolean isEmpty();
-
-    /**
-     * removes a mask in the current structure
-     *
-     * @param p_mask mask
-     */
-    public void remove( final IBeliefBaseMask<T> p_mask );
-
-    /**
-     * removes a literal in the current structure
-     *
-     * @param p_literal literal
-     */
-    public void remove( final ILiteral<T> p_literal );
-
-    /**
-     * updates all items
-     */
-    public void update();
-
+    public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase,
+            final IBeliefBaseMask<Literal> p_parent
+    )
+    {
+        super( p_name, p_beliefbase, p_parent );
+    }
 }

@@ -45,23 +45,67 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
     /**
      * map with elements
      **/
-    protected final Map<String, Set<N>> m_elements = new HashMap<>();
+    protected final Map<String, Set<N>> m_multielements = new HashMap<>();
     /**
      * map with masks
      **/
     protected final Map<String, M> m_singleelements = new HashMap<>();
 
     @Override
+    public Iterator<N> iteratorMultiElement()
+    {
+        return new Iterator<N>()
+        {
+            /**
+             * stack with all iterators
+             **/
+            private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
+            {{
+                    for ( final Set<N> l_item : m_multielements.values() )
+                        add( l_item.iterator() );
+                    for ( final M l_item : m_singleelements.values() )
+                        add( l_item.iterator() );
+                }};
+
+            @Override
+            public boolean hasNext()
+            {
+                if ( m_stack.isEmpty() )
+                    return false;
+
+                if ( m_stack.peek().hasNext() )
+                    return true;
+
+                m_stack.pop();
+                return this.hasNext();
+            }
+
+            @Override
+            public N next()
+            {
+                return m_stack.peek().next();
+            }
+        };
+    }
+
+    @Override
+    public Iterator<M> iteratorSingleElement()
+    {
+        return m_singleelements.values().iterator();
+    }
+
+
+    @Override
     public void addMultiElement( final String p_key, final N p_element )
     {
         final Set<N> l_element;
 
-        if ( m_elements.containsKey( p_key ) )
-            l_element = m_elements.get( p_key );
+        if ( m_multielements.containsKey( p_key ) )
+            l_element = m_multielements.get( p_key );
         else
         {
             l_element = new HashSet<>();
-            m_elements.put( p_key, l_element );
+            m_multielements.put( p_key, l_element );
         }
 
         l_element.add( p_element );
@@ -76,20 +120,20 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
     @Override
     public void clear()
     {
-        m_elements.clear();
+        m_multielements.clear();
         m_singleelements.clear();
     }
 
     @Override
     public final boolean contains( final String p_key )
     {
-        return m_elements.containsKey( p_key ) || m_singleelements.containsKey( p_key );
+        return m_multielements.containsKey( p_key ) || m_singleelements.containsKey( p_key );
     }
 
     @Override
     public final boolean containsMultiElement( final String p_key )
     {
-        final Set<N> l_elements = m_elements.get( p_key );
+        final Set<N> l_elements = m_multielements.get( p_key );
         if ( l_elements == null )
             return false;
 
@@ -105,7 +149,7 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
     @Override
     public final Set<N> getMultiElement( final String p_key )
     {
-        return m_elements.get( p_key );
+        return m_multielements.get( p_key );
     }
 
     @Override
@@ -117,19 +161,19 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
     @Override
     public final boolean isEmpty()
     {
-        return m_elements.isEmpty() && m_singleelements.isEmpty();
+        return m_multielements.isEmpty() && m_singleelements.isEmpty();
     }
 
     @Override
     public boolean remove( final String p_key )
     {
-        return ( m_singleelements.remove( p_key ) != null ) || ( m_elements.remove( p_key ) != null );
+        return ( m_singleelements.remove( p_key ) != null ) || ( m_multielements.remove( p_key ) != null );
     }
 
     @Override
     public boolean removeMultiElement( final String p_key, final N p_element )
     {
-        final Set<N> l_element = m_elements.get( p_key );
+        final Set<N> l_element = m_multielements.get( p_key );
         if ( l_element == null )
             return false;
 
@@ -149,43 +193,8 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
     }
 
     @Override
-    public final Iterator<N> iterator()
-    {
-        return new Iterator<N>()
-        {
-            private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
-            {{
-                    for ( final Set<N> l_literals : m_elements.values() )
-                        add( l_literals.iterator() );
-
-                    for ( final M l_mask : m_singleelements.values() )
-                        add( l_mask.iterator() );
-                }};
-
-            @Override
-            public final boolean hasNext()
-            {
-                if ( m_stack.isEmpty() )
-                    return false;
-
-                if ( m_stack.peek().hasNext() )
-                    return true;
-
-                m_stack.pop();
-                return this.hasNext();
-            }
-
-            @Override
-            public final N next()
-            {
-                return m_stack.peek().next();
-            }
-        };
-    }
-
-    @Override
     public String toString()
     {
-        return "{ multi elements : " + m_elements + ", single elements : " + m_singleelements + " }";
+        return "{ multi elements : " + m_multielements + ", single elements : " + m_singleelements + " }";
     }
 }

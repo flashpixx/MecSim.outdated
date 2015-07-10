@@ -136,6 +136,32 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
+    public int sizeMask()
+    {
+        int l_sum = m_storage.sizeSingleElement();
+        for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
+            l_sum += l_iterator.next().sizeMask();
+
+        return l_sum;
+    }
+
+    @Override
+    public int sizeLiteral()
+    {
+        int l_sum = m_storage.sizeMultiElement();
+        for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
+            l_sum += l_iterator.next().sizeLiteral();
+
+        return l_sum;
+    }
+
+    @Override
+    public int size()
+    {
+        return this.sizeMask() + this.sizeLiteral();
+    }
+
+    @Override
     public Iterator<ILiteral<T>> iterator()
     {
         return m_storage.iteratorMultiElement();

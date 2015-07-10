@@ -193,6 +193,27 @@ public class CBeliefStorage<N, M extends Iterable<N>> implements IStorage<N, M>
     }
 
     @Override
+    public int sizeMultiElement()
+    {
+        int l_sum = 0;
+        for ( final Set<N> l_item : m_multielements.values() )
+            l_sum += l_item.size();
+        return 0;
+    }
+
+    @Override
+    public int sizeSingleElement()
+    {
+        return m_multielements.size();
+    }
+
+    @Override
+    public int size()
+    {
+        return this.sizeMultiElement() + this.sizeSingleElement();
+    }
+
+    @Override
     public String toString()
     {
         return "{ multi elements : " + m_multielements + ", single elements : " + m_singleelements + " }";

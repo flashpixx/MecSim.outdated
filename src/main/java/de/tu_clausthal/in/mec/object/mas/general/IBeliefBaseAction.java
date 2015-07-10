@@ -94,4 +94,26 @@ public interface IBeliefBaseAction<T> extends Iterable<ILiteral<T>>
      */
     public void update();
 
+
+    /**
+     * number of masks
+     *
+     * @return size
+     */
+    public int sizeMask();
+
+    /**
+     * number of literals
+     *
+     * @return size
+     */
+    public int sizeLiteral();
+
+    /**
+     * number of element
+     *
+     * @return size
+     */
+    public int size();
+
 }

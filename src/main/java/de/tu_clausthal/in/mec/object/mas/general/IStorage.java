@@ -149,4 +149,24 @@ public interface IStorage<N, M>
      */
     public void update();
 
+    /**
+     * number of multielements
+     *
+     * @return size
+     */
+    public int sizeMultiElement();
+
+    /**
+     * number of singleelements
+     *
+     * @return size
+     */
+    public int sizeSingleElement();
+
+
+    /**
+     * number of all elements
+     */
+    public int size();
+
 }

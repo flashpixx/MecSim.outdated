@@ -208,7 +208,6 @@ public class CMask<T> implements IBeliefBaseMask<T>
         };
     }
 
-
     @Override
     public int hashCode()
     {
@@ -282,6 +281,24 @@ public class CMask<T> implements IBeliefBaseMask<T>
     public void update()
     {
         m_beliefbase.update();
+    }
+
+    @Override
+    public int sizeMask()
+    {
+        return m_beliefbase.sizeMask();
+    }
+
+    @Override
+    public int sizeLiteral()
+    {
+        return m_beliefbase.sizeLiteral();
+    }
+
+    @Override
+    public int size()
+    {
+        return m_beliefbase.size();
     }
 
     /**

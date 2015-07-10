@@ -93,6 +93,12 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     }
 
     @Override
+    public Iterator<Literal> iterator()
+    {
+        return null;
+    }
+
+    @Override
     public Iterator<Literal> getAll()
     {
         return null;

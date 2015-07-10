@@ -80,8 +80,8 @@ public class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric
 
         for ( final CPath l_path : m_paths )
         {
-            l_firstLiterals.addAll( p_first.getBeliefs().getLiteral( l_path ) );
-            l_secondLiterals.addAll( p_second.getBeliefs().getLiteral( l_path ) );
+            l_firstLiterals.addAll( p_first.getBeliefs().getLiterals( l_path ) );
+            l_secondLiterals.addAll( p_second.getBeliefs().getLiterals( l_path ) );
         }
 
 

@@ -27,7 +27,7 @@ package de.tu_clausthal.in.mec.object.mas.general.implementation;
 /**
  * class to update an immutable belief storage
  */
-public abstract class IOneTimeStorage<N, M extends Iterable<N>> extends CImmutableBeliefStorage<N, M>
+public abstract class IOneTimeStorage<N, M> extends CImmutableBeliefStorage<N, M>
 {
 
     @Override

@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * binding belief storage
  */
-public abstract class IBindStorage<N, M extends Iterable<N>> extends IOneTimeStorage<N, M>
+public abstract class IBindStorage<N, M> extends IOneTimeStorage<N, M>
 {
     /**
      * field filter

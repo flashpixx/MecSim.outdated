@@ -93,6 +93,13 @@ public interface IBeliefBaseAction<T>
     public void remove( final ILiteral<T> p_literal );
 
     /**
+     * removes mask and literal at the current structure
+     *
+     * @param p_name name
+     */
+    void remove( final String p_name );
+
+    /**
      * updates all items
      */
     public void update();

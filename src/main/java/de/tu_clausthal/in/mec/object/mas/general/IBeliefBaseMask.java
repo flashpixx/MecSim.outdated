@@ -73,6 +73,29 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
     void add( final CPath p_path, final ILiteral<T> p_literal, final IGenerator<T> p_generator );
 
     /**
+     * removes a literal
+     *
+     * @param p_path path
+     * @param p_literal literal
+     */
+    void remove( final CPath p_path, final ILiteral<T> p_literal );
+
+    /**
+     * removes a mask
+     *
+     * @param p_path path
+     * @param p_mask mask
+     */
+    void remove( final CPath p_path, final IBeliefBaseMask<T> p_mask );
+
+    /**
+     * removes literal and mask
+     *
+     * @param p_path path
+     */
+    void remove( final CPath p_path );
+
+    /**
      * clones the current mask
      *
      * @param p_parent new parent

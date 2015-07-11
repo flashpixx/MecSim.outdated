@@ -113,6 +113,24 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
+    public void remove( final CPath p_path, final ILiteral<T> p_literal )
+    {
+        walk( p_path, this, null ).remove( p_literal );
+    }
+
+    @Override
+    public void remove( final CPath p_path, final IBeliefBaseMask<T> p_mask )
+    {
+        walk( p_path, this, null ).remove( p_mask );
+    }
+
+    @Override
+    public void remove( final CPath p_path )
+    {
+        walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).remove( p_path.getSuffix() );
+    }
+
+    @Override
     public IBeliefBaseMask<T> clone( final IBeliefBaseMask<T> p_parent )
     {
         return new CMask<>( m_name, m_beliefbase, p_parent );
@@ -241,6 +259,12 @@ public class CMask<T> implements IBeliefBaseMask<T>
     public void remove( final ILiteral<T> p_literal )
     {
         m_beliefbase.remove( p_literal );
+    }
+
+    @Override
+    public void remove( final String p_name )
+    {
+        m_beliefbase.remove( p_name );
     }
 
     @Override

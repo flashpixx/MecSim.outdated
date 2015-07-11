@@ -153,7 +153,11 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public boolean remove( final Literal p_literal )
     {
-        return false;
+        final CPath l_path = new CPath( m_separator, p_literal.getFunctor() );
+        l_path.setSeparator( CPath.DEFAULTSEPERATOR );
+
+        this.remove( l_path, new CLiteral( p_literal ) );
+        return true;
     }
 
     @Override

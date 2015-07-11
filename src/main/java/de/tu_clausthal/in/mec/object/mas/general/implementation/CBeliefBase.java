@@ -94,6 +94,8 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     @Override
     public final void clear()
     {
+        for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
+            l_iterator.next().clear();
         m_storage.clear();
     }
 
@@ -127,6 +129,12 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     public final void remove( final ILiteral<T> p_literal )
     {
         m_storage.removeMultiElement( p_literal.getFunctor().get(), p_literal );
+    }
+
+    @Override
+    public void remove( final String p_name )
+    {
+        m_storage.remove( p_name );
     }
 
     @Override

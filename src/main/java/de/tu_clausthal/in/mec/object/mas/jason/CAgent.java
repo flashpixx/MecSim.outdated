@@ -445,27 +445,12 @@ public class CAgent<T> implements IVoidAgent<Literal>
          */
         public final void cycle( final int p_currentstep )
         {
-            /*
-            // update beliefbases
-            m_beliefbases.get( "root" ).update();
-
-            // synchronize agent beliefbase
-            m_agent.getBB().clear();
-            for ( final ILiteral<Literal> l_literal : m_beliefbases.get( "root" ) )
-                try
-                {
-                    m_agent.addBel( l_literal.getLiteral() );
-                }
-                catch ( final RevisionFailedException l_exception )
-                {
-                    CLogger.error( l_exception );
-                }
+            m_beliefbaserootmask.update();
 
             // run agent reasoning cycle for deducing new beliefs
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();
-            */
         }
 
     }

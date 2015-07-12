@@ -29,7 +29,6 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBaseStorage;
 import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefMaskStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
@@ -124,10 +123,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
      */
     private final IBeliefBaseMask<Literal> m_beliefbaserootmask;
     /**
-     * agents beliefbases
-     */
-    private final CBeliefBaseStorage<Literal> m_beliefbases = new CBeliefBaseStorage();
-    /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
      */
@@ -189,14 +184,13 @@ public class CAgent<T> implements IVoidAgent<Literal>
         // create action bind & beliefbases with tree structure
         m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
 
-        m_beliefbases.add( c_beliefbaseroot, new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ) );
-        m_beliefbases.add( c_beliefbasemessage, new CBeliefBase( new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator ) );
-        m_beliefbases.add( c_beliefbasebind, new CBeliefBase( new CBindingStorage(), c_seperator ) );
-
-
-        m_beliefbaserootmask = m_beliefbases.get( c_beliefbaseroot ).createMask( c_beliefbaseroot );
-        m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasebind ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind ) );
-        m_beliefbases.get( c_beliefbaseroot ).add( m_beliefbases.get( c_beliefbasemessage ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage ) );
+        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ).createMask( c_beliefbaseroot );
+        m_beliefbaserootmask.add(
+                new CBeliefBase( new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator ).<IBeliefBaseMask<Literal>>createMask(
+                        c_beliefbasebind
+                )
+        );
+        m_beliefbaserootmask.add( new CBeliefBase( new CBindingStorage(), c_seperator ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage ) );
 
         if ( p_bind != null )
         {
@@ -204,6 +198,9 @@ public class CAgent<T> implements IVoidAgent<Literal>
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", m_methodBind );
 
+            m_beliefbaserootmask.get
+
+                    .<CBindingStorage>getStorage().push( c_bindname, this );
             m_beliefbases.get( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, this );
         }
     }

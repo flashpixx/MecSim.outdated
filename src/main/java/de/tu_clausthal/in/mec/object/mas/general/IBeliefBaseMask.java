@@ -26,7 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.general;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
-import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -108,32 +108,32 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * of the path
      *
      * @param p_path path
-     * @return set with literal
+     * @return map with literal
      */
-    public Set<ILiteral<T>> getLiterals( final CPath p_path );
+    public Map<CPath, ILiteral<T>> getLiterals( final CPath p_path );
 
     /**
      * gets a list of all literals
      *
      * @return set with literals
      */
-    public Set<ILiteral<T>> getLiterals();
+    public Map<CPath, ILiteral<T>> getLiterals();
 
     /**
      * gets a list of all literals
      * of the path
      *
      * @param p_path path
-     * @return set with literal
+     * @return map with literal
      */
-    public Set<IBeliefBaseMask<T>> getMasks( final CPath p_path );
+    public Map<CPath, IBeliefBaseMask<T>> getMasks( final CPath p_path );
 
     /**
      * gets a list of all literals
      *
-     * @return set with literals
+     * @return map with literals
      */
-    public Set<IBeliefBaseMask<T>> getMasks();
+    public Map<CPath, IBeliefBaseMask<T>> getMasks();
 
     /**
      * returns the full path

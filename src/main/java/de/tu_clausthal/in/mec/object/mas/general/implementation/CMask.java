@@ -30,9 +30,9 @@ import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.general.IStorage;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.Map;
 import java.util.Stack;
 
 
@@ -137,34 +137,37 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
-    public Set<ILiteral<T>> getLiterals( final CPath p_path )
+    public Map<CPath, ILiteral<T>> getLiterals( final CPath p_path )
     {
         return walk( p_path, this, null ).getLiterals();
     }
 
     @Override
-    public Set<ILiteral<T>> getLiterals()
+    public Map<CPath, ILiteral<T>> getLiterals()
     {
-        return new HashSet<ILiteral<T>>()
+        return new HashMap<CPath, ILiteral<T>>()
         {{
-                for ( final ILiteral<T> l_item : this )
-                    add( l_item );
+                for ( final ILiteral<T> l_item : this.values() )
+                    put( CMask.this.getFQNPath().append( l_item.getFunctor().get() ), l_item.clone( CMask.this.getFQNPath() ) );
             }};
     }
 
     @Override
-    public Set<IBeliefBaseMask<T>> getMasks( final CPath p_path )
+    public Map<CPath, IBeliefBaseMask<T>> getMasks( final CPath p_path )
     {
         return walk( p_path, this, null ).getMasks();
     }
 
     @Override
-    public Set<IBeliefBaseMask<T>> getMasks()
+    public Map<CPath, IBeliefBaseMask<T>> getMasks()
     {
-        return new HashSet<IBeliefBaseMask<T>>()
+        return new HashMap<CPath, IBeliefBaseMask<T>>()
         {{
                 for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
-                    add( l_iterator.next() );
+                {
+                    final IBeliefBaseMask<T> l_mask = l_iterator.next();
+                    put( l_mask.getFQNPath(), l_mask );
+                }
             }};
     }
 

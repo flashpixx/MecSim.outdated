@@ -168,7 +168,10 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Element getAsDOM( final Document p_document )
     {
-        return null;
+        final Element l_beliefs = (Element) p_document.createElement( "beliefs" );
+        for ( final Literal l_item : this )
+            l_beliefs.appendChild( l_item.getAsDOM( p_document ) );
+        return l_beliefs;
     }
 
     @Override

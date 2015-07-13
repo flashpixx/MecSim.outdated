@@ -93,15 +93,13 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public boolean add( final Literal p_literal )
     {
-        return this.add( 0, p_literal);
+        return this.add( 0, p_literal );
     }
 
     @Override
     public boolean add( final int p_index, final Literal p_literal )
     {
-        final CPath l_path = new CPath( m_separator, p_literal.getFunctor() );
-        l_path.setSeparator( CPath.DEFAULTSEPERATOR );
-
+        final CPath l_path = this.splitPath( p_literal );
         this.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( p_literal ) );
         return true;
     }
@@ -141,6 +139,10 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Literal contains( final Literal p_literal )
     {
+        final CPath l_path = this.splitPath( p_literal );
+        if ( this.containsLiteral( l_path ) )
+            return this.getLiterals( l_path ).values().iterator().next().getLiteral();
+
         return null;
     }
 
@@ -153,10 +155,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public boolean remove( final Literal p_literal )
     {
-        final CPath l_path = new CPath( m_separator, p_literal.getFunctor() );
-        l_path.setSeparator( CPath.DEFAULTSEPERATOR );
-
-        this.remove( l_path, new CLiteral( p_literal ) );
+        this.remove( this.splitPath( p_literal ), new CLiteral( p_literal ) );
         return true;
     }
 
@@ -205,6 +204,19 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
                 return m_iterator.next().getLiteral();
             }
         };
+    }
+
+    /**
+     * splits the literal functor to a path
+     *
+     * @param p_literal literal
+     * @return path
+     */
+    private CPath splitPath( final Literal p_literal )
+    {
+        final CPath l_path = new CPath( m_separator, p_literal.getFunctor() );
+        l_path.setSeparator( CPath.DEFAULTSEPERATOR );
+        return l_path;
     }
 
 }

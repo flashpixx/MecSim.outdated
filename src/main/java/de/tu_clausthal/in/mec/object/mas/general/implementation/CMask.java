@@ -113,6 +113,30 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
+    public boolean containsMask( final CPath p_path )
+    {
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) )
+            return true;
+
+        if ( p_path.size() == 1 )
+            return m_beliefbase.getStorage().containsSingleElement( p_path.get( 0 ) );
+
+        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsMask( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+    }
+
+    @Override
+    public boolean containsLiteral( final CPath p_path )
+    {
+        if ( ( p_path == null ) || ( p_path.isEmpty() ) )
+            return true;
+
+        if ( p_path.size() == 1 )
+            return m_beliefbase.getStorage().containsMultiElement( p_path.get( 0 ) );
+
+        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).containsLiteral( p_path.getSubPath( p_path.size() - 1, p_path.size() ) );
+    }
+
+    @Override
     public void remove( final CPath p_path, final ILiteral<T> p_literal )
     {
         walk( p_path, this, null ).remove( p_literal );

@@ -72,6 +72,10 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      */
     void add( final CPath p_path, final ILiteral<T> p_literal, final IGenerator<T> p_generator );
 
+    public boolean containsMask( final CPath p_path );
+
+    public boolean containsLiteral( final CPath p_path );
+
     /**
      * removes a literal
      *

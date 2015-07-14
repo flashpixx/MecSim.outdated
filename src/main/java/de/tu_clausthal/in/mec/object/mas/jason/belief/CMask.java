@@ -170,11 +170,9 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public boolean abolish( final PredicateIndicator p_predicateIndicator )
     {
-        final CPath l_path = this.splitPath( p_predicateIndicator.getFunctor() );
-
-        // remove
-
-        return false;
+        // remove masks and literals
+        this.remove( this.splitPath( p_predicateIndicator.getFunctor() ) );
+        return true;
     }
 
     @Override
@@ -183,6 +181,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
         final Element l_beliefs = (Element) p_document.createElement( "beliefs" );
         for ( final Literal l_item : this )
             l_beliefs.appendChild( l_item.getAsDOM( p_document ) );
+
         return l_beliefs;
     }
 

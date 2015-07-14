@@ -34,6 +34,7 @@ import java.awt.*;
 /**
  * single layer to create a single information structure
  */
+@SuppressWarnings( "serial" )
 public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLayer, IVoidSteppable, ILayer
 {
 

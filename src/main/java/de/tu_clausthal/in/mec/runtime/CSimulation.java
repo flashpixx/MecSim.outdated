@@ -51,6 +51,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * singleton object to run the simulation
  */
+@SuppressWarnings( "serial" )
 public class CSimulation
 {
 

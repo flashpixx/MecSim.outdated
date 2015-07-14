@@ -36,6 +36,7 @@ import java.util.Set;
  * Metric implementation for agents. Calculates the distance with respect
  * to size of union and intersection of beliefbases.
  */
+@SuppressWarnings( "serial" )
 public class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultMetric<T>
 {
     /**

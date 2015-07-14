@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * class which is responsible for multi language support in the UI
  */
+@SuppressWarnings( "serial" )
 public class CLanguageEnvironment
 {
     /**

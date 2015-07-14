@@ -41,6 +41,7 @@ import java.util.Stack;
  *
  * @tparam P type of the beliefbase element
  */
+@SuppressWarnings( "serial" )
 public class CMask<T> implements IBeliefBaseMask<T>
 {
     /**

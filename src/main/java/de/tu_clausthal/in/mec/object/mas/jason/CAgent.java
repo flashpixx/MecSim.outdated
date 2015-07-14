@@ -67,6 +67,7 @@ import java.util.Set;
  *
  * @tparam T typ of binding objects
  */
+@SuppressWarnings( "serial" )
 public class CAgent<T> implements IVoidAgent<Literal>
 {
     /**

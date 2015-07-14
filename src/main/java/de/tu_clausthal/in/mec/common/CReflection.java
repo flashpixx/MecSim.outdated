@@ -52,6 +52,7 @@ import java.util.jar.JarFile;
 /**
  * boilerplate code of the reflection API
  */
+@SuppressWarnings( "serial" )
 public class CReflection
 {
     /**

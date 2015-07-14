@@ -45,6 +45,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  *
  * @tparam T object type of the layer
  */
+@SuppressWarnings( "serial" )
 public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer, ISerializable
 {
     /**

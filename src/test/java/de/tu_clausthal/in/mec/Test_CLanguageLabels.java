@@ -80,44 +80,6 @@ public class Test_CLanguageLabels
     private final Pattern m_language = Pattern.compile( "CCommon.getResourceString.+\\)" );
 
     /**
-     * method to build a package path
-     *
-     * @param p_names list of package parts
-     * @return full-qualified string
-     */
-    private static String getPackagePath( String... p_names )
-    {
-        String l_return = "";
-        for ( int i = 0; i < p_names.length - 1; i++ )
-            l_return = l_return + p_names[i] + ClassUtils.PACKAGE_SEPARATOR;
-        return l_return + p_names[p_names.length - 1];
-    }
-
-
-    /**
-     * checks all labels within a Java file
-     *
-     * @param p_file
-     */
-    private void checkFile( final Path p_file ) throws IOException
-    {
-        if ( !p_file.toString().endsWith( ".java" ) )
-            return;
-
-        try
-                (
-                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() );
-                )
-        {
-            new MyMethodVisitor().visit( JavaParser.parse( l_stream ), null );
-        }
-        catch ( final ParseException l_exception )
-        {
-            fail( p_file.toFile() + ": " + l_exception.getMessage() );
-        }
-    }
-
-    /**
      * test-case all resource strings
      */
     @Test
@@ -154,6 +116,43 @@ public class Test_CLanguageLabels
     }
 
     /**
+     * method to build a package path
+     *
+     * @param p_names list of package parts
+     * @return full-qualified string
+     */
+    private static String getPackagePath( String... p_names )
+    {
+        String l_return = "";
+        for ( int i = 0; i < p_names.length - 1; i++ )
+            l_return = l_return + p_names[i] + ClassUtils.PACKAGE_SEPARATOR;
+        return l_return + p_names[p_names.length - 1];
+    }
+
+    /**
+     * checks all labels within a Java file
+     *
+     * @param p_file
+     */
+    private void checkFile( final Path p_file ) throws IOException
+    {
+        if ( !p_file.toString().endsWith( ".java" ) )
+            return;
+
+        try
+                (
+                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() );
+                )
+        {
+            new MyMethodVisitor().visit( JavaParser.parse( l_stream ), null );
+        }
+        catch ( final ParseException l_exception )
+        {
+            fail( p_file.toFile() + ": " + l_exception.getMessage() );
+        }
+    }
+
+    /**
      * AST visitor class
      */
     private class MyMethodVisitor extends VoidVisitorAdapter
@@ -170,6 +169,76 @@ public class Test_CLanguageLabels
          * package name *
          */
         private String m_package = "";
+
+        @Override
+        public void visit( final ClassOrInterfaceDeclaration p_class, final Object p_arg )
+        {
+            if ( m_outerclass.isEmpty() )
+            {
+
+                m_outerclass = p_class.getName();
+                m_innerclass = m_outerclass;
+            }
+            else
+                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_class.getName();
+
+            super.visit( p_class, p_arg );
+        }
+
+        @Override
+        public void visit( final EnumDeclaration p_enum, final Object p_arg )
+        {
+
+            final String l_resetinner;
+            final String l_resetouter;
+
+            if ( m_outerclass.isEmpty() )
+            {
+                l_resetinner = null;
+                l_resetouter = null;
+
+                m_outerclass = p_enum.getName();
+                m_innerclass = m_outerclass;
+            }
+            else if ( m_innerclass.isEmpty() )
+            {
+                l_resetinner = null;
+                l_resetouter = null;
+
+                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
+            }
+            else
+            {
+                l_resetinner = m_innerclass;
+                l_resetouter = m_outerclass;
+
+                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + m_innerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
+
+            }
+
+            super.visit( p_enum, p_arg );
+
+            if ( l_resetinner != null )
+                m_innerclass = l_resetinner;
+            if ( l_resetouter != null )
+                m_outerclass = l_resetouter;
+        }
+
+        @Override
+        public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
+        {
+            final String[] l_label = this.getParameter( p_methodcall.toStringWithoutComments(), m_package, m_outerclass, m_innerclass );
+            if ( l_label != null )
+                this.checkLabel( l_label[0], l_label[1] );
+            super.visit( p_methodcall, p_arg );
+        }
+
+        @Override
+        public void visit( final PackageDeclaration p_package, final Object p_arg )
+        {
+            m_package = p_package.getName().toStringWithoutComments();
+            super.visit( p_package, p_arg );
+        }
 
         /**
          * checks all languages
@@ -288,76 +357,6 @@ public class Test_CLanguageLabels
             }
 
             return l_return;
-        }
-
-        @Override
-        public void visit( final ClassOrInterfaceDeclaration p_class, final Object p_arg )
-        {
-            if ( m_outerclass.isEmpty() )
-            {
-
-                m_outerclass = p_class.getName();
-                m_innerclass = m_outerclass;
-            }
-            else
-                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_class.getName();
-
-            super.visit( p_class, p_arg );
-        }
-
-        @Override
-        public void visit( final EnumDeclaration p_enum, final Object p_arg )
-        {
-
-            final String l_resetinner;
-            final String l_resetouter;
-
-            if ( m_outerclass.isEmpty() )
-            {
-                l_resetinner = null;
-                l_resetouter = null;
-
-                m_outerclass = p_enum.getName();
-                m_innerclass = m_outerclass;
-            }
-            else if ( m_innerclass.isEmpty() )
-            {
-                l_resetinner = null;
-                l_resetouter = null;
-
-                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
-            }
-            else
-            {
-                l_resetinner = m_innerclass;
-                l_resetouter = m_outerclass;
-
-                m_innerclass = m_outerclass + ClassUtils.INNER_CLASS_SEPARATOR + m_innerclass + ClassUtils.INNER_CLASS_SEPARATOR + p_enum.getName();
-
-            }
-
-            super.visit( p_enum, p_arg );
-
-            if ( l_resetinner != null )
-                m_innerclass = l_resetinner;
-            if ( l_resetouter != null )
-                m_outerclass = l_resetouter;
-        }
-
-        @Override
-        public void visit( final MethodCallExpr p_methodcall, final Object p_arg )
-        {
-            final String[] l_label = this.getParameter( p_methodcall.toStringWithoutComments(), m_package, m_outerclass, m_innerclass );
-            if ( l_label != null )
-                this.checkLabel( l_label[0], l_label[1] );
-            super.visit( p_methodcall, p_arg );
-        }
-
-        @Override
-        public void visit( final PackageDeclaration p_package, final Object p_arg )
-        {
-            m_package = p_package.getName().toStringWithoutComments();
-            super.visit( p_package, p_arg );
         }
     }
 

@@ -40,6 +40,7 @@ import java.util.Stack;
  * @tparam N element type
  * @tparam M mask type
  */
+@SuppressWarnings( "serial" )
 public class CBeliefStorage<N, M> implements IStorage<N, M>
 {
     /**

@@ -41,6 +41,7 @@ import java.util.HashSet;
  * @note the hashset defines the set over the edge ID
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
+@SuppressWarnings( "serial" )
 public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
 {
     /**

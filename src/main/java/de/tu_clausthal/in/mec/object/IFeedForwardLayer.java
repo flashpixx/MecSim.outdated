@@ -48,6 +48,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  *
  * @note there exists no cycle check, so detection of infinity loops must be manually
  */
+@SuppressWarnings( "serial" )
 public abstract class IFeedForwardLayer<T extends IFeedForwardLayer.IFinish & IReturnSteppable<?> & IReturnSteppableTarget<T> & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
 {
 

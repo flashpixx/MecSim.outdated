@@ -42,6 +42,7 @@ import java.util.Set;
 /**
  * environment for inconsistency layer and metric
  */
+@SuppressWarnings( "serial" )
 public class CInconsistencyEnvironment
 {
     /**

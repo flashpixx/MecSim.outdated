@@ -51,6 +51,7 @@ import java.util.List;
  * binding https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/
  */
+@SuppressWarnings( "serial" )
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements ISerializable
 {
     /**

@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.common.CPath;
  *
  * @tparam T type of the message data
  */
+@SuppressWarnings( "serial" )
 public class CMessage<T> implements IMessage<T>
 {
     /**

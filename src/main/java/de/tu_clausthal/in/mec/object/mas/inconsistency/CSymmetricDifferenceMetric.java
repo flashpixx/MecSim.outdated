@@ -35,6 +35,7 @@ import java.util.Set;
 /**
  * metric on collections returns the size of symmetric difference
  */
+@SuppressWarnings( "serial" )
 public class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric<T>
 {
     /**

@@ -34,6 +34,7 @@ import java.util.List;
 /**
  * generic term list for agent literals
  */
+@SuppressWarnings( "serial" )
 public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
     /**

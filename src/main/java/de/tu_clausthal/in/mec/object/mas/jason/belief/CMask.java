@@ -143,7 +143,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Literal contains( final Literal p_literal )
     {
-        final CPath l_path = this.splitPath( p_literal );
+        final CPath l_path = this.splitPath( p_literal.getFunctor() );
         if ( this.containsLiteral( l_path ) )
             return this.getLiterals( l_path ).values().iterator().next().getLiteral();
 
@@ -170,6 +170,10 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public boolean abolish( final PredicateIndicator p_predicateIndicator )
     {
+        final CPath l_path = this.splitPath( p_predicateIndicator.getFunctor() );
+
+        // remove
+
         return false;
     }
 
@@ -220,12 +224,12 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     /**
      * splits the literal functor to a path
      *
-     * @param p_literal literal
+     * @param p_functor literal
      * @return path
      */
-    private CPath splitPath( final Literal p_literal )
+    private CPath splitPath( final String p_functor )
     {
-        return new CPath( m_pathseparator, p_literal.getFunctor() );
+        return new CPath( m_pathseparator, p_functor );
     }
 
     /**
@@ -237,7 +241,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
      */
     private void cloneLiteral( final Literal p_literal, CPath p_path, Literal p_output )
     {
-        p_path = this.splitPath( p_literal );
+        p_path = this.splitPath( p_literal.getFunctor() );
 
         p_output = ASSyntax.createLiteral( !p_literal.negated(), p_path.getSuffix() );
         p_output.addAnnot( p_literal.getAnnots() );

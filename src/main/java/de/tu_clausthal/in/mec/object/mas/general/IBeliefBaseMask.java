@@ -159,6 +159,13 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
     public CPath getFQNPath();
 
     /**
+     * set path separator for all path elements
+     *
+     * @param p_separator path separator
+     */
+    public void setPathSeparator( final String p_separator );
+
+    /**
      * returns only the element name
      *
      * @return name

@@ -44,6 +44,10 @@ import java.util.Stack;
 public class CMask<T> implements IBeliefBaseMask<T>
 {
     /**
+     * path separator
+     */
+    protected String m_pathseparator = CPath.DEFAULTSEPERATOR;
+    /**
      * mask name
      */
     private final String m_name;
@@ -198,7 +202,15 @@ public class CMask<T> implements IBeliefBaseMask<T>
     @Override
     public CPath getFQNPath()
     {
-        return getFQNPath( this, new CPath() );
+        final CPath l_path = new CPath();
+        l_path.setSeparator( m_pathseparator );
+        return getFQNPath( this, l_path );
+    }
+
+    @Override
+    public void setPathSeparator( final String p_separator )
+    {
+        m_pathseparator = p_separator;
     }
 
     @Override
@@ -321,7 +333,7 @@ public class CMask<T> implements IBeliefBaseMask<T>
     @Override
     public Iterator<ILiteral<T>> iteratorLiteral()
     {
-        final CPath l_path = CMask.this.getFQNPath();
+        final CPath l_path = this.getFQNPath();
         return new Iterator<ILiteral<T>>()
         {
             /**

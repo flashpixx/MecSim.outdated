@@ -45,22 +45,18 @@ import java.util.Iterator;
  */
 public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementation.CMask<Literal> implements BeliefBase
 {
-    /**
-     * path separator
-     **/
-    private final String m_separator;
 
     /**
      * ctor
      *
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context
-     * @param p_separator separator
+     * @param p_separator path separator
      */
     public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase, final String p_separator )
     {
         super( p_name, p_beliefbase );
-        m_separator = p_separator;
+        this.m_pathseparator = p_separator;
     }
 
     /**
@@ -69,14 +65,13 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context
      * @param p_parent reference to the parent mask
-     * @param p_separator separator
+     * @param p_separator path separator
      */
-    public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase,
-            final IBeliefBaseMask<Literal> p_parent, final String p_separator
+    public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase, final IBeliefBaseMask<Literal> p_parent, final String p_separator
     )
     {
         super( p_name, p_beliefbase, p_parent );
-        m_separator = p_separator;
+        this.m_pathseparator = p_separator;
     }
 
     @Override
@@ -118,7 +113,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     public Iterator<Literal> getAll()
     {
         // deprecated
-        return null;
+        return this.iterator();
     }
 
     @Override
@@ -130,6 +125,11 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Iterator<Literal> getCandidateBeliefs( final Literal p_literal, final Unifier p_unifier )
     {
+        if ( p_literal.isVar() )
+            return this.iterator();
+
+        // filter
+
         return null;
     }
 
@@ -137,7 +137,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     public Iterator<Literal> getRelevant( final Literal p_literal )
     {
         // deprecated
-        return null;
+        return getCandidateBeliefs( p_literal, null );
     }
 
     @Override
@@ -225,9 +225,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
      */
     private CPath splitPath( final Literal p_literal )
     {
-        final CPath l_path = new CPath( m_separator, p_literal.getFunctor() );
-        l_path.setSeparator( CPath.DEFAULTSEPERATOR );
-        return l_path;
+        return new CPath( m_pathseparator, p_literal.getFunctor() );
     }
 
     /**

@@ -44,7 +44,7 @@ public interface IAgent<T> extends Painter, IReceiver
      *
      * @return root belief mask
      */
-    public IBeliefBaseMask<T> getBeliefs();
+    public IBeliefBaseMask<T> getBeliefBase();
 
     /**
      * returns the current cycle

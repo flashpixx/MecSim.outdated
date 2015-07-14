@@ -237,7 +237,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     }
 
     @Override
-    public IBeliefBaseMask<Literal> getBeliefs()
+    public IBeliefBaseMask<Literal> getBeliefBase()
     {
         return m_beliefbaserootmask;
     }

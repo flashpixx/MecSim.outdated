@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
 import jason.asSemantics.Agent;
 import jason.asSemantics.Unifier;
+import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PredicateIndicator;
 import jason.bb.BeliefBase;
@@ -99,8 +100,11 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public boolean add( final int p_index, final Literal p_literal )
     {
-        final CPath l_path = this.splitPath( p_literal );
-        this.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( p_literal ) );
+        CPath l_path = null;
+        Literal l_literal = null;
+        this.cloneLiteral( p_literal, l_path, l_literal );
+
+        this.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_literal ) );
         return true;
     }
 
@@ -155,7 +159,11 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public boolean remove( final Literal p_literal )
     {
-        this.remove( this.splitPath( p_literal ), new CLiteral( p_literal ) );
+        CPath l_path = null;
+        Literal l_literal = null;
+        this.cloneLiteral( p_literal, l_path, l_literal );
+
+        this.remove( l_path, new CLiteral( l_literal ) );
         return true;
     }
 
@@ -220,6 +228,23 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
         final CPath l_path = new CPath( m_separator, p_literal.getFunctor() );
         l_path.setSeparator( CPath.DEFAULTSEPERATOR );
         return l_path;
+    }
+
+    /**
+     * clones a literal with path
+     *
+     * @param p_literal input literal
+     * @param p_path returning literal path
+     * @param p_output output / modified literal
+     */
+    private void cloneLiteral( final Literal p_literal, CPath p_path, Literal p_output )
+    {
+        p_path = this.splitPath( p_literal );
+
+        p_output = ASSyntax.createLiteral( !p_literal.negated(), p_path.getSuffix() );
+        p_output.addAnnot( p_literal.getAnnots() );
+        p_output.addTerms( p_literal.getTerms() );
+        p_output.addSource( p_literal.getSources() );
     }
 
 }

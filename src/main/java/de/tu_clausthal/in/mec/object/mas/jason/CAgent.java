@@ -350,7 +350,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
         public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
         {
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setBB( new DefaultBeliefBase() );
+            this.setBB( m_beliefbaserootmask );
             this.setPL( new PlanLibrary() );
             this.initDefaultFunctions();
 

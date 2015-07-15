@@ -52,6 +52,7 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
      **/
     protected final Map<String, M> m_singleelements = new HashMap<>();
 
+
     @Override
     public void addMultiElement( final String p_key, final N p_element )
     {

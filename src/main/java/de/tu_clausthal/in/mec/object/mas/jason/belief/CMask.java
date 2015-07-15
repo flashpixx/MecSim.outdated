@@ -106,7 +106,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Iterator<Literal> iterator()
     {
-        return this.literalIterator();
+        return this.getLiteralIterator( this.iteratorLiteral() );
     }
 
     @Override
@@ -119,7 +119,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator p_predicateIndicator )
     {
-        return null;
+        return this.getLiteralIterator( this.getLiterals( this.splitPath( p_predicateIndicator.getFunctor() ) ).values().iterator() );
     }
 
     @Override
@@ -153,7 +153,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     @Override
     public Iterator<Literal> getPercepts()
     {
-        return this.literalIterator();
+        return this.getLiteralIterator( this.iteratorLiteral() );
     }
 
     @Override
@@ -196,26 +196,21 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
      *
      * @return iterator
      */
-    private Iterator<Literal> literalIterator()
+    private Iterator<Literal> getLiteralIterator( final Iterator<ILiteral<Literal>> p_iterator )
     {
         return new Iterator<Literal>()
         {
-            /**
-             * iterator
-             **/
-            final Iterator<ILiteral<Literal>> m_iterator = CMask.this.iteratorLiteral();
-
             @Override
             public boolean hasNext()
             {
-                return m_iterator.hasNext();
+                return p_iterator.hasNext();
             }
 
             @Override
             public Literal next()
             {
                 // literal with path
-                return m_iterator.next().getLiteral();
+                return p_iterator.next().getLiteral();
             }
         };
     }

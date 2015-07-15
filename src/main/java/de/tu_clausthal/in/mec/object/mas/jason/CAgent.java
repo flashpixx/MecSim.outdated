@@ -77,11 +77,11 @@ public class CAgent<T> implements IVoidAgent<Literal>
     /**
      * name of the binding beliefbase and its mask
      */
-    private static final CPath c_beliefbasebind = c_beliefbaseroot.append( "bind" );
+    private static final CPath c_beliefbasebind = new CPath( "bind" );
     /**
      * name of the message beliefbase and its mask
      */
-    private static final CPath c_beliefbasemessage = c_beliefbaseroot.append( "message" );
+    private static final CPath c_beliefbasemessage = new CPath( "message" );
 
     /**
      * bind name of the initial object
@@ -189,12 +189,12 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ).createMask( c_beliefbaseroot.getSuffix() );
         m_beliefbaserootmask.add(
                 new CBeliefBase( new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator ).<IBeliefBaseMask<Literal>>createMask(
-                        c_beliefbasebind.getSuffix()
+                        c_beliefbasemessage.getSuffix()
                 )
         );
         m_beliefbaserootmask.add(
                 new CBeliefBase( new CBindingStorage(), c_seperator ).<IBeliefBaseMask<Literal>>createMask(
-                        c_beliefbasemessage.getSuffix()
+                        c_beliefbasebind.getSuffix()
                 )
         );
 
@@ -203,9 +203,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
             // register possible actions
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", m_methodBind );
-
-            IBeliefBaseMask x = m_beliefbaserootmask.getMask( c_beliefbasebind );
-            System.out.println();
 
             m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, this );
         }
@@ -321,7 +318,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        m_beliefbaserootmask.<CMessageStorage>getStorage().receiveMessage( p_messages );
+        m_beliefbaserootmask.getMask( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
     }
 
     @Override

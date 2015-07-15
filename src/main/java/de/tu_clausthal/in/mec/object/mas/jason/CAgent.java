@@ -71,6 +71,10 @@ import java.util.Set;
 public class CAgent<T> implements IVoidAgent<Literal>
 {
     /**
+     * path seperator
+     */
+    private static final String c_seperator = "_";
+    /**
      * name of the root beliefbase and its mask
      */
     private static final CPath c_beliefbaseroot = new CPath("root");
@@ -82,7 +86,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
      * name of the message beliefbase and its mask
      */
     private static final CPath c_beliefbasemessage = new CPath( "message" );
-
     /**
      * bind name of the initial object
      */
@@ -104,10 +107,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
             put( "mecsim.literal2number", new CLiteral2Number() );
             put( "mecsim.removeBelief", new CBeliefRemove() );
         }};
-    /**
-     * path seperator
-     */
-    private static final String c_seperator = "_";
     /**
      * set with actions of this implementation
      */
@@ -162,57 +161,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
      *
      * @param p_namepath name of the agent (full path)
      * @param p_asl agent ASL file
-     * @param p_bind object that should be bind with the agent
-     * @throws JasonException throws an Jason exception
-     * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
-     * and all properties and methods will be bind to the agent with the source "self"
-     * @bug beliefbases
-     */
-    public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
-    {
-        m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ) : p_namepath;
-
-        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
-        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
-        m_architecture = new CJasonArchitecture();
-        m_architecture.insertAgArch( m_architecture );
-
-        // build an own agent to handle manual internal actions
-        m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
-
-        // initialize message system
-        m_participant = new CParticipant( this );
-
-        // create action bind & beliefbases with tree structure
-        m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
-
-        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ).createMask( c_beliefbaseroot.getSuffix() );
-        m_beliefbaserootmask.add(
-                new CBeliefBase( new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator ).<IBeliefBaseMask<Literal>>createMask(
-                        c_beliefbasemessage.getSuffix()
-                )
-        );
-        m_beliefbaserootmask.add(
-                new CBeliefBase( new CBindingStorage(), c_seperator ).<IBeliefBaseMask<Literal>>createMask(
-                        c_beliefbasebind.getSuffix()
-                )
-        );
-
-        if ( p_bind != null )
-        {
-            // register possible actions
-            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
-            m_action.put( "invoke", m_methodBind );
-
-            m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, this );
-        }
-    }
-
-    /**
-     * ctor
-     *
-     * @param p_namepath name of the agent (full path)
-     * @param p_asl agent ASL file
      * @throws JasonException throws an Jason exception
      */
     public CAgent( final CPath p_namepath, final String p_asl ) throws JasonException
@@ -230,6 +178,56 @@ public class CAgent<T> implements IVoidAgent<Literal>
     public CAgent( final String p_asl, final T p_bind ) throws JasonException
     {
         this( null, p_asl, p_bind );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_namepath name of the agent (full path)
+     * @param p_asl agent ASL file
+     * @param p_bind object that should be bind with the agent
+     * @throws JasonException throws an Jason exception
+     * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
+     * and all properties and methods will be bind to the agent with the source "self"
+     */
+    public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
+    {
+        m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ) : p_namepath;
+
+
+        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
+        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
+        m_architecture = new CJasonArchitecture();
+        m_architecture.insertAgArch( m_architecture );
+
+        // build an own agent to handle manual internal actions, create participant object for message communication
+        m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
+        m_participant = new CParticipant( this );
+
+
+        // create action bind & beliefbases with tree structure
+        m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
+
+        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ).createMask( c_beliefbaseroot.getSuffix() );
+        m_beliefbaserootmask.add(
+                new CBeliefBase(
+                        new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator
+                ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage.getSuffix() )
+        );
+        m_beliefbaserootmask.add(
+                new CBeliefBase(
+                        new CBindingStorage( c_seperator ), c_seperator
+                ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind.getSuffix() )
+        );
+
+        if ( p_bind != null )
+        {
+            // register possible actions
+            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
+            m_action.put( "invoke", m_methodBind );
+
+            m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, this );
+        }
     }
 
     /**

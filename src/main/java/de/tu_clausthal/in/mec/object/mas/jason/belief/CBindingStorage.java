@@ -44,24 +44,33 @@ import java.util.Set;
  */
 public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
+    /**
+     *
+     */
+    private final String m_separator;
 
     /**
      * default ctor
+     *
+     * @param p_separator path separator
      */
-    public CBindingStorage()
+    public CBindingStorage( final String p_separator )
     {
         super();
+        m_separator = p_separator;
     }
 
     /**
      * ctor bind an object
      *
+     * @param p_separator path separator
      * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
-    public CBindingStorage( final String p_name, final Object p_object )
+    public CBindingStorage( final String p_separator, final String p_name, final Object p_object )
     {
         super( p_name, p_object );
+        m_separator = p_separator;
     }
 
     @Override
@@ -76,8 +85,9 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
+                    // replace separator to avoid path splitting
                     final Literal l_literal = CCommon.getLiteral(
-                            l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
+                            l_fieldref.getKey().replace( m_separator, "" ), l_fieldref.getValue().getGetter().invoke(
                                     l_item.getValue().getLeft()
                             )
                     );

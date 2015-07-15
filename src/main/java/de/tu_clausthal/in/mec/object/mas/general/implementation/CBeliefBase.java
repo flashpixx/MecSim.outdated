@@ -141,6 +141,10 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     public final void update()
     {
         m_storage.update();
+
+        // iterate over all masks and call update (cascading)
+        for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_storage.iteratorSingleElement(); l_iterator.hasNext(); )
+            l_iterator.next().update();
     }
 
     @Override

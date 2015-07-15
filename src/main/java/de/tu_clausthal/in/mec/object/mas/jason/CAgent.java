@@ -192,7 +192,9 @@ public class CAgent<T> implements IVoidAgent<Literal>
      */
     public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
-        m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ) : p_namepath;
+        m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ).setSeparator(
+                c_seperator
+        ) : p_namepath.setSeparator( c_seperator );
 
 
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch

@@ -205,13 +205,15 @@ public class CPath implements Iterable<CPath>
      * sets the separator
      *
      * @param p_separator separator
+     * @return path object
      */
-    public final void setSeparator( final String p_separator )
+    public final CPath setSeparator( final String p_separator )
     {
         if ( ( p_separator == null ) || ( p_separator.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "separatornotempty" ) );
 
         m_separator = p_separator;
+        return this;
     }
 
     /**

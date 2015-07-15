@@ -52,7 +52,6 @@ import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PlanLibrary;
 import jason.bb.BeliefBase;
-import jason.bb.DefaultBeliefBase;
 
 import java.awt.*;
 import java.io.File;
@@ -227,7 +226,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
             m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( "invoke", m_methodBind );
 
-            m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, this );
+            m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );
         }
     }
 

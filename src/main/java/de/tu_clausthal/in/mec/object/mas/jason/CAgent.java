@@ -257,7 +257,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     @Override
     public final String getName()
     {
-        return m_namepath.getPath( c_seperator );
+        return m_namepath.getPath();
     }
 
     @Override

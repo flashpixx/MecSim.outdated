@@ -51,7 +51,7 @@ import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PlanLibrary;
-import jason.bb.BeliefBase;
+import jason.bb.DefaultBeliefBase;
 
 import java.awt.*;
 import java.io.File;
@@ -73,7 +73,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     /**
      * path seperator
      */
-    private static final String c_seperator = "_";
+    private static final String c_seperator = "::";
     /**
      * name of the root beliefbase and its mask
      */
@@ -352,7 +352,8 @@ public class CAgent<T> implements IVoidAgent<Literal>
         public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
         {
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setBB( (BeliefBase)m_beliefbaserootmask );
+            //this.setBB( (BeliefBase)m_beliefbaserootmask );
+            this.setBB( new DefaultBeliefBase() );
             this.setPL( new PlanLibrary() );
             this.initDefaultFunctions();
 

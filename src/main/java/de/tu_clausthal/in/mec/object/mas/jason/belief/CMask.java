@@ -128,9 +128,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
         if ( p_literal.isVar() )
             return this.iterator();
 
-        // filter
-
-        return null;
+        return this.getLiteralIterator( this.getLiterals( this.splitPath( p_literal.getFunctor() ) ).values().iterator() );
     }
 
     @Override

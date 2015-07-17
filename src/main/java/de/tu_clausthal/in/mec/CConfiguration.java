@@ -76,7 +76,7 @@ public class CConfiguration
     /**
      * list of MAS files for extracting
      */
-    private static final String[] c_masfiles = new String[]{"car_default.asl", "car_emergency.asl", "car_scramble.asl"};
+    private static final String[] c_masfiles = new String[]{"carDefault.asl", "carEmergency.asl", "carScramble.asl"};
     /**
      * user configuration name
      */

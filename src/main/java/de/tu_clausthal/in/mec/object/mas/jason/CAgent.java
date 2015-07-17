@@ -51,7 +51,7 @@ import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PlanLibrary;
-import jason.bb.DefaultBeliefBase;
+import jason.bb.BeliefBase;
 
 import java.awt.*;
 import java.io.File;
@@ -197,20 +197,21 @@ public class CAgent<T> implements IVoidAgent<Literal>
         ) : p_namepath.setSeparator( c_seperator );
 
 
+        // -- create beliefbase and agent architecture
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
-        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
+        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself,
+        // beware that beliefbase must exists before agent ctor is called !
+        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ).createMask( c_beliefbaseroot.getSuffix() );
         m_architecture = new CJasonArchitecture();
         m_architecture.insertAgArch( m_architecture );
 
-        // build an own agent to handle manual internal actions, create participant object for message communication
+        // --- create agent to handle manual internal actions, create participant object for message communication
         m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
         m_participant = new CParticipant( this );
 
 
-        // create action bind & beliefbases with tree structure
+        // --- create beliefbase structure with tree structure
         m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
-
-        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ).createMask( c_beliefbaseroot.getSuffix() );
         m_beliefbaserootmask.add(
                 new CBeliefBase(
                         new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator
@@ -352,8 +353,8 @@ public class CAgent<T> implements IVoidAgent<Literal>
         public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
         {
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            //this.setBB( (BeliefBase)m_beliefbaserootmask );
-            this.setBB( new DefaultBeliefBase() );
+            this.setBB( (BeliefBase) m_beliefbaserootmask );
+            //this.setBB( new DefaultBeliefBase() );
             this.setPL( new PlanLibrary() );
             this.initDefaultFunctions();
 

@@ -17,7 +17,7 @@ public class Test_BeliefBase
     @Test
     public void test_abcd()
     {
-        System.out.println( this.generateJasonTestset() );
+        //System.out.println( this.generateJasonTestset() );
     }
 
     /**

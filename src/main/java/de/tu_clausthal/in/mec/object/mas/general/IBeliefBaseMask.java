@@ -179,8 +179,9 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * set path separator for all path elements
      *
      * @param p_separator path separator
+     * @return returns mask itself
      */
-    public void setPathSeparator( final String p_separator );
+    public IBeliefBaseMask<T> setPathSeparator( final String p_separator );
 
     /**
      * returns only the element name

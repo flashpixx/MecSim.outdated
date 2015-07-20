@@ -222,9 +222,10 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
-    public void setPathSeparator( final String p_separator )
+    public IBeliefBaseMask<T> setPathSeparator( final String p_separator )
     {
         m_pathseparator = p_separator;
+        return this;
     }
 
     @Override

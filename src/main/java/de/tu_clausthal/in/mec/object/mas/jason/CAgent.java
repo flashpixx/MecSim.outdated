@@ -218,12 +218,12 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
         m_beliefbaserootmask.add(
                 new CBeliefBase(
-                        new CMessageStorage( m_agent.getTS(), c_agentnameseparator ), c_agentnameseparator
+                        new CMessageStorage( m_agent.getTS(), c_agentnameseparator ), c_agentbeliefseparator
                 ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage.getSuffix() )
         );
         m_beliefbaserootmask.add(
                 new CBeliefBase(
-                        new CBindingStorage( c_agentbeliefseparator ), c_agentnameseparator
+                        new CBindingStorage( c_agentbeliefseparator ), c_agentbeliefseparator
                 ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind.getSuffix() )
         );
 

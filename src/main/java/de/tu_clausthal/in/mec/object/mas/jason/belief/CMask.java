@@ -221,7 +221,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
      */
     private CPath splitPath( final String p_functor )
     {
-        return new CPath( m_pathseparator, p_functor );
+        return CPath.createPath( m_pathseparator, p_functor );
     }
 
     /**

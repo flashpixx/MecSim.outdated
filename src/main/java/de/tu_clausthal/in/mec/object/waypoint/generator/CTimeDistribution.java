@@ -52,7 +52,6 @@ public class CTimeDistribution extends IInspectorDefault implements IGenerator
             putAll( CTimeDistribution.super.inspect() );
         }};
 
-
     /**
      * ctor
      *
@@ -64,7 +63,6 @@ public class CTimeDistribution extends IInspectorDefault implements IGenerator
         m_count = p_count;
         m_distribution = p_distribution;
     }
-
 
     @Override
     public int getCount( final int p_currentStep )

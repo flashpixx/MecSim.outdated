@@ -71,7 +71,6 @@ public class COSMViewer extends JXMapViewer
      */
     private CompoundPainter<JXMapViewer> m_painter = new CompoundPainter<>();
 
-
     /**
      * ctor with loading configuration defaults and listener definition
      */
@@ -160,8 +159,8 @@ public class COSMViewer extends JXMapViewer
      */
     public final void setConfiguration()
     {
-        CConfiguration.getInstance().get().<Integer>set( "ui/zoom", this.getZoom() );
-        CConfiguration.getInstance().get().<GeoPosition>set( "ui/geoposition", this.getCenterPosition() );
+        CConfiguration.getInstance().get().set( "ui/zoom", this.getZoom() );
+        CConfiguration.getInstance().get().set( "ui/geoposition", this.getCenterPosition() );
     }
 
     /**
@@ -189,7 +188,6 @@ public class COSMViewer extends JXMapViewer
         m_clickablelayer = EClickableLayer.valueOf( (String) p_data.get( "id" ) );
     }
 
-
     /**
      * enum clickable layer
      */
@@ -215,7 +213,7 @@ public class COSMViewer extends JXMapViewer
          *
          * @param p_value string
          */
-        private EClickableLayer( final String p_value )
+        EClickableLayer( final String p_value )
         {
             m_stringvalue = p_value;
         }
@@ -231,7 +229,6 @@ public class COSMViewer extends JXMapViewer
             return m_stringvalue;
         }
     }
-
 
     /**
      * routing painter class

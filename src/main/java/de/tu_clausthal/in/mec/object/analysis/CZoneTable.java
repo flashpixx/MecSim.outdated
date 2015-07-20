@@ -129,14 +129,13 @@ public class CZoneTable<T, S>
             l_item.getRight().valueOf( 0 );
     }
 
-
     /**
      * interface of a validation class *
      */
     public interface CValidation<V, W>
     {
 
-        public boolean validate( V p_zone, W p_input );
+        boolean validate( V p_zone, W p_input );
 
     }
 

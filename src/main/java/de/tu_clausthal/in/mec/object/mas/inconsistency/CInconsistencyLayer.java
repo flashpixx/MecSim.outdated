@@ -26,11 +26,13 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
@@ -54,6 +56,10 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      */
     private static final Algebra c_algebra = new Algebra();
     /**
+     * name of the invoke definition on agent-invoke-call
+     */
+    private static final String c_invokeName = "inconsistency";
+    /**
      * algorithm to calculate stationary probability
      **/
     private final EAlgorithm m_algorithm;
@@ -72,7 +78,11 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * metric object to create the value of two objects
      **/
-    private final IMetric<T> m_metric;
+    private IMetric<T, CPath> m_metric;
+    /**
+     * name of the layer
+     */
+    private final String m_name;
     /**
      * update of the metric values
      */
@@ -81,34 +91,155 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * ctor - use numeric algorithm
      *
+     * @param p_name language-based name of the layer
      * @param p_metric object metric
      */
-    public CInconsistencyLayer( final IMetric<T> p_metric )
+    public CInconsistencyLayer( final String p_name, final IMetric<T, CPath> p_metric )
     {
+        m_name = p_name;
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.Numeric;
+        m_algorithm = EAlgorithm.QRDecomposition;
         m_iteration = 0;
-        m_epsilon = 0;
+        m_epsilon = 0.001;
         m_updatestep = 1;
     }
-
 
     /**
      * ctor - use stochastic algorithm
      *
+     * @param p_name language-based name of the layer
      * @param p_metric object metric
      * @param p_iteration iterations
      * @param p_epsilon epsilon value
      */
-    public CInconsistencyLayer( final IMetric<T> p_metric, final int p_iteration,
+    public CInconsistencyLayer( final String p_name, final IMetric<T, CPath> p_metric, final int p_iteration,
             final double p_epsilon
     )
     {
+        m_name = p_name;
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.Stochastic;
+        m_algorithm = EAlgorithm.FixpointIteration;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
         m_updatestep = 1;
+    }
+
+    /**
+     * adds a new object to the
+     * inconsistency structure
+     *
+     * @param p_object new object
+     */
+    public boolean add( final T p_object )
+    {
+        if ( ( p_object == null ) || ( m_data.containsKey( p_object ) ) )
+            return false;
+
+        m_data.put( p_object, new Double( 0 ) );
+        p_object.registerAction( c_invokeName, new CBind( p_object ) );
+
+        return true;
+    }
+
+    @Override
+    public int getCalculationIndex()
+    {
+        return 500;
+    }
+
+    /**
+     * @bug matrix allocation can be create a memory overflow if it is possible
+     * update existing matrix object
+     */
+    @Override
+    public final void step( final int p_currentstep, final ILayer p_layer )
+    {
+        if ( ( m_data.size() < 2 ) || ( p_currentstep % m_updatestep != 0 ) )
+            return;
+
+        // get key list of map for addressing elements in the correct order
+        final ArrayList<T> l_keys = new ArrayList<T>( m_data.keySet() );
+
+        // calculate markov chain transition matrix
+        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
+        for ( int i = 0; i < l_keys.size(); ++i )
+        {
+            final T l_item = l_keys.get( i );
+            for ( int j = i + 1; j < l_keys.size(); ++j )
+            {
+                final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
+                l_matrix.set( i, j, l_value );
+                l_matrix.set( j, i, l_value );
+            }
+
+            // row-wise normalization for getting probabilities
+            final double l_norm = c_algebra.norm2( l_matrix.viewRow( i ) );
+            if ( l_norm != 0 )
+                l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
+
+            // set epsilon slope for preventing periodic markov chains
+            l_matrix.set( i, i, m_epsilon );
+        }
+
+        System.out.println( l_matrix );
+
+        final DoubleMatrix1D l_eigenvector;
+        if ( l_matrix.zSum() <= m_data.size() * m_epsilon )
+            l_eigenvector = new DenseDoubleMatrix1D( m_data.size() );
+        else
+        {
+            // get the eigenvector for largest eigenvalue
+            l_eigenvector = this.getStationaryDistribution( l_matrix );
+
+            // normalize vector to get the stationary distribution
+            l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
+        }
+
+        System.out.println( l_eigenvector );
+
+        // set inconsistency value for each entry
+        for ( int i = 0; i < l_keys.size(); ++i )
+            m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );
+    }
+
+    /**
+     * gets the current metric
+     *
+     * @return get metric
+     */
+    public final IMetric<T, CPath> getMetric()
+    {
+        return m_metric;
+    }
+
+    /**
+     * sets the metric
+     *
+     * @param p_metric metric
+     */
+    public final void setMetric( final IMetric<T, CPath> p_metric )
+    {
+        m_metric = p_metric;
+    }
+
+    /**
+     * removes an object from the
+     * inconsistency structure
+     *
+     * @param p_object removing object
+     */
+    public boolean remove( final T p_object )
+    {
+        p_object.unregisterAction( c_invokeName );
+
+        m_data.remove( p_object );
+        return true;
+    }
+
+    @Override
+    public final String toString()
+    {
+        return m_name;
     }
 
     /**
@@ -159,80 +290,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     }
 
     /**
-     * adds a new object to the
-     * inconsistency structure
-     *
-     * @param p_object new object
-     */
-    public void add( final T p_object )
-    {
-        if ( ( p_object == null ) || ( m_data.containsKey( p_object ) ) )
-            return;
-
-        m_data.put( p_object, new Double( 0 ) );
-    }
-
-    @Override
-    public int getCalculationIndex()
-    {
-        return 500;
-    }
-
-    /**
-     * @bug matrix allocation chan be create a memory overflow if it is possible
-     * update existing matrix object
-     */
-    @Override
-    public final void step( final int p_currentstep, final ILayer p_layer )
-    {
-        if ( ( m_data.size() < 2 ) || ( p_currentstep % m_updatestep != 0 ) )
-            return;
-
-        // get key list of map for addressing elements in the correct order
-        final ArrayList<T> l_keys = new ArrayList<T>( m_data.keySet() );
-
-        // calculate matrix and build metric value
-        final DoubleMatrix2D l_matrix = new DenseDoubleMatrix2D( m_data.size(), m_data.size() );
-        for ( int i = 0; i < l_keys.size(); ++i )
-        {
-            final T l_item = l_keys.get( i );
-            for ( int j = i; j < l_keys.size(); ++j )
-            {
-                final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
-                l_matrix.set( i, j, l_value );
-                l_matrix.set( j, i, l_value );
-            }
-
-            // create markow-chain (normalize row)
-            l_matrix.viewRow( i ).assign( Mult.div( c_algebra.norm2( l_matrix.viewRow( i ) ) ) );
-        }
-
-
-        // get the stationary probility with eigen decomposition
-        final DoubleMatrix1D l_eigenvector;
-        switch ( m_algorithm )
-        {
-            case Stochastic:
-                l_eigenvector = getPerronFrobenius( l_matrix, m_iteration );
-                break;
-
-            case Numeric:
-                l_eigenvector = getLargestEigenvector( l_matrix );
-
-            default:
-                throw new IllegalStateException( CCommon.getResourceString( CInconsistencyLayer.class, "algorithm" ) );
-        }
-
-        // normalize vector (to probabilites)
-        l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
-
-
-        // set inconsistency value for each entry
-        for ( int i = 0; i < l_keys.size(); ++i )
-            m_data.put( l_keys.get( i ), l_eigenvector.get( i ) );
-    }
-
-    /**
      * returns metric value
      *
      * @param p_first
@@ -242,29 +299,25 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     private double getMetricValue( final T p_first, final T p_second )
     {
         if ( p_first.equals( p_second ) )
-            return m_epsilon;
+            return 0;
 
         return m_metric.calculate( p_first, p_second );
     }
 
-    /**
-     * removes an object from the
-     * inconsistency structure
-     *
-     * @param p_object removing object
-     */
-    public void remove( final T p_object )
+    private DoubleMatrix1D getStationaryDistribution( final DoubleMatrix2D p_matrix )
     {
-        m_data.remove( p_object );
+        switch ( m_algorithm )
+        {
+            case FixpointIteration:
+                return getPerronFrobenius( p_matrix, m_iteration );
+
+            case QRDecomposition:
+                return getLargestEigenvector( p_matrix );
+
+            default:
+                throw new IllegalStateException( CCommon.getResourceString( CInconsistencyLayer.class, "algorithm" ) );
+        }
     }
-
-
-    @Override
-    public final String toString()
-    {
-        return CCommon.getResourceString( this, "name" );
-    }
-
 
     /**
      * numeric algorithm structure
@@ -274,13 +327,12 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         /**
          * use numeric algorithm
          **/
-        Numeric,
+        QRDecomposition,
         /**
          * use stochastic algorithm
          **/
-        Stochastic;
+        FixpointIteration
     }
-
 
     /**
      * class to create a bind between
@@ -301,7 +353,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             m_bind = p_agent;
         }
 
-
         /**
          * returns the agent inconsistency value
          *
@@ -312,6 +363,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             final Double l_value = m_data.get( m_bind );
             return l_value == null ? 0 : l_value.doubleValue();
         }
-
     }
+
 }

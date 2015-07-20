@@ -65,7 +65,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     private final Random m_random = new Random();
 
-
     /**
      * ctor
      *

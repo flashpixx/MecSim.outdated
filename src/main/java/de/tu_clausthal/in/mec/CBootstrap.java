@@ -23,19 +23,21 @@
 
 package de.tu_clausthal.in.mec;
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.analysis.CDatabase;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
-import de.tu_clausthal.in.mec.object.mas.inconsistency.CBoolBeliefMetric;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CSymmetricDifferenceMetric;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
 import de.tu_clausthal.in.mec.ui.CConsole;
+import de.tu_clausthal.in.mec.ui.CInconsistencyEnvironment;
 import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.CLanguageEnvironment;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -96,7 +98,7 @@ public class CBootstrap
 
 
         // register objects
-        p_server.registerObject( CConsole.getError( "error" ) );
+        //p_server.registerObject( CConsole.getError( "error" ) );
         p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CSimulation.getInstance().getMessageSystem() );
@@ -110,6 +112,7 @@ public class CBootstrap
         p_server.registerObject( new CWaypointEnvironment() );
         p_server.registerObject( CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent() );
         p_server.registerObject( CSimulation.getInstance().getWorld().get( "Car WayPoints" ) );
+        p_server.registerObject( new CInconsistencyEnvironment( "Jason Car Inconsistency" ) );
     }
 
     /**
@@ -122,9 +125,13 @@ public class CBootstrap
         p_simulation.getWorld().put( "Database", new CDatabase() );
         p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
-        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer() );
-        p_simulation.getWorld().put( "Agent Inconsistency", new CInconsistencyLayer<CAgent>( new CBoolBeliefMetric<CAgent>() ) );
 
+        // build layer first and set linkage between layer via ctor, because world is not initialized yet
+        final CInconsistencyLayer l_inconsistency = new CInconsistencyLayer<CAgent>(
+                CCommon.getResourceString( CInconsistencyLayer.class, "jasoncar" ), new CSymmetricDifferenceMetric<CAgent>()
+        );
+        p_simulation.getWorld().put( "Jason Car Inconsistency", l_inconsistency );
+        p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer( l_inconsistency ) );
     }
 
     /**

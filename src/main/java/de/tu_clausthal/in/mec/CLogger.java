@@ -100,64 +100,6 @@ public class CLogger
     }
 
     /**
-     * creates a full log item
-     *
-     * @param p_status status name
-     * @param p_add additional log data
-     */
-    private static String createLogData( final Level p_status, final Object p_add )
-    {
-        // get invoker position (index depends on static main function)
-        int l_invokerindex;
-        try
-        {
-            getInvokingMethodNameFqn( 4 );
-            l_invokerindex = 4;
-        }
-        catch ( final ArrayIndexOutOfBoundsException l_exception )
-        {
-            l_invokerindex = 3;
-        }
-
-        final String l_sep = StringUtils.repeat( " ", 5 );
-        final StringBuffer l_str = new StringBuffer();
-
-        l_str.append( l_sep ).
-                append( padCut( "status [" + p_status + "]", ' ', 15 ) ).
-                     append( l_sep ).
-                     append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
-                     append( l_sep ).
-                     append( padCut( "invoker [" + getInvokingMethodNameFqn( l_invokerindex ) + "]", ' ', 100 ) ).
-                     append( l_sep ).
-                     append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
-                     append( l_sep ).
-                     append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
-
-
-        String l_add = "";
-        if ( p_add != null )
-        {
-            if ( p_add instanceof Collection )
-            {
-                l_add = "[   ";
-                for ( Object l_item : (Collection) p_add )
-                    l_add += l_item.toString().trim() + "   ";
-                l_add += "]";
-            }
-            else
-                l_add = p_add.toString().trim();
-        }
-
-        if ( !l_add.isEmpty() )
-        {
-            l_str.append( l_sep ).
-                    append( l_add.replace( "\n", "  " ).replace( "\t", "  " ).replace( "\r", "" ).trim() );
-        }
-
-        return l_str.toString().trim();
-    }
-
-    /**
      * adds a debug message
      */
     public static void debug()
@@ -254,49 +196,6 @@ public class CLogger
     }
 
     /**
-     * gets the current class name
-     *
-     * @return class name
-     */
-    private static String getCurrentClassName( final int p_offset )
-    {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getClassName();
-    }
-
-    /**
-     * gets the current line number
-     *
-     * @return number
-     */
-    private static int getCurrentLineNumber( final int p_offset )
-    {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getLineNumber();
-    }
-
-    /**
-     * gets the current method name
-     *
-     * @return method name
-     */
-    private static String getCurrentMethodName( final int p_offset )
-    {
-        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getMethodName();
-    }
-
-    /**
-     * gets the current FQN method name
-     *
-     * @return FQN method name
-     */
-    private static String getCurrentMethodNameFqn( final int p_offset )
-    {
-        final String l_currentClassName = getCurrentClassName( p_offset + 1 );
-        final String l_currentMethodName = getCurrentMethodName( p_offset + 1 );
-
-        return l_currentClassName + "." + l_currentMethodName;
-    }
-
-    /**
      * returns logger instance
      *
      * @return logger instance
@@ -304,39 +203,6 @@ public class CLogger
     public static CLogger getInstance()
     {
         return s_instance;
-    }
-
-    /**
-     * gets the current invoker class name
-     *
-     * @return class name
-     */
-    private static String getInvokingClassName( final int p_offset )
-    {
-        return getCurrentClassName( p_offset + 1 );
-    }
-
-    /**
-     * gets the current invoker method name
-     *
-     * @return method name
-     */
-    private static String getInvokingMethodName( final int p_offset )
-    {
-        return getCurrentMethodName( p_offset + 1 );
-    }
-
-    /**
-     * gets the current invoker FQN method name
-     *
-     * @return FQN method name
-     */
-    private static String getInvokingMethodNameFqn( final int p_offset )
-    {
-        final String l_invokingClassName = getInvokingClassName( p_offset + 1 );
-        final String l_invokingMethodName = getInvokingMethodName( p_offset + 1 );
-
-        return l_invokingClassName + "." + l_invokingMethodName;
     }
 
     /**
@@ -441,24 +307,6 @@ public class CLogger
     }
 
     /**
-     * pad / cut string of a define length
-     *
-     * @param p_input input string
-     * @param p_filler fill character
-     * @param p_length max string length
-     * @return modified string
-     */
-    private static String padCut( final String p_input, final char p_filler, final int p_length )
-    {
-        if ( p_length < 1 )
-            return p_input;
-        if ( p_input.length() < p_length )
-            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
-
-        return p_input.substring( 0, p_length );
-    }
-
-    /**
      * adds a warn message
      */
     public static void warn()
@@ -504,6 +352,158 @@ public class CLogger
     {
         warn( p_data, true );
         return p_data;
+    }
+
+    /**
+     * creates a full log item
+     *
+     * @param p_status status name
+     * @param p_add additional log data
+     */
+    private static String createLogData( final Level p_status, final Object p_add )
+    {
+        // get invoker position (index depends on static main function)
+        int l_invokerindex;
+        try
+        {
+            getInvokingMethodNameFqn( 4 );
+            l_invokerindex = 4;
+        }
+        catch ( final ArrayIndexOutOfBoundsException l_exception )
+        {
+            l_invokerindex = 3;
+        }
+
+        final String l_sep = StringUtils.repeat( " ", 5 );
+        final StringBuffer l_str = new StringBuffer();
+
+        l_str.append( l_sep ).
+                append( padCut( "status [" + p_status + "]", ' ', 15 ) ).
+                     append( l_sep ).
+                     append( padCut( "thread [" + Thread.currentThread() + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "invoker [" + getInvokingMethodNameFqn( l_invokerindex ) + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "method [" + getCurrentMethodNameFqn( 3 ) + "]", ' ', 100 ) ).
+                     append( l_sep ).
+                     append( padCut( "line no [" + getCurrentLineNumber( 3 ) + "]", ' ', 25 ) );
+
+
+        String l_add = "";
+        if ( p_add != null )
+        {
+            if ( p_add instanceof Collection )
+            {
+                l_add = "[   ";
+                for ( Object l_item : (Collection) p_add )
+                    l_add += l_item.toString().trim() + "   ";
+                l_add += "]";
+            }
+            else
+                l_add = p_add.toString().trim();
+        }
+
+        if ( !l_add.isEmpty() )
+        {
+            l_str.append( l_sep ).
+                    append( l_add.replace( "\n", "  " ).replace( "\t", "  " ).replace( "\r", "" ).trim() );
+        }
+
+        return l_str.toString().trim();
+    }
+
+    /**
+     * gets the current class name
+     *
+     * @return class name
+     */
+    private static String getCurrentClassName( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getClassName();
+    }
+
+    /**
+     * gets the current line number
+     *
+     * @return number
+     */
+    private static int getCurrentLineNumber( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getLineNumber();
+    }
+
+    /**
+     * gets the current method name
+     *
+     * @return method name
+     */
+    private static String getCurrentMethodName( final int p_offset )
+    {
+        return Thread.currentThread().getStackTrace()[Math.min( c_stackindex + p_offset, Thread.currentThread().getStackTrace().length )].getMethodName();
+    }
+
+    /**
+     * gets the current FQN method name
+     *
+     * @return FQN method name
+     */
+    private static String getCurrentMethodNameFqn( final int p_offset )
+    {
+        final String l_currentClassName = getCurrentClassName( p_offset + 1 );
+        final String l_currentMethodName = getCurrentMethodName( p_offset + 1 );
+
+        return l_currentClassName + "." + l_currentMethodName;
+    }
+
+    /**
+     * gets the current invoker class name
+     *
+     * @return class name
+     */
+    private static String getInvokingClassName( final int p_offset )
+    {
+        return getCurrentClassName( p_offset + 1 );
+    }
+
+    /**
+     * gets the current invoker method name
+     *
+     * @return method name
+     */
+    private static String getInvokingMethodName( final int p_offset )
+    {
+        return getCurrentMethodName( p_offset + 1 );
+    }
+
+    /**
+     * gets the current invoker FQN method name
+     *
+     * @return FQN method name
+     */
+    private static String getInvokingMethodNameFqn( final int p_offset )
+    {
+        final String l_invokingClassName = getInvokingClassName( p_offset + 1 );
+        final String l_invokingMethodName = getInvokingMethodName( p_offset + 1 );
+
+        return l_invokingClassName + "." + l_invokingMethodName;
+    }
+
+    /**
+     * pad / cut string of a define length
+     *
+     * @param p_input input string
+     * @param p_filler fill character
+     * @param p_length max string length
+     * @return modified string
+     */
+    private static String padCut( final String p_input, final char p_filler, final int p_length )
+    {
+        if ( p_length < 1 )
+            return p_input;
+        if ( p_input.length() < p_length )
+            return p_input + StringUtils.repeat( p_filler, p_length - p_input.length() );
+
+        return p_input.substring( 0, p_length );
     }
 
     /**

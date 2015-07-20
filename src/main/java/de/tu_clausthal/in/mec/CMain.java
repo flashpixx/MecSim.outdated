@@ -64,29 +64,6 @@ public class CMain
     }
 
     /**
-     * checkes the VM arguments on startup
-     * and writes a warning information
-     *
-     * @param p_arguments argument prefixes
-     */
-    private static void checkVMArguments( final String[] p_arguments )
-    {
-        final List<String> l_argumentlist = ManagementFactory.getRuntimeMXBean().getInputArguments();
-        for ( final String l_checkargument : p_arguments )
-        {
-            boolean l_found = false;
-            for ( final String l_vmargument : l_argumentlist )
-                if ( l_vmargument.startsWith( l_checkargument ) )
-                {
-                    l_found = true;
-                    break;
-                }
-
-            CLogger.out( CCommon.getResourceString( CMain.class, "vmargumentmissing", l_checkargument ), !l_found );
-        }
-    }
-
-    /**
      * main program
      *
      * @param p_args commandline arguments
@@ -204,6 +181,29 @@ public class CMain
             }
         }
 
+    }
+
+    /**
+     * checkes the VM arguments on startup
+     * and writes a warning information
+     *
+     * @param p_arguments argument prefixes
+     */
+    private static void checkVMArguments( final String[] p_arguments )
+    {
+        final List<String> l_argumentlist = ManagementFactory.getRuntimeMXBean().getInputArguments();
+        for ( final String l_checkargument : p_arguments )
+        {
+            boolean l_found = false;
+            for ( final String l_vmargument : l_argumentlist )
+                if ( l_vmargument.startsWith( l_checkargument ) )
+                {
+                    l_found = true;
+                    break;
+                }
+
+            CLogger.out( CCommon.getResourceString( CMain.class, "vmargumentmissing", l_checkargument ), !l_found );
+        }
     }
 
 }

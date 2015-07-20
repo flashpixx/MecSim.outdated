@@ -35,7 +35,7 @@ public interface IViewableLayer
      *
      * @return boolean of visibility
      */
-    public boolean isVisible();
+    boolean isVisible();
 
 
     /**
@@ -43,6 +43,6 @@ public interface IViewableLayer
      *
      * @param p_visible boolean visibility
      */
-    public void setVisible( boolean p_visible );
+    void setVisible( boolean p_visible );
 
 }

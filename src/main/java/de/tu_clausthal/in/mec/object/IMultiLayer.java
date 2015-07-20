@@ -45,6 +45,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  *
  * @tparam T object type of the layer
  */
+@SuppressWarnings( "serial" )
 public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer, ISerializable
 {
     /**
@@ -188,7 +189,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public final boolean add( final T p_value )
+    public boolean add( final T p_value )
     {
         final boolean l_return = m_data.add( p_value );
 
@@ -199,7 +200,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
-    public final boolean remove( final Object p_object )
+    public boolean remove( final Object p_object )
     {
         final boolean l_result = m_data.remove( p_object );
 

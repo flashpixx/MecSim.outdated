@@ -25,6 +25,8 @@ package de.tu_clausthal.in.mec.object.car;
 
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 
@@ -34,6 +36,12 @@ import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
  */
 public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
 {
+    private final CInconsistencyLayer m_inconsistencyLayer;
+
+    public CCarJasonAgentLayer( final CInconsistencyLayer p_inconsistencyLayer )
+    {
+        m_inconsistencyLayer = p_inconsistencyLayer;
+    }
 
     @Override
     public final void afterStepObject( final int p_currentstep, final CAgent<CDefaultCar> p_object
@@ -53,6 +61,20 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
     public int getCalculationIndex()
     {
         return 100;
+    }
+
+    @Override
+    public boolean add( final CAgent<CDefaultCar> p_value )
+    {
+        return super.add( p_value ) &&
+               m_inconsistencyLayer.add( p_value );
+    }
+
+    @Override
+    public boolean remove( final Object p_object )
+    {
+        return super.remove( p_object ) &&
+               m_inconsistencyLayer.remove( (IAgent) p_object );
     }
 
     @Override

@@ -36,24 +36,6 @@ public class CNames
 {
 
     /**
-     * creates the group path
-     *
-     * @param p_object object
-     * @return group path
-     */
-    protected static CPath getGroup( final Object p_object )
-    {
-
-        if ( p_object instanceof CAgent )
-            return new CPath( "agent" );
-
-        if ( p_object instanceof ICar )
-            return new CPath( "car" );
-
-        return new CPath( "unkown" );
-    }
-
-    /**
      * creates a full name
      *
      * @param p_object object
@@ -76,6 +58,24 @@ public class CNames
     public static CPath getName( final Object p_object )
     {
         return getName( p_object, p_object.toString() );
+    }
+
+    /**
+     * creates the group path
+     *
+     * @param p_object object
+     * @return group path
+     */
+    protected static CPath getGroup( final Object p_object )
+    {
+
+        if ( p_object instanceof CAgent )
+            return new CPath( "agent" );
+
+        if ( p_object instanceof ICar )
+            return new CPath( "car" );
+
+        return new CPath( "unkown" );
     }
 
 }

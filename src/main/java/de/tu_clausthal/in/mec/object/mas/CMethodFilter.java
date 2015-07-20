@@ -44,13 +44,12 @@ public class CMethodFilter implements CReflection.IMethodFilter
     {
         boolean l_use = true;
         if ( p_method.isAnnotationPresent( CAgent.class ) )
-            l_use = ( (CAgent) p_method.getAnnotation( CAgent.class ) ).bind();
+            l_use = p_method.getAnnotation( CAgent.class ).bind();
 
         return l_use && ( !( Modifier.isAbstract( p_method.getModifiers() ) || Modifier.isInterface( p_method.getModifiers() ) || ( Modifier.isNative(
                 p_method.getModifiers()
         ) || ( Modifier.isStatic( p_method.getModifiers() ) ) ) ) );
     }
-
 
     @Retention( RetentionPolicy.RUNTIME )
     @Target( ElementType.METHOD )
@@ -62,6 +61,6 @@ public class CMethodFilter implements CReflection.IMethodFilter
          *
          * @return true if the method is bind
          */
-        public boolean bind() default true;
+        boolean bind() default true;
     }
 }

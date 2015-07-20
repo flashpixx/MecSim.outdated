@@ -53,7 +53,6 @@ public class CWorkspace extends CBrowser
     )
     );
 
-
     /**
      * ctor - adds the browser *
      */

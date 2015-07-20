@@ -68,25 +68,6 @@ public class CMainLoop implements Runnable
     private int m_simulationcount;
 
     /**
-     * returns a runnable object of the steppable input
-     *
-     * @param p_iteration iteration
-     * @param p_object steppable object
-     * @param p_layer layer
-     * @return runnable object
-     */
-    private static Callable<Object> createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
-    {
-        if ( p_object instanceof IVoidSteppable )
-            return new CVoidSteppable( p_iteration, (IVoidSteppable) p_object, p_layer );
-
-        if ( p_object instanceof IReturnSteppable )
-            return new CReturnSteppable( p_iteration, (IReturnSteppable) p_object, p_layer );
-
-        throw new IllegalArgumentException( CCommon.getResourceString( CMainLoop.class, "notsteppable" ) );
-    }
-
-    /**
      * returns the simulation step
      *
      * @return step number
@@ -94,21 +75,6 @@ public class CMainLoop implements Runnable
     public final int getSimulationstep()
     {
         return m_simulationcount;
-    }
-
-    /**
-     * invokes all defined data
-     *
-     * @param p_layer layer
-     * @param p_tasksource invoking tasks
-     * @throws InterruptedException is throws on task error
-     */
-    protected final void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
-    {
-        final Collection<Callable<Object>> l_tasklist = new LinkedList<>();
-        for ( final ISteppable l_object : p_tasksource )
-            l_tasklist.add( createTask( m_simulationcount, l_object, p_layer ) );
-        m_pool.invokeAll( l_tasklist );
     }
 
     /**
@@ -261,6 +227,40 @@ public class CMainLoop implements Runnable
     public final void stop()
     {
         Thread.currentThread().interrupt();
+    }
+
+    /**
+     * invokes all defined data
+     *
+     * @param p_layer layer
+     * @param p_tasksource invoking tasks
+     * @throws InterruptedException is throws on task error
+     */
+    protected final void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
+    {
+        final Collection<Callable<Object>> l_tasklist = new LinkedList<>();
+        for ( final ISteppable l_object : p_tasksource )
+            l_tasklist.add( createTask( m_simulationcount, l_object, p_layer ) );
+        m_pool.invokeAll( l_tasklist );
+    }
+
+    /**
+     * returns a runnable object of the steppable input
+     *
+     * @param p_iteration iteration
+     * @param p_object steppable object
+     * @param p_layer layer
+     * @return runnable object
+     */
+    private static Callable<Object> createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
+    {
+        if ( p_object instanceof IVoidSteppable )
+            return new CVoidSteppable( p_iteration, (IVoidSteppable) p_object, p_layer );
+
+        if ( p_object instanceof IReturnSteppable )
+            return new CReturnSteppable( p_iteration, (IReturnSteppable) p_object, p_layer );
+
+        throw new IllegalArgumentException( CCommon.getResourceString( CMainLoop.class, "notsteppable" ) );
     }
 
 }

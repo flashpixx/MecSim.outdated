@@ -62,6 +62,19 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 {
 
     /**
+     * reference to the graph
+     */
+    @CFieldFilter.CAgent( bind = false )
+    protected final CCarLayer m_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
+    /**
+     * maximum speed definition in km/h
+     */
+    protected final int m_maxspeed;
+    /**
+     * current speed in km/h (use boxed-type because MAS can modify value)
+     */
+    protected Integer m_speed;
+    /**
      * individual acceleration in m/sec^2
      */
     private final int m_acceleration;
@@ -83,18 +96,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
             putAll( CDefaultCar.super.inspect() );
         }};
     /**
-     * reference to the graph
-     */
-    @CFieldFilter.CAgent( bind = false )
-    protected final CCarLayer m_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
-    /**
      * linger probability value
      */
     private final double m_lingerprobability;
-    /**
-     * maximum speed definition in km/h
-     */
-    protected final int m_maxspeed;
     /**
      * cell structure of the route
      */
@@ -105,11 +109,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     @CFieldFilter.CAgent( bind = false )
     private int m_routeindex;
-    /**
-     * current speed in km/h (use boxed-type because MAS can modify value)
-     */
-    protected Integer m_speed;
-
 
     /**
      * ctor to create the initial values
@@ -241,90 +240,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         return m_endreached;
     }
 
-    /**
-     * returns the number of cars on the current edge
-     *
-     * @return number of cars
-     */
-    private Integer getCurrentCarsOnEdge()
-    {
-        return m_layer.getGraph().getEdge( this.getEdge() ).getNumberOfObjects();
-    }
-
-    /**
-     * returns the maximum allowed speed at the current edge
-     *
-     * @return speed value
-     */
-    private Double getCurrentEdgeMaxSpeed()
-    {
-        return m_layer.getGraph().getEdgeSpeed( this.getEdge() );
-    }
-
-    /**
-     * returns a triple of the current edge id, cell position and geoposition
-     *
-     * @return tripel (edge information, cell position, geoposition)
-     */
-    @CMethodFilter.CAgent( bind = false )
-    protected final Triple<EdgeIteratorState, Integer, GeoPosition> getCurrentPosition()
-    {
-        if ( ( m_route == null ) || ( m_routeindex >= m_route.size() ) )
-            return new ImmutableTriple<>( null, null, this.getGeoposition() );
-
-        return new ImmutableTriple<>(
-                m_route.get( m_routeindex ).getLeft(),
-                m_route.get( m_routeindex ).getRight(),
-                this.getGeoposition()
-        );
-    }
-
-    /**
-     * returns the edge from an index
-     *
-     * @param p_index index
-     * @return null or edge
-     */
-    @CMethodFilter.CAgent( bind = false )
-    private final EdgeIteratorState getEdge( final int p_index )
-    {
-        if ( m_route == null )
-            return null;
-
-        return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
-    }
-
-    /**
-     * creates a list of items for route painting
-     *
-     * @param p_start start index of the route list
-     * @param p_end end index of the route list
-     * @param p_color color of the items
-     * @param p_stroke stroke of the items
-     * @return list with route
-     */
-    @CMethodFilter.CAgent( bind = false )
-    private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> getRouteLine( final int p_start, final int p_end, final Color p_color,
-            final Stroke p_stroke
-    )
-    {
-        final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_list = new LinkedList<>();
-
-        GeoPosition l_start = m_layer.getGraph().getEdge( m_route.get( p_start ).getLeft() ).getGeoPositions( m_route.get( p_start ).getRight().intValue() );
-        GeoPosition l_end;
-        for ( int i = p_start + 1; i < p_end; ++i )
-        {
-            l_end = m_layer.getGraph().getEdge( m_route.get( i ).getLeft() ).getGeoPositions( m_route.get( i ).getRight().intValue() );
-            if ( l_start.equals( l_end ) )
-                continue;
-
-            l_list.add( new ImmutableTriple<>( new ImmutablePair<>( l_start, l_end ), p_color, p_stroke ) );
-            l_start = l_end;
-        }
-
-        return l_list;
-    }
-
     @Override
     @CMethodFilter.CAgent( bind = false )
     public Map<String, Object> inspect()
@@ -400,24 +315,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         p_graphic.fillOval( (int) l_point.getX(), (int) l_point.getY(), l_zoom, l_zoom );
     }
 
-    /**
-     * reroute to a new target position
-     *
-     * @param p_position new end position
-     */
-    private void reroute( final GeoPosition p_position )
-    {
-        if ( m_routeindex >= m_route.size() - 1 )
-            return;
-
-        final List<List<EdgeIteratorState>> l_route = m_layer.getGraph().getRoutes( this.getGeoposition(), p_position, 1 );
-        if ( l_route.size() > 0 )
-        {
-            m_route.subList( m_routeindex + 1, m_route.size() );
-            m_route.addAll( m_layer.getGraph().getRouteCells( l_route.get( 0 ) ) );
-        }
-    }
-
     @Override
     @CMethodFilter.CAgent( bind = false )
     public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
@@ -470,6 +367,108 @@ public class CDefaultCar extends IInspectorDefault implements ICar
 
         }
 
+    }
+
+    /**
+     * returns a triple of the current edge id, cell position and geoposition
+     *
+     * @return tripel (edge information, cell position, geoposition)
+     */
+    @CMethodFilter.CAgent( bind = false )
+    protected final Triple<EdgeIteratorState, Integer, GeoPosition> getCurrentPosition()
+    {
+        if ( ( m_route == null ) || ( m_routeindex >= m_route.size() ) )
+            return new ImmutableTriple<>( null, null, this.getGeoposition() );
+
+        return new ImmutableTriple<>(
+                m_route.get( m_routeindex ).getLeft(),
+                m_route.get( m_routeindex ).getRight(),
+                this.getGeoposition()
+        );
+    }
+
+    /**
+     * returns the number of cars on the current edge
+     *
+     * @return number of cars
+     */
+    private Integer getCurrentCarsOnEdge()
+    {
+        return m_layer.getGraph().getEdge( this.getEdge() ).getNumberOfObjects();
+    }
+
+    /**
+     * returns the maximum allowed speed at the current edge
+     *
+     * @return speed value
+     */
+    private Double getCurrentEdgeMaxSpeed()
+    {
+        return m_layer.getGraph().getEdgeSpeed( this.getEdge() );
+    }
+
+    /**
+     * returns the edge from an index
+     *
+     * @param p_index index
+     * @return null or edge
+     */
+    @CMethodFilter.CAgent( bind = false )
+    private final EdgeIteratorState getEdge( final int p_index )
+    {
+        if ( m_route == null )
+            return null;
+
+        return p_index < m_route.size() ? m_route.get( p_index ).getLeft() : null;
+    }
+
+    /**
+     * creates a list of items for route painting
+     *
+     * @param p_start start index of the route list
+     * @param p_end end index of the route list
+     * @param p_color color of the items
+     * @param p_stroke stroke of the items
+     * @return list with route
+     */
+    @CMethodFilter.CAgent( bind = false )
+    private List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> getRouteLine( final int p_start, final int p_end, final Color p_color,
+            final Stroke p_stroke
+    )
+    {
+        final List<Triple<Pair<GeoPosition, GeoPosition>, Color, Stroke>> l_list = new LinkedList<>();
+
+        GeoPosition l_start = m_layer.getGraph().getEdge( m_route.get( p_start ).getLeft() ).getGeoPositions( m_route.get( p_start ).getRight().intValue() );
+        GeoPosition l_end;
+        for ( int i = p_start + 1; i < p_end; ++i )
+        {
+            l_end = m_layer.getGraph().getEdge( m_route.get( i ).getLeft() ).getGeoPositions( m_route.get( i ).getRight().intValue() );
+            if ( l_start.equals( l_end ) )
+                continue;
+
+            l_list.add( new ImmutableTriple<>( new ImmutablePair<>( l_start, l_end ), p_color, p_stroke ) );
+            l_start = l_end;
+        }
+
+        return l_list;
+    }
+
+    /**
+     * reroute to a new target position
+     *
+     * @param p_position new end position
+     */
+    private void reroute( final GeoPosition p_position )
+    {
+        if ( m_routeindex >= m_route.size() - 1 )
+            return;
+
+        final List<List<EdgeIteratorState>> l_route = m_layer.getGraph().getRoutes( this.getGeoposition(), p_position, 1 );
+        if ( l_route.size() > 0 )
+        {
+            m_route.subList( m_routeindex + 1, m_route.size() );
+            m_route.addAll( m_layer.getGraph().getRouteCells( l_route.get( 0 ) ) );
+        }
     }
 
 }

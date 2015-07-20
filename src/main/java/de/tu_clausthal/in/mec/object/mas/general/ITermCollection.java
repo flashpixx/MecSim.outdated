@@ -21,37 +21,14 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.inconsistency;
+package de.tu_clausthal.in.mec.object.mas.general;
 
-import de.tu_clausthal.in.mec.object.mas.IAgent;
+import java.util.Collection;
 
 
 /**
- * belief-base metric with bool structure
+ * interface for term collection
  */
-public class CBoolBeliefMetric<T extends IAgent> implements IMetric<T>
+public interface ITermCollection extends ITerm, Collection<ITerm>
 {
-
-    @Override
-    public double calculate( final T p_first, final T p_second )
-    {
-        // equal objects create zero value
-        if ( p_first.equals( p_second ) )
-            return 0;
-
-        // create aggregate belief-base
-        /*
-        final Set<N> l_aggregate = new HashSet<N>()
-        {{
-                addAll( p_current.getBeliefs() );
-                addAll( p_other.getBeliefs() );
-            }};
-        */
-
-        // difference of contradiction is the sum of difference of contradictions on each belief-base (closed-world-assumption)
-        //return new Integer( ( ( l_aggregate.size() - p_current.getBeliefs().size() ) + ( l_aggregate.size() - p_other.getBeliefs().size() ) ) );
-
-        return 0;
-
-    }
 }

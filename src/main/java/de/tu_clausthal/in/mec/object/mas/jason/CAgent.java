@@ -27,40 +27,36 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.mas.ICycle;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefMaskStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.IBelief;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
-import jason.RevisionFailedException;
 import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.ActionExec;
 import jason.asSemantics.Agent;
-import jason.asSemantics.Event;
-import jason.asSemantics.Intention;
 import jason.asSemantics.InternalAction;
 import jason.asSemantics.Message;
 import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PlanLibrary;
-import jason.asSyntax.Trigger;
 import jason.bb.BeliefBase;
-import jason.bb.DefaultBeliefBase;
 
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,10 +67,27 @@ import java.util.Set;
  *
  * @tparam T typ of binding objects
  */
-public class CAgent<T> implements IVoidAgent
+@SuppressWarnings( "serial" )
+public class CAgent<T> implements IVoidAgent<Literal>
 {
     /**
-     * bind name
+     * path seperator
+     */
+    private static final String c_seperator = "::";
+    /**
+     * name of the root beliefbase and its mask
+     */
+    private static final CPath c_beliefbaseroot = new CPath("root");
+    /**
+     * name of the binding beliefbase and its mask
+     */
+    private static final CPath c_beliefbasebind = new CPath( "bind" );
+    /**
+     * name of the message beliefbase and its mask
+     */
+    private static final CPath c_beliefbasemessage = new CPath( "message" );
+    /**
+     * bind name of the initial object
      */
     private static final String c_bindname = "self";
     /**
@@ -82,7 +95,6 @@ public class CAgent<T> implements IVoidAgent
      */
     private static final Map<String, InternalAction> c_overwriteaction = new HashMap<String, InternalAction>()
     {{
-
             // overwrite default internal actions
             final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
             put( "jason.stdlib.clone", new CInternalEmpty() );
@@ -96,15 +108,11 @@ public class CAgent<T> implements IVoidAgent
             put( "mecsim.removeBelief", new CBeliefRemove() );
         }};
     /**
-     * path seperator
-     */
-    private final static String c_seperator = "::";
-    /**
      * set with actions of this implementation
      */
     private final Map<String, IAction> m_action = new HashMap<>();
     /**
-     * Jason agent object
+     * agent object
      */
     private final Agent m_agent;
     /**
@@ -112,31 +120,30 @@ public class CAgent<T> implements IVoidAgent
      */
     private final CJasonArchitecture m_architecture;
     /**
-     * set with belief binds
+     * root beliefbase
      */
-    private final Set<IBelief> m_beliefs = new HashSet<>();
+    private final IBeliefBaseMask<Literal> m_beliefbaserootmask;
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
      */
     private int m_cycle;
     /**
-     * set with cycle objects
+     * mapping from functor to path
      */
-    private final Set<ICycle> m_cycleobject = new HashSet<>();
+    private final Map<String, CPath> m_mapping = new HashMap<>();
+    /**
+     * method bind
+     */
+    private final CMethodBind m_methodBind;
     /**
      * name of the agent
      */
-    private CPath m_namepath;
+    private final CPath m_namepath;
     /**
-     * participant object *
+     * participant object
      */
-    private CParticipant m_participant;
-    /**
-     * set with received messages
-     */
-    private final Set<IMessage> m_receivedmessages = new HashSet<>();
-
+    private final CParticipant m_participant;
 
     /**
      * ctor
@@ -148,43 +155,6 @@ public class CAgent<T> implements IVoidAgent
     {
         this( null, p_asl, null );
     }
-
-
-    /**
-     * ctor
-     *
-     * @param p_namepath name of the agent (full path)
-     * @param p_asl agent ASL file
-     * @param p_bind object that should be bind with the agent
-     * @throws JasonException throws an Jason exception
-     * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
-     * and all properties and methods will be bind to the agent with the source "self"
-     */
-    public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
-    {
-        m_namepath = p_namepath;
-        if ( ( m_namepath == null ) || ( m_namepath.isEmpty() ) )
-            m_namepath = new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() );
-
-        if ( p_bind != null )
-        {
-            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
-            m_action.put( "invoke", new CMethodBind( c_bindname, p_bind ) );
-            m_beliefs.add( new de.tu_clausthal.in.mec.object.mas.jason.belief.CFieldBind( c_bindname, p_bind ) );
-        }
-
-        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
-        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself
-        m_architecture = new CJasonArchitecture();
-        m_architecture.insertAgArch( m_architecture );
-
-        // build an own agent to handle manual internal actions
-        m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
-
-        // initialize message system
-        m_participant = new CParticipant( this );
-    }
-
 
     /**
      * ctor
@@ -198,7 +168,6 @@ public class CAgent<T> implements IVoidAgent
         this( p_namepath, p_asl, null );
     }
 
-
     /**
      * ctor
      *
@@ -211,68 +180,57 @@ public class CAgent<T> implements IVoidAgent
         this( null, p_asl, p_bind );
     }
 
-    @Override
-    public void addBelief( final String p_name, final Object p_data )
+    /**
+     * ctor
+     *
+     * @param p_namepath name of the agent (full path)
+     * @param p_asl agent ASL file
+     * @param p_bind object that should be bind with the agent
+     * @throws JasonException throws an Jason exception
+     * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
+     * and all properties and methods will be bind to the agent with the source "self"
+     */
+    public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
-        try
+        m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ).setSeparator(
+                c_seperator
+        ) : p_namepath.setSeparator( c_seperator );
+
+
+        // -- create beliefbase and agent architecture
+        // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
+        // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself,
+        // beware that beliefbase must exists before agent ctor is called !
+        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ).createMask( c_beliefbaseroot.getSuffix() );
+        m_architecture = new CJasonArchitecture();
+        m_architecture.insertAgArch( m_architecture );
+
+        // --- create agent to handle manual internal actions, create participant object for message communication
+        m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
+        m_participant = new CParticipant( this );
+
+
+        // --- create beliefbase structure with tree structure
+        m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
+        m_beliefbaserootmask.add(
+                new CBeliefBase(
+                        new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator
+                ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage.getSuffix() )
+        );
+        m_beliefbaserootmask.add(
+                new CBeliefBase(
+                        new CBindingStorage( c_seperator ), c_seperator
+                ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind.getSuffix() )
+        );
+
+        if ( p_bind != null )
         {
-            m_agent.addBel( CCommon.getLiteral( p_name, p_data ) );
+            // register possible actions
+            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
+            m_action.put( "invoke", m_methodBind );
+
+            m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );
         }
-        catch ( final RevisionFailedException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-    }
-
-    @Override
-    public final int getCycle()
-    {
-        return m_cycle;
-    }
-
-    //@Override
-    public final String getName()
-    {
-        return m_namepath.getPath( c_seperator );
-    }
-
-    @Override
-    public final String getSource()
-    {
-        return new File( m_agent.getASLSrc() ).getName();
-    }
-
-    @Override
-    public void registerCycle( final ICycle p_cycle )
-    {
-        m_cycleobject.add( p_cycle );
-    }
-
-    @Override
-    public final void release()
-    {
-        m_agent.stopAg();
-        m_participant.release();
-        MindInspectorWeb.get().removeAg( m_agent );
-    }
-
-    @Override
-    public void removeBelief( final String p_name, final Object p_data )
-    {
-        try
-        {
-            m_agent.delBel( CCommon.getLiteral( p_name, p_data ) );
-        }
-        catch ( final RevisionFailedException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-    }
-
-    @Override
-    public void unregisterCycle( final ICycle p_cycle )
-    {
-        m_cycleobject.remove( p_cycle );
     }
 
     /**
@@ -285,15 +243,66 @@ public class CAgent<T> implements IVoidAgent
         return m_action;
     }
 
-    /**
-     * returns the current belief base of the agent
-     *
-     * @return belief base
-     */
-    public final IBeliefBase getBeliefBase()
+    @Override
+    public IBeliefBaseMask<Literal> getBeliefBase()
     {
-        // must be converted m_agent.getBB()
-        return null;
+        return m_beliefbaserootmask;
+    }
+
+    @Override
+    public final int getCycle()
+    {
+        return m_cycle;
+    }
+
+    @Override
+    public final String getName()
+    {
+        return m_namepath.getPath();
+    }
+
+    @Override
+    public final String getSource()
+    {
+        return new File( m_agent.getASLSrc() ).getName();
+    }
+
+    @Override
+    public void registerAction( final String p_name, final Object p_object )
+    {
+        if ( m_methodBind == null )
+            return;
+
+        m_methodBind.push( p_name, p_object );
+    }
+
+    @Override
+    public void registerMask( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
+    {
+        m_beliefbaserootmask.add( p_mask );
+    }
+
+    @Override
+    public final void release()
+    {
+        m_agent.stopAg();
+        m_participant.release();
+        MindInspectorWeb.get().removeAg( m_agent );
+    }
+
+    @Override
+    public void unregisterAction( final String p_name )
+    {
+        if ( m_methodBind == null )
+            return;
+
+        m_methodBind.remove( p_name );
+    }
+
+    @Override
+    public void unregisterMask( final CPath p_path )
+    {
+
     }
 
     @Override
@@ -302,11 +311,15 @@ public class CAgent<T> implements IVoidAgent
         return m_namepath;
     }
 
+    /**
+     * pass messages to message containing beliefbase
+     *
+     * @param p_messages set of messages
+     */
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        m_receivedmessages.clear();
-        m_receivedmessages.addAll( p_messages );
+        m_beliefbaserootmask.getMask( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
     }
 
     @Override
@@ -319,6 +332,50 @@ public class CAgent<T> implements IVoidAgent
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
         m_architecture.cycle( p_currentstep );
+    }
+
+    /**
+     * class of an own Jason agent to handle Jason stdlib internal action includes
+     *
+     * @note we do the initialization process manually, because some internal actions are removed from the default
+     * behaviour
+     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
+     */
+    protected class CJasonAgent extends Agent
+    {
+
+        /**
+         * ctor - for building a "blank / empty" agent
+         *
+         * @param p_asl ASL file
+         * @param p_architecture architecture
+         */
+        public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
+        {
+            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
+            this.setBB( (BeliefBase) m_beliefbaserootmask );
+            //this.setBB( new DefaultBeliefBase() );
+            this.setPL( new PlanLibrary() );
+            this.initDefaultFunctions();
+
+
+            try
+            {
+                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
+                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
+
+                // create internal actions map - reset the map and overwrite not useable actions with placeholder
+                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, c_overwriteaction );
+            }
+            catch ( final Throwable l_throwable )
+            {
+                CLogger.error( l_throwable );
+            }
+
+            this.load( p_asl.toString() );
+            MindInspectorWeb.get().registerAg( this );
+        }
+
     }
 
     /**
@@ -390,156 +447,12 @@ public class CAgent<T> implements IVoidAgent
          */
         public final void cycle( final int p_currentstep )
         {
-            // run all register before-cycle object
-            for ( final ICycle l_item : m_cycleobject )
-                l_item.beforeCycle( p_currentstep, CAgent.this );
+            m_beliefbaserootmask.update();
 
-
-            // add the simulationstep belief with the new number and remove the old one
-            try
-            {
-                m_agent.addBel( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep ) ) );
-                m_agent.delBel( ASSyntax.createLiteral( "g_simulationstep", ASSyntax.createNumber( p_currentstep - 1 ) ) );
-            }
-            catch ( final Exception l_exception )
-            {
-            }
-
-            // run belief updates
-            this.updateBindBeliefs();
-            this.updateMessageBeliefs();
-
+            // run agent reasoning cycle for deducing new beliefs
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();
-
-
-            // run all register after-cycle object
-            for ( final ICycle l_item : m_cycleobject )
-                l_item.afterCycle( p_currentstep, CAgent.this );
-        }
-
-        /**
-         * updates all beliefs, that will read from the bind objects
-         */
-        protected final void updateBindBeliefs()
-        {
-            for ( final IBelief l_item : m_beliefs )
-            {
-                // remove old belief within the agent
-                for ( final Literal l_literal : l_item.getLiterals() )
-                    try
-                    {
-                        m_agent.delBel( l_literal );
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                    }
-
-                // clear belief storage and update the entries
-                l_item.clear();
-                l_item.update();
-
-
-                // set new belief into the agent
-                for ( final Literal l_literal : l_item.getLiterals() )
-                    try
-                    {
-                        m_agent.addBel( l_literal );
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                    }
-            }
-        }
-
-        /**
-         * updates all beliefs that are read from the message queue
-         */
-        protected final void updateMessageBeliefs()
-        {
-            for ( final IMessage l_msg : m_receivedmessages )
-                try
-                {
-
-                    // if message is a message from Jason internal message system
-                    if ( l_msg instanceof CMessage )
-                    {
-                        final Message l_jmsg = ( (Message) l_msg.getData() );
-                        final Literal l_literal = (Literal) l_jmsg.getPropCont();
-                        l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_jmsg.getSender() ).getPath( c_seperator ) ) ) );
-
-                        if ( l_jmsg.isTell() )
-                            m_agent.addBel( l_literal );
-                        if ( l_jmsg.isUnTell() )
-                            m_agent.delBel( l_literal );
-                        if ( l_jmsg.isKnownPerformative() )
-                        {
-                            l_literal.addAnnot( BeliefBase.TPercept );
-                            this.getTS().getC().addEvent(
-                                    new Event(
-                                            new Trigger(
-                                                    Trigger.TEOperator.add, Trigger.TEType.belief, l_literal
-                                            ), Intention.EmptyInt
-                                    )
-                            );
-                        }
-
-                        continue;
-                    }
-
-                    // otherwise message will direct converted
-                    final Literal l_literal = CCommon.getLiteral( l_msg.getTitle(), l_msg.getData() );
-                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( new CPath( l_msg.getSource() ).getPath( c_seperator ) ) ) );
-                    m_agent.addBel( l_literal );
-
-                }
-                catch ( final Exception l_exception )
-                {
-                }
-        }
-
-    }
-
-
-    /**
-     * class of an own Jason agent to handle Jason stdlib internal action includes
-     *
-     * @note we do the initialization process manually, because some internal actions are removed from the default
-     * behaviour
-     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
-     */
-    protected class CJasonAgent extends Agent
-    {
-
-        /**
-         * ctor - for building a "blank / empty" agent
-         *
-         * @param p_asl ASL file
-         * @param p_architecture architecture
-         */
-        public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
-        {
-            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setBB( new DefaultBeliefBase() );
-            this.setPL( new PlanLibrary() );
-            this.initDefaultFunctions();
-
-            try
-            {
-                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
-                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
-
-                // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, c_overwriteaction );
-            }
-            catch ( final Throwable l_throwable )
-            {
-                CLogger.error( l_throwable );
-            }
-
-            this.load( p_asl.toString() );
-            MindInspectorWeb.get().registerAg( this );
         }
 
     }

@@ -133,6 +133,29 @@ public class CUI extends Application
     }
 
     /**
+     * returns a tab / node
+     *
+     * @param p_name name of the tab
+     * @return node or null
+     *
+     * @tparam T node type
+     */
+    @SuppressWarnings( "unchecked" )
+    public final <T extends Node> T get( final String p_name )
+    {
+        return (T) m_content.get( p_name );
+    }
+
+    @Override
+    public final void start( final Stage p_stage ) throws Exception
+    {
+        CSimulation.getInstance().getStorage().add( "ui", this );
+        this.stageInitialization( p_stage );
+        this.stageLayoutInitialization( p_stage );
+        CBootstrap.afterStageInit( this );
+    }
+
+    /**
      * creates a new pop window
      *
      * @param p_title title
@@ -174,27 +197,13 @@ public class CUI extends Application
     }
 
     /**
-     * returns a tab / node
-     *
-     * @param p_name name of the tab
-     * @return node or null
-     *
-     * @tparam T node type
-     */
-    @SuppressWarnings( "unchecked" )
-    public final <T extends Node> T get( final String p_name )
-    {
-        return (T) m_content.get( p_name );
-    }
-
-    /**
      * state initialization
      *
      * @param p_stage main stage
      */
     private void stageInitialization( final Stage p_stage )
     {
-        this.setUserAgentStylesheet( null );
+        setUserAgentStylesheet( null );
         if ( m_stage == null )
             m_stage = p_stage;
 
@@ -247,15 +256,6 @@ public class CUI extends Application
         );
         p_stage.sizeToScene();
         p_stage.show();
-    }
-
-    @Override
-    public final void start( final Stage p_stage ) throws Exception
-    {
-        CSimulation.getInstance().getStorage().add( "ui", this );
-        this.stageInitialization( p_stage );
-        this.stageLayoutInitialization( p_stage );
-        CBootstrap.afterStageInit( this );
     }
 
 }

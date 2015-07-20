@@ -56,28 +56,6 @@ public abstract class IUIListener implements MouseListener
             CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().addMouseListener( this );
     }
 
-    /**
-     * returns the normalized zoom level
-     *
-     * @param p_viewer viewer object
-     * @return value in [0,1] with scale of the current zoom level
-     */
-    protected final double iconscale( final JXMapViewer p_viewer )
-    {
-        return this.iconsize( p_viewer ) / (double) ( c_maxzoom - c_miniconsize );
-    }
-
-    /**
-     * returns the icon size
-     *
-     * @param p_viewer viewer object
-     * @return circle size
-     */
-    protected final int iconsize( final JXMapViewer p_viewer )
-    {
-        return Math.max( c_maxzoom - p_viewer.getZoom(), c_miniconsize );
-    }
-
     @Override
     public final void mouseClicked( final MouseEvent p_event )
     {
@@ -121,6 +99,28 @@ public abstract class IUIListener implements MouseListener
     public void release()
     {
         CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().removeMouseListener( this );
+    }
+
+    /**
+     * returns the normalized zoom level
+     *
+     * @param p_viewer viewer object
+     * @return value in [0,1] with scale of the current zoom level
+     */
+    protected final double iconscale( final JXMapViewer p_viewer )
+    {
+        return this.iconsize( p_viewer ) / (double) ( c_maxzoom - c_miniconsize );
+    }
+
+    /**
+     * returns the icon size
+     *
+     * @param p_viewer viewer object
+     * @return circle size
+     */
+    protected final int iconsize( final JXMapViewer p_viewer )
+    {
+        return Math.max( c_maxzoom - p_viewer.getZoom(), c_miniconsize );
     }
 
 }

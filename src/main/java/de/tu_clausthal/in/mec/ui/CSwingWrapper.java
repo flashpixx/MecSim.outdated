@@ -44,7 +44,6 @@ public class CSwingWrapper<T extends JComponent> extends SwingNode
      */
     private final T m_component;
 
-
     /**
      * ctor
      *

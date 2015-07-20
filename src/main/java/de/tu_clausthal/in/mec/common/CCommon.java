@@ -184,21 +184,6 @@ public class CCommon
     }
 
     /**
-     * returns a string with hexadecimal bytes
-     *
-     * @param p_bytes input bytes
-     * @return hexadecimal string
-     */
-    private static String getBytes2Hex( final byte[] p_bytes )
-    {
-        final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
-        for ( final byte l_byte : p_bytes )
-            l_str.append( String.format( "%02x", l_byte & 0xff ) );
-
-        return l_str.toString();
-    }
-
-    /**
      * checks a value and returns the checkd value or the default value
      *
      * @param p_input unchecked value
@@ -436,7 +421,7 @@ public class CCommon
             return "{}";
 
         try (
-                final ByteArrayOutputStream l_stream = new ByteArrayOutputStream();
+                final ByteArrayOutputStream l_stream = new ByteArrayOutputStream()
         )
         {
             new ObjectMapper().configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false ).writer().writeValue( l_stream, p_data );
@@ -447,6 +432,21 @@ public class CCommon
             CLogger.error( l_exception );
         }
         return null;
+    }
+
+    /**
+     * returns a string with hexadecimal bytes
+     *
+     * @param p_bytes input bytes
+     * @return hexadecimal string
+     */
+    private static String getBytes2Hex( final byte[] p_bytes )
+    {
+        final StringBuilder l_str = new StringBuilder( 2 * p_bytes.length );
+        for ( final byte l_byte : p_bytes )
+            l_str.append( String.format( "%02x", l_byte & 0xff ) );
+
+        return l_str.toString();
     }
 
 }

@@ -47,6 +47,13 @@ public class CNagelSchreckenberg implements IDriveModel
      */
     private final Random m_random = new Random();
 
+    @Override
+    public void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car )
+    {
+        this.checkAccelerationWithEdgeSpeed( p_layer, p_car );
+        this.checkCollision( p_layer, p_car );
+        this.checkLinger( p_layer, p_car );
+    }
 
     /**
      * checks the acceleration and increment the speed
@@ -100,14 +107,6 @@ public class CNagelSchreckenberg implements IDriveModel
                             )
                     )
             );
-    }
-
-    @Override
-    public void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car )
-    {
-        this.checkAccelerationWithEdgeSpeed( p_layer, p_car );
-        this.checkCollision( p_layer, p_car );
-        this.checkLinger( p_layer, p_car );
     }
 
 }

@@ -54,10 +54,6 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
 {
 
     /**
-     * color of the source (needed in web-ui)
-     */
-    private final Color m_color;
-    /**
      * factory of this source
      */
     protected final P m_factory;
@@ -65,6 +61,10 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      * generator of this source
      */
     protected final N m_generator;
+    /**
+     * color of the source (needed in web-ui)
+     */
+    private final Color m_color;
     /**
      * image of the waypoint
      */
@@ -92,7 +92,6 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      * current scaled image
      */
     private transient BufferedImage m_scaledimage;
-
 
     /**
      * ctor for empty waypoints
@@ -184,39 +183,6 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
         return l_newimage;
     }
 
-    /**
-     * creates an image with a specific scale
-     *
-     * @param p_width image width
-     * @param p_height image height
-     * @param p_color color of the waypoint
-     * @return image
-     */
-    private BufferedImage initializeImage( final int p_width, final int p_height, final Color p_color )
-    {
-        try
-        {
-            final BufferedImage l_image = this.getScaledImage(
-                    ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) ), p_width, p_height
-            );
-            for ( int i = 0; i < l_image.getHeight(); i++ )
-                for ( int j = 0; j < l_image.getWidth(); j++ )
-                {
-                    final Color l_color = new Color( l_image.getRGB( j, i ) );
-                    if ( l_color.getBlue() > 0 )
-                        l_image.setRGB( j, i, p_color.getRGB() );
-                }
-
-            return l_image;
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-
-        return null;
-    }
-
     @Override
     public Map<String, Object> inspect()
     {
@@ -262,5 +228,38 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
             return null;
 
         return m_factory.generate( this.getPath(), m_generator.getCount( p_currentstep ) );
+    }
+
+    /**
+     * creates an image with a specific scale
+     *
+     * @param p_width image width
+     * @param p_height image height
+     * @param p_color color of the waypoint
+     * @return image
+     */
+    private BufferedImage initializeImage( final int p_width, final int p_height, final Color p_color )
+    {
+        try
+        {
+            final BufferedImage l_image = this.getScaledImage(
+                    ImageIO.read( DefaultWaypointRenderer.class.getResource( "/images/standard_waypoint.png" ) ), p_width, p_height
+            );
+            for ( int i = 0; i < l_image.getHeight(); i++ )
+                for ( int j = 0; j < l_image.getWidth(); j++ )
+                {
+                    final Color l_color = new Color( l_image.getRGB( j, i ) );
+                    if ( l_color.getBlue() > 0 )
+                        l_image.setRGB( j, i, p_color.getRGB() );
+                }
+
+            return l_image;
+        }
+        catch ( final Exception l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+
+        return null;
     }
 }

@@ -23,12 +23,8 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-import java.util.Set;
 
-
-/**
- * belief base of literals
- */
-public interface IBeliefBase extends Set<ILiteral>
+public interface IBeliefBase<T> extends IBeliefBaseAction<T>
 {
+
 }

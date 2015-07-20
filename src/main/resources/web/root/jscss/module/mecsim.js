@@ -193,6 +193,8 @@ var MecSim = (function (px_modul) {
                             jQuery( lx_generator.call(po_options.target, la[1], "#") ).text( pc_translation );
                         if (la[0] === "label")
                             jQuery( 'label[for="' + lx_generator.call(po_options.target, la[1]) + '"]' ).text( pc_translation );
+                        if (la[0] === "title")
+                            jQuery( lx_generator.call(po_options.target, la[1], "#") ).prop( "title", pc_translation );
                     });
                 }
 

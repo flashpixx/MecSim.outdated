@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 /**
  * layer for any calculation atomic task without visibility
  */
+@SuppressWarnings( "serial" )
 public abstract class ISingleEvaluateLayer implements ILayer, IVoidSteppable
 {
     /**

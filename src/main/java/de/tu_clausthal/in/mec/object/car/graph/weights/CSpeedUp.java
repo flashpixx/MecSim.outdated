@@ -47,7 +47,6 @@ public class CSpeedUp implements IWeighting
      */
     private final double m_maxSpeed;
 
-
     /**
      * ctor
      *

@@ -24,35 +24,50 @@
 package de.tu_clausthal.in.mec.object.mas.general;
 
 
-import java.util.List;
-import java.util.Set;
+import de.tu_clausthal.in.mec.common.CPath;
 
 
 /**
  * literal interface
+ *
+ * @note closed world assumption, no negation marker needed
  */
-public interface ILiteral
+public interface ILiteral<T> extends ITerm
 {
+
+    /**
+     * clones the literal
+     *
+     * @param p_prefix add a path to the functor
+     * @return copy of the literal
+     */
+    public ILiteral<T> clone( final CPath p_prefix );
 
     /**
      * returns the optional annotations
      *
-     * @return annotation literal list
+     * @return annotation term
      */
-    public Set<ILiteral> getAnnotation();
+    public ITermCollection getAnnotation();
 
     /**
      * returns the functor / dataset of the literal
      *
      * @return function data
      */
-    public IAtom<?> getFunctor();
+    public IAtom<String> getFunctor();
 
     /**
-     * returns the optional literal list
+     * getter for language specific literal
      *
-     * @return value literal list
+     * @return literal
      */
-    public List<ILiteral> getValues();
+    public T getLiteral();
 
+    /**
+     * returns the optional value term
+     *
+     * @return value term
+     */
+    public ITermCollection getValues();
 }

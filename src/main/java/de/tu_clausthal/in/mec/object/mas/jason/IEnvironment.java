@@ -51,6 +51,7 @@ import java.util.List;
  * binding https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/
  */
+@SuppressWarnings( "serial" )
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements ISerializable
 {
     /**
@@ -122,6 +123,11 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * gets a list of all agents file names
      *
      * @return string list with the filenames only
+     * <<<<<<< HEAD
+     *
+     * @todo add ASL build-in files with the resource directory
+     * =======
+     * >>>>>>> upstream/master
      */
     public static String[] getAgentFiles()
     {

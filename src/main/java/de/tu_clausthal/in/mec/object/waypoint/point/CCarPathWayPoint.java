@@ -46,7 +46,6 @@ public class CCarPathWayPoint extends IPathWayPoint<ICar, ICarFactory, IGenerato
             add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
 
-
     /**
      * ctor
      *

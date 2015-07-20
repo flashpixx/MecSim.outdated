@@ -100,6 +100,13 @@ Help.prototype.afterDOMAdded = function()
 
     MecSim.language({ url : "/clanguageenvironment/help", target : this });
 
+    jQuery(this.generateSubID("dialog", "#")).dialog({
+        width    : "auto",
+        modal    : true,
+        autoOpen : false,
+        overlay  : { background: "black" }
+    });
+
 
     // --- create about button & bind action to the button -----------------------------------------------------------------------------------------------------
     jQuery(this.generateSubID("about", "#")).button().click( function() {
@@ -124,15 +131,7 @@ Help.prototype.afterDOMAdded = function()
             jQuery(self.generateSubID("buildcommit", "#"))
                 .text(  po_data.manifest["build-commit"] ? po_data.manifest["build-commit"].substring(0,8) : ""  );
 
-        }).done( function() {
-
-            // after adding data - dialog is called
-            jQuery(self.generateSubID("dialog", "#")).dialog({
-                width: "auto",
-                modal: true
-            });
-
-        });
+        }).done( function() { jQuery(self.generateSubID("dialog", "#")).dialog("open"); });
 
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

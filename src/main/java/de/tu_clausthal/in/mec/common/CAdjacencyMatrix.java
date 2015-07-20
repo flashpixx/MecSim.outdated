@@ -25,7 +25,6 @@ package de.tu_clausthal.in.mec.common;
 
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -42,6 +41,7 @@ import java.util.Set;
 /**
  * class of an adjacence matrix
  */
+@SuppressWarnings( "serial" )
 @JsonSerialize( using = CAdjacencyMatrix.CJson.class )
 public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 {
@@ -58,7 +58,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
      */
     private final String m_rowname;
 
-
     /**
      * ctor
      */
@@ -66,7 +65,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
     {
         this( "row", "col" );
     }
-
 
     /**
      * ctor
@@ -127,7 +125,6 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
         this.put( new ImmutablePair<>( p_row, p_column ), p_value );
     }
 
-
     /**
      * serializer for Json access
      */
@@ -136,7 +133,7 @@ public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 
         @Override
         public void serialize( final CAdjacencyMatrix<?, ?> p_matrix, final JsonGenerator p_generator, final SerializerProvider p_serializer
-        ) throws IOException, JsonProcessingException
+        ) throws IOException
         {
             p_generator.writeStartObject();
             p_generator.writeArrayFieldStart( "cells" );

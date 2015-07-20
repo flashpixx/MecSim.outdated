@@ -77,7 +77,6 @@ public class CVirtualStaticMethod implements IVirtualLocation
      */
     private final String m_uri;
 
-
     /**
      * ctor
      *
@@ -94,20 +93,6 @@ public class CVirtualStaticMethod implements IVirtualLocation
         m_arguments = p_method.getMethod().getParameterCount();
 
         CLogger.info( p_uri );
-    }
-
-    /**
-     * converts the string-string map into a string-object map to create map-in-map structure
-     *
-     * @param p_input input map
-     * @return string-object map
-     */
-    private Map<String, Object> convertMap( final Map<String, String> p_input )
-    {
-        final Map<String, Object> l_return = new HashMap<>();
-        for ( final Map.Entry<String, String> l_item : p_input.entrySet() )
-            this.splitKeyValues( l_item.getKey().replace( "]", "" ).split( "\\[" ), 0, l_item.getValue(), l_return );
-        return l_return;
     }
 
     @Override
@@ -177,6 +162,20 @@ public class CVirtualStaticMethod implements IVirtualLocation
             return this.hashCode() == p_object.hashCode();
 
         return false;
+    }
+
+    /**
+     * converts the string-string map into a string-object map to create map-in-map structure
+     *
+     * @param p_input input map
+     * @return string-object map
+     */
+    private Map<String, Object> convertMap( final Map<String, String> p_input )
+    {
+        final Map<String, Object> l_return = new HashMap<>();
+        for ( final Map.Entry<String, String> l_item : p_input.entrySet() )
+            this.splitKeyValues( l_item.getKey().replace( "]", "" ).split( "\\[" ), 0, l_item.getValue(), l_return );
+        return l_return;
     }
 
     /**

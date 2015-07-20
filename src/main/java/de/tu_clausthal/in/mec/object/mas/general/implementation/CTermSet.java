@@ -21,30 +21,44 @@
  * @endcond
  */
 
+package de.tu_clausthal.in.mec.object.mas.general.implementation;
 
-package de.tu_clausthal.in.mec.object.mas;
+import de.tu_clausthal.in.mec.object.mas.general.ITerm;
+import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- * interface of running calls on the agent-cycle
+ * generic term set for agent literals
+ *
+ * @todo empty set initialization with static EMPTY_SET
  */
-public interface ICycle
+public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
+    /**
+     * default ctor
+     */
+    public CTermSet()
+    {
+        super( 0 );
+    }
 
     /**
-     * method is called within the agent-cycle
+     * ctor - with initial elements specified
      *
-     * @param p_currentstep current simulation step
-     * @param p_agent agent
+     * @param p_collection collection containing initial elements
      */
-    public void afterCycle( final int p_currentstep, final IAgent p_agent );
+    public CTermSet( final Collection<ITerm> p_collection )
+    {
+        super( p_collection );
+    }
 
-    /**
-     * method is called within the agent-cycle
-     *
-     * @param p_currentstep current simulation step
-     * @param p_agent agent
-     */
-    public void beforeCycle( final int p_currentstep, final IAgent p_agent );
-
+    @Override
+    public boolean instanceOf( final Class<?> p_class )
+    {
+        return Set.class.isAssignableFrom( p_class );
+    }
 }

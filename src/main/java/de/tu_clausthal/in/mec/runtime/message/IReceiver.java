@@ -39,13 +39,13 @@ public interface IReceiver
      *
      * @return path
      */
-    public CPath getReceiverPath();
+    CPath getReceiverPath();
 
     /**
      * receives all messages, each message is unique
      *
      * @param p_messages set of messages
      */
-    public void receiveMessage( final Set<IMessage> p_messages );
+    void receiveMessage( final Set<IMessage> p_messages );
 
 }

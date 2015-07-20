@@ -31,12 +31,16 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
-import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.object.mas.ICycle;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.IOneTimeStorage;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import jason.JasonException;
+import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -51,18 +55,13 @@ import java.util.Set;
  *
  * @bug refactor ctor (reduce parameter)
  */
-public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
+public class CCarJasonAgent extends CDefaultCar implements IReceiver
 {
     /**
      * agent object *
      */
     @CFieldFilter.CAgent( bind = false )
     private final Set<de.tu_clausthal.in.mec.object.mas.jason.CAgent> m_agents = new HashSet<>();
-    /**
-     * cache of beliefs to remove it automatically
-     */
-    @CFieldFilter.CAgent( bind = false )
-    private final Map<String, Object> m_beliefcache = new HashMap<>();
     /**
      * inspector map
      */
@@ -76,6 +75,11 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
      */
     @CFieldFilter.CAgent( bind = false )
     private final CPath m_objectpath;
+    /**
+     * traffic environment belief base
+     */
+    @CFieldFilter.CAgent( bind = false )
+    private final IBeliefBase<Literal> m_trafficbeliefbase = new CBeliefBase<>( new CTrafficStorage() );
 
     /**
      * ctor
@@ -104,7 +108,6 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
         );
     }
 
-
     /**
      * @param p_route driving route
      * @param p_speed initial speed
@@ -115,6 +118,7 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
      * @param p_objectname name of the object within the simulation
      * @param p_agent set with ASL / agent name
      * @throws JasonException throws on Jason error
+     * @todo add agent to inconsistency layer
      */
     public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
             final int p_deceleration, final double p_lingerprobability, final String p_objectname, final Set<String> p_agent
@@ -124,77 +128,6 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
         m_objectpath = new CPath( "traffic", "car", CSimulation.getInstance().generateObjectName( p_objectname, this ) );
         for ( final String l_item : p_agent )
             this.bind( l_item );
-    }
-
-    @Override
-    public void afterCycle( final int p_currentstep, final IAgent p_agent )
-    {
-    }
-
-    @Override
-    @CMethodFilter.CAgent( bind = false )
-    public void beforeCycle( final int p_currentstep, final IAgent p_agent )
-    {
-        // removes old beliefs
-        for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
-            p_agent.removeBelief( l_item.getKey(), l_item.getValue() );
-        m_beliefcache.clear();
-
-        // add new beliefs
-        m_beliefcache.put(
-                "ag_position", this.getCurrentPosition()
-        );
-        m_beliefcache.put( "ag_predecessor", this.getPredecessorWithName( 5 ) );
-
-        for ( final Map.Entry<String, Object> l_item : m_beliefcache.entrySet() )
-            p_agent.addBelief( l_item.getKey(), l_item.getValue() );
-    }
-
-    /**
-     * binds an agent with the name
-     *
-     * @param p_asl ASL / agent name
-     * @throws JasonException throws on Jason error
-     */
-    @CMethodFilter.CAgent( bind = false )
-    private void bind( final String p_asl ) throws JasonException
-    {
-        final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent = new de.tu_clausthal.in.mec.object.mas.jason.CAgent(
-                m_objectpath.append( p_asl ), p_asl, this
-        );
-        m_inspect.put( CCommon.getResourceString( this, "agent", l_agent.getName() ), l_agent.getSource() );
-        l_agent.registerCycle( this );
-
-        // add agent to layer and internal set
-        CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
-        m_agents.add( l_agent );
-    }
-
-    /**
-     * returns the predecessor with name for communication
-     *
-     * @param p_count number of predecessors
-     * @return map with distance and map with name and can communicate
-     */
-    private Map<Double, Map<String, Object>> getPredecessorWithName( final int p_count )
-    {
-        final Map<Double, Map<String, Object>> l_predecessor = new HashMap<>();
-
-        for ( final Map.Entry<Double, ICar> l_item : this.getPredecessor( p_count ).entrySet() )
-        {
-            final ICar l_car = l_item.getValue();
-            final boolean l_isagent = l_car instanceof CCarJasonAgent;
-
-            l_predecessor.put(
-                    l_item.getKey(),
-                    CCommon.getMap(
-                            "name", l_isagent ? ( (CCarJasonAgent) l_car ).getReceiverPath().toString() : l_car.toString(),
-                            "isagent", l_isagent
-                    )
-            );
-        }
-
-        return l_predecessor;
     }
 
     @Override
@@ -236,5 +169,64 @@ public class CCarJasonAgent extends CDefaultCar implements ICycle, IReceiver
         // [0,max-speed] other values are declared as final member
         m_speed = Math.min( Math.max( 0, m_speed ), m_maxspeed );
         super.step( p_currentstep, p_layer );
+    }
+
+    /**
+     * binds an agent with the name
+     *
+     * @param p_asl ASL / agent name
+     * @throws JasonException throws on Jason error
+     */
+    @CMethodFilter.CAgent( bind = false )
+    private void bind( final String p_asl ) throws JasonException
+    {
+        final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent = new de.tu_clausthal.in.mec.object.mas.jason.CAgent(
+                m_objectpath.append( p_asl ), p_asl, this
+        );
+        m_inspect.put( CCommon.getResourceString( this, "agent", l_agent.getName() ), l_agent.getSource() );
+
+        // add agent to layer and internal set
+        CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
+        m_agents.add( l_agent );
+    }
+
+    /**
+     * returns the predecessor with name for communication
+     *
+     * @param p_count number of predecessors
+     * @return map with distance and map with name and can communicate
+     */
+    private Map<Double, Map<String, Object>> getPredecessorWithName( final int p_count )
+    {
+        final Map<Double, Map<String, Object>> l_predecessor = new HashMap<>();
+
+        for ( final Map.Entry<Double, ICar> l_item : this.getPredecessor( p_count ).entrySet() )
+        {
+            final ICar l_car = l_item.getValue();
+            final boolean l_isagent = l_car instanceof CCarJasonAgent;
+
+            l_predecessor.put(
+                    l_item.getKey(),
+                    CCommon.getMap(
+                            "name", l_isagent ? ( (CCarJasonAgent) l_car ).getReceiverPath().toString() : l_car.toString(),
+                            "isagent", l_isagent
+                    )
+            );
+        }
+
+        return l_predecessor;
+    }
+
+    private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
+    {
+
+        @Override
+        protected void updating()
+        {
+            /*
+            m_beliefcache.put( "position", this.getCurrentPosition() );
+            m_beliefcache.put( "predecessor", this.getPredecessorWithName( 5 ) );
+            */
+        }
     }
 }

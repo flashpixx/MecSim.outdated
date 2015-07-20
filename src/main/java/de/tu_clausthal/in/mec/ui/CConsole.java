@@ -47,7 +47,6 @@ public class CConsole extends ByteArrayOutputStream
      */
     private final CSocketStorage m_communicator = new CSocketStorage();
 
-
     /**
      * ctor
      */

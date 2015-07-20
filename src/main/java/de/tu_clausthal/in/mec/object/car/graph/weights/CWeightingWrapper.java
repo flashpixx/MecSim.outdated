@@ -43,7 +43,6 @@ public class CWeightingWrapper<T extends Weighting> implements IWeighting
      */
     private final T m_weight;
 
-
     /**
      * ctor
      *
@@ -53,7 +52,6 @@ public class CWeightingWrapper<T extends Weighting> implements IWeighting
     {
         m_weight = p_weight;
     }
-
 
     /**
      * ctor

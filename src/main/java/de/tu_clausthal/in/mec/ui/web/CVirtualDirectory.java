@@ -105,7 +105,6 @@ public class CVirtualDirectory implements IVirtualLocation
         CLogger.info( p_uri );
     }
 
-
     /**
      * ctor
      *

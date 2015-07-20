@@ -43,6 +43,6 @@ public interface IDriveModel extends Serializable
      * @param p_layer car layer
      * @param p_car car object
      */
-    public void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car );
+    void update( final int p_currentstep, final CCarLayer p_layer, final ICar p_car );
 
 }

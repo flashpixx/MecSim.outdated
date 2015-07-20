@@ -46,7 +46,6 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
      */
     protected final Queue<T> m_data = new ConcurrentLinkedQueue<>();
 
-
     @Override
     public int getCalculationIndex()
     {

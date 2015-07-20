@@ -63,7 +63,6 @@ public class CAgentCarFactory extends CDefaultCarFactory
             putAll( CAgentCarFactory.super.inspect() );
         }};
 
-
     /**
      * ctor
      *
@@ -90,6 +89,11 @@ public class CAgentCarFactory extends CDefaultCarFactory
         m_inspect.put( CCommon.getResourceString( CAgentCarFactory.class, "factoryagenttype" ), m_agenttype );
     }
 
+    @Override
+    public Map<String, Object> inspect()
+    {
+        return m_inspect;
+    }
 
     @Override
     protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
@@ -121,12 +125,6 @@ public class CAgentCarFactory extends CDefaultCarFactory
             CLogger.error( l_exception );
         }
         return null;
-    }
-
-    @Override
-    public Map<String, Object> inspect()
-    {
-        return m_inspect;
     }
 
     /**

@@ -60,7 +60,6 @@ public class CInternalEmpty extends DefaultInternalAction
         m_result = true;
     }
 
-
     /**
      * ctor
      *
@@ -71,7 +70,6 @@ public class CInternalEmpty extends DefaultInternalAction
     {
         this( p_min, p_max, true );
     }
-
 
     /**
      * ctor
@@ -87,7 +85,6 @@ public class CInternalEmpty extends DefaultInternalAction
         m_result = p_result;
     }
 
-
     /**
      * ctor
      *
@@ -97,7 +94,6 @@ public class CInternalEmpty extends DefaultInternalAction
     {
         this( 0, 0, p_result );
     }
-
 
     @Override
     public final int getMinArgs()

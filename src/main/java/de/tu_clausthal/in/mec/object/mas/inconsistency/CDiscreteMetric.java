@@ -21,35 +21,59 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.jason.belief;
+package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
+import de.tu_clausthal.in.mec.common.CPath;
 
-import jason.asSyntax.Literal;
-
-import java.util.Set;
+import java.util.Collection;
 
 
 /**
- * interface for belief structure
+ * generic discrete metric
+ *
+ * @see http://mathworld.wolfram.com/DiscreteMetric.html
  */
-public interface IBelief
+public class CDiscreteMetric<T> extends IDefaultMetric<T>
 {
 
     /**
-     * clear all literals *
-     */
-    public void clear();
-
-    /**
-     * get non-atom literals
+     * ctor
      *
-     * @return non-atom literals
+     * @param p_paths path list
      */
-    public Set<Literal> getLiterals();
+    public CDiscreteMetric( final CPath... p_paths )
+    {
+        super( p_paths );
+    }
 
     /**
-     * update the literals *
+     * copy-ctor
+     *
+     * @param p_metric metric
      */
-    public void update();
+    public CDiscreteMetric( final IDefaultMetric<T> p_metric )
+    {
+        super( p_metric );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_paths collection of path
+     */
+    public CDiscreteMetric( final Collection<CPath> p_paths )
+    {
+        super( p_paths );
+    }
+
+    @Override
+    public double calculate( final T p_first, final T p_second )
+    {
+        // equal objects create zero value
+        if ( p_first.equals( p_second ) )
+            return 0;
+
+        return 1;
+    }
 
 }

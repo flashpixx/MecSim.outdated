@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -38,12 +39,11 @@ import java.util.List;
  */
 public class CPath implements Iterable<CPath>
 {
+    public static final String DEFAULTSEPERATOR = "/";
     /**
      * empty path
      **/
     public static final CPath EMPTY = new CPath();
-
-
     /**
      * list with path parts *
      */
@@ -51,8 +51,7 @@ public class CPath implements Iterable<CPath>
     /**
      * separator of the path elements *
      */
-    private String m_separator = "/";
-
+    private String m_separator = DEFAULTSEPERATOR;
 
     /**
      * copy-ctor with arguments
@@ -65,7 +64,6 @@ public class CPath implements Iterable<CPath>
         this( p_path );
         m_path.addAll( Arrays.asList( p_varargs ) );
     }
-
 
     /**
      * copy-ctor
@@ -101,6 +99,20 @@ public class CPath implements Iterable<CPath>
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
         return new CPath( StringUtils.join( p_varargs[0], p_varargs, 1 ) );
+    }
+
+    public static CPath createSplitPath( final String... p_varargs )
+    {
+        if ( p_varargs.length < 3 )
+            throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
+
+        final List<String> l_pathlist = new LinkedList<>();
+        l_pathlist.add( p_varargs[1] );
+
+        for ( int i = 2; i < p_varargs.length; ++i )
+            l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[i], p_varargs[0] ) ) );
+
+        return createPath( (String[]) l_pathlist.toArray() );
     }
 
     /**
@@ -193,13 +205,15 @@ public class CPath implements Iterable<CPath>
      * sets the separator
      *
      * @param p_separator separator
+     * @return path object
      */
-    public final void setSeparator( final String p_separator )
+    public final CPath setSeparator( final String p_separator )
     {
         if ( ( p_separator == null ) || ( p_separator.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "separatornotempty" ) );
 
         m_separator = p_separator;
+        return this;
     }
 
     /**
@@ -257,21 +271,6 @@ public class CPath implements Iterable<CPath>
     public final String toString()
     {
         return this.getPath();
-    }
-
-    /**
-     * splits the string data
-     *
-     * @param p_fqn full path
-     */
-    private void initialize( final String p_fqn )
-    {
-        for ( final String l_item : p_fqn.split( m_separator ) )
-            if ( !l_item.isEmpty() )
-                m_path.add( l_item );
-
-        if ( m_path.size() == 0 )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
     }
 
     /**
@@ -397,6 +396,21 @@ public class CPath implements Iterable<CPath>
                 return false;
 
         return true;
+    }
+
+    /**
+     * splits the string data
+     *
+     * @param p_fqn full path
+     */
+    private void initialize( final String p_fqn )
+    {
+        for ( final String l_item : p_fqn.split( m_separator ) )
+            if ( !l_item.isEmpty() )
+                m_path.add( l_item );
+
+        if ( m_path.size() == 0 )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
     }
 
 }

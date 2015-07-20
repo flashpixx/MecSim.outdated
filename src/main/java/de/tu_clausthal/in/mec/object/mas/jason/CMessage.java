@@ -45,7 +45,6 @@ public class CMessage implements IMessage<Message>
      */
     private int m_ttl = 10;
 
-
     /**
      * ctor
      *

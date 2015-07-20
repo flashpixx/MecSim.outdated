@@ -39,7 +39,7 @@ public interface IReturnSteppable<T> extends ISteppable
      *
      * @return objects which gets the data
      */
-    public Collection<IReturnSteppableTarget<T>> getTargets();
+    Collection<IReturnSteppableTarget<T>> getTargets();
 
     /**
      * step method with return argument
@@ -48,6 +48,6 @@ public interface IReturnSteppable<T> extends ISteppable
      * @param p_layer layer on which is the object push or null
      * @return collection with step values
      */
-    public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception;
+    Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception;
 
 }

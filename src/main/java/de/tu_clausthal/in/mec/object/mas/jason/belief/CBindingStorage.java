@@ -26,72 +26,55 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
-import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.IBindStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 
 /**
- * belief structure to bind object properties
+ * beliefbase structure to bind object properties
  */
-public class CFieldBind implements IBelief
+public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
     /**
-     * field filter
+     *
      */
-    private static final CFieldFilter c_filter = new CFieldFilter();
-    /**
-     * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
-     * setter handles, so each bind can configurate individual
-     */
-    private final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
-    /**
-     * set with literals
-     */
-    private final Set<Literal> m_literals = new HashSet<>();
-
+    private final String m_separator;
 
     /**
-     * ctor - default
+     * default ctor
+     *
+     * @param p_separator path separator
      */
-    public CFieldBind()
+    public CBindingStorage( final String p_separator )
     {
-
+        super();
+        m_separator = p_separator;
     }
 
     /**
      * ctor bind an object
      *
+     * @param p_separator path separator
      * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
-    public CFieldBind( final String p_name, final Object p_object )
+    public CBindingStorage( final String p_separator, final String p_name, final Object p_object )
     {
-        this.push( p_name, p_object );
+        super( p_name, p_object );
+        m_separator = p_separator;
     }
 
     @Override
-    public final void clear()
-    {
-        m_literals.clear();
-    }
-
-    @Override
-    public final Set<Literal> getLiterals()
-    {
-        return m_literals;
-    }
-
-    @Override
-    public final void update()
+    protected void updating()
     {
         // iterate over all binded objects
         for ( final Map.Entry<String, Pair<Object, Map<String, CReflection.CGetSet>>> l_item : m_bind.entrySet() )
@@ -102,16 +85,23 @@ public class CFieldBind implements IBelief
                 {
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
+                    // replace separator to avoid path splitting
                     final Literal l_literal = CCommon.getLiteral(
-                            l_fieldref.getKey(), l_fieldref.getValue().getGetter().invoke(
+                            l_fieldref.getKey().replace( m_separator, "" ), l_fieldref.getValue().getGetter().invoke(
                                     l_item.getValue().getLeft()
                             )
                     );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
                     l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
-                    m_literals.add( l_literal );
 
+                    final Set<ILiteral<Literal>> l_elements = m_multielements.getOrDefault( l_literal.getFunctor(), new HashSet<>() );
+                    l_elements.add(
+                            new CLiteral(
+                                    l_literal
+                            )
+                    );
+                    m_multielements.put( l_literal.getFunctor(), l_elements );
                 }
                 catch ( final Exception l_exception )
                 {
@@ -131,30 +121,4 @@ public class CFieldBind implements IBelief
                 }
     }
 
-    /**
-     * adds / binds an object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     */
-    public final void push( final String p_name, final Object p_object )
-    {
-        m_bind.put(
-                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
-                        p_object, CReflection.getClassFields(
-                        p_object.getClass(), c_filter
-                )
-                )
-        );
-    }
-
-    /**
-     * removes an object from the bind
-     *
-     * @param p_name name
-     */
-    public final void remove( final String p_name )
-    {
-        m_bind.remove( p_name );
-    }
 }

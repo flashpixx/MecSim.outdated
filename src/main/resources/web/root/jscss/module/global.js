@@ -88,6 +88,27 @@ String.prototype.hash = String.prototype.hash || function()
 }
 
 
+/**
+ * split a string into lines and remove empty lines
+ * @param pc_separator separator
+ * @return array of lines
+**/
+String.prototype.splitLines = String.prototype.splitLines || function( pc_separator )
+{
+    var la_out = [];
+    var lc_separator = "\n";
+    if (pc_separator)
+        lc_separator = pc_separator;
+
+    jQuery.each(this.split(lc_separator), function (pn, pc) {
+        if (pc)
+            la_out.push(pc);
+    });
+
+    return la_out;
+}
+
+
 
 /**
  * removes an element of an array

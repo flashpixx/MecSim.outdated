@@ -23,29 +23,15 @@
 
 package de.tu_clausthal.in.mec.object.mas.general;
 
-
 /**
- * atom interface
+ * interface for atoms of agent literals
  */
-public interface IAtom<T>
+public interface IAtom<T> extends ITerm
 {
-
     /**
      * returns the value of the atom
      *
      * @return value
      */
-    public T get();
-
-
-    /**
-     * checks if the generic type of the atom matches a class
-     *
-     * @param p_class matching class
-     * @return boolean of checking
-     *
-     * @note use generic_type_class.isAssignableFrom(p_class)
-     */
-    public boolean instanceOf( final Class<?> p_class );
-
+    T get();
 }

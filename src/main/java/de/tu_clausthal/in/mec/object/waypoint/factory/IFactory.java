@@ -48,6 +48,6 @@ public interface IFactory<T> extends IInspector, Serializable
      * @param p_count number of objects
      * @return set with objects
      */
-    public Set<T> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count );
+    Set<T> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count );
 
 }

@@ -32,6 +32,6 @@ public interface ISteppable
     /**
      * release function to remove object *
      */
-    public void release();
+    void release();
 
 }

@@ -25,8 +25,16 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.general.ITerm;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CNumberAtom;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CStringAtom;
+import de.tu_clausthal.in.mec.object.mas.general.implementation.CTermList;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import jason.NoValueException;
 import jason.asSyntax.ASSyntax;
+import jason.asSyntax.Atom;
 import jason.asSyntax.ListTerm;
 import jason.asSyntax.Literal;
 import jason.asSyntax.NumberTerm;
@@ -38,9 +46,11 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -66,6 +76,108 @@ public class CCommon
     public static String clearString( final String p_input )
     {
         return p_input.replaceAll( "\"", "" ).replaceAll( "'", "" );
+    }
+
+    /**
+     * converts an atom into a string atom
+     *
+     * @param p_atom atom to convert
+     * @return string atom
+     */
+    public static CStringAtom convertGeneric( final Atom p_atom )
+    {
+        return new CStringAtom( clearString( p_atom.getFunctor() ) );
+    }
+
+    /**
+     * converts a StringTerm into a string atom
+     *
+     * @param p_term string term to convert
+     * @return string atom
+     */
+    public static CStringAtom convertGeneric( final StringTerm p_term )
+    {
+        return new CStringAtom( clearString( p_term.getString() ) );
+    }
+
+    /**
+     * converts a jason specific set of literals to a generic one
+     *
+     * @param p_literals set of jason-specific literals
+     * @return converted Set of generic literals
+     */
+    public static Set<ILiteral<Literal>> convertGeneric( final List<Literal> p_literals )
+    {
+        return new HashSet<ILiteral<Literal>>()
+        {{
+                for ( final Literal l_literal : p_literals )
+                    add( new CLiteral( l_literal ) );
+            }};
+    }
+
+
+    /**
+     * converts a NumberTerm into a Double Atom
+     *
+     * @param p_number NumberTerm
+     * @return Double Atom
+     */
+    public static CNumberAtom convertGeneric( final NumberTerm p_number )
+    {
+        try
+        {
+            return new CNumberAtom( p_number.solve() );
+        }
+        catch ( NoValueException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+
+        return null;
+    }
+
+
+    /**
+     * converts a term into a generic ITerm
+     *
+     * @param p_term original term
+     * @return converted generic term
+     */
+    public static ITerm convertGeneric( final Term p_term )
+    {
+        if ( p_term == null )
+            return new ITerm()
+            {
+                @Override
+                public boolean instanceOf( Class<?> p_class )
+                {
+                    return ITerm.class.isAssignableFrom( p_class );
+                }
+            };
+
+        if ( p_term.isNumeric() )
+            return convertGeneric( (NumberTerm) p_term );
+
+        if ( p_term instanceof StringTerm )
+            return convertGeneric( (StringTerm) p_term );
+
+        if ( p_term.isAtom() )
+            return convertGeneric( (Atom) p_term );
+
+        if ( p_term.isLiteral() )
+            return new CLiteral( (Literal) p_term );
+
+        if ( p_term.isList() )
+
+            return new CTermList()
+            {
+                {
+                    for ( final Term l_term : (ListTerm) p_term )
+                        add( convertGeneric( l_term ) );
+                }
+            };
+
+        throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( CCommon.class, "convertgenericfail" ) );
     }
 
     /**
@@ -133,6 +245,18 @@ public class CCommon
         throw new IllegalArgumentException( de.tu_clausthal.in.mec.common.CCommon.getResourceString( CCommon.class, "jasontodefaultjava", p_term ) );
     }
 
+    /**
+     * creates a Jason literal with optional data
+     *
+     * @param p_name name of the literal
+     * @param p_data data of the literal
+     * @return literal object
+     */
+    @SuppressWarnings( "unchecked" )
+    public static Literal getLiteral( final String p_name, final Object p_data )
+    {
+        return ASSyntax.createLiteral( p_name, getTerm( p_data ) );
+    }
 
     /**
      * converts a Double into a number object with correct type structure
@@ -159,7 +283,6 @@ public class CCommon
         throw new IllegalArgumentException( "class unknown" );
     }
 
-
     /**
      * returns an atom
      *
@@ -170,20 +293,6 @@ public class CCommon
     {
         return ASSyntax.createAtom( getLiteralName( p_atom ) );
     }
-
-    /**
-     * creates a Jason literal with optional data
-     *
-     * @param p_name name of the literal
-     * @param p_data data of the literal
-     * @return literal object
-     */
-    @SuppressWarnings( "unchecked" )
-    public static Literal getLiteral( final String p_name, final Object p_data )
-    {
-        return ASSyntax.createLiteral( getLiteralName( p_name ), getTerm( p_data ) );
-    }
-
 
     /**
      * checks a literal name and convert it to the correct syntax
@@ -207,7 +316,7 @@ public class CCommon
         for ( int i = 0; i < l_parts.length; i++ )
             l_parts[i] = ( i == 0 ? l_parts[i].substring( 0, 1 ).toLowerCase() : l_parts[i].substring( 0, 1 ).toUpperCase() ) + l_parts[i].substring( 1 );
 
-        return StringUtils.join( l_parts ).replaceAll( "\\W", "" );
+        return StringUtils.join( l_parts ); //.replaceAll("\\W", "");
     }
 
     /**

@@ -41,8 +41,13 @@ import java.util.HashSet;
  * @note the hashset defines the set over the edge ID
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
+@SuppressWarnings( "serial" )
 public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
 {
+    /**
+     * stroke definition
+     */
+    private static final Stroke s_stroke = new BasicStroke( 5 );
     /**
      * active flag *
      */
@@ -55,11 +60,6 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
      * marked edge to allow mouse-interaction
      */
     private Integer m_reserveedge;
-    /**
-     * stroke definition
-     */
-    private static final Stroke s_stroke = new BasicStroke( 5 );
-
 
     /**
      * ctor
@@ -134,22 +134,6 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
     }
 
     /**
-     * paints the line
-     *
-     * @param p_graphic graphic reference
-     * @param p_viewer viewer reference
-     * @param p_edge edge ID
-     */
-    private void paintLine( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_edge )
-    {
-        final CEdge<?, ?> l_edge = m_graph.getEdge( m_graph.getEdgeIterator( p_edge ) );
-        final Point2D l_start = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( 0 ) );
-        final Point2D l_end = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( -1 ) );
-
-        p_graphic.drawLine( (int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY() );
-    }
-
-    /**
      * removes a reserved edge from the list
      */
     public final void remove()
@@ -196,5 +180,21 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
             this.remove( p_edge );
         else
             this.add( p_edge );
+    }
+
+    /**
+     * paints the line
+     *
+     * @param p_graphic graphic reference
+     * @param p_viewer viewer reference
+     * @param p_edge edge ID
+     */
+    private void paintLine( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_edge )
+    {
+        final CEdge<?, ?> l_edge = m_graph.getEdge( m_graph.getEdgeIterator( p_edge ) );
+        final Point2D l_start = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( 0 ) );
+        final Point2D l_end = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( -1 ) );
+
+        p_graphic.drawLine( (int) l_start.getX(), (int) l_start.getY(), (int) l_end.getX(), (int) l_end.getY() );
     }
 }

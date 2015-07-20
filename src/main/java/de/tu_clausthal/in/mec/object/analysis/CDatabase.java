@@ -55,7 +55,6 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
      */
     private final BasicDataSource m_datasource = new BasicDataSource();
 
-
     /**
      * ctor - context initialization
      */
@@ -74,6 +73,18 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
                 "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)",
                 new String[]{"add primary key (step,zonegroup,zone)"}
         );
+    }
+
+    @Override
+    public final int getCalculationIndex()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public final String toString()
+    {
+        return CCommon.getResourceString( this, "name" );
     }
 
     /**
@@ -108,7 +119,7 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
         ) == null ? p_tablename : CConfiguration.getInstance().get().<String>get( "database/tableprefix" ) + p_tablename;
 
         try (
-                final Connection l_connect = m_datasource.getConnection();
+                final Connection l_connect = m_datasource.getConnection()
         )
         {
             final ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_table, new String[]{"TABLE"} );
@@ -124,18 +135,6 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
         {
             CLogger.error( l_exception );
         }
-    }
-
-    @Override
-    public final int getCalculationIndex()
-    {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public final String toString()
-    {
-        return CCommon.getResourceString( this, "name" );
     }
 
     /**

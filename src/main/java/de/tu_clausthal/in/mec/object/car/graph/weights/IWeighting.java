@@ -38,7 +38,7 @@ public interface IWeighting extends Weighting
      *
      * @return bool activity flag
      */
-    public boolean isActive();
+    boolean isActive();
 
 
     /**
@@ -46,6 +46,6 @@ public interface IWeighting extends Weighting
      *
      * @param p_value bool activity flag
      */
-    public void setActive( boolean p_value );
+    void setActive( boolean p_value );
 
 }

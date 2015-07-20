@@ -51,7 +51,6 @@ public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGene
             add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
         }};
 
-
     /**
      * ctor
      *

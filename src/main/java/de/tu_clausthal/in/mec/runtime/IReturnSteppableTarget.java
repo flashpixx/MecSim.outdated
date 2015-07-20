@@ -39,6 +39,6 @@ public interface IReturnSteppableTarget<T>
      *
      * @param p_data collection with data
      */
-    public void push( final Collection<T> p_data );
+    void push( final Collection<T> p_data );
 
 }

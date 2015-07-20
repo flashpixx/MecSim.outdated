@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.common.CPath;
  *
  * @tparam T type of the message data
  */
+@SuppressWarnings( "serial" )
 public class CMessage<T> implements IMessage<T>
 {
     /**
@@ -50,7 +51,6 @@ public class CMessage<T> implements IMessage<T>
      * time-to-live value *
      */
     private int m_ttl = 10;
-
 
     /**
      * ctor - creates a message with data and name
@@ -88,7 +88,6 @@ public class CMessage<T> implements IMessage<T>
         m_title = p_title;
         m_data = p_data;
     }
-
 
     @Override
     public final T getData()

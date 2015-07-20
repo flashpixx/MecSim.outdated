@@ -61,7 +61,6 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      */
     private final Random m_random = new Random();
 
-
     /**
      * ctor
      *

@@ -24,70 +24,82 @@
 package de.tu_clausthal.in.mec.object.mas;
 
 
+import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import org.jxmapviewer.painter.Painter;
 
 
 /**
  * interface of an agent
+ *
+ * @tparam T literal type
  */
-public interface IAgent extends Painter, IReceiver
+public interface IAgent<T> extends Painter, IReceiver
 {
 
     /**
-     * adds new belief
+     * returns the root beliefmask to get access
+     * of all beliefs
      *
-     * @param p_name name of the belief
-     * @param p_data belief data
+     * @return root belief mask
      */
-    public void addBelief( final String p_name, final Object p_data );
+    public IBeliefBaseMask<T> getBeliefBase();
 
     /**
      * returns the current cycle
      *
      * @return cycle number
      */
-    public int getCycle();
+    int getCycle();
 
     /**
      * returns the name of the agent
      *
      * @return name of the agent
      */
-    public String getName();
+    String getName();
 
     /**
      * returns the source / file of the agent
      *
      * @return source
      */
-    public String getSource();
+    String getSource();
 
     /**
-     * register a cycle object
+     * register an object for running actions
      *
-     * @param p_cycle cycle object
+     * @param p_name binding name of the action
+     * @param p_object binding object
      */
-    public void registerCycle( final ICycle p_cycle );
+    public void registerAction( final String p_name, final Object p_object );
+
+    /**
+     * register a beliefbase mask
+     *
+     * @param p_path path in which the mask is added
+     * @param p_mask mask
+     */
+    public void registerMask( final CPath p_path, final IBeliefBaseMask<T> p_mask );
 
     /**
      * release agent call *
      */
-    public void release();
+    void release();
 
     /**
-     * removes a belief
+     * unregister an action
      *
-     * @param p_name name of the belief
-     * @param p_data belief data
+     * @param p_name binding name of the action
      */
-    public void removeBelief( final String p_name, final Object p_data );
+    public void unregisterAction( final String p_name );
 
     /**
-     * unregister a cycle object
+     * unregister a beliefbase mask
      *
-     * @param p_cycle cycle object
+     * @param p_path path of the mask (last element is the mask name)
      */
-    public void unregisterCycle( final ICycle p_cycle );
+    public void unregisterMask( final CPath p_path );
 
 }

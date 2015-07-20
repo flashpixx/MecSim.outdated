@@ -44,7 +44,6 @@ public class CVirtualLocation
      */
     private final Map<Integer, IVirtualLocation> m_locations = new HashMap<>();
 
-
     /**
      * ctor
      *
@@ -54,7 +53,6 @@ public class CVirtualLocation
     {
         m_defaultlocation = p_defaultlocation;
     }
-
 
     /**
      * adds a new location

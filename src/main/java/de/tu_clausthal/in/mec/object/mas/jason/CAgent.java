@@ -71,13 +71,17 @@ import java.util.Set;
 public class CAgent<T> implements IVoidAgent<Literal>
 {
     /**
-     * path seperator
+     * path seperator of agent name
      */
-    private static final String c_seperator = "::";
+    private static final String c_agentnameseparator = "::";
+    /**
+     * path separator of agent belief
+     */
+    private static final String c_agentbeliefseparator = "_";
     /**
      * name of the root beliefbase and its mask
      */
-    private static final CPath c_beliefbaseroot = new CPath("root");
+    private static final CPath c_beliefbaseroot = new CPath( "root" );
     /**
      * name of the binding beliefbase and its mask
      */
@@ -193,15 +197,15 @@ public class CAgent<T> implements IVoidAgent<Literal>
     public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
     {
         m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ).setSeparator(
-                c_seperator
-        ) : p_namepath.setSeparator( c_seperator );
+                c_agentnameseparator
+        ) : p_namepath.setSeparator( c_agentnameseparator );
 
 
-        // -- create beliefbase and agent architecture
+        // --- create beliefbase and agent architecture
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself,
         // beware that beliefbase must exists before agent ctor is called !
-        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_seperator ).createMask( c_beliefbaseroot.getSuffix() );
+        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
         m_architecture = new CJasonArchitecture();
         m_architecture.insertAgArch( m_architecture );
 
@@ -214,12 +218,12 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
         m_beliefbaserootmask.add(
                 new CBeliefBase(
-                        new CMessageStorage( m_agent.getTS(), c_seperator ), c_seperator
+                        new CMessageStorage( m_agent.getTS(), c_agentbeliefseparator ), c_agentnameseparator
                 ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage.getSuffix() )
         );
         m_beliefbaserootmask.add(
                 new CBeliefBase(
-                        new CBindingStorage( c_seperator ), c_seperator
+                        new CBindingStorage( c_agentbeliefseparator ), c_agentnameseparator
                 ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind.getSuffix() )
         );
 
@@ -418,14 +422,14 @@ public class CAgent<T> implements IVoidAgent<Literal>
         @Override
         public final String getAgName()
         {
-            return m_namepath.getPath( c_seperator );
+            return m_namepath.getPath( c_agentnameseparator );
         }
 
         @Override
         public final void sendMsg( final Message p_message ) throws Exception
         {
             p_message.setSender( getReceiverPath().toString() );
-            m_participant.sendMessage( new CPath( p_message.getReceiver().split( c_seperator ) ), new CMessage( p_message ) );
+            m_participant.sendMessage( new CPath( p_message.getReceiver().split( c_agentnameseparator ) ), new CMessage( p_message ) );
         }
 
         @Override

@@ -56,7 +56,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase, final String p_separator )
     {
         super( p_name, p_beliefbase );
-        this.m_pathseparator = p_separator;
+        m_pathseparator = p_separator;
     }
 
     /**
@@ -71,7 +71,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     )
     {
         super( p_name, p_beliefbase, p_parent );
-        this.m_pathseparator = p_separator;
+        m_pathseparator = p_separator;
     }
 
     @Override
@@ -187,6 +187,12 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     public BeliefBase clone()
     {
         return this;
+    }
+
+    @Override
+    public IBeliefBaseMask<Literal> clone( final IBeliefBaseMask<Literal> p_parent )
+    {
+        return new CMask( m_name, m_beliefbase, p_parent, m_pathseparator );
     }
 
     /**

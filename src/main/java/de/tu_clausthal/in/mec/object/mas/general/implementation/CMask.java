@@ -52,15 +52,15 @@ public class CMask<T> implements IBeliefBaseMask<T>
     /**
      * mask name
      */
-    private final String m_name;
+    protected final String m_name;
+    /**
+     * reference to the beliefbase context
+     */
+    protected final IBeliefBase<T> m_beliefbase;
     /**
      * parent name
      */
     private final IBeliefBaseMask<T> m_parent;
-    /**
-     * reference to the beliefbase context
-     */
-    private final IBeliefBase<T> m_beliefbase;
 
     /**
      * ctor

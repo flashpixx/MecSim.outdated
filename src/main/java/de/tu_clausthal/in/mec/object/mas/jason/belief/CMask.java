@@ -60,7 +60,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
     }
 
     /**
-     * private ctor
+     * ctor
      *
      * @param p_name name of the mask
      * @param p_beliefbase reference to the beliefbase context

@@ -215,7 +215,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementat
             public Literal next()
             {
                 // literal with path
-                return p_iterator.next().clone( l_path ).getLiteral();
+                return p_iterator.next().getLiteral();
             }
         };
     }

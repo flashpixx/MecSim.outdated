@@ -98,7 +98,7 @@ public class CBootstrap
 
 
         // register objects
-        //p_server.registerObject( CConsole.getError( "error" ) );
+        p_server.registerObject( CConsole.getError( "error" ) );
         p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CSimulation.getInstance().getMessageSystem() );

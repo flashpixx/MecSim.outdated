@@ -50,7 +50,10 @@ import java.util.Set;
  */
 public class CEdge<N, T> implements Comparable<CEdge>
 {
-
+    /**
+     * epsilon value for sampling quality of datapoints
+     */
+    private static final double c_epsilon = 0.001;
     /**
      * array with additional information
      */
@@ -105,7 +108,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
         // create a spline interpolation for cell sampling of the geoposition
         // get edge geoposition and convert data in arrays, run spline interpolation
         // catch number exceptions and calculate for each cell the geoposition
-        final PointListArray l_list = this.filterPointList( p_edgestate.fetchWayGeometry( 2 ), 0.01 );
+        final PointListArray l_list = this.filterPointList( p_edgestate.fetchWayGeometry( 2 ), c_epsilon );
 
         try
         {

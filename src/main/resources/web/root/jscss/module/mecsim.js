@@ -36,7 +36,7 @@ var MecSim = (function (px_modul) {
      * websocket structure to encapsulate access to the internal websocket structure  with function binding
      *
      * @param pc_wspath path of the websocket (can set relative to the window location)
-     * @param po_options object with onmessage, onerror, onopen and onclose functions to bind functions direct
+     * @param po_options object with onmessage, onerror, onopen and onclose functions to bind functions directly
      * @returns websocket
      **/
     px_modul.websocket = function( pc_wspath, po_options )
@@ -51,7 +51,7 @@ var MecSim = (function (px_modul) {
 
         if (lo_socket !== undefined)
         {
-            lo_socket.onopen    = lo_options.onopen    || null;
+            lo_socket.onopen    = function() { if (lo_options.onopen) lo_options.onopen(lo_socket); };
             lo_socket.onclose   = lo_options.onclose   || null;
             lo_socket.onmessage = lo_options.onmessage || null;
             lo_socket.onerror   = lo_options.onerror   || null;

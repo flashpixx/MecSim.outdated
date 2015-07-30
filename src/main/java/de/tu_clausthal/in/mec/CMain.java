@@ -79,6 +79,7 @@ public class CMain
         l_clioptions.addOption( "uibindport", true, CCommon.getResourceString( CMain.class, "uibindport" ) );
         l_clioptions.addOption( "uibindhost", true, CCommon.getResourceString( CMain.class, "uibindhost" ) );
         l_clioptions.addOption( "step", true, CCommon.getResourceString( CMain.class, "step" ) );
+        l_clioptions.addOption( "benchmark", true, CCommon.getResourceString( CMain.class, "benchmark" ) );
         l_clioptions.addOption( "loglevel", true, CCommon.getResourceString( CMain.class, "loglevel" ) );
         l_clioptions.addOption( "logfile", true, CCommon.getResourceString( CMain.class, "logfile" ) );
 

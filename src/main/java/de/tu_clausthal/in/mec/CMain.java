@@ -24,7 +24,9 @@
 package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.benchmark.CSummary;
 import de.tu_clausthal.in.mec.ui.CUI;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -34,6 +36,7 @@ import org.apache.commons.cli.Options;
 import org.pmw.tinylog.Level;
 
 import java.io.File;
+import java.lang.instrument.Instrumentation;
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -136,6 +139,10 @@ public class CMain
 
         CBootstrap.configurationIsLoaded( CConfiguration.getInstance() );
 
+        // define benchmark
+        if ( l_cli.hasOption( "benchmark" ) )
+            CSummary.getInstance().setFilename( l_cli.getOptionValue( "benchmark" ) );
+
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
         CLogger.out(
@@ -172,6 +179,7 @@ public class CMain
 
                 CSimulation.getInstance().load( new File( l_cli.getOptionValue( "nogui" ) ) );
                 CSimulation.getInstance().start( Integer.parseInt( l_cli.getOptionValue( "step" ) ) );
+                CBootstrap.onApplicationClose();
 
             }
             catch ( final Exception l_exception )

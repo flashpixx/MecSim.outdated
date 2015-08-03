@@ -35,6 +35,8 @@ import de.tu_clausthal.in.mec.object.mas.inconsistency.CSymmetricDifferenceMetri
 import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.benchmark.CInjection;
+import de.tu_clausthal.in.mec.runtime.benchmark.CSummary;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
 import de.tu_clausthal.in.mec.ui.CConsole;
 import de.tu_clausthal.in.mec.ui.CInconsistencyEnvironment;
@@ -61,6 +63,14 @@ public class CBootstrap
      */
     private CBootstrap()
     {
+    }
+
+    /**
+     * is called after benchmark is initialize
+     */
+    public static void afterBenchmarkInit( final CInjection p_injection )
+    {
+        CSummary.getInstance().set( "de.tu_clausthal.in.mec.object.mas.jason.CAgent" );
     }
 
     /**
@@ -174,6 +184,12 @@ public class CBootstrap
         if ( p_simulation.getStorage().exists() )
             p_simulation.getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().resetConfiguration();
 
+    }
+
+
+    public static void onApplicationClose()
+    {
+        CSummary.getInstance().store();
     }
 
 }

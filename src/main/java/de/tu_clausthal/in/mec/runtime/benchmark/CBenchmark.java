@@ -21,56 +21,35 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec;
-
+package de.tu_clausthal.in.mec.runtime.benchmark;
 
 import java.lang.instrument.Instrumentation;
 
 
 /**
- * bootstrap for the Java main call - checking of the correct installed JRE
+ * main executable class for benchmarking
  *
- * @warning the class must be compiled with a lower target version of the JRE, the Maven build script uses different
- * profiles to do this
+ * @note benchmark must run with @code java -javaagent:MecSim.jar -jar MecSim.jar @endcode
  */
-public class CBoot
+public final class CBenchmark
 {
 
     /**
-     * private ctor - avoid instantiation
+     * private ctor
      */
-    private CBoot()
+    private CBenchmark()
     {
     }
 
 
     /**
-     * main bootstrap program
-     *
-     * @param p_args commandline arguments
+     * premain for benchmarking
+     * @param p_args arguments of the agent - will pass to the normal main
+     * @param p_instrumentation instrumentation to inject class data
      */
-    public static void main( final String[] p_args )
+    public static void premain( final String p_args, final Instrumentation p_instrumentation )
     {
-        checkJVM();
-        CMain.main( p_args );
-    }
-
-
-    /**
-     * checks th Java runtime version
-     */
-    private static void checkJVM()
-    {
-        // check JRE properties (version must be checked numerical)
-        if ( !( ( "Oracle Corporation".equalsIgnoreCase( System.getProperty( "java.vendor" ) ) ) && ( Float.parseFloat(
-                System.getProperty(
-                        "java.specification.version"
-                )
-        ) >= 1.8f ) ) )
-        {
-            System.err.println( "JRE from Oracle Corporation (http://www.java.com/) version 1.8 or newer must be installed to run the program" );
-            System.exit( -1 );
-        }
+        p_instrumentation.addTransformer( new CInjection() );
     }
 
 }

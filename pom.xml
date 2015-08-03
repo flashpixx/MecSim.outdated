@@ -223,7 +223,7 @@
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog</artifactId>
-            <version>1.0</version>
+            <version>1.0.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -377,6 +377,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifestEntries>
+                            <!-- default items -->
                             <Project-Name>${project.name}</Project-Name>
                             <Project-URL>${project.url}</Project-URL>
                             <License>${project.licenses[0].name}</License>
@@ -386,6 +387,12 @@
                             <Build-Version>${project.version}</Build-Version>
                             <Build-Number>${build.number}</Build-Number>
                             <Build-Commit>${build.commit}</Build-Commit>
+                            <!-- benchmark items -->
+                            <Boot-Class-Path>${artifactId}-${version}.jar</Boot-Class-Path>
+                            <Premain-Class>de.tu_clausthal.in.mec.runtime.benchmark.CBenchmark</Premain-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                            <Can-Set-Native-Method-Prefix>true</Can-Set-Native-Method-Prefix>
                         </manifestEntries>
                         <manifest>
                             <mainClass>de.tu_clausthal.in.mec.CBoot</mainClass>

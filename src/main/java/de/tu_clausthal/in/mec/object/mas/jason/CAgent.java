@@ -38,6 +38,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
+import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.JasonException;
@@ -333,6 +334,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     }
 
     @Override
+    @IBenchmark
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
         m_architecture.cycle( p_currentstep );

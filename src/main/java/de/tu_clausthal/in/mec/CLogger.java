@@ -89,7 +89,8 @@ public class CLogger
     {
         s_level = p_level;
         s_logoutput = p_filename.equalsIgnoreCase( "console" );
-        Configurator.defaultConfig().writer(
+
+        Configurator.currentConfig().writer(
                 p_level == Level.OFF ? null : s_logoutput ? new ConsoleWriter() : new FileWriter(
                         p_filename
                 )

@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.benchmark.CSummary;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -224,6 +225,7 @@ public class CUI extends Application
                         );
 
                         CConfiguration.getInstance().write();
+                        CBootstrap.onApplicationClose();
                     }
                 }
         );

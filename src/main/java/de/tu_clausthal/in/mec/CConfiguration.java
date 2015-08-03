@@ -27,6 +27,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.runtime.benchmark.CBenchmark;
+import de.tu_clausthal.in.mec.runtime.benchmark.CInjection;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +41,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -386,6 +389,8 @@ public class CConfiguration
 
     /**
      * private Ctor to avoid manual instantiation with manifest reading
+     *
+     * @note IO-Exception is thrown on non-existing jar / NPE is thrown on Benchmarking
      */
     private CConfiguration()
     {
@@ -394,9 +399,8 @@ public class CConfiguration
             final Manifest l_manifest = new JarFile( this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() ).getManifest();
             for ( final Map.Entry<Object, Object> l_item : l_manifest.getMainAttributes().entrySet() )
                 m_configuration.set( "manifest/" + l_item.getKey().toString().toLowerCase(), l_item.getValue().toString() );
-
         }
-        catch ( final IOException l_exception )
+        catch ( final IOException | NullPointerException l_exception )
         {
         }
 

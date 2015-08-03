@@ -25,21 +25,14 @@ package de.tu_clausthal.in.mec.runtime.benchmark;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.common.CReflection;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 
 
 /**
@@ -52,10 +45,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class CSummary
 {
-    /** singleton instance **/
+    /**
+     * singleton instance
+     **/
     private static final CSummary c_instance = new CSummary();
-    /** statistic object **/
+    /**
+     * statistic object
+     **/
     private final Map<String, SummaryStatistics> m_result = new ConcurrentHashMap<>();
+    /**
+     * storing filename
+     **/
+    private String m_filename;
 
 
     /**
@@ -70,12 +71,26 @@ public final class CSummary
 
 
     /**
+     * sets the storing filename
+     *
+     * @param p_filename filename
+     */
+    public void setFilename( final String p_filename )
+    {
+        if ( ( m_filename != null ) && ( !m_filename.isEmpty() ) )
+            return;
+
+        m_filename = p_filename;
+    }
+
+
+    /**
      * sets the time value
      *
      * @param p_fqnmethodname full-qualified method name
      * @param p_time elapsed time value
      */
-    public void set( final String p_fqnmethodname, final long p_time )
+    public void setTime( final String p_fqnmethodname, final long p_time )
     {
         // microbenchmark should ignore the first set
         m_result.putIfAbsent( p_fqnmethodname, new SummaryStatistics() ).addValue( p_time );
@@ -84,82 +99,47 @@ public final class CSummary
 
     /**
      * sets a class for benchmarking
+     *
      * @param p_class class
      */
-    public void set( final Class p_class )
+    public void set( final String p_class )
     {
-        // http://www.tomsquest.com/blog/2014/01/intro-java-agent-and-bytecode-manipulation/
-        // https://thoughtpage.wordpress.com/2012/07/29/inject-code-using-javaassist-simple-example/
-        // http://www.ibm.com/developerworks/library/j-dyn0203/
-
-        CtClass l_class;
-
-        try {
-            l_class = ClassPool.getDefault().get( p_class.getCanonicalName() );
-        } catch ( final Exception l_exception ) {
-            CLogger.error(l_exception);
+        if ( ( m_filename == null ) || ( m_filename.isEmpty() ) )
             return;
-        }
 
-        for ( final CtMethod l_method : l_class.getDeclaredMethods() )
-            try
-            {
-                if (l_method.getAnnotation( IBenchmark.class ) == null)
-                    continue;
-
-                l_method.addLocalVariable( "l_injectElapsedTime", CtClass.longType );
-                l_method.insertBefore( "l_injectElapsedTime = System.nanoTime();" );
-                l_method.insertAfter( "de.tu_clausthal.in.mec.runtime.benchmark.CSummary.getInstance().set(\"" + l_method.getLongName() + "\", l_injectElapsedTime);" );
-
-            } catch ( final Exception l_exception ) {
-                CLogger.error( l_exception );
-            }
     }
 
 
     /**
      * stores the benchmark data into a Json file
-     *
-     * @param p_filename filename
      */
-    public void store( String p_filename )
+    public void store()
     {
+        if ( ( m_filename == null ) || ( m_filename.isEmpty() ) )
+            return;
+
         final Map<String, Map<String, Object>> l_benchmark = new HashMap<>();
-        for( final Map.Entry<String, SummaryStatistics> l_item : m_result.entrySet() )
+        for ( final Map.Entry<String, SummaryStatistics> l_item : m_result.entrySet() )
             l_benchmark.put(
                     l_item.getKey(), CCommon.getMap(
                             CCommon.getResourceString( this, "max" ), l_item.getValue().getMax(),
                             CCommon.getResourceString( this, "min" ), l_item.getValue().getMin(),
                             CCommon.getResourceString( this, "mean" ), l_item.getValue().getMean(),
-                            CCommon.getResourceString( this, "stddeviation" ), l_item.getValue().getStandardDeviation(),
+                            CCommon.getResourceString( this, "deviation" ), l_item.getValue().getStandardDeviation(),
                             CCommon.getResourceString( this, "count" ), l_item.getValue().getN(),
                             CCommon.getResourceString( this, "sum" ), l_item.getValue().getSum(),
                             CCommon.getResourceString( this, "variance" ), l_item.getValue().getVariance()
-                    ) );
+                    )
+            );
 
         try
         {
-            FileUtils.writeStringToFile( new File(p_filename), CCommon.toJson( l_benchmark ), "UTF-8" );
+            FileUtils.writeStringToFile( new File( m_filename ), CCommon.toJson( l_benchmark ), "UTF-8" );
         }
         catch ( final IOException l_exception )
         {
-            CLogger.error(l_exception);
+            CLogger.error( l_exception );
         }
     }
-
-
-    /**
-     * filter class for method filter
-     */
-    private static final class CMethodFilter implements CReflection.IMethodFilter
-    {
-
-        @Override
-        public boolean filter( final Method p_method )
-        {
-            return p_method.isAnnotationPresent( IBenchmark.class );
-        }
-    }
-
 
 }

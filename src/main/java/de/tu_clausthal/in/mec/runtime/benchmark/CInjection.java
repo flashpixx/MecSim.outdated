@@ -48,15 +48,6 @@ public final class CInjection implements ClassFileTransformer
     private static final ClassPool c_pool = ClassPool.getDefault();
 
 
-    /**
-     * default ctor
-     */
-    public CInjection()
-    {
-        CBootstrap.afterBenchmarkInit( this );
-    }
-
-
     @Override
     public byte[] transform( final ClassLoader p_loader, final String p_classname, final Class<?> p_redefine, final ProtectionDomain p_protecteddomain,
             final byte[] p_buffer

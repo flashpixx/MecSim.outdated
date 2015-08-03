@@ -66,14 +66,6 @@ public class CBootstrap
     }
 
     /**
-     * is called after benchmark is initialize
-     */
-    public static void afterBenchmarkInit( final CInjection p_injection )
-    {
-        CSummary.getInstance().set( "de.tu_clausthal.in.mec.object.mas.jason.CAgent" );
-    }
-
-    /**
      * is called after the OSM viewer is initialize
      *
      * @param p_viewer viewer object

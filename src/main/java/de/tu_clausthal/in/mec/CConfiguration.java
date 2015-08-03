@@ -70,7 +70,6 @@ public class CConfiguration
     /**
      * singleton instance variable
      */
-
     private static final CConfiguration c_instance = new CConfiguration();
     /**
      * name of the main package
@@ -80,6 +79,10 @@ public class CConfiguration
      * list of MAS files for extracting
      */
     private static final String[] c_masfiles = new String[]{"carDefault.asl", "carEmergency.asl", "carScramble.asl"};
+    /**
+     * list if external files for extracting
+     */
+    private static final String[] c_externalfiles = new String[]{"benchmark.r"};
     /**
      * user configuration name
      */
@@ -543,6 +546,18 @@ public class CConfiguration
                 }
         m_configuration.set( "extractmasexamples", false );
 
+        // extract external files
+        for ( final String l_file : c_externalfiles )
+            try
+            {
+                FileUtils.copyURLToFile( CCommon.getResourceURL( "external/" + l_file ), new File( m_location.get( "external" ) + File.separator + l_file ) );
+            }
+            catch ( final IOException l_exception )
+            {
+                CLogger.error( l_exception );
+                return false;
+            }
+
         return true;
     }
 
@@ -665,7 +680,7 @@ public class CConfiguration
      */
     private void setDefaultDirectories()
     {
-        for ( final String l_item : new String[]{"mas", "jar", "www"} )
+        for ( final String l_item : new String[]{"mas", "jar", "www", "external"} )
             m_location.put( l_item, this.getBasePath( l_item ) );
     }
 

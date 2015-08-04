@@ -39,6 +39,8 @@ import java.security.ProtectionDomain;
 
 /**
  * injection class to build benchmark structure within a class
+ *
+ * @see https://www.informit.com/guides/content.aspx?g=java&seqNum=589
  */
 public final class CInjection implements ClassFileTransformer
 {
@@ -77,6 +79,7 @@ public final class CInjection implements ClassFileTransformer
      */
     private byte[] inject( final String p_class ) throws NotFoundException, ClassNotFoundException, CannotCompileException, IOException
     {
+        final CtClass l_timer = c_pool.getCtClass( CTimer.class.getCanonicalName() );
         final CtClass l_class = c_pool.getCtClass( p_class );
         l_class.stopPruning( false );
 
@@ -86,12 +89,9 @@ public final class CInjection implements ClassFileTransformer
             if ( l_method.getAnnotation( IBenchmark.class ) == null )
                 continue;
 
-            l_method.addLocalVariable( "l_injectElapsedTime", CtClass.longType );
-            l_method.insertBefore( "final l_injectElapsedTime = System.nanoTime();" );
-            l_method.insertAfter(
-                    "System.out.println(\"called\");" +
-                    "de.tu_clausthal.in.mec.runtime.benchmark.CSummary.getInstance().setTime(\"" + l_method.getLongName() + "\", l_injectElapsedTime);"
-            );
+            l_method.addLocalVariable( "l_bechmarktimer", l_timer );
+            l_method.insertBefore( "final l_bechmarktimer = new " + CTimer.class.getCanonicalName() + "().start();" );
+            l_method.insertAfter(  "l_bechmarktimer.stop(\"" + l_method.getLongName() + "\");" );
         }
 
         l_class.stopPruning( true );

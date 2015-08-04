@@ -40,7 +40,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @see http://www.objc.io/issues/11-android/dependency-injection-in-java/
  * @see http://stackoverflow.com/questions/29451704/using-javassist-to-log-method-calls-and-argument-values-how-to-make-a-logger-cl
- * @see http://docs.oracle.com/javase/7/docs/api/java/lang/instrument/Instrumentation.html
  * @see https://wiki.openjdk.java.net/display/HotSpot/MicroBenchmarks
  */
 public final class CSummary
@@ -87,13 +86,13 @@ public final class CSummary
     /**
      * sets the time value
      *
-     * @param p_fqnmethodname full-qualified method name
+     * @param p_label full-qualified method name
      * @param p_time elapsed time value
      */
-    public void setTime( final String p_fqnmethodname, final long p_time )
+    public void setTime( final String p_label, final long p_time )
     {
         // microbenchmark should ignore the first set
-        m_result.putIfAbsent( p_fqnmethodname, new SummaryStatistics() ).addValue( p_time );
+        m_result.putIfAbsent( p_label, new SummaryStatistics() ).addValue( p_time );
     }
 
 
@@ -122,13 +121,13 @@ public final class CSummary
         for ( final Map.Entry<String, SummaryStatistics> l_item : m_result.entrySet() )
             l_benchmark.put(
                     l_item.getKey(), CCommon.getMap(
-                            CCommon.getResourceString( this, "max" ), l_item.getValue().getMax(),
-                            CCommon.getResourceString( this, "min" ), l_item.getValue().getMin(),
-                            CCommon.getResourceString( this, "mean" ), l_item.getValue().getMean(),
-                            CCommon.getResourceString( this, "deviation" ), l_item.getValue().getStandardDeviation(),
-                            CCommon.getResourceString( this, "count" ), l_item.getValue().getN(),
-                            CCommon.getResourceString( this, "sum" ), l_item.getValue().getSum(),
-                            CCommon.getResourceString( this, "variance" ), l_item.getValue().getVariance()
+                            "max", l_item.getValue().getMax(),
+                            "min", l_item.getValue().getMin(),
+                            "mean", l_item.getValue().getMean(),
+                            "stddeviation", l_item.getValue().getStandardDeviation(),
+                            "count", l_item.getValue().getN(),
+                            "sum", l_item.getValue().getSum(),
+                            "variance", l_item.getValue().getVariance()
                     )
             );
 

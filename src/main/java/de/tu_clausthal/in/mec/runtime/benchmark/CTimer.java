@@ -23,30 +23,47 @@
 
 package de.tu_clausthal.in.mec.runtime.benchmark;
 
-import java.lang.instrument.Instrumentation;
+import de.tu_clausthal.in.mec.common.CCommon;
 
 
 /**
- * premain executable class for benchmarking
+ * timer class for benchmarking
  */
-public final class CBenchmark
+public final class CTimer
 {
+    /** start time **/
+    private long m_start = -1;
+
 
     /**
-     * private ctor
+     * start timer
+     *
+     * @return timer object
      */
-    private CBenchmark()
+    public CTimer start()
     {
+        if (m_start >= 0)
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "start" ) );
+
+        m_start = System.nanoTime();
+        return this;
     }
 
     /**
-     * premain for benchmarking
-     * @param p_args arguments of the agent - will pass to the normal main
-     * @param p_instrumentation instrumentation to inject class data
+     * stop time
+     *
+     * @param p_label label of the timer value
+     * @return timer object
      */
-    public static void premain( final String p_args, final Instrumentation p_instrumentation )
+    public CTimer stop( final String p_label )
     {
-        p_instrumentation.addTransformer( new CInjection() );
+        if (m_start < 0)
+            throw new IllegalStateException( CCommon.getResourceString( this, "stop" ) );
+
+        CSummary.getInstance().setTime( p_label, System.nanoTime() - m_start );
+        m_start = -1;
+        return this;
     }
+
 
 }

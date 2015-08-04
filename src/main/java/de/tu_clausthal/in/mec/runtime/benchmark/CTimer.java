@@ -47,7 +47,7 @@ public final class CTimer
         if ( m_start >= 0 )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "start" ) );
 
-        m_start = System.nanoTime();
+        m_start = this.getTime();
         return this;
     }
 
@@ -62,9 +62,18 @@ public final class CTimer
         if ( m_start < 0 )
             throw new IllegalStateException( CCommon.getResourceString( this, "stop" ) );
 
-        CSummary.getInstance().setTime( p_label, System.nanoTime() - m_start );
+        CSummary.getInstance().setTime( p_label, this.getTime() - m_start );
         m_start = -1;
         return this;
     }
 
+    /**
+     * returns the current time
+     *
+     * @return time value
+     */
+    private long getTime()
+    {
+        return System.currentTimeMillis();
+    }
 }

@@ -108,7 +108,7 @@ public final class CInjection implements ClassFileTransformer
 
             l_method.addLocalVariable( "l_bechmarktimer", m_timerclass );
             l_method.insertBefore( "final l_bechmarktimer = new " + CTimer.class.getCanonicalName() + "().start();" );
-            l_method.insertAfter( "l_bechmarktimer.stop(\"" + l_method.getLongName() + "\");" );
+            l_method.insertAfter( "l_bechmarktimer.stop(\"" + l_method.getLongName().replace( CConfiguration.getPackage() + ".", "" ) + "\");" );
         }
 
         l_class.stopPruning( true );

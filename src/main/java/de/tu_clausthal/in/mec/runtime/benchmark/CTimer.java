@@ -74,6 +74,6 @@ public final class CTimer
      */
     private long getTime()
     {
-        return System.currentTimeMillis();
+        return System.nanoTime();
     }
 }

@@ -26,7 +26,8 @@ package de.tu_clausthal.in.mec.runtime.benchmark;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public final class CSummary
     /**
      * statistic object
      **/
-    private final Map<String, SummaryStatistics> m_result = new ConcurrentHashMap<>();
+    private final Map<String, DescriptiveStatistics> m_result = new ConcurrentHashMap<>();
     /**
      * storing filename
      **/
@@ -61,7 +62,7 @@ public final class CSummary
      *
      * @return object
      */
-    public static final CSummary getInstance()
+    public static CSummary getInstance()
     {
         return c_instance;
     }
@@ -86,23 +87,13 @@ public final class CSummary
      *
      * @param p_label full-qualified method name
      * @param p_time elapsed time value
+     * @warning check explict of null value to avoid NPE on initialization call
      */
     public void setTime( final String p_label, final long p_time )
     {
-        m_result.putIfAbsent( p_label, new SummaryStatistics() ).addValue( p_time );
-    }
-
-
-    /**
-     * sets a class for benchmarking
-     *
-     * @param p_class class
-     */
-    public void set( final String p_class )
-    {
-        if ( ( m_filename == null ) || ( m_filename.isEmpty() ) )
-            return;
-
+        final DescriptiveStatistics l_statistic = m_result.putIfAbsent( p_label, new SynchronizedDescriptiveStatistics() );
+        if ( l_statistic != null )
+            l_statistic.addValue( p_time );
     }
 
 
@@ -115,18 +106,28 @@ public final class CSummary
             return;
 
         final Map<String, Map<String, Object>> l_benchmark = new HashMap<>();
-        for ( final Map.Entry<String, SummaryStatistics> l_item : m_result.entrySet() )
+        for ( final Map.Entry<String, DescriptiveStatistics> l_item : m_result.entrySet() )
             l_benchmark.put(
                     l_item.getKey(), CCommon.getMap(
                             "max", l_item.getValue().getMax(),
                             "min", l_item.getValue().getMin(),
-                            "mean", l_item.getValue().getMean(),
+                            "kurtosis", l_item.getValue().getKurtosis(),
+                            "arithmeticmean", l_item.getValue().getMean(),
+                            "geometricmean", l_item.getValue().getGeometricMean(),
+                            "percentile50", l_item.getValue().getPercentile( 50 ),
+                            "percentile25", l_item.getValue().getPercentile( 25 ),
+                            "percentile75", l_item.getValue().getPercentile( 75 ),
                             "stddeviation", l_item.getValue().getStandardDeviation(),
+                            "skewness", l_item.getValue().getSkewness(),
                             "count", l_item.getValue().getN(),
                             "sum", l_item.getValue().getSum(),
+                            "sumsquare", l_item.getValue().getSumsq(),
                             "variance", l_item.getValue().getVariance()
                     )
             );
+
+        if ( l_benchmark.isEmpty() )
+            return;
 
         try
         {

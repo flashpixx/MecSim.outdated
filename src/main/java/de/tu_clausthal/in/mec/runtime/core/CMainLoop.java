@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppable;
 import de.tu_clausthal.in.mec.runtime.ISteppable;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
+import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -168,44 +169,9 @@ public class CMainLoop implements Runnable
                 if ( m_simulationcount >= m_shutdownstep )
                     break;
 
-
-                // run all layer
-                final Collection<Callable<Object>> l_tasks = new LinkedList<>();
-                l_tasks.add( new CVoidSteppable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
-                for ( final ILayer l_layer : l_layerorder )
-                    if ( l_layer.isActive() )
-                        l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
-                m_pool.invokeAll( l_tasks );
-
-
-                // run all layer objects - only multi-, evaluate- & network layer can store other objects
-                for ( final ILayer l_layer : l_layerorder )
-                {
-                    if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) || ( l_layer instanceof ISingleEvaluateLayer ) )
-                        continue;
-
-                    if ( l_layer instanceof IMultiLayer )
-                    {
-                        this.invokeTasks( l_layer, (IMultiLayer) l_layer );
-                        continue;
-                    }
-
-                    if ( l_layer instanceof IMultiEvaluateLayer )
-                    {
-                        this.invokeTasks( l_layer, (IMultiEvaluateLayer) l_layer );
-                        continue;
-                    }
-
-                    if ( l_layer instanceof IFeedForwardLayer )
-                    {
-                        ( (IFeedForwardLayer) l_layer ).beforeStepAllObject( m_shutdownstep );
-                        while ( !( (IFeedForwardLayer) l_layer ).isEmpty() )
-                            this.invokeTasks( l_layer, (IFeedForwardLayer) l_layer );
-                        ( (IFeedForwardLayer) l_layer ).afterStepAllObject( m_shutdownstep );
-                        continue;
-                    }
-                }
-
+                // run simulation objects
+                this.processLayer( l_layerorder );
+                this.processObjects( l_layerorder );
 
                 m_simulationcount++;
                 Thread.sleep( CConfiguration.getInstance().get().<Integer>get( "simulation/threadsleeptime" ) );
@@ -261,6 +227,64 @@ public class CMainLoop implements Runnable
             return new CReturnSteppable( p_iteration, (IReturnSteppable) p_object, p_layer );
 
         throw new IllegalArgumentException( CCommon.getResourceString( CMainLoop.class, "notsteppable" ) );
+    }
+
+
+    /**
+     * process layer
+     *
+     * @param p_layer ordered layer list
+     * @throws InterruptedException thrown on thread error
+     */
+    @IBenchmark
+    private void processLayer( final List<ILayer> p_layer ) throws InterruptedException
+    {
+        final Collection<Callable<Object>> l_tasks = new LinkedList<>();
+
+        l_tasks.add( new CVoidSteppable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
+        for ( final ILayer l_layer : p_layer )
+            if ( l_layer.isActive() )
+                l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
+
+        m_pool.invokeAll( l_tasks );
+    }
+
+    /**
+     * process layer object
+     *
+     * @param p_layer ordered layer list
+     * @throws InterruptedException thrown on thread error
+     * @note only multi-, evaluate- & network layer can store other objects
+     */
+    @IBenchmark
+    private void processObjects( final List<ILayer> p_layer ) throws InterruptedException
+    {
+        for ( final ILayer l_layer : p_layer )
+        {
+            if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) || ( l_layer instanceof ISingleEvaluateLayer ) )
+                continue;
+
+            if ( l_layer instanceof IMultiLayer )
+            {
+                this.invokeTasks( l_layer, (IMultiLayer) l_layer );
+                continue;
+            }
+
+            if ( l_layer instanceof IMultiEvaluateLayer )
+            {
+                this.invokeTasks( l_layer, (IMultiEvaluateLayer) l_layer );
+                continue;
+            }
+
+            if ( l_layer instanceof IFeedForwardLayer )
+            {
+                ( (IFeedForwardLayer) l_layer ).beforeStepAllObject( m_shutdownstep );
+                while ( !( (IFeedForwardLayer) l_layer ).isEmpty() )
+                    this.invokeTasks( l_layer, (IFeedForwardLayer) l_layer );
+                ( (IFeedForwardLayer) l_layer ).afterStepAllObject( m_shutdownstep );
+                continue;
+            }
+        }
     }
 
 }

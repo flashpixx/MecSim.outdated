@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.CSwingWrapper;
@@ -316,6 +317,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
+    @IBenchmark
     @CMethodFilter.CAgent( bind = false )
     public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {

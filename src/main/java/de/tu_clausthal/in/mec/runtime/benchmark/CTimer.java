@@ -31,7 +31,9 @@ import de.tu_clausthal.in.mec.common.CCommon;
  */
 public final class CTimer
 {
-    /** start time **/
+    /**
+     * start time
+     **/
     private long m_start = -1;
 
 
@@ -42,7 +44,7 @@ public final class CTimer
      */
     public CTimer start()
     {
-        if (m_start >= 0)
+        if ( m_start >= 0 )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "start" ) );
 
         m_start = System.nanoTime();
@@ -57,13 +59,12 @@ public final class CTimer
      */
     public CTimer stop( final String p_label )
     {
-        if (m_start < 0)
+        if ( m_start < 0 )
             throw new IllegalStateException( CCommon.getResourceString( this, "stop" ) );
 
         CSummary.getInstance().setTime( p_label, System.nanoTime() - m_start );
         m_start = -1;
         return this;
     }
-
 
 }

@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public abstract class IBindStorage<N, M> extends IOneTimeStorage<N, M>
 {
-        /**
+    /**
      * field filter
      */
     protected static final CFieldFilter c_filter = new CFieldFilter();

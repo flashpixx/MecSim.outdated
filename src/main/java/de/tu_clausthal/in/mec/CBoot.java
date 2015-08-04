@@ -24,9 +24,6 @@
 package de.tu_clausthal.in.mec;
 
 
-import java.lang.instrument.Instrumentation;
-
-
 /**
  * bootstrap for the Java main call - checking of the correct installed JRE
  *

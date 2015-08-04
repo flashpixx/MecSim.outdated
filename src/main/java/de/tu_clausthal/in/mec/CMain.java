@@ -24,7 +24,6 @@
 package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.benchmark.CSummary;
 import de.tu_clausthal.in.mec.ui.CUI;
@@ -36,7 +35,6 @@ import org.apache.commons.cli.Options;
 import org.pmw.tinylog.Level;
 
 import java.io.File;
-import java.lang.instrument.Instrumentation;
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

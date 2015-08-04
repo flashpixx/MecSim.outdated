@@ -101,6 +101,7 @@ public interface IBeliefBaseAction<T>
 
     /**
      * updates all items
+     *
      * @warning call update on a storage and on all storage-masks, if exists different masks
      * which are point to the same storage, the update is called more than once, so the storage must
      * limit the number of update calls

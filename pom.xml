@@ -388,7 +388,6 @@
                             <Build-Number>${build.number}</Build-Number>
                             <Build-Commit>${build.commit}</Build-Commit>
                             <!-- benchmark items -->
-                            <Boot-Class-Path>${artifactId}-${version}.jar</Boot-Class-Path>
                             <Premain-Class>de.tu_clausthal.in.mec.runtime.benchmark.CBenchmark</Premain-Class>
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>

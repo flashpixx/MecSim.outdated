@@ -39,8 +39,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * class to store benchmarking content
  *
  * @see http://www.objc.io/issues/11-android/dependency-injection-in-java/
- * @see http://stackoverflow.com/questions/29451704/using-javassist-to-log-method-calls-and-argument-values-how-to-make-a-logger-cl
- * @see https://wiki.openjdk.java.net/display/HotSpot/MicroBenchmarks
  */
 public final class CSummary
 {
@@ -91,7 +89,6 @@ public final class CSummary
      */
     public void setTime( final String p_label, final long p_time )
     {
-        // microbenchmark should ignore the first set
         m_result.putIfAbsent( p_label, new SummaryStatistics() ).addValue( p_time );
     }
 

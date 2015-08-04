@@ -29,6 +29,7 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
+import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
@@ -222,6 +223,7 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     }
 
     @Override
+    @IBenchmark
     public Collection<T> step( final int p_currentstep, final ILayer p_layer ) throws Exception
     {
         if ( !this.hasFactoryGenerator() )

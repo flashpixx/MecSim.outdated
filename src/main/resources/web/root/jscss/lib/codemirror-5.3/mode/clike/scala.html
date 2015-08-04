@@ -1,32 +1,33 @@
 <!doctype html>
 
-<title>CodeMirror: Scala mode</title>
-<meta charset="utf-8"/>
-<link rel=stylesheet href="../../doc/docs.css">
+<title >CodeMirror: Scala mode</title >
+<meta charset = "utf-8" />
+<link rel = stylesheet href = "../../doc/docs.css" >
 
-<link rel="stylesheet" href="../../lib/codemirror.css">
-<link rel="stylesheet" href="../../theme/ambiance.css">
-<script src="../../lib/codemirror.js"></script>
-<script src="../../addon/edit/matchbrackets.js"></script>
-<script src="clike.js"></script>
-<div id=nav>
-  <a href="http://codemirror.net"><h1>CodeMirror</h1><img id=logo src="../../doc/logo.png"></a>
+<link rel = "stylesheet" href = "../../lib/codemirror.css" >
+<link rel = "stylesheet" href = "../../theme/ambiance.css" >
+<script src = "../../lib/codemirror.js" ></script >
+<script src = "../../addon/edit/matchbrackets.js" ></script >
+<script src = "clike.js" ></script >
+<div id = nav >
+  <a href = "http://codemirror.net" ><h1 >CodeMirror</h1 ><img id = logo src = "../../doc/logo.png" ></a >
 
-  <ul>
-    <li><a href="../../index.html">Home</a>
-    <li><a href="../../doc/manual.html">Manual</a>
-    <li><a href="https://github.com/codemirror/codemirror">Code</a>
-  </ul>
-  <ul>
-    <li><a href="../index.html">Language modes</a>
-    <li><a class=active href="#">Scala</a>
-  </ul>
-</div>
+  <ul >
+    <li ><a href = "../../index.html" >Home</a >
+    <li ><a href = "../../doc/manual.html" >Manual</a >
+    <li ><a href = "https://github.com/codemirror/codemirror" >Code</a >
+  </ul >
+  <ul >
+    <li ><a href = "../index.html" >Language modes</a >
+    <li ><a class = active href = "#" >Scala</a >
+  </ul >
+</div >
 
-<article>
-<h2>Scala mode</h2>
-<form>
-<textarea id="code" name="code">
+<article >
+  <h2 >Scala mode</h2 >
+
+  <form >
+<textarea id = "code" name = "code" >
 
   /*                     __                                               *\
   **     ________ ___   / /  ___     Scala API                            **
@@ -69,8 +70,8 @@
    *  a non-strict collection class may defer computation of some of their
    *  elements until after the instance is available as a value.
    *  A typical example of a non-strict collection class is a
-   *  <a href="../immutable/Stream.html" target="ContentFrame">
-   *  `scala.collection.immutable.Stream`</a>.
+   *  <a href = "../immutable/Stream.html" target = "ContentFrame" >
+  * `scala.collection.immutable.Stream`</a >.
    *  A more general class of examples are `TraversableViews`.
    *  
    *  If a collection is an instance of an ordered collection class, traversing
@@ -753,15 +754,17 @@
   }
 
 
-</textarea>
-</form>
+</textarea >
+  </form >
 
-    <script>
+  <script >
       var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         matchBrackets: true,
         theme: "ambiance",
         mode: "text/x-scala"
       });
-    </script>
-  </article>
+
+
+  </script >
+</article >

@@ -23,6 +23,8 @@
 
 package de.tu_clausthal.in.mec.runtime.benchmark;
 
+import javassist.NotFoundException;
+
 import java.lang.instrument.Instrumentation;
 
 
@@ -44,7 +46,7 @@ public final class CBenchmark
      * @param p_args arguments of the agent - will pass to the normal main
      * @param p_instrumentation instrumentation to inject class data
      */
-    public static void premain( final String p_args, final Instrumentation p_instrumentation )
+    public static void premain( final String p_args, final Instrumentation p_instrumentation ) throws NotFoundException
     {
         p_instrumentation.addTransformer( new CInjection() );
     }

@@ -48,6 +48,16 @@ public final class CInjection implements ClassFileTransformer
      * class pool
      */
     private static final ClassPool c_pool = ClassPool.getDefault();
+    private final CtClass m_timerclass;
+
+    /**
+     * ctor
+     * @throws NotFoundException is thrown if timer class not found
+     */
+    public CInjection() throws NotFoundException
+    {
+        m_timerclass = c_pool.getCtClass( CTimer.class.getCanonicalName() );
+    }
 
 
     @Override
@@ -79,7 +89,6 @@ public final class CInjection implements ClassFileTransformer
      */
     private byte[] inject( final String p_class ) throws NotFoundException, ClassNotFoundException, CannotCompileException, IOException
     {
-        final CtClass l_timer = c_pool.getCtClass( CTimer.class.getCanonicalName() );
         final CtClass l_class = c_pool.getCtClass( p_class );
         l_class.stopPruning( false );
 
@@ -89,7 +98,7 @@ public final class CInjection implements ClassFileTransformer
             if ( l_method.getAnnotation( IBenchmark.class ) == null )
                 continue;
 
-            l_method.addLocalVariable( "l_bechmarktimer", l_timer );
+            l_method.addLocalVariable( "l_bechmarktimer", m_timerclass );
             l_method.insertBefore( "final l_bechmarktimer = new " + CTimer.class.getCanonicalName() + "().start();" );
             l_method.insertAfter(  "l_bechmarktimer.stop(\"" + l_method.getLongName() + "\");" );
         }

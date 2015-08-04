@@ -18,4 +18,99 @@
 ######################################################################################
 
 
-# === visualization script for benchmarks ======================================================================================================================
+
+#' visualization script for benchmarks json files
+#' 
+#' @param pc_file
+#' @param type output type of the table - allowed values: text, latex, html
+#' @param label label of the plot and table - %1.0E defines the scaling of the seconds
+#' @param xlabel label of the plot x-axis
+#' @param ylabel label if the plot y-axis
+mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim Microbenchmark (in %1.0E seconds)", xlabel="methods", ylabel="time" )
+{
+  # --- check required packages ---
+  # JsonLite (https://cran.r-project.org/web/packages/jsonlite/) 
+  # StarGazer (https://cran.r-project.org/web/packages/stargazer/)
+  # GGplot2 (https://cran.r-project.org/web/packages/ggplot2/)
+  for ( i in c("jsonlite", "stargazer", "ggplot2") )
+    if (!is.element( i, installed.packages()[,1] ) )
+      install.packages(i)
+
+  
+  # --- read data, keys and columns ---
+  lo_data    <- jsonlite::fromJSON( pc_file, flatten = TRUE );
+  
+  la_keys    <- names( lo_data )
+  if (length(la_keys) < 1) stop(sprintf("no elements are found within the benchmarkfile [%s]", pc_file))
+  
+  la_columns <- names( lo_data[[la_keys[1]]] )
+  if (length(la_columns) < 1) stop(sprintf("no columns elements are found within the benchmarkfile [%s]", pc_file))
+  
+  lc_label <- sprintf(label, 1e-9*scaling)
+  
+
+  # --- build table ---
+  ln_table = matrix(, nrow = length(la_keys), ncol = length(la_columns), dimnames = list( la_keys, la_columns ) )
+  i = 1
+  for ( r in la_keys )
+  { 
+    j = 1
+    for ( c in la_columns )
+    {
+      ln_table[i,j] <- lo_data[[r]][[c]]
+      j <- j+1
+    }  
+    i <- i+1
+  }      
+  
+  
+  # --- scaling ---
+  for (i in c("arithmeticmean", "geometricmean", "kurtosis", "max", "min", "percentile25", "percentile50", "percentile75", "skewness", "stddeviation", "sum", "sumsquare", "variance"))
+    ln_table[, i] <- ln_table[, i] / scaling
+
+  
+  # --- build output ---  
+  stargazer::stargazer( 
+      data  = ln_table,
+      type  = type, 
+      title = lc_label
+  )
+  
+  
+  # --- build boxplot ---
+  lo_frame <- data.frame(
+      label  = la_keys,
+      min    = ln_table[, "min"],
+      max    = ln_table[, "max"],
+      low    = ln_table[, "percentile25"],
+      mid    = ln_table[, "percentile50"],
+      top    = ln_table[, "percentile75"]
+  )
+  lo_plot <- ggplot2::ggplot( 
+      lo_frame, 
+      ggplot2::aes( 
+          x      = label, 
+          ymin   = min, 
+          lower  = low, 
+          middle = mid, 
+          upper  = top, 
+          ymax   = max
+      )
+  ) + 
+  ggplot2::geom_boxplot(
+      stat = "identity"
+  ) +
+  ggplot2::ggtitle(
+      lc_label
+  ) +
+  ggplot2::labs(
+      x = xlabel, 
+      y = ylabel
+  ) +
+  ggplot2::coord_flip()       
+  print(lo_plot)
+
+
+  
+  return(ln_table)
+}

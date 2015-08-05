@@ -26,7 +26,7 @@
 #' @param label label of the plot and table - % element will be replaced with scaling time factor
 #' @param xlabel label of the plot x-axis 
 #' @param ylabel label if the plot y-axis - % element will be replaced with scaling time factor
-mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim Method Microbenchmark in %1.0E seconds", xlabel="time in %1.0E seconds", ylabel="methods" )
+mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim Method Microbenchmark in %1.0E seconds", xlabel="time in %1.0E seconds", ylabel="" )
 {
   # --- check required packages ---
   # JsonLite (https://cran.r-project.org/web/packages/jsonlite/) 
@@ -87,6 +87,7 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
       top    = ln_table[, "75-percentile"],
       mean   = ln_table[, "arithmetic mean"]
   )
+  # boxes
   lo_plot <- ggplot2::ggplot( 
       lo_frame, 
       ggplot2::aes( 
@@ -106,16 +107,24 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
   ggplot2::geom_boxplot(
       stat = "identity"
   ) +
+  # title label
   ggplot2::ggtitle(
       lc_label
   ) +
+  # axis labeling  
   ggplot2::labs(
       x = ylabel,
       y = sprintf(xlabel, 1e-9*scaling)
   ) +
-  ggplot2::stat_summary(fun.y = "mean", geom = "point", size=4, col="white" ) +
-  ggplot2::coord_flip() +
-  ggplot2::guides(fill=FALSE)
+  # mean point      
+  ggplot2::stat_summary(fun.y = "mean", geom = "text", label="----", size= 10, color= "black" ) +
+  # logarithm scaling on the time axis
+  ggplot2::coord_trans(y = "log10") +
+  # disable legend      
+  ggplot2::guides(fill=FALSE) +
+  # coloring      
+  ggplot2::theme_bw() + ggplot2::theme( panel.grid.major = ggplot2::element_line(colour = "grey60") )
+  # create output
   print(lo_plot)
 
 

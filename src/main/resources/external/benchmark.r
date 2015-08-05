@@ -23,10 +23,10 @@
 #' 
 #' @param pc_file
 #' @param type output type of the table - allowed values: text, latex, html
-#' @param label label of the plot and table - %1.0E defines the scaling of the seconds
-#' @param xlabel label of the plot x-axis
-#' @param ylabel label if the plot y-axis
-mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim Microbenchmark (in %1.0E seconds)", xlabel="methods", ylabel="time" )
+#' @param label label of the plot and table - % element will be replaced with scaling time factor
+#' @param xlabel label of the plot x-axis 
+#' @param ylabel label if the plot y-axis - % element will be replaced with scaling time factor
+mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim Microbenchmark", xlabel="time in %1.0E seconds", ylabel="methods" )
 {
   # --- check required packages ---
   # JsonLite (https://cran.r-project.org/web/packages/jsonlite/) 
@@ -40,9 +40,9 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
   # --- read data, keys and columns ---
   lo_data    <- jsonlite::fromJSON( pc_file, flatten = TRUE );
   
-  la_keys    <- names( lo_data )
+  la_keys <- names( lo_data )
   if (length(la_keys) < 1) stop(sprintf("no elements are found within the benchmarkfile [%s]", pc_file))
-  
+
   la_columns <- names( lo_data[[la_keys[1]]] )
   if (length(la_columns) < 1) stop(sprintf("no columns elements are found within the benchmarkfile [%s]", pc_file))
   
@@ -79,23 +79,29 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
   
   # --- build boxplot ---
   lo_frame <- data.frame(
-      label  = la_keys,
+      label  = gsub("\\(", "\n\\(", la_keys),
       min    = ln_table[, "min"],
       max    = ln_table[, "max"],
       low    = ln_table[, "percentile25"],
       mid    = ln_table[, "percentile50"],
-      top    = ln_table[, "percentile75"]
+      top    = ln_table[, "percentile75"],
+      mean   = ln_table[, "arithmeticmean"]
   )
   lo_plot <- ggplot2::ggplot( 
       lo_frame, 
       ggplot2::aes( 
           x      = label, 
+          y      = mean,
           ymin   = min, 
           lower  = low, 
           middle = mid, 
           upper  = top, 
-          ymax   = max
-      )
+          ymax   = max,
+          fill   = label
+      ),
+      alpha    = 0.25,
+      width    = 0.5,
+      position = position_dodge(width = 0.9)
   ) + 
   ggplot2::geom_boxplot(
       stat = "identity"
@@ -104,10 +110,12 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
       lc_label
   ) +
   ggplot2::labs(
-      x = xlabel, 
-      y = ylabel
+      x = ylabel,
+      y = sprintf(xlabel, 1e-9*scaling)
   ) +
-  ggplot2::coord_flip()       
+  ggplot2::stat_summary(fun.y = "mean", geom = "point", size=4, col="white" ) +
+  ggplot2::coord_flip() +
+  ggplot2::guides(fill=FALSE)
   print(lo_plot)
 
 

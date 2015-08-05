@@ -116,13 +116,13 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, xlabel="", yla
   ggplot2::stat_summary(fun.y = "mean", geom = "text", label="----", size= 10, color= "black" ) +
   # logarithm scaling on the time axis
   ggplot2::coord_trans(y = "log10") +
-  # disable legend      
+  # theme layout    
   ggplot2::guides( fill = FALSE ) +
-  # coloring      
   ggplot2::theme_bw() + 
   ggplot2::theme( 
-      panel.grid.major = ggplot2::element_line(colour = "grey60")
+    panel.grid.major = ggplot2::element_line(colour = "grey60")
   )
+
   
   # calling caller plot
   lo_callerplot <-  ggplot2::qplot(
@@ -142,13 +142,16 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, xlabel="", yla
       x = xlabel
   )  +
   # logarithm scaling on the caller axis
-  ggplot2::scale_y_log10() +
-  # coloring      
-  ggplot2::theme_bw() +
+  ggplot2::scale_y_log10(
+      labels = function(x) format( x, nsmall = 0, scientific = FALSE )
+  ) + 
+  # theme layout    
+  ggplot2::guides( fill = FALSE ) +
+  ggplot2::theme_bw() + 
   ggplot2::theme( 
-      panel.grid.major = ggplot2::element_line(colour = "grey60")
-  )      
-
+    panel.grid.major = ggplot2::element_line(colour = "grey60")
+  )
+  
   # arrange plots and output
   gridExtra::grid.arrange(
       lo_boxplot, 

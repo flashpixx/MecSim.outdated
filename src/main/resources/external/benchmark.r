@@ -26,7 +26,7 @@
 #' @param label label of the plot and table - % element will be replaced with scaling time factor
 #' @param xlabel label of the plot x-axis 
 #' @param ylabel label if the plot y-axis - % element will be replaced with scaling time factor
-mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim Microbenchmark", xlabel="time in %1.0E seconds", ylabel="methods" )
+mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim Method Microbenchmark in %1.0E seconds", xlabel="time in %1.0E seconds", ylabel="methods" )
 {
   # --- check required packages ---
   # JsonLite (https://cran.r-project.org/web/packages/jsonlite/) 
@@ -65,7 +65,7 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
   
   
   # --- scaling ---
-  for (i in c("arithmeticmean", "geometricmean", "kurtosis", "max", "min", "percentile25", "percentile50", "percentile75", "skewness", "stddeviation", "sum", "sumsquare", "variance"))
+  for (i in c("arithmetic mean", "geometric mean", "kurtosis", "max", "min", "25-percentile", "50-percentile", "75-percentile", "skewness", "standard deviation", "sum", "sum square", "variance"))
     ln_table[, i] <- ln_table[, i] / scaling
 
   
@@ -82,10 +82,10 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
       label  = gsub("\\(", "\n\\(", la_keys),
       min    = ln_table[, "min"],
       max    = ln_table[, "max"],
-      low    = ln_table[, "percentile25"],
-      mid    = ln_table[, "percentile50"],
-      top    = ln_table[, "percentile75"],
-      mean   = ln_table[, "arithmeticmean"]
+      low    = ln_table[, "25-percentile"],
+      mid    = ln_table[, "50-percentile"],
+      top    = ln_table[, "75-percentile"],
+      mean   = ln_table[, "arithmetic mean"]
   )
   lo_plot <- ggplot2::ggplot( 
       lo_frame, 

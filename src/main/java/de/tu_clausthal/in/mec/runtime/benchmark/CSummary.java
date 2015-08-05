@@ -112,16 +112,16 @@ public final class CSummary
                             "max", l_item.getValue().getMax(),
                             "min", l_item.getValue().getMin(),
                             "kurtosis", l_item.getValue().getKurtosis(),
-                            "arithmeticmean", l_item.getValue().getMean(),
-                            "geometricmean", l_item.getValue().getGeometricMean(),
-                            "percentile50", l_item.getValue().getPercentile( 50 ),
-                            "percentile25", l_item.getValue().getPercentile( 25 ),
-                            "percentile75", l_item.getValue().getPercentile( 75 ),
-                            "stddeviation", l_item.getValue().getStandardDeviation(),
+                            "arithmetic mean", l_item.getValue().getMean(),
+                            "geometric mean", l_item.getValue().getGeometricMean(),
+                            "50-percentile", l_item.getValue().getPercentile( 50 ),
+                            "25-percentile", l_item.getValue().getPercentile( 25 ),
+                            "75-percentile", l_item.getValue().getPercentile( 75 ),
+                            "standard deviation", l_item.getValue().getStandardDeviation(),
                             "skewness", l_item.getValue().getSkewness(),
                             "count", l_item.getValue().getN(),
                             "sum", l_item.getValue().getSum(),
-                            "sumsquare", l_item.getValue().getSumsq(),
+                            "sum square", l_item.getValue().getSumsq(),
                             "variance", l_item.getValue().getVariance()
                     )
             );

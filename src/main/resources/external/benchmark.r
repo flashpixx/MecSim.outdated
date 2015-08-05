@@ -21,18 +21,20 @@
 
 #' visualization script for benchmarks json files
 #' 
-#' @param pc_file
+#' @param pc_file benchmark json file
 #' @param type output type of the table - allowed values: text, latex, html
-#' @param label label of the plot and table - % element will be replaced with scaling time factor
-#' @param xlabel label of the plot x-axis 
-#' @param ylabel label if the plot y-axis - % element will be replaced with scaling time factor
-mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim Method Microbenchmark in %1.0E seconds", xlabel="time in %1.0E seconds", ylabel="" )
+#' @param scaling scaling factor of the time
+#' @param x-label label of the plot x-axis 
+#' @param y-label label if the plot y-axis - % element will be replaced with scaling time factor
+#' @calllabel y-axis label of the bar blot
+mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, xlabel="", ylabel="time in %1.0E seconds (log-scale)", calllabel="number of calls" )
 {
   # --- check required packages ---
   # JsonLite (https://cran.r-project.org/web/packages/jsonlite/) 
   # StarGazer (https://cran.r-project.org/web/packages/stargazer/)
   # GGplot2 (https://cran.r-project.org/web/packages/ggplot2/)
-  for ( i in c("jsonlite", "stargazer", "ggplot2") )
+  # GridExtra (https://cran.r-project.org/web/packages/gridExtra)
+  for ( i in c("jsonlite", "stargazer", "ggplot2", "gridExtra") )
     if (!is.element( i, installed.packages()[,1] ) )
       install.packages(i)
 
@@ -45,8 +47,6 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
 
   la_columns <- names( lo_data[[la_keys[1]]] )
   if (length(la_columns) < 1) stop(sprintf("no columns elements are found within the benchmarkfile [%s]", pc_file))
-  
-  lc_label <- sprintf(label, 1e-9*scaling)
   
 
   # --- build table ---
@@ -72,8 +72,7 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
   # --- build output ---  
   stargazer::stargazer( 
       data  = ln_table,
-      type  = type, 
-      title = lc_label
+      type  = type
   )
   
   
@@ -85,10 +84,11 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
       low    = ln_table[, "25-percentile"],
       mid    = ln_table[, "50-percentile"],
       top    = ln_table[, "75-percentile"],
-      mean   = ln_table[, "arithmetic mean"]
+      mean   = ln_table[, "arithmetic mean"],
+      count  = ln_table[, "count"]
   )
-  # boxes
-  lo_plot <- ggplot2::ggplot( 
+  # boxplot
+  lo_boxplot <- ggplot2::ggplot( 
       lo_frame, 
       ggplot2::aes( 
           x      = label, 
@@ -107,25 +107,54 @@ mecsim.benchmark <- function( pc_file, type="text", scaling=1e+6, label="MecSim 
   ggplot2::geom_boxplot(
       stat = "identity"
   ) +
-  # title label
-  ggplot2::ggtitle(
-      lc_label
-  ) +
   # axis labeling  
   ggplot2::labs(
-      x = ylabel,
-      y = sprintf(xlabel, 1e-9*scaling)
+      y = sprintf(ylabel, 1e-9*scaling),
+      x = xlabel
   ) +
   # mean point      
   ggplot2::stat_summary(fun.y = "mean", geom = "text", label="----", size= 10, color= "black" ) +
   # logarithm scaling on the time axis
   ggplot2::coord_trans(y = "log10") +
   # disable legend      
-  ggplot2::guides(fill=FALSE) +
+  ggplot2::guides( fill = FALSE ) +
   # coloring      
-  ggplot2::theme_bw() + ggplot2::theme( panel.grid.major = ggplot2::element_line(colour = "grey60") )
-  # create output
-  print(lo_plot)
+  ggplot2::theme_bw() + 
+  ggplot2::theme( 
+      panel.grid.major = ggplot2::element_line(colour = "grey60")
+  )
+  
+  # calling caller plot
+  lo_callerplot <-  ggplot2::qplot(
+      x        = label, 
+      y        = count, 
+      fill     = label,
+      data     = lo_frame, 
+      geom     = "bar", 
+      stat     = "identity",
+      position = "dodge"
+  ) +
+  # disable legend      
+  ggplot2::guides( fill = FALSE ) +
+  # axis labeling  
+  ggplot2::labs(
+      y = calllabel,
+      x = xlabel
+  )  +
+  # logarithm scaling on the caller axis
+  ggplot2::scale_y_log10() +
+  # coloring      
+  ggplot2::theme_bw() +
+  ggplot2::theme( 
+      panel.grid.major = ggplot2::element_line(colour = "grey60")
+  )      
+
+  # arrange plots and output
+  gridExtra::grid.arrange(
+      lo_boxplot, 
+      lo_callerplot, 
+      nrow = 2
+  )
 
 
   

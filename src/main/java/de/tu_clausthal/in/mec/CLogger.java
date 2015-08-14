@@ -53,6 +53,10 @@ public class CLogger
                 break;
         }
         c_stackindex = i;
+
+        // set logger default configuration
+        Configurator.currentConfig().writer( null ).level( Level.OFF ).activate();
+        Configurator.currentConfig().formatPattern( "{message}" ).activate();
     }
 
     /**
@@ -97,7 +101,6 @@ public class CLogger
         ).level(
                 p_level
         ).activate();
-        Configurator.currentConfig().formatPattern( "{message}" ).activate();
     }
 
     /**

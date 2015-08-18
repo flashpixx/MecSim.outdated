@@ -202,7 +202,6 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
      */
     private Iterator<Literal> getLiteralIterator( final Iterator<ILiteral<Literal>> p_iterator )
     {
-        final CPath l_path = this.getFQNPath();
         return new Iterator<Literal>()
         {
             @Override

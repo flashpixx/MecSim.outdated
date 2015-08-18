@@ -6,6 +6,15 @@ Micro traffic simulation with multi-agent structure based on  [Jason](http://jas
 ![Screenshot](screen.png)
 
 
+## Features
+
+* native Java implementation
+* HTML5-based GUI with multilanguage support
+* build-in user and developer documentation
+* complete [OpenStreetMap](https://www.openstreetmap.org/) data import
+* Nagel-Schreckenberg traffic following model
+* Multi-Agent system with complete [Jason-Support](http://jason.sourceforge.net/)
+* Code Benchmarking with statistical analysis with [R](https://www.r-project.org/)
 
 ## Requirements
 
@@ -15,7 +24,7 @@ Micro traffic simulation with multi-agent structure based on  [Jason](http://jas
 * online access
 * at least 3 GB RAM
 
-### Compiling
+### Developing
 
 * [Oracle Java Developing Kit 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [Maven 3.0](http://maven.apache.org/)
@@ -25,7 +34,6 @@ Micro traffic simulation with multi-agent structure based on  [Jason](http://jas
 
 * [IntelliJ Community Edition](http://www.jetbrains.com/idea/)
 * [Eclipse](http://www.eclipse.org/)
-
 
 
 ## Installation / Configuration

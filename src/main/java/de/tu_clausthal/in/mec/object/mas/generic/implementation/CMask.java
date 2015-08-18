@@ -348,7 +348,8 @@ public class CMask<T> implements IBeliefBaseMask<T>
     @Override
     public Iterator<ILiteral<T>> iteratorLiteral()
     {
-        final CPath l_path = this.getFQNPath();
+        // the fqn path is build through the tree traversing, so only the current path is build
+        final CPath l_path = new CPath( m_name ).setSeparator( m_pathseparator );
         return new Iterator<ILiteral<T>>()
         {
             /**

@@ -70,4 +70,9 @@ public interface ILiteral<T> extends ITerm
      * @return value term
      */
     public ITermCollection getValues();
+
+    /**
+     * getter of the literal for the negation
+     */
+    public boolean isNegated();
 }

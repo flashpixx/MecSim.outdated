@@ -1,3 +1,9 @@
+// --- scrambling car agent -------------------------------------------------------------
+// the distance of the predecessor car and the scrambling value are used to modify the
+// current speed of the car, so the agent can flare lower to the predecessor car
+// --------------------------------------------------------------------------------------
+
+
 // scrambling value in [0,1] (0 low scrambling, 1 high scrambling)
 ag_scramble(0.4).
 

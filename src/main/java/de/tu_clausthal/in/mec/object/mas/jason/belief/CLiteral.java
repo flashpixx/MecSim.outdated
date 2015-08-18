@@ -44,7 +44,7 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implemen
      */
     public CLiteral( final Literal p_literal )
     {
-        super( p_literal.getFunctor(), p_literal );
+        super( p_literal.getFunctor(), p_literal, p_literal.negated() );
 
         if ( p_literal.hasTerm() )
             for ( final Term l_term : p_literal.getTerms() )

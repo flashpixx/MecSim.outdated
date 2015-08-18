@@ -1,4 +1,10 @@
-// acceleration (based on Nagel-Schreckenberg model)
+// --- default car agent ----------------------------------------------------------------
+// drives depend on the Nagel-Schreckenberg model, the deceleration and acceleration
+// depends on the distance to the current predecessor car
+// --------------------------------------------------------------------------------------
+
+
+// acceleration
 +!accelerate
    :  m_speed(Speed) &
       m_acceleration(Accelerate) &
@@ -7,7 +13,7 @@
       set(self, m_speed, NewSpeed);
       !drive.
 
-// deceleration (based on Nagel-Schreckenberg model)
+// deceleration
 +!decelerate
    :  m_speed(Speed) &
       m_deceleration(Decelerate) &
@@ -38,13 +44,13 @@
 
 	 	// check if predecessing car is too close
 	 	if ( BrakingDistance > Scramble*Distance )
-    	 {
-		!decelerate;
-    	 }
-    	 else
-    	 {
-		!accelerate;
-	 }.
+    	{
+		    !decelerate;
+    	}
+    	else
+    	{
+		    !accelerate;
+	    }.
 
 // default behaviour - accelerate
 +!drive

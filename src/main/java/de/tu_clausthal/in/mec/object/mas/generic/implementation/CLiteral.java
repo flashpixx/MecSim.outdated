@@ -56,6 +56,10 @@ public class CLiteral<T> implements ILiteral<T>
      * the literals functor
      */
     protected final IAtom<String> m_functor;
+    /**
+     * negated option
+     */
+    protected final boolean m_negated;
 
     /**
      * ctor
@@ -65,7 +69,19 @@ public class CLiteral<T> implements ILiteral<T>
      */
     public CLiteral( final String p_functor, final T p_literal )
     {
-        this( p_functor, p_literal, new CTermList(), new CTermSet() );
+        this( new CStringAtom( p_functor ), p_literal, new CTermList(), new CTermSet(), false );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_functor functor
+     * @param p_literal literal
+     * @param p_negated negated flag
+     */
+    public CLiteral( final String p_functor, final T p_literal, final boolean p_negated )
+    {
+        this( new CStringAtom( p_functor ), p_literal, new CTermList(), new CTermSet(), p_negated );
     }
 
     /**
@@ -78,7 +94,7 @@ public class CLiteral<T> implements ILiteral<T>
      */
     public CLiteral( final String p_functor, final T p_literal, final List<ITerm> p_values, final Set<ITerm> p_annotations )
     {
-        this( new CStringAtom( p_functor ), p_literal, new CTermList( p_values ), new CTermSet( p_annotations ) );
+        this( new CStringAtom( p_functor ), p_literal, new CTermList( p_values ), new CTermSet( p_annotations ), false );
     }
 
     /**
@@ -88,19 +104,23 @@ public class CLiteral<T> implements ILiteral<T>
      * @param p_literal the original literal
      * @param p_values initial list of values
      * @param p_annotations initial set of annotations
+     * @param p_negated negated flag
      */
-    public CLiteral( final CStringAtom p_functor, final T p_literal, final ITermCollection p_values, final ITermCollection p_annotations )
+    public CLiteral( final CStringAtom p_functor, final T p_literal, final ITermCollection p_values, final ITermCollection p_annotations,
+            final boolean p_negated
+    )
     {
         m_functor = p_functor;
         m_literal = p_literal;
         m_values = p_values;
         m_annotations = p_annotations;
+        m_negated = p_negated;
     }
 
     @Override
     public ILiteral<T> clone( final CPath p_prefix )
     {
-        return new CLiteral<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations );
+        return new CLiteral<T>( new CStringAtom( p_prefix.append( m_functor.get() ).toString() ), m_literal, m_values, m_annotations, m_negated );
     }
 
     @Override
@@ -125,6 +145,12 @@ public class CLiteral<T> implements ILiteral<T>
     public ITermCollection getValues()
     {
         return m_values;
+    }
+
+    @Override
+    public boolean isNegated()
+    {
+        return m_negated;
     }
 
     @Override

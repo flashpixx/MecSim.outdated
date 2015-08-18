@@ -626,7 +626,6 @@ public class CConfiguration
      * sets the configuration values with semantic check
      *
      * @param p_input input map
-     * @bug ui path not stored
      */
     private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException, IllegalArgumentException
     {

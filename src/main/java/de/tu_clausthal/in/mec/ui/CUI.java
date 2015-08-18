@@ -50,7 +50,7 @@ import java.util.Map;
 /**
  * JavaFX application
  *
- * @bug undock structure does not work correct
+ * @bug undock structure does not work correctly
  * @see https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
  * @see http://docs.oracle.com/javafx/2/layout/style_css.htm#CHDHIGCA
  */

@@ -10,40 +10,40 @@ ag_scramble(0.4).
 // initial goal
 !drive.
 
-// acceleration (based on Nagel-Schreckenberg model)
+// acceleration
 +!accelerate
-   :  m_speed(Speed) &
-      m_acceleration(Accelerate) &
-      m_maxspeed(MaxSpeed)
+   :  root_bind_mspeed(Speed) &
+      root_bind_macceleration(Accelerate) &
+      root_bind_mmaxspeed(MaxSpeed)
    <- .min([MaxSpeed, Speed+Accelerate], NewSpeed);
-      set(self, m_speed, NewSpeed);
+      mesim.set(self, m_speed, NewSpeed);
       !drive.
 
-// deceleration (based on Nagel-Schreckenberg model)
+// deceleration
 +!decelerate
-   :  m_speed(Speed) &
-      m_deceleration(Decelerate) &
+   :  root_bind_mspeed(Speed) &
+      root_bind_mdeceleration(Decelerate) &
       Decelerate > 0
    <- .max([5, Speed-Decelerate], NewSpeed);
-      set(self, m_speed, NewSpeed);
+      mecsim.set(self, m_speed, NewSpeed);
       !drive.
 
 // if there is a predecessor, check braking distance
 // braking distance will be calculated using gaussian sum
 // @see https://de.wikipedia.org/wiki/Gau%C3%9Fsche_Summenformel
 +!drive
-    :    m_speed(Speed) &
-         m_deceleration(Deceleration) &
+    :    root_bind_mspeed(Speed) &
+         root_bind_mdeceleration(Deceleration) &
     	 ag_predecessor([Predecessor]) &
 	     not(.empty([Predecessor]))
 
     <-   // this beliefs will be updated
          mecsim.removeBelief(ag_predecessor(_));
-      
+
 	     // get distance to predecessing car
          Predecessor =.. [X|_];
          mecsim.literal2number(X,Distance);
-         
+
 	     // calculate braking distance with gaussian sum
          UpperSumIndex = math.floor( Speed / Deceleration );
          BrakingDistance = UpperSumIndex * ( Speed - 0.5 * Deceleration * ( UpperSumIndex + 1 ) );

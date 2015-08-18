@@ -1,17 +1,13 @@
-# MecSim - Traffic Simulation
-
-Micro traffic simulation with multi-agent structure based on  [Jason](http://jason.sourceforge.net) and
-[GraphHopper](https://graphhopper.com) OpenStreepMap library.
+# MecSim - Micro Traffic Agent-Based Simulation
 
 ![Screenshot](screen.png)
-
 
 ## Features
 
 * native Java implementation
 * HTML5-based GUI with multilanguage support
 * build-in user and developer documentation
-* complete [OpenStreetMap](https://www.openstreetmap.org/) data import
+* complete [OpenStreetMap](https://www.openstreetmap.org/) data import with [GraphHopper](https://graphhopper.com) routing engine
 * Nagel-Schreckenberg traffic following model
 * Multi-Agent system with complete [Jason-Support](http://jason.sourceforge.net/)
 * Code Benchmarking with statistical analysis with [R](https://www.r-project.org/)

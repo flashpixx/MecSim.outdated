@@ -38,7 +38,7 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implemen
 {
 
     /**
-     * ctor with path specified
+     * ctor for Jason literals
      *
      * @param p_literal Jason literal
      */

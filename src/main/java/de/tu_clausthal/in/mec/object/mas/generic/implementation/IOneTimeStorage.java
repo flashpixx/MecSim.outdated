@@ -21,53 +21,29 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
-
-
-import de.tu_clausthal.in.mec.common.CPath;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 
 
 /**
- * literal interface
- *
- * @note closed world assumption, no negation marker needed
+ * class to update an immutable belief storage
  */
-public interface ILiteral<T> extends ITerm
+public abstract class IOneTimeStorage<N, M> extends CImmutableBeliefStorage<N, M>
 {
 
-    /**
-     * clones the literal
-     *
-     * @param p_prefix add a path to the functor
-     * @return copy of the literal
-     */
-    public ILiteral<T> clone( final CPath p_prefix );
+    @Override
+    public final void update()
+    {
+        // clear is final at the super, so clearing is run manually
+        m_multielements.clear();
+        m_singleelements.clear();
+
+        super.update();
+        this.updating();
+    }
 
     /**
-     * returns the optional annotations
-     *
-     * @return annotation term
+     * updates the element structure
      */
-    public ITermCollection getAnnotation();
+    protected abstract void updating();
 
-    /**
-     * returns the functor / dataset of the literal
-     *
-     * @return function data
-     */
-    public IAtom<String> getFunctor();
-
-    /**
-     * getter for language specific literal
-     *
-     * @return literal
-     */
-    public T getLiteral();
-
-    /**
-     * returns the optional value term
-     *
-     * @return value term
-     */
-    public ITermCollection getValues();
 }

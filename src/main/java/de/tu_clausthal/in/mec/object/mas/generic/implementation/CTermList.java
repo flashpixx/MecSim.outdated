@@ -21,45 +21,45 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
+
+import de.tu_clausthal.in.mec.object.mas.generic.ITerm;
+import de.tu_clausthal.in.mec.object.mas.generic.ITermCollection;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
- * immutable belief storage
+ * generic term list for agent literals
  */
-public class CImmutableBeliefStorage<N, M> extends CBeliefStorage<N, M>
+@SuppressWarnings( "serial" )
+public class CTermList extends LinkedList<ITerm> implements ITermCollection
 {
-
-    @Override
-    public final void addMultiElement( final String p_key, final N p_element )
+    /**
+     * default ctor
+     */
+    public CTermList()
     {
+        super();
     }
 
-    @Override
-    public final void addSingleElement( final String p_key, final M p_element )
+    /**
+     * ctor - with initial elements specified
+     *
+     * @param p_collection collection containing initial elements
+     */
+    public CTermList( final Collection<ITerm> p_collection )
     {
+        super( p_collection );
     }
 
-    @Override
-    public final void clear()
-    {
-    }
 
     @Override
-    public final boolean remove( final String p_key )
+    public boolean instanceOf( final Class<?> p_class )
     {
-        return false;
+        return List.class.isAssignableFrom( p_class );
     }
 
-    @Override
-    public final boolean removeMultiElement( final String p_key, final N p_element )
-    {
-        return false;
-    }
-
-    @Override
-    public final boolean removeSingleElement( final String p_key )
-    {
-        return false;
-    }
 }

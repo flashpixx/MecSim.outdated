@@ -21,23 +21,22 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 
 
 /**
- * storage of a beliefbase for storing masks only
+ * numeric atom class for agent literals
  */
-public class CBeliefMaskStorage<N, M> extends CBeliefStorage<N, M>
+public class CNumberAtom extends IDefaultAtom<Number>
 {
-
-    @Override
-    public final void addMultiElement( final String p_key, final N p_element )
+    /**
+     * ctor
+     *
+     * @param p_value the atom's value
+     */
+    public CNumberAtom( final Number p_value )
     {
+        super( p_value );
     }
 
-    @Override
-    public final boolean removeMultiElement( final String p_key, final N p_element )
-    {
-        return false;
-    }
 }

@@ -26,11 +26,11 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.ITerm;
-import de.tu_clausthal.in.mec.object.mas.general.implementation.CNumberAtom;
-import de.tu_clausthal.in.mec.object.mas.general.implementation.CStringAtom;
-import de.tu_clausthal.in.mec.object.mas.general.implementation.CTermList;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.generic.ITerm;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.CNumberAtom;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.CStringAtom;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.CTermList;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import jason.NoValueException;
 import jason.asSyntax.ASSyntax;

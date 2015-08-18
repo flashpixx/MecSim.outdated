@@ -25,7 +25,7 @@ package de.tu_clausthal.in.mec.object.mas;
 
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import org.jxmapviewer.painter.Painter;
 

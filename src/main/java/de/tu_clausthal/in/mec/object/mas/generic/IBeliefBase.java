@@ -21,45 +21,10 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
-
-import de.tu_clausthal.in.mec.object.mas.general.ITerm;
-import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+package de.tu_clausthal.in.mec.object.mas.generic;
 
 
-/**
- * generic term list for agent literals
- */
-@SuppressWarnings( "serial" )
-public class CTermList extends LinkedList<ITerm> implements ITermCollection
+public interface IBeliefBase<T> extends IBeliefBaseAction<T>
 {
-    /**
-     * default ctor
-     */
-    public CTermList()
-    {
-        super();
-    }
-
-    /**
-     * ctor - with initial elements specified
-     *
-     * @param p_collection collection containing initial elements
-     */
-    public CTermList( final Collection<ITerm> p_collection )
-    {
-        super( p_collection );
-    }
-
-
-    @Override
-    public boolean instanceOf( final Class<?> p_class )
-    {
-        return List.class.isAssignableFrom( p_class );
-    }
 
 }

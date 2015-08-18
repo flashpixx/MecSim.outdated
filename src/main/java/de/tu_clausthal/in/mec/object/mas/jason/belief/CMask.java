@@ -25,9 +25,9 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 import jason.asSemantics.Agent;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.ASSyntax;
@@ -43,7 +43,7 @@ import java.util.Iterator;
 /**
  * beliefbase mask that represent the Jason beliefbase
  */
-public class CMask extends de.tu_clausthal.in.mec.object.mas.general.implementation.CMask<Literal> implements BeliefBase
+public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CMask<Literal> implements BeliefBase
 {
 
     /**

@@ -21,13 +21,13 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.IAtom;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.ITerm;
-import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
+import de.tu_clausthal.in.mec.object.mas.generic.IAtom;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.generic.ITerm;
+import de.tu_clausthal.in.mec.object.mas.generic.ITermCollection;
 
 import java.util.List;
 import java.util.Set;

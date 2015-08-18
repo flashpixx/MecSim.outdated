@@ -21,10 +21,25 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
-public interface IBeliefBase<T> extends IBeliefBaseAction<T>
+/**
+ * thread-safe storage e.g. for shared-beliefs
+ */
+public class CBeliefSynchronizedStorage<N, M extends Iterable<N>> extends CBeliefStorage<N, M>
 {
+    /**
+     * thread-safe map with elements
+     **/
+    protected final Map<String, Set<N>> m_elements = new ConcurrentHashMap<>();
+    /**
+     * thread-safe map with masks
+     **/
+    protected final Map<String, M> m_masks = new ConcurrentHashMap<>();
 
 }

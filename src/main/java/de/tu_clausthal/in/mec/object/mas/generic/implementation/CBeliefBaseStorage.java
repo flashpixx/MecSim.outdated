@@ -21,25 +21,59 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBase;
+
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * thread-safe storage e.g. for shared-beliefs
+ * storage of beliefbases to address different beliefbases with a name
  */
-public class CBeliefSynchronizedStorage<N, M extends Iterable<N>> extends CBeliefStorage<N, M>
+public final class CBeliefBaseStorage<T>
 {
     /**
-     * thread-safe map with elements
+     * map with case-insensitive name and a beliefbase
      **/
-    protected final Map<String, Set<N>> m_elements = new ConcurrentHashMap<>();
+    private final Map<String, IBeliefBase<T>> m_beliefbases = new HashMap<>();
+
+
     /**
-     * thread-safe map with masks
-     **/
-    protected final Map<String, M> m_masks = new ConcurrentHashMap<>();
+     * adds a new beliefbase
+     *
+     * @param p_name key name
+     * @param p_base beliefbase
+     */
+    public final void add( final String p_name, final IBeliefBase<T> p_base )
+    {
+        if ( m_beliefbases.containsKey( p_name.toLowerCase() ) )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "exists", p_name.toLowerCase() ) );
+
+        m_beliefbases.put( p_name.toLowerCase(), p_base );
+    }
+
+    /**
+     * returns a beliefbase
+     *
+     * @param p_name key name
+     * @return null or beliefbase
+     */
+    public final IBeliefBase<T> get( final String p_name )
+    {
+        return m_beliefbases.get( p_name.toLowerCase() );
+    }
+
+    /**
+     * removes a beliefbase
+     *
+     * @param p_name key name
+     */
+    public final void remove( final String p_name )
+    {
+        m_beliefbases.remove( p_name.toLowerCase() );
+    }
 
 }

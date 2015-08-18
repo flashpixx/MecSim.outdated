@@ -21,14 +21,23 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
-
-import java.util.Collection;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 
 
 /**
- * interface for term collection
+ * storage of a beliefbase for storing masks only
  */
-public interface ITermCollection extends ITerm, Collection<ITerm>
+public class CBeliefMaskStorage<N, M> extends CBeliefStorage<N, M>
 {
+
+    @Override
+    public final void addMultiElement( final String p_key, final N p_element )
+    {
+    }
+
+    @Override
+    public final boolean removeMultiElement( final String p_key, final N p_element )
+    {
+        return false;
+    }
 }

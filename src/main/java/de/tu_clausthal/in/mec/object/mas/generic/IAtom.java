@@ -21,22 +21,17 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
-
+package de.tu_clausthal.in.mec.object.mas.generic;
 
 /**
- * numeric atom class for agent literals
+ * interface for atoms of agent literals
  */
-public class CNumberAtom extends IDefaultAtom<Number>
+public interface IAtom<T> extends ITerm
 {
     /**
-     * ctor
+     * returns the value of the atom
      *
-     * @param p_value the atom's value
+     * @return value
      */
-    public CNumberAtom( final Number p_value )
-    {
-        super( p_value );
-    }
-
+    T get();
 }

@@ -1,8 +1,8 @@
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.generic;
 
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefStorage;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;

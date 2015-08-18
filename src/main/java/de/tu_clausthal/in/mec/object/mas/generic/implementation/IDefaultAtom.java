@@ -1,7 +1,7 @@
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 
 
-import de.tu_clausthal.in.mec.object.mas.general.IAtom;
+import de.tu_clausthal.in.mec.object.mas.generic.IAtom;
 
 
 /**

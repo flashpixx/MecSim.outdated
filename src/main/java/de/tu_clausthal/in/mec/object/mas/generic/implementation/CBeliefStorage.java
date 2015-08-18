@@ -21,10 +21,10 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 
 
-import de.tu_clausthal.in.mec.object.mas.general.IStorage;
+import de.tu_clausthal.in.mec.object.mas.generic.IStorage;
 
 import java.util.HashMap;
 import java.util.HashSet;

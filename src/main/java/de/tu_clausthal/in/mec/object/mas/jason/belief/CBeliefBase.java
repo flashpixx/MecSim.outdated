@@ -23,16 +23,16 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.IStorage;
+import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.generic.IStorage;
 import jason.asSyntax.Literal;
 
 
 /**
  * Jason specfic beliefbase
  */
-public class CBeliefBase extends de.tu_clausthal.in.mec.object.mas.general.implementation.CBeliefBase<Literal>
+public class CBeliefBase extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefBase<Literal>
 {
     /**
      * separator

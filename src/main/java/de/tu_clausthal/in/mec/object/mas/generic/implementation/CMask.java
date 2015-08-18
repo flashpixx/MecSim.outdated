@@ -21,14 +21,14 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.IStorage;
+import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBase;
+import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.generic.IStorage;
 
 import java.util.HashMap;
 import java.util.Iterator;

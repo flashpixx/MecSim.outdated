@@ -26,9 +26,9 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
-import de.tu_clausthal.in.mec.object.mas.general.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
-import de.tu_clausthal.in.mec.object.mas.general.implementation.IBindStorage;
+import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.IBindStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;

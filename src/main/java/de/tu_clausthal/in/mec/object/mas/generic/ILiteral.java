@@ -21,44 +21,53 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general.implementation;
+package de.tu_clausthal.in.mec.object.mas.generic;
 
-import de.tu_clausthal.in.mec.object.mas.general.ITerm;
-import de.tu_clausthal.in.mec.object.mas.general.ITermCollection;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import de.tu_clausthal.in.mec.common.CPath;
 
 
 /**
- * generic term set for agent literals
+ * literal interface
  *
- * @todo empty set initialization with static EMPTY_SET
+ * @note closed world assumption, no negation marker needed
  */
-public class CTermSet extends HashSet<ITerm> implements ITermCollection
+public interface ILiteral<T> extends ITerm
 {
-    /**
-     * default ctor
-     */
-    public CTermSet()
-    {
-        super( 0 );
-    }
 
     /**
-     * ctor - with initial elements specified
+     * clones the literal
      *
-     * @param p_collection collection containing initial elements
+     * @param p_prefix add a path to the functor
+     * @return copy of the literal
      */
-    public CTermSet( final Collection<ITerm> p_collection )
-    {
-        super( p_collection );
-    }
+    public ILiteral<T> clone( final CPath p_prefix );
 
-    @Override
-    public boolean instanceOf( final Class<?> p_class )
-    {
-        return Set.class.isAssignableFrom( p_class );
-    }
+    /**
+     * returns the optional annotations
+     *
+     * @return annotation term
+     */
+    public ITermCollection getAnnotation();
+
+    /**
+     * returns the functor / dataset of the literal
+     *
+     * @return function data
+     */
+    public IAtom<String> getFunctor();
+
+    /**
+     * getter for language specific literal
+     *
+     * @return literal
+     */
+    public T getLiteral();
+
+    /**
+     * returns the optional value term
+     *
+     * @return value term
+     */
+    public ITermCollection getValues();
 }

@@ -21,21 +21,14 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.generic;
+
+import java.util.Collection;
+
 
 /**
- * term interface
+ * interface for term collection
  */
-public interface ITerm
+public interface ITermCollection extends ITerm, Collection<ITerm>
 {
-    /**
-     * checks if the generic type of the term matches a class
-     *
-     * @param p_class matching class
-     * @return boolean of checking
-     *
-     * @note use generic_type_class.isAssignableFrom(p_class)
-     */
-    public boolean instanceOf( final Class<?> p_class );
-
 }

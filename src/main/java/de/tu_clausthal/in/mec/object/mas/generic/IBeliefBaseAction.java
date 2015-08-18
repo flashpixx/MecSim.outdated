@@ -21,37 +21,33 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.generic;
 
 
 import java.util.Iterator;
-import java.util.Set;
 
 
 /**
- * interface of a beliefbase storage
- *
- * @tparam N multiple elements
- * @tparam M single elements
+ * interface for equal method names on masks and beliefbases
  */
-public interface IStorage<N, M>
+public interface IBeliefBaseAction<T>
 {
 
     /**
-     * adds an element
+     * adds a literal in the current structure
      *
-     * @param p_key key name
-     * @param p_element element
+     * @param p_literal literal
      */
-    public void addMultiElement( final String p_key, final N p_element );
+    public void add( final ILiteral<T> p_literal );
 
     /**
-     * adds a new mask
+     * adds a mask into the current structure
      *
-     * @param p_key key name
-     * @param p_element mask element
+     * @param p_mask mask
+     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
+     * @returns returns the added mask
      */
-    public void addSingleElement( final String p_key, final M p_element );
+    public IBeliefBaseMask<T> add( final IBeliefBaseMask<T> p_mask );
 
     /**
      * clears all elements
@@ -59,99 +55,77 @@ public interface IStorage<N, M>
     public void clear();
 
     /**
-     * checks any element exists
+     * returns a new mask of the belief base
      *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    public boolean contains( final String p_key );
-
-    /**
-     * check if an element exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    public boolean containsMultiElement( final String p_key );
-
-    /**
-     * checks if a mask exists
-     *
-     * @param p_key key name
-     * @return exist boolean
-     */
-    public boolean containsSingleElement( String p_key );
-
-    /**
-     * returns a set of elements
-     *
-     * @param p_key key name
-     * @return set
-     */
-    public Set<N> getMultiElement( final String p_key );
-
-    /**
-     * returns a mask
-     *
-     * @param p_key key name
+     * @param p_name name of the mask
      * @return mask
      */
-    public M getSingleElement( final String p_key );
+    public <E extends IBeliefBaseMask<T>> E createMask( final String p_name );
 
     /**
-     * checks if a storage is empty
+     * returns the storage of the beliefbase
+     *
+     * @return storage
+     *
+     * @tparam L typecast
+     */
+    public <L extends IStorage<ILiteral<T>, IBeliefBaseMask<T>>> L getStorage();
+
+    /**
+     * checks if the structure empty
      *
      * @return empty boolean
      */
     public boolean isEmpty();
 
     /**
-     * removes all elements by its name
+     * removes a mask in the current structure
      *
-     * @param p_key key name
-     * @return boolean flag that elements could be removed
+     * @param p_mask mask
      */
-    public boolean remove( final String p_key );
+    public void remove( final IBeliefBaseMask<T> p_mask );
 
     /**
-     * removes an element
+     * removes a literal in the current structure
      *
-     * @param p_key key name
-     * @param p_element element
-     * @return boolean flag, that the element is removed
+     * @param p_literal literal
      */
-    public boolean removeMultiElement( final String p_key, final N p_element );
+    public void remove( final ILiteral<T> p_literal );
 
     /**
-     * removes a mask
+     * removes mask and literal at the current structure
      *
-     * @param p_key key name
-     * @return boolean flag the element is removed
+     * @param p_name name
      */
-    public boolean removeSingleElement( final String p_key );
+    void remove( final String p_name );
 
     /**
      * updates all items
+     *
+     * @warning call update on a storage and on all storage-masks, if exists different masks
+     * which are point to the same storage, the update is called more than once, so the storage must
+     * limit the number of update calls
      */
     public void update();
 
     /**
-     * number of multielements
+     * number of masks
      *
      * @return size
      */
-    public int sizeMultiElement();
+    public int sizeMask();
 
     /**
-     * number of singleelements
+     * number of literals
      *
      * @return size
      */
-    public int sizeSingleElement();
-
+    public int sizeLiteral();
 
     /**
-     * number of all elements
+     * number of element
+     *
+     * @return size
      */
     public int size();
 
@@ -160,13 +134,13 @@ public interface IStorage<N, M>
      *
      * @return iterator
      */
-    public Iterator<N> iteratorMultiElement();
+    public Iterator<ILiteral<T>> iteratorLiteral();
 
     /**
      * iterator over all singlelements
      *
      * @return iterator
      */
-    public Iterator<M> iteratorSingleElement();
+    public Iterator<IBeliefBaseMask<T>> iteratorBeliefBaseMask();
 
 }

@@ -25,7 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
-import de.tu_clausthal.in.mec.object.mas.general.ILiteral;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 
 import java.util.Collection;
 import java.util.HashSet;

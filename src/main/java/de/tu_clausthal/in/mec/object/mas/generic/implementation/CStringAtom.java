@@ -21,17 +21,22 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.general;
+package de.tu_clausthal.in.mec.object.mas.generic.implementation;
+
 
 /**
- * interface for atoms of agent literals
+ * string atom class for agent literals
  */
-public interface IAtom<T> extends ITerm
+public class CStringAtom extends IDefaultAtom<String>
 {
+
     /**
-     * returns the value of the atom
+     * ctor
      *
-     * @return value
+     * @param p_value string value
      */
-    T get();
+    public CStringAtom( final String p_value )
+    {
+        super( p_value );
+    }
 }

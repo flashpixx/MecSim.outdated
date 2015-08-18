@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.runtime.core;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.IFeedForwardLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiEvaluateLayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
@@ -273,15 +272,6 @@ public class CMainLoop implements Runnable
             if ( l_layer instanceof IMultiEvaluateLayer )
             {
                 this.invokeTasks( l_layer, (IMultiEvaluateLayer) l_layer );
-                continue;
-            }
-
-            if ( l_layer instanceof IFeedForwardLayer )
-            {
-                ( (IFeedForwardLayer) l_layer ).beforeStepAllObject( m_shutdownstep );
-                while ( !( (IFeedForwardLayer) l_layer ).isEmpty() )
-                    this.invokeTasks( l_layer, (IFeedForwardLayer) l_layer );
-                ( (IFeedForwardLayer) l_layer ).afterStepAllObject( m_shutdownstep );
                 continue;
             }
         }

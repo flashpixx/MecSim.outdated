@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.runtime;
 import de.tu_clausthal.in.mec.CBootstrap;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
-import de.tu_clausthal.in.mec.object.IFeedForwardLayer;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiEvaluateLayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
@@ -187,7 +186,7 @@ public class CSimulation
                 if ( l_layer instanceof ISerializable )
                     ( (ISerializable) l_layer ).onDeserializationInitialization();
 
-                if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IMultiEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
+                if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IMultiEvaluateLayer ) )
                     for ( final ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
                         if ( l_item instanceof ISerializable )
                             ( (ISerializable) l_item ).onDeserializationInitialization();
@@ -202,7 +201,7 @@ public class CSimulation
                 if ( l_layer instanceof ISerializable )
                     ( (ISerializable) l_layer ).onDeserializationComplete();
 
-                if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IMultiEvaluateLayer ) || ( l_layer instanceof IFeedForwardLayer ) )
+                if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IMultiEvaluateLayer ) )
                     for ( final ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
                         if ( l_item instanceof ISerializable )
                             ( (ISerializable) l_item ).onDeserializationComplete();

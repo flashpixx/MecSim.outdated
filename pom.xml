@@ -262,7 +262,8 @@
 
     <!-- main build -->
     <build>
-        <defaultGoal>package</defaultGoal>
+        <!-- default goal is set to package and checking dependency updates -->
+        <defaultGoal>package versions:display-dependency-updates</defaultGoal>
 
         <!-- using newer build plugins -->
         <pluginManagement>

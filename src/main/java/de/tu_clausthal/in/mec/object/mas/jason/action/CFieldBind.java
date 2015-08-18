@@ -62,7 +62,6 @@ public class CFieldBind extends IAction
      */
     public CFieldBind()
     {
-
     }
 
 

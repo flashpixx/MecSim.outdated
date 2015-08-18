@@ -33,7 +33,7 @@ import java.util.Iterator;
 
 
 /**
- * internal action for deleting events directly,
+ * internal action for deleting beliefs directly,
  * based on their functor without event generation
  */
 public class CBeliefRemove extends DefaultInternalAction

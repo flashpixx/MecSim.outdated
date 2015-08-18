@@ -55,7 +55,7 @@ public class CLiteral<T> implements ILiteral<T>
     /**
      * the literals functor
      */
-    private IAtom<String> m_functor;
+    protected final IAtom<String> m_functor;
 
     /**
      * ctor

@@ -23,7 +23,10 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
+import de.tu_clausthal.in.mec.common.CPath;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
+import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
 
@@ -52,4 +55,15 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implemen
                 m_annotations.add( CCommon.convertGeneric( l_term ) );
     }
 
+
+    @Override
+    public ILiteral<Literal> clone( final CPath p_prefix )
+    {
+        final Literal l_literal = ASSyntax.createLiteral( p_prefix.append( m_functor.get() ).toString() );
+        l_literal.setAnnots( m_literal.getAnnots() );
+        l_literal.setTerms( m_literal.getTerms() );
+        l_literal.setNegated( m_literal.negated() );
+
+        return new CLiteral( l_literal );
+    }
 }

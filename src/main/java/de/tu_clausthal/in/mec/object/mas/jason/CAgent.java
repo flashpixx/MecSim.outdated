@@ -80,6 +80,14 @@ public class CAgent<T> implements IVoidAgent<Literal>
      */
     private static final String c_agentbeliefseparator = "_";
     /**
+     * name of the invoke-command
+     */
+    private static final String c_invokecommandname = "mecsim.invoke";
+    /**
+     * name of the set/property-command
+     */
+    private static final String c_setpropertycommandname = "mecsim.set";
+    /**
      * name of the root beliefbase and its mask
      */
     private static final CPath c_beliefbaseroot = new CPath( "root" );
@@ -231,8 +239,8 @@ public class CAgent<T> implements IVoidAgent<Literal>
         if ( p_bind != null )
         {
             // register possible actions
-            m_action.put( "set", new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
-            m_action.put( "invoke", m_methodBind );
+            m_action.put( c_setpropertycommandname, new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
+            m_action.put( c_invokecommandname, m_methodBind );
 
             m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );
         }

@@ -78,12 +78,18 @@ public class CSymmetricDifferenceMetric<T extends IAgent> extends IDefaultMetric
         final Set<ILiteral<?>> l_firstLiterals = new HashSet<>();
         final Set<ILiteral<?>> l_secondLiterals = new HashSet<>();
 
-
-        for ( final CPath l_path : m_paths )
+        // if no path elements are set, we use all
+        if ( m_paths.isEmpty() )
         {
-            l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals( l_path ).values() );
-            l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals( l_path ).values() );
+            l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals().values() );
+            l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals().values() );
         }
+        else
+            for ( final CPath l_path : m_paths )
+            {
+                l_firstLiterals.addAll( p_first.getBeliefBase().getLiterals( l_path ).values() );
+                l_secondLiterals.addAll( p_second.getBeliefBase().getLiterals( l_path ).values() );
+            }
 
 
         // get union

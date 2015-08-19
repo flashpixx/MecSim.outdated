@@ -47,29 +47,16 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
     /**
      * string that is removed from a literal name
      */
-    private final String m_literalreplace;
+    private final String[] m_literalreplace;
 
     /**
      * default ctor
      *
      * @param p_replace replace literal string
      */
-    public CBindingStorage( final String p_replace )
+    public CBindingStorage( final String... p_replace )
     {
         super();
-        m_literalreplace = p_replace;
-    }
-
-    /**
-     * ctor bind an object
-     *
-     * @param p_replace replace literal string
-     * @param p_name name / annotation of the bind object
-     * @param p_object bind object
-     */
-    public CBindingStorage( final String p_replace, final String p_name, final Object p_object )
-    {
-        super( p_name, p_object );
         m_literalreplace = p_replace;
     }
 
@@ -86,8 +73,12 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
                     // invoke / call the getter of the object field - field name will be the belief name, return value
                     // of the getter invoke call is set for the belief value
                     // replace separator to avoid path splitting
+                    String l_literalname = l_fieldref.getKey();
+                    for ( final String l_replace : m_literalreplace )
+                        l_literalname = l_literalname.replace( l_replace, "" );
+
                     final Literal l_literal = CCommon.getLiteral(
-                            l_fieldref.getKey().replace( m_literalreplace, "" ), l_fieldref.getValue().getGetter().invoke(
+                            l_literalname, l_fieldref.getValue().getGetter().invoke(
                                     l_item.getValue().getLeft()
                             )
                     );

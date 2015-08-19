@@ -80,13 +80,17 @@ public class CAgent<T> implements IVoidAgent<Literal>
      */
     private static final String c_agentbeliefseparator = "_";
     /**
+     * binding replacing prefix - the prefix will be removed from the binding belief name
+     */
+    private static final String c_beliefbindprefixreplace = "m_";
+    /**
      * name of the invoke-command
      */
-    private static final String c_invokecommandname = "mecsim.invoke";
+    private static final String c_invokecommandname = "mecsim_invokemethod";
     /**
      * name of the set/property-command
      */
-    private static final String c_setpropertycommandname = "mecsim.set";
+    private static final String c_setpropertycommandname = "mecsim_propertyset";
     /**
      * name of the root beliefbase and its mask
      */
@@ -232,7 +236,8 @@ public class CAgent<T> implements IVoidAgent<Literal>
         );
         m_beliefbaserootmask.add(
                 new CBeliefBase(
-                        new CBindingStorage( c_agentbeliefseparator ), c_agentbeliefseparator
+                        // not the order of replacing arguments
+                        new CBindingStorage( c_beliefbindprefixreplace, c_agentbeliefseparator ), c_agentbeliefseparator
                 ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind.getSuffix() )
         );
 

@@ -6,26 +6,26 @@
 
 // acceleration
 +!accelerate
-   :  root_bind_mspeed(Speed) &
-      root_bind_macceleration(Accelerate) &
-      root_bind_mmaxspeed(MaxSpeed)
+   :  root_bind_speed(Speed) &
+      root_bind_acceleration(Accelerate) &
+      root_bind_maxspeed(MaxSpeed)
    <- .min([MaxSpeed, Speed+Accelerate], NewSpeed);
-      mecsim.set(self, m_speed, NewSpeed);
+      mecsim_propertyset(self, m_speed, NewSpeed);
       !drive.
 
 // deceleration
 +!decelerate
-   :  root_bind_mspeed(Speed) &
-      root_bind_mdeceleration(Decelerate) &
+   :  root_bind_speed(Speed) &
+      root_bind_deceleration(Decelerate) &
       Decelerate > 0
    <- .max([5, Speed-Decelerate], NewSpeed);
-      mecsim.set(self, m_speed, NewSpeed);
+      mecsim_propertyset(self, m_speed, NewSpeed);
       !drive.
 
 // driving call
 +!drive
-    :    root_bind_mspeed(Speed) &
-         root_bind_mdeceleration(Deceleration) &
+    :    root_bind_speed(Speed) &
+         root_bind_deceleration(Deceleration) &
 	     not (.empty([Predecessor]))
 
     <-   // get distance to predecessing car

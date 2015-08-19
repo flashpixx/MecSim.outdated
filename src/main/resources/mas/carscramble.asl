@@ -12,28 +12,28 @@ ag_scramble(0.4).
 
 // acceleration
 +!accelerate
-   :  root_bind_mspeed(Speed) &
-      root_bind_macceleration(Accelerate) &
-      root_bind_mmaxspeed(MaxSpeed)
+   :  root_bind_speed(Speed) &
+      root_bind_acceleration(Accelerate) &
+      root_bind_maxspeed(MaxSpeed)
    <- .min([MaxSpeed, Speed+Accelerate], NewSpeed);
-      mesim.set(self, m_speed, NewSpeed);
+      mesim_propertyset(self, m_speed, NewSpeed);
       !drive.
 
 // deceleration
 +!decelerate
-   :  root_bind_mspeed(Speed) &
-      root_bind_mdeceleration(Decelerate) &
+   :  root_bind_speed(Speed) &
+      root_bind_deceleration(Decelerate) &
       Decelerate > 0
    <- .max([5, Speed-Decelerate], NewSpeed);
-      mecsim.set(self, m_speed, NewSpeed);
+      mecsim_propertyset(self, m_speed, NewSpeed);
       !drive.
 
 // if there is a predecessor, check braking distance
 // braking distance will be calculated using gaussian sum
 // @see https://de.wikipedia.org/wiki/Gau%C3%9Fsche_Summenformel
 +!drive
-    :    root_bind_mspeed(Speed) &
-         root_bind_mdeceleration(Deceleration) &
+    :    root_bind_speed(Speed) &
+         root_bind_deceleration(Deceleration) &
     	 ag_predecessor([Predecessor]) &
 	     not(.empty([Predecessor]))
 

@@ -36,10 +36,12 @@ import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.IOneTimeStorage;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import jason.JasonException;
+import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -221,14 +223,27 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
      */
     private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
     {
+        private static final String c_inconsistencyname = "inconsistency";
 
         @Override
         protected void updating()
         {
-            /*
-            m_beliefcache.put( "position", this.getCurrentPosition() );
-            m_beliefcache.put( "predecessor", this.getPredecessorWithName( 5 ) );
-            */
+            this.clear();
+
+            for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
+                this.addMultiElement(
+                        c_inconsistencyname,
+                        new CLiteral(
+                                ASSyntax.createLiteral(
+                                        c_inconsistencyname,
+                                        ASSyntax.createNumber(
+                                                CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).getInconsistencyValue(
+                                                        l_agent
+                                                ).doubleValue()
+                                        )
+                                )
+                        )
+                );
         }
     }
 }

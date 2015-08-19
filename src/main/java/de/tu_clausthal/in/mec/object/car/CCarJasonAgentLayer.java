@@ -90,4 +90,15 @@ public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
     {
         return CCommon.getResourceString( this, "name" );
     }
+
+    /**
+     * returns the inconsistency value of an object
+     *
+     * @return inconsistency value
+     */
+    public Double getInconsistencyValue( final CAgent<CDefaultCar> p_value )
+    {
+        return m_inconsistencyLayer.getInconsistencyValue( p_value );
+    }
+
 }

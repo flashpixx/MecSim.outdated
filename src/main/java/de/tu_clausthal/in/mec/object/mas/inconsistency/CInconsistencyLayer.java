@@ -36,7 +36,6 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
-import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 
 import java.util.ArrayList;
@@ -125,6 +124,11 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         m_updatestep = 1;
     }
 
+    public Double getInconsistencyValue( final T p_object )
+    {
+        return m_data.get( p_object );
+    }
+
     /**
      * adds a new object to the
      * inconsistency structure
@@ -137,8 +141,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             return false;
 
         m_data.put( p_object, new Double( 0 ) );
-        //p_object.registerAction( c_invokeName, new CBind( p_object ) );
-
         return true;
     }
 
@@ -333,37 +335,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
          * use stochastic algorithm
          **/
         FixpointIteration
-    }
-
-    /**
-     * class to create a bind between
-     * agent and inconsistency value
-     */
-    public class CBind
-    {
-        @CFieldFilter.CAgent( bind = false )
-        final T m_bind;
-
-        /**
-         * ctor
-         *
-         * @param p_agent sets the agent
-         */
-        public CBind( final T p_agent )
-        {
-            m_bind = p_agent;
-        }
-
-        /**
-         * returns the agent inconsistency value
-         *
-         * @return value
-         */
-        public final double getInconsistency()
-        {
-            final Double l_value = m_data.get( m_bind );
-            return l_value == null ? 0 : l_value.doubleValue();
-        }
     }
 
 }

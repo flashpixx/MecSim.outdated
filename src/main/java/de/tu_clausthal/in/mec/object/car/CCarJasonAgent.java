@@ -36,12 +36,11 @@ import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.IOneTimeStorage;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CMask;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import jason.JasonException;
-import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -185,6 +184,9 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         );
         m_inspect.put( CCommon.getResourceString( this, "agent", l_agent.getName() ), l_agent.getSource() );
 
+        // add local beliefbase to the agent
+        l_agent.getBeliefBase().add( new CMask( "traffic", m_trafficbeliefbase, "_" ) );
+
         // add agent to layer and internal set
         CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
         m_agents.add( l_agent );
@@ -229,8 +231,12 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         protected void updating()
         {
             this.clear();
-
+/*
             for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
+                System.out.println(CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).getInconsistencyValue(
+                                           l_agent
+                                   ));
+
                 this.addMultiElement(
                         c_inconsistencyname,
                         new CLiteral(
@@ -244,6 +250,7 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
                                 )
                         )
                 );
+                */
         }
     }
 }

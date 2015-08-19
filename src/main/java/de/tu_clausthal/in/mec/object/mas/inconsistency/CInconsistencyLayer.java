@@ -190,13 +190,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         if ( l_matrix.zSum() <= m_data.size() * m_epsilon )
             l_eigenvector = new DenseDoubleMatrix1D( m_data.size() );
         else
-        {
-            // get the eigenvector for largest eigenvalue
             l_eigenvector = this.getStationaryDistribution( l_matrix );
-
-            // normalize vector to get the stationary distribution
-            l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
-        }
 
         CLogger.info( CCommon.getResourceString( this, "eigenvector", l_eigenvector ) );
 
@@ -307,6 +301,12 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return m_metric.calculate( p_first, p_second );
     }
 
+    /**
+     * calculates the stationary distribution
+     *
+     * @param p_matrix transition matrix
+     * @return stationary distribution
+     */
     private DoubleMatrix1D getStationaryDistribution( final DoubleMatrix2D p_matrix )
     {
         switch ( m_algorithm )

@@ -31,6 +31,7 @@ import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import cern.jet.math.Mult;
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
@@ -181,7 +182,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             l_matrix.set( i, i, m_epsilon );
         }
 
-        //CLogger.out( l_matrix );
+        CLogger.info( CCommon.getResourceString( this, "transitionmatrix", l_matrix ) );
 
         final DoubleMatrix1D l_eigenvector;
         if ( l_matrix.zSum() <= m_data.size() * m_epsilon )
@@ -195,7 +196,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             l_eigenvector.assign( Mult.div( c_algebra.norm2( l_eigenvector ) ) );
         }
 
-        //CLogger.out( l_eigenvector );
+        CLogger.info( CCommon.getResourceString( this, "eigenvector", l_eigenvector ) );
 
         // set inconsistency value for each entry
         for ( int i = 0; i < l_keys.size(); ++i )

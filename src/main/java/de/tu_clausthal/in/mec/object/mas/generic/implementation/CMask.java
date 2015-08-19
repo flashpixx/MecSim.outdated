@@ -175,10 +175,17 @@ public class CMask<T> implements IBeliefBaseMask<T>
     @Override
     public Map<CPath, ILiteral<T>> getLiterals()
     {
+        final CPath l_path = this.getFQNPath();
         return new HashMap<CPath, ILiteral<T>>()
         {{
-                for ( final ILiteral<T> l_item : this.values() )
-                    put( CMask.this.getFQNPath().append( l_item.getFunctor().get() ), l_item.clone( CMask.this.getFQNPath() ) );
+                for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
+                    putAll( l_iterator.next().getLiterals() );
+
+                for ( final Iterator<ILiteral<T>> l_iterator = m_beliefbase.getStorage().iteratorMultiElement(); l_iterator.hasNext(); )
+                {
+                    final ILiteral<T> l_literal = l_iterator.next();
+                    put( l_path.append( l_literal.getFunctor().get() ), l_literal.clone( l_path ) );
+                }
             }};
     }
 

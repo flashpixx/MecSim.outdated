@@ -118,7 +118,6 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
      * @param p_objectname name of the object within the simulation
      * @param p_agent set with ASL / agent name
      * @throws JasonException throws on Jason error
-     * @todo add agent to inconsistency layer
      */
     public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
             final int p_deceleration, final double p_lingerprobability, final String p_objectname, final Set<String> p_agent
@@ -139,7 +138,6 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
     @Override
     public void receiveMessage( final Set<IMessage> p_messages )
     {
-
     }
 
     @Override
@@ -217,6 +215,10 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         return l_predecessor;
     }
 
+
+    /**
+     * private class for definined a belief storage to use "traffic content information"
+     */
     private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
     {
 

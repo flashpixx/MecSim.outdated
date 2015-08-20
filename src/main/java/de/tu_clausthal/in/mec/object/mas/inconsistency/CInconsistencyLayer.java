@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
+import cern.colt.function.DoubleFunction;
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
@@ -98,7 +99,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     {
         m_name = p_name;
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.QRDecomposition;
+        m_algorithm = EAlgorithm.Numeric;
         m_iteration = 0;
         m_epsilon = 0.001;
         m_updatestep = 1;
@@ -118,7 +119,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     {
         m_name = p_name;
         m_metric = p_metric;
-        m_algorithm = EAlgorithm.FixpointIteration;
+        m_algorithm = EAlgorithm.Iteration;
         m_iteration = p_iteration;
         m_epsilon = p_epsilon;
         m_updatestep = 1;
@@ -176,12 +177,12 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             }
 
             // row-wise normalization for getting probabilities
-            final double l_norm = Math.sqrt( c_algebra.norm2( l_matrix.viewRow( i ) ) );
+            final double l_norm = c_algebra.norm1( l_matrix.viewRow( i ) );
             if ( l_norm != 0 )
                 l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
 
             // set epsilon slope for preventing periodic markov chains
-            l_matrix.set( i, i, m_epsilon );
+            l_matrix.setQuick( i, i, m_epsilon );
         }
 
         CLogger.info( CCommon.getResourceString( this, "transitionmatrix", l_matrix ) );
@@ -227,8 +228,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      */
     public boolean remove( final T p_object )
     {
-        p_object.unregisterAction( c_invokeName );
-
         m_data.remove( p_object );
         return true;
     }
@@ -268,6 +267,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      * @param p_iteration number of iterations
      * @return largest eigenvector (not normalized)
      *
+     * @bug testing of correct algorith and method calls (normalization)
      * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
      */
     private static DoubleMatrix1D getPerronFrobenius( final DoubleMatrix2D p_matrix, final int p_iteration )
@@ -309,17 +309,36 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      */
     private DoubleMatrix1D getStationaryDistribution( final DoubleMatrix2D p_matrix )
     {
+        final DoubleMatrix1D l_eigenvector;
+
         switch ( m_algorithm )
         {
-            case FixpointIteration:
-                return getPerronFrobenius( p_matrix, m_iteration );
+            case Iteration:
+                l_eigenvector = getPerronFrobenius( p_matrix, m_iteration );
+                break;
 
-            case QRDecomposition:
-                return getLargestEigenvector( p_matrix );
+            case Numeric:
+                l_eigenvector = getLargestEigenvector( p_matrix );
+                break;
 
             default:
                 throw new IllegalStateException( CCommon.getResourceString( CInconsistencyLayer.class, "algorithm" ) );
         }
+
+        // normalize eigenvector and create positiv oriantation
+        l_eigenvector.assign( Mult.div( c_algebra.norm1( l_eigenvector ) ) );
+        l_eigenvector.assign(
+                new DoubleFunction()
+                {
+                    @Override
+                    public double apply( final double p_value )
+                    {
+                        return Math.abs( p_value );
+                    }
+                }
+        );
+
+        return l_eigenvector;
     }
 
     /**
@@ -328,13 +347,13 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     public enum EAlgorithm
     {
         /**
-         * use numeric algorithm
+         * use numeric algorithm (QR decomposition)
          **/
-        QRDecomposition,
+        Numeric,
         /**
-         * use stochastic algorithm
+         * use stochastic algorithm (fixpoint iteration)
          **/
-        FixpointIteration
+        Iteration
     }
 
 }

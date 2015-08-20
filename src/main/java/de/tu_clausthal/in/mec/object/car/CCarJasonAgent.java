@@ -36,11 +36,13 @@ import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.IOneTimeStorage;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMask;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import jason.JasonException;
+import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -230,27 +232,25 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         @Override
         protected void updating()
         {
-            this.clear();
-/*
             for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
-                System.out.println(CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).getInconsistencyValue(
-                                           l_agent
-                                   ));
-
-                this.addMultiElement(
-                        c_inconsistencyname,
-                        new CLiteral(
-                                ASSyntax.createLiteral(
-                                        c_inconsistencyname,
-                                        ASSyntax.createNumber(
-                                                CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).getInconsistencyValue(
-                                                        l_agent
-                                                ).doubleValue()
-                                        )
+            {
+                final ILiteral<Literal> l_literal = new CLiteral(
+                        ASSyntax.createLiteral(
+                                c_inconsistencyname,
+                                ASSyntax.createNumber(
+                                        CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).getInconsistencyValue(
+                                                l_agent
+                                        ).doubleValue()
                                 )
                         )
                 );
-                */
+
+
+                final Set<ILiteral<Literal>> l_elements = m_multielements.getOrDefault( l_literal.getFunctor().get(), new HashSet<>() );
+                l_elements.add( l_literal );
+                m_multielements.put( l_literal.getFunctor().get(), l_elements );
+            }
         }
+
     }
 }

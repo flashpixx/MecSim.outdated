@@ -48,6 +48,9 @@ public final class CInjection implements ClassFileTransformer
      * class pool
      */
     private static final ClassPool c_pool = ClassPool.getDefault();
+    /**
+     * timer class
+     */
     private final CtClass m_timerclass;
 
     /**

@@ -38,6 +38,7 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.ISingleEvaluateLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
+import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -151,11 +152,8 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return 500;
     }
 
-    /**
-     * @bug matrix allocation can be create a memory overflow if it is possible
-     * update existing matrix object
-     */
     @Override
+    @IBenchmark
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
         if ( ( m_data.size() < 2 ) || ( p_currentstep % m_updatestep != 0 ) )
@@ -307,6 +305,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      * @param p_matrix transition matrix
      * @return stationary distribution
      */
+    @IBenchmark
     private DoubleMatrix1D getStationaryDistribution( final DoubleMatrix2D p_matrix )
     {
         final DoubleMatrix1D l_eigenvector;

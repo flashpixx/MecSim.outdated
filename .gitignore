@@ -1,6 +1,8 @@
 *.*
 
 !.gitignore
+!.bowerrc
+!bower.json
 !*.md
 !*.java
 
@@ -25,3 +27,4 @@
 
 target/**
 src/main/resources/web/documentation/developer/**
+src/main/resources/web/root/lib/**

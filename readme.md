@@ -25,6 +25,7 @@
 * [Oracle Java Developing Kit 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [Maven 3.0](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org)
+* [Bower](http://bower.io/)
 
 #### IDE Support
 

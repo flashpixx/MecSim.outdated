@@ -353,18 +353,32 @@
                 <version>1.3.2</version>
                 <executions>
                     <execution>
+                        <id>doxygen</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <executable>doxygen</executable>
+                            <arguments>
+                                <argument>src/main/documentation/configuration.doxyfile</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bower</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bower</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <executable>doxygen</executable>
-                    <arguments>
-                        <argument>src/main/documentation/configuration.doxyfile</argument>
-                    </arguments>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>

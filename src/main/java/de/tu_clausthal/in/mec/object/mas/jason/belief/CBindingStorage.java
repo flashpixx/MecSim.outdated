@@ -77,22 +77,16 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
                     for ( final String l_replace : m_literalreplace )
                         l_literalname = l_literalname.replace( l_replace, "" );
 
-                    final Literal l_literal = CCommon.getLiteral(
-                            l_literalname, l_fieldref.getValue().getGetter().invoke(
-                                    l_item.getValue().getLeft()
+                    final Literal l_literal = this.add(
+                            CCommon.getLiteral(
+                                    l_literalname, l_fieldref.getValue().getGetter().invoke(
+                                            l_item.getValue().getLeft()
+                                    )
                             )
                     );
 
                     // add the annotation to the belief and push it to the main list for reading later (within the agent)
-                    l_literal.addAnnot( ASSyntax.createLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
-
-                    final Set<ILiteral<Literal>> l_elements = m_multielements.getOrDefault( l_literal.getFunctor(), new HashSet<>() );
-                    l_elements.add(
-                            new CLiteral(
-                                    l_literal
-                            )
-                    );
-                    m_multielements.put( l_literal.getFunctor(), l_elements );
+                    l_literal.addAnnot( CCommon.getLiteral( "source", ASSyntax.createAtom( l_item.getKey() ) ) );
                 }
                 catch ( final Exception l_exception )
                 {
@@ -110,6 +104,20 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
                             )
                     );
                 }
+    }
+
+    /**
+     * adds an element to the storage
+     *
+     * @param p_literal literal
+     * @return input literal
+     */
+    private Literal add( final Literal p_literal )
+    {
+        final Set<ILiteral<Literal>> l_elements = m_multielements.getOrDefault( p_literal.getFunctor(), new HashSet<>() );
+        l_elements.add( new CLiteral( p_literal ) );
+        m_multielements.put( p_literal.getFunctor(), l_elements );
+        return p_literal;
     }
 
 }

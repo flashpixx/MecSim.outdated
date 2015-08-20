@@ -344,7 +344,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
     /**
      * numeric algorithm structure
      */
-    public enum EAlgorithm
+    private static enum EAlgorithm
     {
         /**
          * use numeric algorithm (QR decomposition)

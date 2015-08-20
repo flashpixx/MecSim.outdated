@@ -129,7 +129,8 @@ public class CBootstrap
 
         // build layer first and set linkage between layer via ctor, because world is not initialized yet
         final CInconsistencyLayer l_inconsistency = new CInconsistencyLayer<CAgent>(
-                CCommon.getResourceString( CInconsistencyLayer.class, "jasoncar" ), new CSymmetricDifferenceMetric<CAgent>()
+                CCommon.getResourceString( CInconsistencyLayer.class, "jasoncar" ),
+                new CSymmetricDifferenceMetric<CAgent>()
         );
         p_simulation.getWorld().put( "Jason Car Inconsistency", l_inconsistency );
         p_simulation.getWorld().put( "Jason Car Agents", new CCarJasonAgentLayer( l_inconsistency ) );

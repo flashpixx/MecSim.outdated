@@ -259,6 +259,17 @@ public class CCommon
     }
 
     /**
+     * returns an atom
+     *
+     * @param p_atom name of the atom
+     * @return literal object
+     */
+    public static Literal getLiteral( final String p_atom )
+    {
+        return ASSyntax.createAtom( getLiteralName( p_atom ) );
+    }
+
+    /**
      * converts a Double into a number object with correct type structure
      *
      * @param p_value double value
@@ -284,17 +295,6 @@ public class CCommon
     }
 
     /**
-     * returns an atom
-     *
-     * @param p_atom name of the atom
-     * @return literal object
-     */
-    private static Literal getLiteral( final String p_atom )
-    {
-        return ASSyntax.createAtom( getLiteralName( p_atom ) );
-    }
-
-    /**
      * checks a literal name and convert it to the correct syntax
      *
      * @param p_name name of the literal
@@ -316,7 +316,7 @@ public class CCommon
         for ( int i = 0; i < l_parts.length; i++ )
             l_parts[i] = ( i == 0 ? l_parts[i].substring( 0, 1 ).toLowerCase() : l_parts[i].substring( 0, 1 ).toUpperCase() ) + l_parts[i].substring( 1 );
 
-        return StringUtils.join( l_parts ); //.replaceAll("\\W", "");
+        return StringUtils.join( l_parts );
     }
 
     /**

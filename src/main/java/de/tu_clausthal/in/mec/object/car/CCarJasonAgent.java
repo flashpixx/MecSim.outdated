@@ -28,7 +28,6 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBase;
@@ -78,10 +77,14 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
     @CFieldFilter.CAgent( bind = false )
     private final CPath m_objectpath;
     /**
-     * traffic environment belief base
+     * agent traffic environment belief base
      */
     @CFieldFilter.CAgent( bind = false )
     private final IBeliefBase<Literal> m_trafficbeliefbase = new CBeliefBase<>( new CTrafficStorage() );
+    /**
+     * reference to the agent layer
+     */
+    private final CCarJasonAgentLayer m_agentlayer = CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" );
 
     /**
      * ctor
@@ -157,7 +160,7 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
         {
             l_agent.release();
-            CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).remove( l_agent );
+            m_agentlayer.remove( l_agent );
         }
     }
 
@@ -189,7 +192,7 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         l_agent.getBeliefBase().add( new CMask( "mytraffic", m_trafficbeliefbase, "_" ) );
 
         // add agent to layer and internal set
-        CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
+        m_agentlayer.add( l_agent );
         m_agents.add( l_agent );
     }
 
@@ -223,8 +226,6 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
 
     /**
      * private class for definined a belief storage to use "traffic content information"
-     *
-     * @bug inconsistency value works with one agent only
      */
     private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
     {
@@ -236,31 +237,60 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
          * name of the predecessor
          **/
         private static final String c_predecessor = "predecessor";
+        /**
+         * number of predecessors which are shown within the beliefbase
+         */
+        private static final int c_numberofpredecssor = 3;
+        /**
+         * source name
+         */
+        private static final String c_source = "source";
+        /**
+         * self name
+         */
+        private static final String c_self = "self";
+
 
         @Override
         protected void updating()
         {
-            this.add( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_predecessor, CCarJasonAgent.this.getPredecessorWithName( 1 ) ) );
+            // add traffic values
+            this.add(
+                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                            c_predecessor, CCarJasonAgent.this.getPredecessorWithName(
+                                    c_numberofpredecssor
+                            )
+                    )
+            ).addAnnot(
+                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, c_self )
+            );
 
+            // add for each agent the inconsistency value, so each agent knows the inconsistency value of the other agents within the same car,
+            // the name of the agent is get by the receiver and not bei the getName() call, because the getName() returns the full path of the agent
             for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
-                this.add(
+            {
+                final Literal l_literal = this.add(
                         de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
-                                c_inconsistencyname,
-                                CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).getInconsistencyValue( l_agent )
+                                c_inconsistencyname, m_agentlayer.getInconsistencyValue( l_agent )
                         )
                 );
+                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, c_self ) );
+                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, l_agent.getReceiverPath().getSuffix() ) );
+            }
         }
 
         /**
          * adds an element to the storage
          *
          * @param p_literal literal
+         * @return input literal
          */
-        private void add( final Literal p_literal )
+        private Literal add( final Literal p_literal )
         {
             final Set<ILiteral<Literal>> l_elements = m_multielements.getOrDefault( p_literal.getFunctor(), new HashSet<>() );
             l_elements.add( new CLiteral( p_literal ) );
             m_multielements.put( p_literal.getFunctor(), l_elements );
+            return p_literal;
         }
 
     }

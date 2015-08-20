@@ -387,6 +387,8 @@
                     <filesets>
                         <fileset>
                             <directory>src/main/resources/web/documentation/developer</directory>
+                        </fileset>
+                        <fileset>
                             <directory>src/main/resources/web/root/lib</directory>
                         </fileset>
                     </filesets>

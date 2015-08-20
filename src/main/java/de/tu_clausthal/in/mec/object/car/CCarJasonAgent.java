@@ -42,7 +42,6 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import de.tu_clausthal.in.mec.runtime.message.IReceiver;
 import jason.JasonException;
-import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -187,7 +186,7 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
         m_inspect.put( CCommon.getResourceString( this, "agent", l_agent.getName() ), l_agent.getSource() );
 
         // add local beliefbase to the agent
-        l_agent.getBeliefBase().add( new CMask( "traffic", m_trafficbeliefbase, "_" ) );
+        l_agent.getBeliefBase().add( new CMask( "mytraffic", m_trafficbeliefbase, "_" ) );
 
         // add agent to layer and internal set
         CSimulation.getInstance().getWorld().<IMultiLayer>getTyped( "Jason Car Agents" ).add( l_agent );
@@ -224,32 +223,44 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
 
     /**
      * private class for definined a belief storage to use "traffic content information"
+     *
+     * @bug inconsistency value works with one agent only
      */
     private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
     {
+        /**
+         * name of the inconsistency belief
+         **/
         private static final String c_inconsistencyname = "inconsistency";
+        /**
+         * name of the predecessor
+         **/
+        private static final String c_predecessor = "predecessor";
 
         @Override
         protected void updating()
         {
+            this.add( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_predecessor, CCarJasonAgent.this.getPredecessorWithName( 1 ) ) );
+
             for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
-            {
-                final ILiteral<Literal> l_literal = new CLiteral(
-                        ASSyntax.createLiteral(
+                this.add(
+                        de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
                                 c_inconsistencyname,
-                                ASSyntax.createNumber(
-                                        CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).getInconsistencyValue(
-                                                l_agent
-                                        ).doubleValue()
-                                )
+                                CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).getInconsistencyValue( l_agent )
                         )
                 );
+        }
 
-
-                final Set<ILiteral<Literal>> l_elements = m_multielements.getOrDefault( l_literal.getFunctor().get(), new HashSet<>() );
-                l_elements.add( l_literal );
-                m_multielements.put( l_literal.getFunctor().get(), l_elements );
-            }
+        /**
+         * adds an element to the storage
+         *
+         * @param p_literal literal
+         */
+        private void add( final Literal p_literal )
+        {
+            final Set<ILiteral<Literal>> l_elements = m_multielements.getOrDefault( p_literal.getFunctor(), new HashSet<>() );
+            l_elements.add( new CLiteral( p_literal ) );
+            m_multielements.put( p_literal.getFunctor(), l_elements );
         }
 
     }

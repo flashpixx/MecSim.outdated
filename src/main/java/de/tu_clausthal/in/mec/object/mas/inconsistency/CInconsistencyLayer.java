@@ -171,12 +171,12 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
             for ( int j = i + 1; j < l_keys.size(); ++j )
             {
                 final double l_value = this.getMetricValue( l_item, l_keys.get( j ) );
-                l_matrix.set( i, j, l_value );
-                l_matrix.set( j, i, l_value );
+                l_matrix.setQuick( i, j, l_value );
+                l_matrix.setQuick( j, i, l_value );
             }
 
             // row-wise normalization for getting probabilities
-            final double l_norm = c_algebra.norm2( l_matrix.viewRow( i ) );
+            final double l_norm = Math.sqrt( c_algebra.norm2( l_matrix.viewRow( i ) ) );
             if ( l_norm != 0 )
                 l_matrix.viewRow( i ).assign( Mult.div( l_norm ) );
 

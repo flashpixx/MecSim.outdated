@@ -309,7 +309,7 @@ var MecSim = (function (px_modul) {
             // --- set default CSS definition ---
 
             // defines HTML / body with 100% height and width for the splitter content
-            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; }' +
+            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; font-family: Helvetica, Arial, sans-serif; font-size:1em; color: #505050; }' +
             // overwrite the default a tag
             'a { text-decoration: none; color: #505050; }' +
             // select needs a width, because jQuery sets it to size = 0

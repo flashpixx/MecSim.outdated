@@ -123,11 +123,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * gets a list of all agents file names
      *
      * @return string list with the filenames only
-     * <<<<<<< HEAD
-     *
-     * @todo add ASL build-in files with the resource directory
-     * =======
-     * >>>>>>> upstream/master
      */
     public static String[] getAgentFiles()
     {

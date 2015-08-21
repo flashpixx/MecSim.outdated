@@ -39,11 +39,6 @@ import javafx.scene.web.WebView;
 
 /**
  * create a plain browser component to show any URL
- *
- * @todo add popup handler https://docs.oracle.com/javase/8/javafx/embedded-browser-tutorial/pop-up.htm / https://docs.oracle.com/javase/8/javafx/embedded-browser-tutorial/overview.htm
- * / http://controlsfx.bitbucket.org/org/controlsfx/control/PopOver.html / http://stackoverflow.com/questions/22184172/javafx-centered-pop-up-pane-in-stackpane
- * @see http://docs.oracle.com/javafx/2/webview/jfxpub-webview.htm
- * @see http://dammsebastian.blogspot.de/2012/06/javafx-20-layout-panes-gridpane.html
  */
 public class CBrowser extends GridPane
 {

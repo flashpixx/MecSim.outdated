@@ -296,9 +296,9 @@ var MecSim = (function (px_modul) {
             '<style type = "text/css">' +
 
             // sets the menu layout
-            px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(images/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
+            px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(theme/images/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
             // sets the content layout (with logo)
-            px_modul.ui().content("#") + '::before { z-index: -1; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(images/tuc.svg); background-repeat: no-repeat; }' +
+            px_modul.ui().content("#") + '::before { z-index: -1; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(theme/images/tuc.svg); background-repeat: no-repeat; }' +
             px_modul.ui().content("#") + ' { z-index: 0; overflow: auto; }' +
             /** sets the static content layout **/
             px_modul.ui().static("#") + ' { z-index: 1; position: absolute; }' +
@@ -317,7 +317,9 @@ var MecSim = (function (px_modul) {
             // resizing iFrame to the full parent element size
             'iframe{ width: 100%; height: 100%; position: absolute; }' +
             // jQuery button is set to a minimale size
-            '.ui-button { min-height: 2em; min-width: 50px; padding: 0.5em; }' +
+            '.ui-button { min-height: 1.8em; min-width: 50px; padding: 0.5em; }' +
+            // jQuery sortable without bullet
+            '.ui-sortable { list-style-type: none; }' +
 
             '</style>'
         );

@@ -309,17 +309,18 @@ var MecSim = (function (px_modul) {
             // --- set default CSS definition ---
 
             // defines HTML / body with 100% height and width for the splitter content
-            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; font-size: 1em; font-family: sans-serif; background-color: white; color:#607D8B; }' +
+            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; }' +
             // overwrite the default a tag
-            'a { text-decoration: none; color:#607D8B; cursor: pointer; }' +
+            'a { text-decoration: none; color: #505050; }' +
             // select needs a width, because jQuery sets it to size = 0
-            'select { width: 100px; }' +
+            'select { width: 125px; }' +
             // resizing iFrame to the full parent element size
             'iframe{ width: 100%; height: 100%; position: absolute; }' +
             // jQuery button is set to a minimale size
-            '.ui-button { min-height: 1.8em; min-width: 50px; padding: 0.5em; }' +
+            '.ui-button-text-only { min-height: 1.8em; min-width: 50px; padding-top: 0.5em; padding-bottom: 0.5em; padding-left: 2em; padding-right: 2em; }' +
             // jQuery sortable without bullet
             '.ui-sortable { list-style-type: none; }' +
+            'li.ui-state-default { min-height: 0.5em; padding: 0.5em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }' +
 
             '</style>'
         );

@@ -20,6 +20,8 @@
 !src/main/resources/**/*.png
 !src/main/resources/**/*.properties
 !src/main/resources/**/*.r
+!src/main/resources/**/*.svg
+!src/main/resources/**/*.gif
 
 !src/main/styleguide/**/*.xml
 !src/main/styleguide/*.header

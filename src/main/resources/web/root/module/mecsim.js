@@ -296,9 +296,9 @@ var MecSim = (function (px_modul) {
             '<style type = "text/css">' +
 
             // sets the menu layout
-            px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(img/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
+            px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(images/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
             // sets the content layout (with logo)
-            px_modul.ui().content("#") + '::before { z-index: -1; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(img/tuc.svg); background-repeat: no-repeat; }' +
+            px_modul.ui().content("#") + '::before { z-index: -1; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(images/tuc.svg); background-repeat: no-repeat; }' +
             px_modul.ui().content("#") + ' { z-index: 0; overflow: auto; }' +
             /** sets the static content layout **/
             px_modul.ui().static("#") + ' { z-index: 1; position: absolute; }' +

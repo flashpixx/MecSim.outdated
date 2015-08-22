@@ -298,7 +298,7 @@ var MecSim = (function (px_modul) {
             // sets the menu layout
             px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(theme/images/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
             // sets the content layout (with logo)
-            px_modul.ui().content("#") + '::before { z-index: -1; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(theme/images/tuc.svg); background-repeat: no-repeat; }' +
+            px_modul.ui().content("#") + '::before { z-index: 0; content: ""; position: fixed; top: 35%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(theme/images/tuc.svg); background-repeat: no-repeat; }' +
             px_modul.ui().content("#") + ' { z-index: 0; overflow: auto; }' +
             /** sets the static content layout **/
             px_modul.ui().static("#") + ' { z-index: 1; position: absolute; }' +
@@ -310,8 +310,8 @@ var MecSim = (function (px_modul) {
 
             // defines HTML / body with 100% height and width for the splitter content (font values are copied from jQuery-UI)
             'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden;    font-family: Helvetica,Arial,sans-serif; font-size:1em; color:#505050 }' +
-            // overwrite the default a tag
-            'a { text-decoration: none; color: #505050; }' +
+            // overwrite the default a tag (font values are copied from jQuery-UI)
+            'a { text-decoration: none;    color: #505050; }' +
             // select needs a width, because jQuery sets it to size = 0
             'select { width: 125px; }' +
             // resizing iFrame to the full parent element size

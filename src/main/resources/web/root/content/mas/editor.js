@@ -84,7 +84,7 @@ MASEditor.prototype.getGlobalContent = function()
 **/
 MASEditor.prototype.getGlobalCSS = function()
 {
-    return  ".CodeMirror { border: 1px solid #eee; height: auto; }" + Pane.prototype.getGlobalCSS.call(this);
+    return  ".CodeMirror { border: 1px solid #eee; overflow-y: auto; height: auto; }" + Pane.prototype.getGlobalCSS.call(this);
 }
 
 
@@ -465,14 +465,20 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
             });
 
             // create editor bind action, on blur (focus lost) the data are written to the REST-API and the textarea
-            lo_editor.on( "blur", function( po_editor ) { self.writeAgent( pc_group, pc_agent, po_editor.getValue() ); po_editor.save(); });
-
-            // refresh editor and tab structure
-            lo_editor.refresh();
-            self.mo_tabs.tabs( "refresh" );
+            lo_editor.on( "blur", function( po_editor ) {
+                self.writeAgent( pc_group, pc_agent, po_editor.getValue() ); po_editor.save();
+            });
 
             // set active tab to the last inserted tab
-            self.mo_tabs.tabs({ active: self.mo_tabs.find( ' .ui-state-default' ).size()-1 });
+            self.mo_tabs.tabs( "refresh" );
+            self.mo_tabs.tabs({
+                active   : self.mo_tabs.find( ' .ui-state-default' ).size()-1,
+                show     : function(po_event, po_ui) {
+                    lo_editor.refresh();
+                }
+            });
+
+
         }
 
     });

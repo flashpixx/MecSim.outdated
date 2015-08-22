@@ -308,8 +308,8 @@ var MecSim = (function (px_modul) {
 
             // --- set default CSS definition ---
 
-            // defines HTML / body with 100% height and width for the splitter content
-            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; font-family: Helvetica, Arial, sans-serif; font-size:1em; color: #505050; }' +
+            // defines HTML / body with 100% height and width for the splitter content (font values are copied from jQuery-UI)
+            'html, body { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden;    font-family: Helvetica,Arial,sans-serif; font-size:1em; color:#505050 }' +
             // overwrite the default a tag
             'a { text-decoration: none; color: #505050; }' +
             // select needs a width, because jQuery sets it to size = 0
@@ -324,7 +324,6 @@ var MecSim = (function (px_modul) {
 
             '</style>'
         );
-
 
         // initialize the content pane with the three layer structures - must be called at the end, because of correct layout structure
         jQuery( px_modul.ui().screen("#") ).jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });

@@ -74,7 +74,6 @@ Configuration.prototype.afterDOMAdded = function()
         });
 
     });
-
 }
 
 

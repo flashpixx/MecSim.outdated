@@ -555,7 +555,6 @@ public class CConfiguration
                 return false;
             }
 
-        CBootstrap.configurationIsLoaded( this );
         return true;
     }
 

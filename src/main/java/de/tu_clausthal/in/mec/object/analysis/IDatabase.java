@@ -137,9 +137,9 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
                                 )
                         )
                 );
-                final String[] l_fields = this.getTableFields();
-                if ( l_fields != null )
-                    for ( final String l_item : l_fields )
+                final String[] l_alter = this.getTableAlter();
+                if ( l_alter != null )
+                    for ( final String l_item : l_alter )
                         l_connect.createStatement().execute( CLogger.info( MessageFormat.format( "alter table {0} {1}", l_tablename, l_item ) ) );
             }
             l_result.close();

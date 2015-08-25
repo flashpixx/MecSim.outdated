@@ -134,6 +134,7 @@ public class CMain
             System.err.println( CCommon.getResourceString( CMain.class, "configload" ) );
             System.exit( -1 );
         }
+        CBootstrap.configurationIsLoaded( CConfiguration.getInstance() );
 
 
         // define benchmark

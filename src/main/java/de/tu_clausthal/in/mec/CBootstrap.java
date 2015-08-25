@@ -123,7 +123,6 @@ public class CBootstrap
      */
     public static void afterSimulationInit( final CSimulation p_simulation )
     {
-        p_simulation.getWorld().put( "Statistic Evaluation", new CStatisticEvaluation() );
         p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
 
@@ -164,6 +163,9 @@ public class CBootstrap
      */
     public static void configurationIsLoaded( final CConfiguration p_configuration )
     {
+        // layer with database connection must be created after the configuration is loaded,
+        // because the configuration adds the driver Jars to the classpath
+        CSimulation.getInstance().getWorld().put( "Statistic Evaluation", new CStatisticEvaluation() );
     }
 
     /**

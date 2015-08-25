@@ -30,9 +30,6 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefMaskStorage;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
@@ -46,7 +43,6 @@ import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.ActionExec;
 import jason.asSemantics.Agent;
-import jason.asSemantics.InternalAction;
 import jason.asSemantics.Message;
 import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.ASSyntax;
@@ -107,23 +103,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
      * bind name of the initial object
      */
     private static final String c_bindname = "self";
-    /**
-     * static list of internal overwrite actions
-     */
-    private static final Map<String, InternalAction> c_overwriteaction = new HashMap<String, InternalAction>()
-    {{
-            // overwrite default internal actions
-            final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
-            put( "jason.stdlib.clone", new CInternalEmpty() );
-            put( "jason.stdlib.wait", l_empty13 );
-            put( "jason.stdlib.create_agent", l_empty13 );
-            put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
-            put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 
-            // add own function
-            put( "mecsim.literal2number", new CLiteral2Number() );
-            put( "mecsim.removeBelief", new CBeliefRemove() );
-        }};
     /**
      * set with actions of this implementation
      */
@@ -373,7 +353,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
         {
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.setBB( (BeliefBase) m_beliefbaserootmask );
-            //this.setBB( new DefaultBeliefBase() );
             this.setPL( new PlanLibrary() );
             this.initDefaultFunctions();
 
@@ -384,7 +363,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
                 CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, c_overwriteaction );
+                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, IEnvironment.getInternalActions() );
             }
             catch ( final Throwable l_throwable )
             {

@@ -29,9 +29,13 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.runtime.ISerializable;
 import de.tu_clausthal.in.mec.ui.web.CBrowser;
 import jason.asSemantics.Agent;
+import jason.asSemantics.InternalAction;
 import jason.asSyntax.parser.as2j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -40,8 +44,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 
@@ -66,6 +72,34 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
     private transient CBrowser m_mindinspector;
+    /**
+     * static list of internal overwrite actions
+     */
+    private static final Map<String, InternalAction> c_internalaction = new HashMap<String, InternalAction>()
+    {{
+            // overwrite default internal actions
+            final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
+            put( "jason.stdlib.clone", new CInternalEmpty() );
+            put( "jason.stdlib.wait", l_empty13 );
+            put( "jason.stdlib.create_agent", l_empty13 );
+            put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
+            put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
+
+            // add own function
+            put( "mecsim.literal2number", new CLiteral2Number() );
+            put( "mecsim.removeBelief", new CBeliefRemove() );
+        }};
+
+
+    /**
+     * returns the internal action map
+     *
+     * @return map with internal actions
+     */
+    public static Map<String, InternalAction> getInternalActions()
+    {
+        return c_internalaction;
+    }
 
     /**
      * checks the syntax of an agent
@@ -86,6 +120,8 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
 
             final Agent l_agent = new Agent();
             CReflection.getClassField( Agent.class, "logger" ).getSetter().invokeWithArguments( l_agent, l_logger );
+            // create internal actions map - reset the map and overwrite not useable actions with placeholder
+            CReflection.getClassField( l_agent.getClass(), "internalActions" ).getSetter().invoke( l_agent, c_internalaction );
 
             final as2j l_parser = new as2j( FileUtils.openInputStream( getAgentFile( p_agentname ) ) );
             CReflection.getClassField( as2j.class, "logger" ).getSetter().invokeWithArguments( l_logger );

@@ -70,11 +70,16 @@ MASEditor.prototype = Object.create(Pane.prototype);
 **/
 MASEditor.prototype.getGlobalContent = function()
 {
-    return "<p>" + Layout.dialog({
-        id        : this.generateSubID("dialog"),
-        contentid : this.generateSubID("content"),
-        title     : ""
-    }) + "</p>" +
+    return Layout.dialog({
+                   id        : this.generateSubID("dialog"),
+                   contentid : this.generateSubID("text"),
+                   title     : this.generateSubID("dialogtitle")
+    }) +
+    Layout.dialog({
+                       id        : this.generateSubID("errordialog"),
+                       contentid : this.generateSubID("errortext"),
+                       title     : this.generateSubID("errordialogtitle")
+    }) +
     Pane.prototype.getGlobalContent.call(this);
 }
 
@@ -142,11 +147,28 @@ MASEditor.prototype.afterDOMAdded = function()
     // bind reading action
     this.readAgents();
 
+    // --- error dialog ----------------------------------------------------------------------------------------------------------------------------------------
+    jQuery(this.generateSubID("errordialog")).dialog({
+        dialogClass : "error",
+        width       : "auto",
+        modal       : true,
+        resizable   : false,
+
+        buttons     : {
+            Ok : function () {
+                jQuery(this).dialog("close");
+            }
+
+        }
+    });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
     // --- bind new-agent button action ------------------------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("new", "#") ).button().click( function() {
 
         // set dialog content
-        jQuery(self.generateSubID("content", "#")).empty().append(
+        jQuery(self.generateSubID("text", "#")).empty().append(
             "<p>" +
             Layout.select({
 
@@ -171,7 +193,6 @@ MASEditor.prototype.afterDOMAdded = function()
         jQuery(self.generateSubID("dialog", "#")).dialog({
             width   : "auto",
             modal   : true,
-            overlay : { background: "black" },
             buttons : {
 
                 Create : function() {
@@ -226,12 +247,12 @@ MASEditor.prototype.afterDOMAdded = function()
             url     : self.mo_configuration[lo.group].check,
             data    : { "name" : lo.value  },
         }).fail(function( po ) {
-
             console.log(po);
+            //jQuery(self.generateSubID("errordialog")).dialog("open");
 
         }).done(function() {
 
-            console.log("ok");
+
 
         });
 
@@ -360,7 +381,7 @@ MASEditor.prototype.createAgent = function( pc_group, pc_agent )
     }).fail( function( po_data ) {
 
         // @todo show error dialog
-        //console.log(po_data);
+        console.log(po_data);
 
     });
 }

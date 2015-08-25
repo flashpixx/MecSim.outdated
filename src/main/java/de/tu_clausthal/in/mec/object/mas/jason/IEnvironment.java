@@ -25,20 +25,24 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.runtime.ISerializable;
 import de.tu_clausthal.in.mec.ui.web.CBrowser;
-import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
+import jason.asSyntax.parser.as2j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 
 /**
@@ -68,18 +72,46 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @note should throw exception on syntax error
-     * @bug does not work correctly - exception is not thrown
+     * @warn exception is not thrown on parsing error, the error is only send to log (see "Agent" class method "parseAS" ), so we pass the log message
+     * to a variable, check the parsing result and the variable content for throwing an own exception
      */
     public static void checkAgentFileSyntax( final String p_agentname )
     {
         try
         {
-            Agent.create( new AgArch(), Agent.class.getName(), null, getAgentFile( p_agentname ).toString(), null );
+            // initialize agent manually to modify the internal agent structure (with reflection and pass the
+            // log message to an own logger to get the parsing error messages)
+            final CLogger l_logger = new CLogger();
+
+            final Agent l_agent = new Agent();
+            CReflection.getClassField( Agent.class, "logger" ).getSetter().invokeWithArguments( l_agent, l_logger );
+
+            final as2j l_parser = new as2j( FileUtils.openInputStream( getAgentFile( p_agentname ) ) );
+            CReflection.getClassField( as2j.class, "logger" ).getSetter().invokeWithArguments( l_logger );
+
+            // run agent initalizing and parsing
+            l_agent.initAg();
+            l_parser.agent( l_agent );
+
+            if ( !l_logger.get().isEmpty() )
+                throw new IllegalStateException(
+                        CCommon.getResourceString(
+                                IEnvironment.class, "syntaxerror", p_agentname, StringUtils.join(
+                                        l_logger.get()
+                                )
+                        )
+                );
+
         }
         catch ( final Exception l_exception )
         {
             throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
         }
+        catch ( final Throwable l_throwable )
+        {
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_throwable.getMessage() ) );
+        }
+
     }
 
     /**
@@ -181,5 +213,57 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         p_stream.defaultReadObject();
 
         //this.setFrame( CSimulation.getInstance().getUIServer() );
+    }
+
+
+    /**
+     * interal log writer to catch Jason parsing messages
+     *
+     * @warn class uses depend on Java logging a static context
+     */
+    private static class CLogger extends java.util.logging.Logger
+    {
+        /**
+         * log list
+         **/
+        private final LinkedList<String> m_logs = new LinkedList<>();
+
+
+        public CLogger()
+        {
+            this( null, null );
+        }
+
+
+        protected CLogger( final String p_name, final String p_resourceBundleName )
+        {
+            super( p_name, p_resourceBundleName );
+        }
+
+        /**
+         * returns the full log list
+         *
+         * @return list
+         */
+        public LinkedList<String> get()
+        {
+            return m_logs;
+        }
+
+        /**
+         * clears the log list
+         */
+        public void clear()
+        {
+            m_logs.clear();
+        }
+
+
+        @Override
+        public void log( final Level p_level, final String p_msg )
+        {
+            m_logs.add( p_msg );
+        }
+
     }
 }

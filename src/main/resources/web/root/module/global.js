@@ -109,6 +109,15 @@ String.prototype.splitLines = String.prototype.splitLines || function( pc_separa
 }
 
 
+/**
+ * replaces all linebreaks to HTML br tag
+ * @return modified string
+**/
+String.prototype.nl2br = String.prototype.nl2br || function()
+{
+    return this.replace(/(\r\n|\n\r|\r|\n)/g, "<br/>");
+}
+
 
 /**
  * removes an element of an array

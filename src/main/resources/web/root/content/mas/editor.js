@@ -250,7 +250,7 @@ MASEditor.prototype.afterDOMAdded = function()
             data    : { "name" : lo.value  },
         }).fail(function( po ) {
 
-            jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
+            jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error.nl2br());
             jQuery(self.generateSubID("errordialog", "#")).dialog("open");
 
         }).done(function() {

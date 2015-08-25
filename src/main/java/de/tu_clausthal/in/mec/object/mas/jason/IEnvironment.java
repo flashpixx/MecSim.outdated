@@ -94,23 +94,18 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             l_agent.initAg();
             l_parser.agent( l_agent );
 
+            // on log message wie report an error an create linebreaks for later splitting
             if ( !l_logger.get().isEmpty() )
-                throw new IllegalStateException(
-                        CCommon.getResourceString(
-                                IEnvironment.class, "syntaxerror", p_agentname, StringUtils.join(
-                                        l_logger.get()
-                                )
-                        )
-                );
+                throw new IllegalStateException( StringUtils.join( l_logger.get(), "\n" ) );
 
         }
         catch ( final Exception l_exception )
         {
-            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_exception.getMessage() ) );
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, "\n\n" + l_exception.getMessage() ) );
         }
         catch ( final Throwable l_throwable )
         {
-            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, l_throwable.getMessage() ) );
+            throw new IllegalStateException( CCommon.getResourceString( IEnvironment.class, "syntaxerror", p_agentname, "\n\n" + l_throwable.getMessage() ) );
         }
 
     }
@@ -239,6 +234,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         protected CLogger( final String p_name, final String p_resourceBundleName )
         {
             super( p_name, p_resourceBundleName );
+            this.setUseParentHandlers( false );
         }
 
         /**
@@ -259,11 +255,19 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             m_logs.clear();
         }
 
-
         @Override
         public void log( final Level p_level, final String p_msg )
         {
-            m_logs.add( p_msg );
+            final String[] l_split = StringUtils.split( p_msg, ":" );
+            if ( l_split.length < 3 )
+                return;
+            m_logs.add(
+                    CCommon.getResourceString(
+                            this, "message", StringUtils.split( l_split[1], "]" )[0], StringUtils.join(
+                                    l_split, " ", 2, l_split.length
+                            )
+                    )
+            );
         }
 
     }

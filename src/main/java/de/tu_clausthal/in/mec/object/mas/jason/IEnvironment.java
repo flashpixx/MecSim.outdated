@@ -72,7 +72,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @note should throw exception on syntax error
-     * @warn exception is not thrown on parsing error, the error is only send to log (see "Agent" class method "parseAS" ), so we pass the log message
+     * @warn exception is not thrown on parsing error, the error is only send to log (see "Agent.parseAS" method), so we pass the log message
      * to a variable, check the parsing result and the variable content for throwing an own exception
      */
     public static void checkAgentFileSyntax( final String p_agentname )
@@ -80,7 +80,8 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         try
         {
             // initialize agent manually to modify the internal agent structure (with reflection and pass the
-            // log message to an own logger to get the parsing error messages)
+            // log message to an own logger to get the parsing error messages). The logger on the agent class
+            // is a member variable on the parser class a static variable
             final CLogger l_logger = new CLogger();
 
             final Agent l_agent = new Agent();

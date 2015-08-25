@@ -148,11 +148,12 @@ MASEditor.prototype.afterDOMAdded = function()
     this.readAgents();
 
     // --- error dialog ----------------------------------------------------------------------------------------------------------------------------------------
-    jQuery(this.generateSubID("errordialog")).dialog({
+    jQuery(this.generateSubID("errordialog", "#")).dialog({
         dialogClass : "error",
         width       : "auto",
         modal       : true,
         resizable   : false,
+        autoOpen    : false,
 
         buttons     : {
             Ok : function () {
@@ -215,6 +216,7 @@ MASEditor.prototype.afterDOMAdded = function()
         var lo = self.getSelectedAgent();
 
         // set dialog content
+        // @todo translation
         jQuery( self.generateSubID("content", "#") ).empty().append( "<p>Should the [" + lo.group + "] agent [" + lo.value + "] be deleted?</p>" );
 
          // open dialog
@@ -247,12 +249,13 @@ MASEditor.prototype.afterDOMAdded = function()
             url     : self.mo_configuration[lo.group].check,
             data    : { "name" : lo.value  },
         }).fail(function( po ) {
-            console.log(po);
-            //jQuery(self.generateSubID("errordialog")).dialog("open");
+
+            jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
+            jQuery(self.generateSubID("errordialog", "#")).dialog("open");
 
         }).done(function() {
 
-
+            //@todo correct message dialog
 
         });
 
@@ -353,10 +356,10 @@ MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
         url     : this.mo_configuration[pc_group].write,
         data    : { "name" : pc_agent, "source" : pc_content }
 
-    }).fail( function( po_data ) {
+    }).fail( function( po ) {
 
-        // @todo cache on fail
-        //console.log(po_data);
+        jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
+        jQuery(self.generateSubID("errordialog", "#")).dialog("open");
 
     });
 }
@@ -378,10 +381,10 @@ MASEditor.prototype.createAgent = function( pc_group, pc_agent )
         data    : { "name" : pc_agent },
         success : function() { self.readAgents(); }
 
-    }).fail( function( po_data ) {
+    }).fail( function( po ) {
 
-        // @todo show error dialog
-        console.log(po_data);
+        jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
+        jQuery(self.generateSubID("errordialog", "#")).dialog("open");
 
     });
 }
@@ -415,10 +418,10 @@ MASEditor.prototype.removeAgent = function( pc_group, pc_agent )
 
         }
 
-    }).fail( function( po_data ) {
+    }).fail( function( po ) {
 
-        // @todo show error dialog
-        //console.log(po_data);
+        jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
+        jQuery(self.generateSubID("errordialog", "#")).dialog("open");
 
     });
 }

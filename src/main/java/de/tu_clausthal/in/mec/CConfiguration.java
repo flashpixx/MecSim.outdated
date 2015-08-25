@@ -515,13 +515,13 @@ public class CConfiguration
         {
             final URLClassLoader l_classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
             for ( final String l_jar : m_location.get( "jar" ).list( new WildcardFileFilter( "*.jar" ) ) )
+            {
+                final URL l_fqnjar = CCommon.getResourceURL( m_location.get( "jar" ) + File.separator + l_jar );
                 CReflection.getClassMethod( l_classloader.getClass(), "addURL", new Class<?>[]{URL.class} ).getHandle().invoke(
-                        l_classloader, CCommon.getResourceURL(
-                                m_location.get(
-                                        "jar"
-                                ) + File.separator + l_jar
-                        )
+                        l_classloader, l_fqnjar
                 );
+                CLogger.info( CCommon.getResourceString( this, "jarload", l_fqnjar ) );
+            }
         }
         catch ( final Throwable l_throwable )
         {
@@ -555,6 +555,7 @@ public class CConfiguration
                 return false;
             }
 
+        CBootstrap.configurationIsLoaded( this );
         return true;
     }
 

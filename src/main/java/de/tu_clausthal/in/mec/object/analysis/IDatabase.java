@@ -26,25 +26,24 @@ package de.tu_clausthal.in.mec.object.analysis;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiEvaluateLayer;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.text.MessageFormat;
 
 
 /**
  * class for writing data into a database
  *
- * @bug incomplete e.g. table creating process does not exists exists
- * @todo add an example to write down data e.g. OD-matrix structure
  * @note JDBC driver is needed
  * @see http://commons.apache.org/proper/commons-dbcp/
  */
-public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
+public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
 {
     /**
      * flag to set connectivity
@@ -58,7 +57,7 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
     /**
      * ctor - context initialization
      */
-    public CDatabase()
+    public IDatabase()
     {
         m_active = m_connectable;
         if ( !m_connectable )
@@ -69,10 +68,7 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
         m_datasource.setUsername( CConfiguration.getInstance().get().<String>get( "database/username" ) );
         m_datasource.setPassword( CConfiguration.getInstance().get().<String>get( "database/password" ) );
 
-        this.createTableIfNotExists(
-                "zonecount", "(step bigint(20) unsigned not null, zonegroup varchar(64) not null, zone varchar(64) not null, value double not null)",
-                new String[]{"add primary key (step,zonegroup,zone)"}
-        );
+        this.createTable();
     }
 
     @Override
@@ -81,53 +77,70 @@ public class CDatabase extends IMultiEvaluateLayer<CDatabase.CWorker>
         return Integer.MAX_VALUE;
     }
 
-    @Override
-    public final String toString()
-    {
-        return CCommon.getResourceString( this, "name" );
-    }
-
     /**
      * check if database is connectable
      *
      * @return boolean of connectivity
      */
-    private static boolean isConnectable()
+    protected static boolean isConnectable()
     {
         final String l_driver = CConfiguration.getInstance().get().<String>get( "database/driver" );
         final String l_url = CConfiguration.getInstance().get().<String>get( "database/url" );
-        if ( ( l_driver == null ) || ( !l_driver.isEmpty() ) || ( l_url != null ) || ( !l_url.isEmpty() ) )
+        if ( ( l_driver == null ) || ( l_driver.isEmpty() ) || ( l_url == null ) || ( l_url.isEmpty() ) )
             return false;
 
-        return CConfiguration.getInstance().get().<Boolean>get(
-                "database/active"
-        );
+        return CConfiguration.getInstance().get().<Boolean>get( "database/active" );
     }
 
     /**
-     * creates the table structure
+     * returns the table name
      *
-     * @param p_tablename table name without prefix (will append automatically)
-     * @param p_createsql create sql without "create >tablename<"
-     * @param p_altertable alter sql statements, that will run after the create, also without "alter table <tablename>"
-     * @todo check database independence
+     * @return table name
      */
-    private void createTableIfNotExists( final String p_tablename, final String p_createsql, final String[] p_altertable )
-    {
-        final String l_table = CConfiguration.getInstance().get().<String>get(
-                "database/tableprefix"
-        ) == null ? p_tablename : CConfiguration.getInstance().get().<String>get( "database/tableprefix" ) + p_tablename;
+    protected abstract String getTableName();
 
+    /**
+     * returns the field list with field attributes
+     *
+     * @return fields
+     */
+    protected abstract String[] getTableFields();
+
+    /**
+     * returns optional alter definitions
+     *
+     * @return null or alter definitions
+     */
+    protected abstract String[] getTableAlter();
+
+    /**
+     * creates the table structure
+     */
+    private void createTable()
+    {
+        final String l_tablename = MessageFormat.format(
+                "{0}{1}", CConfiguration.getInstance().get().<String>get( "database/tableprefix" ), this.getTableName()
+        );
         try (
                 final Connection l_connect = m_datasource.getConnection()
         )
         {
-            final ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_table, new String[]{"TABLE"} );
+            final ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_tablename, new String[]{"TABLE"} );
             if ( !l_result.next() )
             {
-                l_connect.createStatement().execute( "create table " + l_table + " " + p_createsql );
-                for ( final String l_item : p_altertable )
-                    l_connect.createStatement().execute( "alter table " + l_table + " " + l_item );
+                l_connect.createStatement().execute(
+                        CLogger.info(
+                                MessageFormat.format(
+                                        "create table {0} ({1})", l_tablename, StringUtils.join(
+                                                this.getTableFields(), ","
+                                        )
+                                )
+                        )
+                );
+                final String[] l_fields = this.getTableFields();
+                if ( l_fields != null )
+                    for ( final String l_item : l_fields )
+                        l_connect.createStatement().execute( CLogger.info( MessageFormat.format( "alter table {0} {1}", l_tablename, l_item ) ) );
             }
             l_result.close();
         }

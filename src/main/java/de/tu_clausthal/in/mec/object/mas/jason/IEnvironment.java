@@ -106,7 +106,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      *
      * @param p_agentname agent name
      * @note should throw exception on syntax error
-     * @warn exception is not thrown on parsing error, the error is only send to log (see "Agent.parseAS" method), so we pass the log message
+     * @warning exception is not thrown on parsing error, the error is only send to log (see "Agent.parseAS" method), so we pass the log message
      * to a variable, check the parsing result and the variable content for throwing an own exception
      */
     public static void checkAgentFileSyntax( final String p_agentname )
@@ -250,8 +250,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
 
     /**
      * interal log writer to catch Jason parsing messages
-     *
-     * @warn class uses depend on Java logging a static context
      */
     private static class CLogger extends java.util.logging.Logger
     {

@@ -25,7 +25,7 @@ package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.object.analysis.CDatabase;
+import de.tu_clausthal.in.mec.object.analysis.CStatisticEvaluation;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -123,7 +123,7 @@ public class CBootstrap
      */
     public static void afterSimulationInit( final CSimulation p_simulation )
     {
-        p_simulation.getWorld().put( "Database", new CDatabase() );
+        p_simulation.getWorld().put( "Statistic Evaluation", new CStatisticEvaluation() );
         p_simulation.getWorld().put( "Car WayPoints", new CCarWayPointLayer() );
         p_simulation.getWorld().put( "Cars", new CCarLayer() );
 

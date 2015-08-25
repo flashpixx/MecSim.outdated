@@ -135,7 +135,6 @@ public class CMain
             System.exit( -1 );
         }
 
-        CBootstrap.configurationIsLoaded( CConfiguration.getInstance() );
 
         // define benchmark
         if ( l_cli.hasOption( "benchmark" ) )

@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.object.analysis;
 
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.IMultiEvaluateLayer;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -158,16 +157,10 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
     /**
      * worker class to push data to the database *
      */
-    protected class CWorker implements IVoidSteppable
+    protected abstract class CWorker implements IVoidSteppable
     {
-
         @Override
-        public final void release()
-        {
-        }
-
-        @Override
-        public final void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+        public void release()
         {
         }
     }

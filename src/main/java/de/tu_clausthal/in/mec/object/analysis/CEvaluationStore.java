@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.object.analysis;
 
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.object.ILayer;
 
 
 /**
@@ -48,12 +49,29 @@ public class CEvaluationStore extends IDatabase
     @Override
     protected String[] getTableFields()
     {
-        return new String[]{"instance char(36) not null", "process binary(128) not null"};
+        return new String[]{
+                "instance char(36) not null",
+                "process binary(128) not null"
+        };
     }
 
     @Override
     protected String[] getTableAlter()
     {
         return new String[]{"add primary key (instance, process)"};
+    }
+
+    /**
+     * worker to get all information via reflection
+     */
+    protected class CCollector extends IDatabase.CWorker
+    {
+
+        @Override
+        public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+        {
+
+        }
+
     }
 }

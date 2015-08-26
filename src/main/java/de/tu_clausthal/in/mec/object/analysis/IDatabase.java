@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.text.MessageFormat;
+import java.util.Optional;
 
 
 /**
@@ -119,7 +120,7 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
     private void createTable()
     {
         final String l_tablename = MessageFormat.format(
-                "{0}{1}", CConfiguration.getInstance().get().<String>get( "database/tableprefix" ), this.getTableName()
+                "{0}{1}", Optional.ofNullable( CConfiguration.getInstance().get().<String>get( "database/tableprefix" ) ).orElse( "" ), this.getTableName()
         );
         try (
                 final Connection l_connect = m_datasource.getConnection()

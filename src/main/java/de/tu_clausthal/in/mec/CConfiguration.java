@@ -50,6 +50,7 @@ import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.UUID;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
@@ -95,6 +96,9 @@ public class CConfiguration
 
             // extract all MAS files from the Jar to the home path (should be run once) - accessible within the UI
             put( "extractmasexamples", true );
+
+            // UUID / unique instance name - used by the database structure
+            put( "uuid", UUID.randomUUID().toString() );
 
 
             // language data - accessible within the UI
@@ -229,6 +233,11 @@ public class CConfiguration
      */
     private Map<String, List<ICheck>> m_configurationchecks = new HashMap<String, List<ICheck>>()
     {{
+            put( "uuid", new LinkedList<ICheck>()
+                 {{
+                        add( new CStringNotEmpty() );
+                     }}
+            );
             put(
                     "language/current", new LinkedList<ICheck>()
                     {{

@@ -28,10 +28,10 @@ import de.tu_clausthal.in.mec.common.CCommon;
 
 /**
  * statistic evaluation access
+ * @see http://db.apache.org/ddlutils/
  */
-public class CStatisticEvaluation extends IDatabase
+public class CEvaluationStore extends IDatabase
 {
-
 
     @Override
     public final String toString()
@@ -48,12 +48,12 @@ public class CStatisticEvaluation extends IDatabase
     @Override
     protected String[] getTableFields()
     {
-        return new String[]{"step bigint(20) unsigned not null"};
+        return new String[]{"instance char(36) not null", "process binary(128) not null"};
     }
 
     @Override
     protected String[] getTableAlter()
     {
-        return new String[]{"add primary key (step)"};
+        return new String[]{"add primary key (instance, process)"};
     }
 }

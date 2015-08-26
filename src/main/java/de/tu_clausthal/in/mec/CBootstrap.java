@@ -25,7 +25,7 @@ package de.tu_clausthal.in.mec;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.IMultiLayer;
-import de.tu_clausthal.in.mec.object.analysis.CStatisticEvaluation;
+import de.tu_clausthal.in.mec.object.analysis.CEvaluationStore;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -165,7 +165,7 @@ public class CBootstrap
     {
         // layer with database connection must be created after the configuration is loaded,
         // because the configuration adds the driver Jars to the classpath
-        CSimulation.getInstance().getWorld().put( "Statistic Evaluation", new CStatisticEvaluation() );
+        CSimulation.getInstance().getWorld().put( "Statistic Evaluation", new CEvaluationStore() );
     }
 
     /**

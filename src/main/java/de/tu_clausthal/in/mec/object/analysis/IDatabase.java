@@ -47,13 +47,22 @@ import java.util.Optional;
 public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
 {
     /**
+     * datasource connection pool (static context)
+     */
+    protected final static BasicDataSource c_datasource = new BasicDataSource()
+    {{
+            if ( isConnectable() )
+            {
+                setDriverClassName( CConfiguration.getInstance().get().<String>get( "database/driver" ) );
+                setUrl( CConfiguration.getInstance().get().<String>get( "database/url" ) );
+                setUsername( CConfiguration.getInstance().get().<String>get( "database/username" ) );
+                setPassword( CConfiguration.getInstance().get().<String>get( "database/password" ) );
+            }
+        }};
+    /**
      * flag to set connectivity
      */
     private final boolean m_connectable = isConnectable();
-    /**
-     * datasource *
-     */
-    private final BasicDataSource m_datasource = new BasicDataSource();
 
     /**
      * ctor - context initialization
@@ -63,11 +72,6 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
         m_active = m_connectable;
         if ( !m_connectable )
             return;
-
-        m_datasource.setDriverClassName( CConfiguration.getInstance().get().<String>get( "database/driver" ) );
-        m_datasource.setUrl( CConfiguration.getInstance().get().<String>get( "database/url" ) );
-        m_datasource.setUsername( CConfiguration.getInstance().get().<String>get( "database/username" ) );
-        m_datasource.setPassword( CConfiguration.getInstance().get().<String>get( "database/password" ) );
 
         this.createTable();
     }
@@ -123,7 +127,7 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
                 "{0}{1}", Optional.ofNullable( CConfiguration.getInstance().get().<String>get( "database/tableprefix" ) ).orElse( "" ), this.getTableName()
         );
         try (
-                final Connection l_connect = m_datasource.getConnection()
+                final Connection l_connect = c_datasource.getConnection()
         )
         {
             final ResultSet l_result = l_connect.getMetaData().getTables( null, null, l_tablename, new String[]{"TABLE"} );

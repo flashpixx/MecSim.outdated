@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
@@ -395,6 +396,10 @@ public class CConfiguration
      * UTF-8 property reader
      */
     private ResourceBundle.Control m_reader = new UTF8Control();
+    /**
+     * UUID of the current process
+     */
+    private final BigInteger m_processid = new BigInteger( UUID.randomUUID().toString().replace( "-", "" ), 16 );
 
     /**
      * private Ctor to avoid manual instantiation with manifest reading
@@ -432,6 +437,14 @@ public class CConfiguration
     public static String getPackage()
     {
         return c_mainpackage;
+    }
+
+    /**
+     * returns the current process id
+     */
+    public BigInteger getProcessID()
+    {
+        return m_processid;
     }
 
     /**

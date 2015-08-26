@@ -158,7 +158,8 @@ public class CLiteral<T> implements ILiteral<T>
     {
         return 41 * m_functor.hashCode() +
                43 * m_values.hashCode() +
-               59 * m_annotations.hashCode();
+               59 * m_annotations.hashCode() +
+               ( m_negated ? 11 : 17 );
     }
 
     @Override

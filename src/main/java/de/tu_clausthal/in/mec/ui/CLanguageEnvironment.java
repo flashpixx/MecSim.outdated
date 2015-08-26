@@ -40,6 +40,7 @@ public class CLanguageEnvironment
      */
     private static final Map<String, String> c_configurationelements = new HashMap<String, String>()
     {{
+            put( "label_uuid", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_uuid" ) );
             put( "label_reset", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_reset" ) );
             put( "label_extractmasexamples", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_extractmasexample" ) );
             put( "label_language_current", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_language_current" ) );

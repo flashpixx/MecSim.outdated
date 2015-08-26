@@ -173,6 +173,7 @@ Configuration.prototype.buildUIElements = function()
 
         // general tab
         '<div id="' + this.generateSubID("general") + '">' +
+        '<p>' + Layout.input({ id: this.generateSubIDElementsInit("uuid"),                   label : "",   list: lo_elements.texts,      value: this.mo_configuration.uuid })               + '</p>' +
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("reset"),               label : "",   list: lo_elements.switches,   value: this.mo_configuration.reset })              + '</p>' +
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("extractmasexamples"),  label : "",   list: lo_elements.switches,   value: this.mo_configuration.extractmasexamples }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("language_current"),    label : "",   list: lo_elements.selects,    value: this.mo_configuration.language.current,   options: this.mo_configuration.language.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) + '</p>' +

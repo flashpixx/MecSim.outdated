@@ -23,6 +23,7 @@
 
 package de.tu_clausthal.in.mec.object.analysis;
 
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
@@ -31,22 +32,52 @@ import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Map;
 
 
 /**
  * statistic evaluation access
+ *
  * @see http://db.apache.org/ddlutils/
  */
 public class CEvaluationStore extends IDatabase
 {
+    private static String c_tablename = "inconsistency";
+
     /**
      * ctor
      */
     public CEvaluationStore()
     {
         super();
-        m_data.add( new CCollectorInconsistency() );
+
+        // create worker
+        try
+        {
+            m_data.add( new CCollectorInconsistency() );
+        }
+        catch ( final SQLException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+
+        // create table structures
+        this.createTable(
+                c_tablename,
+                new String[]{
+                        "instance char(36) not null",
+                        "process bigint unsigned not null",
+                        "run bigint unsigned not null",
+                        "step bigint unsigned not null",
+                        "agenthash bigint unsigned not null",
+                        "value double not null"
+                },
+                new String[]{
+                        "add primary key (instance, process, run, step, agenthash)"
+                }
+        );
     }
 
     @Override
@@ -55,44 +86,49 @@ public class CEvaluationStore extends IDatabase
         return CCommon.getResourceString( this, "name" );
     }
 
-    @Override
-    protected String getTableName()
-    {
-        return "statistic";
-    }
-
-    @Override
-    protected String[] getTableFields()
-    {
-        return new String[]{
-                "instance char(36) not null",
-                "process binary(128) not null"
-        };
-    }
-
-    @Override
-    protected String[] getTableAlter()
-    {
-        return new String[]{"add primary key (instance, process)"};
-    }
-
     /**
      * worker to inconsistency via reflection
      */
-    protected static class CCollectorInconsistency extends IDatabase.CWorker
+    protected class CCollectorInconsistency extends IDatabase.CWorker
     {
+        /**
+         * access to the field of the inconsistency layer
+         **/
         private final CReflection.CGetSet m_access = CReflection.getClassField( CInconsistencyLayer.class, "m_data" );
+        private final PreparedStatement m_statement;
 
+
+        /**
+         * ctor
+         *
+         * @throws SQLException
+         */
+        public CCollectorInconsistency() throws SQLException
+        {
+            m_statement = c_datasource.getConnection().prepareStatement( "insert into ? values ( ?, ?, ?, ?, ? )" );
+
+            m_statement.setString( 1, CEvaluationStore.this.getTableName( c_tablename ) );
+            m_statement.setObject( 2, CConfiguration.getInstance().getProcessID() );
+        }
 
         @Override
         public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
         {
             try
             {
-                final Map<IAgent<?>, Double> l_data = (Map<IAgent<?>, Double>) m_access.getGetter().invoke(
+                m_statement.setObject( 3, CSimulation.getInstance().getNumberOfRuns() );
+
+                for ( final Map.Entry<IAgent<?>, Double> l_item : ( (Map<IAgent<?>, Double>) m_access.getGetter().invoke(
                         CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( "Jason Car Inconsistency" )
-                );
-                //System.out.println(l_data);
+                ) ).entrySet() )
+                {
+                    m_statement.setInt( 4, p_currentstep );
+                    m_statement.setInt( 5, l_item.hashCode() );
+                    m_statement.setDouble( 6, l_item.getValue() );
+
+                    m_statement.execute();
+                }
+
             }
             catch ( final Throwable p_throwable )
             {

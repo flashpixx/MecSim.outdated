@@ -56,12 +56,17 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
                 setUrl( CConfiguration.getInstance().get().<String>get( "database/url" ) );
                 setUsername( CConfiguration.getInstance().get().<String>get( "database/username" ) );
                 setPassword( CConfiguration.getInstance().get().<String>get( "database/password" ) );
+                setPoolPreparedStatements( true );
             }
         }};
     /**
      * flag to set connectivity
      */
     private final boolean m_connectable = isConnectable();
+    /**
+     * table prefix
+     */
+    private final String m_tableprefix = Optional.ofNullable( CConfiguration.getInstance().get().<String>get( "database/tableprefix" ) ).orElse( "" );
 
     /**
      * ctor - context initialization
@@ -69,10 +74,6 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
     public IDatabase()
     {
         m_active = m_connectable;
-        if ( !m_connectable )
-            return;
-
-        this.createTable();
     }
 
     @Override
@@ -97,34 +98,15 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
     }
 
     /**
-     * returns the table name
-     *
-     * @return table name
-     */
-    protected abstract String getTableName();
-
-    /**
-     * returns the field list with field attributes
-     *
-     * @return fields
-     */
-    protected abstract String[] getTableFields();
-
-    /**
-     * returns optional alter definitions
-     *
-     * @return null or alter definitions
-     */
-    protected abstract String[] getTableAlter();
-
-    /**
      * creates the table structure
+     *
+     * @param p_tablename table name
+     * @param p_fields field list
+     * @param p_alter optional table alter commands
      */
-    private void createTable()
+    protected final void createTable( final String p_tablename, final String[] p_fields, final String[] p_alter )
     {
-        final String l_tablename = MessageFormat.format(
-                "{0}{1}", Optional.ofNullable( CConfiguration.getInstance().get().<String>get( "database/tableprefix" ) ).orElse( "" ), this.getTableName()
-        );
+        final String l_tablename = this.getTableName( p_tablename );
         try (
                 final Connection l_connect = c_datasource.getConnection()
         )
@@ -136,14 +118,13 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
                         CLogger.info(
                                 MessageFormat.format(
                                         "create table {0} ({1})", l_tablename, StringUtils.join(
-                                                this.getTableFields(), ","
+                                                p_fields, ","
                                         )
                                 )
                         )
                 );
-                final String[] l_alter = this.getTableAlter();
-                if ( l_alter != null )
-                    for ( final String l_item : l_alter )
+                if ( p_alter != null )
+                    for ( final String l_item : p_alter )
                         l_connect.createStatement().execute( CLogger.info( MessageFormat.format( "alter table {0} {1}", l_tablename, l_item ) ) );
             }
             l_result.close();
@@ -152,6 +133,17 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
         {
             CLogger.error( l_exception );
         }
+    }
+
+    /**
+     * returns the full table name
+     *
+     * @param p_tablename table name
+     * @return full table name
+     */
+    protected final String getTableName( final String p_tablename )
+    {
+        return MessageFormat.format( "{0}{1}", m_tableprefix, p_tablename );
     }
 
     /**

@@ -84,6 +84,7 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
     /**
      * reference to the agent layer
      */
+    @CFieldFilter.CAgent( bind = false )
     private final CCarJasonAgentLayer m_agentlayer = CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" );
 
     /**

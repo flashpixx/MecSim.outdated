@@ -234,10 +234,11 @@ public class CConfiguration
      */
     private Map<String, List<ICheck>> m_configurationchecks = new HashMap<String, List<ICheck>>()
     {{
-            put( "uuid", new LinkedList<ICheck>()
-                 {{
-                        add( new CStringNotEmpty() );
-                     }}
+            put(
+                    "uuid", new LinkedList<ICheck>()
+                    {{
+                            add( new CStringNotEmpty() );
+                        }}
             );
             put(
                     "language/current", new LinkedList<ICheck>()

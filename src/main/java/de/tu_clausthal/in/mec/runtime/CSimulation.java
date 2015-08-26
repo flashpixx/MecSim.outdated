@@ -86,6 +86,10 @@ public class CSimulation
      * world of the simulation
      */
     private CWorld m_world = new CWorld();
+    /**
+     * run count - counts each start call
+     */
+    private int m_runs = 0;
 
     /**
      * private ctor
@@ -253,6 +257,7 @@ public class CSimulation
         m_mainloopthread.join();
 
         m_mainloopthread = null;
+        m_runs++;
     }
 
     /**
@@ -267,6 +272,17 @@ public class CSimulation
         CLogger.info( CCommon.getResourceString( this, "start" ) );
 
         m_mainloop.resume();
+        m_runs++;
+    }
+
+    /**
+     * returns the number of runs
+     *
+     * @return run number
+     */
+    public int getNumberOfRuns()
+    {
+        return m_runs;
     }
 
     /**

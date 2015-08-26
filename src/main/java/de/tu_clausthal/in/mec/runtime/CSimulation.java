@@ -79,7 +79,7 @@ public class CSimulation
      */
     private final Random m_random = new Random();
     /**
-     * UI components
+     * global object storage
      */
     private CStorage m_storage = new CStorage();
     /**
@@ -415,7 +415,7 @@ public class CSimulation
     }
 
     /**
-     * peristent storage
+     * peristent storage for any objects
      */
     public class CStorage
     {

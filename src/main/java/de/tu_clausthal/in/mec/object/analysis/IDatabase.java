@@ -157,7 +157,7 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
     /**
      * worker class to push data to the database *
      */
-    protected abstract class CWorker implements IVoidSteppable
+    protected abstract static class CWorker implements IVoidSteppable
     {
         @Override
         public void release()

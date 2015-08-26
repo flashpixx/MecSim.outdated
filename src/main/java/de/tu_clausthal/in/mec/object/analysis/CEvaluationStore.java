@@ -23,8 +23,15 @@
 
 package de.tu_clausthal.in.mec.object.analysis;
 
+import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
+import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
+import de.tu_clausthal.in.mec.runtime.CSimulation;
+
+import java.util.Map;
 
 
 /**
@@ -33,6 +40,14 @@ import de.tu_clausthal.in.mec.object.ILayer;
  */
 public class CEvaluationStore extends IDatabase
 {
+    /**
+     * ctor
+     */
+    public CEvaluationStore()
+    {
+        super();
+        m_data.add( new CCollectorInconsistency() );
+    }
 
     @Override
     public final String toString()
@@ -62,15 +77,27 @@ public class CEvaluationStore extends IDatabase
     }
 
     /**
-     * worker to get all information via reflection
+     * worker to inconsistency via reflection
      */
-    protected class CCollector extends IDatabase.CWorker
+    protected static class CCollectorInconsistency extends IDatabase.CWorker
     {
+        private final CReflection.CGetSet m_access = CReflection.getClassField( CInconsistencyLayer.class, "m_data" );
+
 
         @Override
         public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
         {
-
+            try
+            {
+                final Map<IAgent<?>, Double> l_data = (Map<IAgent<?>, Double>) m_access.getGetter().invoke(
+                        CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( "Jason Car Inconsistency" )
+                );
+                //System.out.println(l_data);
+            }
+            catch ( final Throwable p_throwable )
+            {
+                CLogger.error( p_throwable );
+            }
         }
 
     }

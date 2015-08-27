@@ -260,10 +260,9 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      * @param p_iteration number of iterations
      * @return largest eigenvector (not normalized)
      *
-     * @bug testing of correct algorith and method calls (normalization)
      * @see http://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
      */
-    private static DoubleMatrix1D getPerronFrobenius( final DoubleMatrix2D p_matrix, final int p_iteration )
+    private static DoubleMatrix1D getLargestEigenvector( final DoubleMatrix2D p_matrix, final int p_iteration )
     {
         DoubleMatrix1D l_probability = DoubleFactory1D.dense.random( p_matrix.rows() );
         for ( int i = 0; i < p_iteration; ++i )
@@ -308,7 +307,7 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         switch ( m_algorithm )
         {
             case Iteration:
-                l_eigenvector = getPerronFrobenius( p_matrix, m_iteration );
+                l_eigenvector = getLargestEigenvector( p_matrix, m_iteration );
                 break;
 
             case Numeric:

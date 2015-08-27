@@ -34,6 +34,7 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Map;
 
 
@@ -68,10 +69,10 @@ public class CEvaluationStore extends IDatabase
                 c_tablename,
                 new String[]{
                         "instance char(36) not null",
-                        "process bigint unsigned not null",
-                        "run bigint unsigned not null",
-                        "step bigint unsigned not null",
-                        "agenthash bigint unsigned not null",
+                        "process bigint not null",
+                        "run int unsigned not null",
+                        "step int unsigned not null",
+                        "agenthash int not null",
                         "value double not null"
                 },
                 new String[]{
@@ -105,11 +106,12 @@ public class CEvaluationStore extends IDatabase
          */
         public CCollectorInconsistency() throws SQLException
         {
-            m_statement = c_datasource.getConnection().prepareStatement( "insert into ? values ( ?, ?, ?, ?, ?, ? )" );
+            m_statement = c_datasource.getConnection().prepareStatement(
+                    "insert into " + CEvaluationStore.this.getTableName( c_tablename ) + " values ( ?, ?,  ?, ?,  ?, ? )"
+            );
 
-            m_statement.setString( 1, CEvaluationStore.this.getTableName( c_tablename ) );
-            m_statement.setString( 2, CConfiguration.getInstance().get().<String>get( "uuid" ) );
-            m_statement.setObject( 3, CConfiguration.getInstance().getProcessID() );
+            m_statement.setString( 1, CConfiguration.getInstance().get().<String>get( "uuid" ) );
+            m_statement.setObject( 2, CConfiguration.getInstance().getProcessID(), Types.BIGINT );
         }
 
         @Override
@@ -117,15 +119,15 @@ public class CEvaluationStore extends IDatabase
         {
             try
             {
-                m_statement.setObject( 4, CSimulation.getInstance().getNumberOfRuns() );
+                m_statement.setInt( 3, CSimulation.getInstance().getNumberOfRuns() );
 
                 for ( final Map.Entry<IAgent<?>, Double> l_item : ( (Map<IAgent<?>, Double>) m_access.getGetter().invoke(
                         CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( "Jason Car Inconsistency" )
                 ) ).entrySet() )
                 {
-                    m_statement.setInt( 5, p_currentstep );
-                    m_statement.setInt( 6, l_item.hashCode() );
-                    m_statement.setDouble( 7, l_item.getValue() );
+                    m_statement.setInt( 4, p_currentstep );
+                    m_statement.setInt( 5, l_item.hashCode() );
+                    m_statement.setDouble( 6, l_item.getValue() );
 
                     m_statement.execute();
                 }

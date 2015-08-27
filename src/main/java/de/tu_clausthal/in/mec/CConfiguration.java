@@ -441,7 +441,7 @@ public class CConfiguration
     }
 
     /**
-     * returns the current process id
+     * returns the current process id (a signed big integer value)
      */
     public BigInteger getProcessID()
     {

@@ -20,7 +20,10 @@
 
 # evaluation of inconsistency data
 #
+# @param databasedriver database driver
+#
 mecsim.inconsistency <- function(
+    databasedriver
 
 ){
     # --- check required packages ---
@@ -32,4 +35,9 @@ mecsim.inconsistency <- function(
         if (!is.element( i, installed.packages()[,1] ) )
             install.packages(i)
 
+
+    # set database connection elements - close an existing connection first
+    if (!is.null(getOption("sqldf.connection"))) sqldf()
+
+    options( sqldf.driver = databasedriver )
 }

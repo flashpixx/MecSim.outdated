@@ -45,6 +45,9 @@ import java.util.Map;
  */
 public class CEvaluationStore extends IDatabase
 {
+    /**
+     * table name
+     **/
     private static String c_tablename = "inconsistency";
 
     /**
@@ -96,6 +99,7 @@ public class CEvaluationStore extends IDatabase
          * access to the field of the inconsistency layer
          **/
         private final CReflection.CGetSet m_access = CReflection.getClassField( CInconsistencyLayer.class, "m_data" );
+        /** prepare statement **/
         private final PreparedStatement m_statement;
 
 

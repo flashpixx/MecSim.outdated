@@ -81,7 +81,7 @@ public class CConfiguration
     /**
      * list if external files for extracting
      */
-    private static final String[] c_externalfiles = new String[]{"benchmark.r"};
+    private static final String[] c_externalfiles = new String[]{"benchmark.r", "inconsistency.r"};
     /**
      * user configuration name
      */

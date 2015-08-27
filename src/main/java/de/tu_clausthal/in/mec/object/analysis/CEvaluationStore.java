@@ -99,14 +99,16 @@ public class CEvaluationStore extends IDatabase
          * access to the field of the inconsistency layer
          **/
         private final CReflection.CGetSet m_access = CReflection.getClassField( CInconsistencyLayer.class, "m_data" );
-        /** prepare statement **/
+        /**
+         * prepare statement
+         **/
         private final PreparedStatement m_statement;
 
 
         /**
-         * ctor
+         * ctor - set prepare statement with fixed values
          *
-         * @throws SQLException
+         * @throws SQLException preparing throws exceptions
          */
         public CCollectorInconsistency() throws SQLException
         {
@@ -119,12 +121,15 @@ public class CEvaluationStore extends IDatabase
         }
 
         @Override
+        @SuppressWarnings( "unchecked" )
         public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
         {
             try
             {
+                // set iteration-fixed values within the statement
                 m_statement.setInt( 3, CSimulation.getInstance().getNumberOfRuns() );
 
+                // get data via reflection and iterate over dataset
                 for ( final Map.Entry<IAgent<?>, Double> l_item : ( (Map<IAgent<?>, Double>) m_access.getGetter().invoke(
                         CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( "Jason Car Inconsistency" )
                 ) ).entrySet() )

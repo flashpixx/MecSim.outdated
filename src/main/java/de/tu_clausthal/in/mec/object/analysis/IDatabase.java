@@ -152,7 +152,7 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
     protected abstract static class CWorker implements IVoidSteppable
     {
         @Override
-        public void release()
+        public final void release()
         {
         }
     }

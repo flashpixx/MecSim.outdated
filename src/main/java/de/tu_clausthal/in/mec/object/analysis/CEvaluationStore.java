@@ -76,6 +76,7 @@ public class CEvaluationStore extends IDatabase
                         "run int unsigned not null",
                         "step int unsigned not null",
                         "agenthash int not null",
+                        "agentsource varchar(256) not null",
                         "value double not null"
                 },
                 new String[]{
@@ -113,7 +114,7 @@ public class CEvaluationStore extends IDatabase
         public CCollectorInconsistency() throws SQLException
         {
             m_statement = c_datasource.getConnection().prepareStatement(
-                    "insert into " + CEvaluationStore.this.getTableName( c_tablename ) + " values ( ?, ?,  ?, ?,  ?, ? )"
+                    "insert into " + CEvaluationStore.this.getTableName( c_tablename ) + " values ( ?, ?,  ?, ?,  ?, ?, ? )"
             );
 
             m_statement.setString( 1, CConfiguration.getInstance().get().<String>get( "uuid" ) );
@@ -136,7 +137,8 @@ public class CEvaluationStore extends IDatabase
                 {
                     m_statement.setInt( 4, p_currentstep );
                     m_statement.setInt( 5, l_item.hashCode() );
-                    m_statement.setDouble( 6, l_item.getValue() );
+                    m_statement.setString( 6, l_item.getKey().getSource() );
+                    m_statement.setDouble( 7, l_item.getValue() );
 
                     m_statement.execute();
                 }

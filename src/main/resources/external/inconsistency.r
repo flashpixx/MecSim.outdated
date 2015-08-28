@@ -20,24 +20,66 @@
 
 # evaluation of inconsistency data
 #
+# @warning the R package of the database driver e.g. RMySL is needed and must installed manually
+#
 # @param databasedriver database driver
 #
 mecsim.inconsistency <- function(
-    databasedriver
-
+    instance,
+    configuration = file.path( Sys.getenv("HOME"), ".mecsim" ),
+    onlymyself=TRUE
 ){
     # --- check required packages ---
-    # SQLDF (https://cran.r-project.org/web/packages/sqldf/)
+    # RJDBC (https://cran.r-project.org/web/packages/RJDBC/)
+    # JsonLite (https://cran.r-project.org/web/packages/jsonlite/)
     # StarGazer (https://cran.r-project.org/web/packages/stargazer/)
     # GGplot2 (https://cran.r-project.org/web/packages/ggplot2/)
     # GridExtra (https://cran.r-project.org/web/packages/gridExtra)
-    for ( i in c("sqldf", "stargazer", "ggplot2", "gridExtra") )
+    for ( i in c("RJDBC", "jsonlite", "stargazer", "ggplot2", "gridExtra") )
         if (!is.element( i, installed.packages()[,1] ) )
             install.packages(i)
 
 
-    # set database connection elements - close an existing connection first
-    if (!is.null(getOption("sqldf.connection"))) sqldf()
+    # --- read MecSim configuration (database settings) ---
+    lo_config    <- jsonlite::fromJSON( file.path(configuration, "config.json"), flatten = TRUE );
+    #print(lo_config$database)
+    # --- try to load JDBC driver from Jar ---
+    lo_connection <- NULL
+    for ( i  in list.files( file.path(configuration, "jar"), pattern= ".jar", full.names = TRUE ) )
+    {
+        #print(i)
+        lo_connection <-RJDBC::dbConnect( RJDBC::JDBC( lo_config$database$driver, i ), lo_config$database$url, lo_config$database$username, lo_config$database$password )
 
-    options( sqldf.driver = databasedriver )
+        #print( RJDBC::dbGetInfo(lo_driver) )
+        #RJDBC::dbListConnections(lo_driver)
+
+        #print( RJDBC::dbGetTables(lo_connection) )
+        #print( lo_connection )
+        #print("")
+        #print("")
+
+
+        #if (!is.na(lo_driver[1]))
+        #    break
+
+    }
+
+
+
+    # --- read table data ---
+    lc_tablename <- paste(lo_config$database$tableprefix, "inconsistency")
+
+    lo_result <- NULL
+    if (onlymyself)
+        lo_result <- RJDBC::dbGetQuery( lo_connection, paste("select * from ", lc_tablename, " where instance=?"), lo_config$uuid )
+    else
+        lo_result <- RJDBC::dbGetQuery( lo_connection, paste("select * from ", lc_tablename) )
+
+
+    print(lo_result)
+
+
+    # --- close database connetion and clear result ---
+    #RJDBC::dbClearResult(lo_result)
+    RJDBC::dbDisconnect(lo_connection);
 }

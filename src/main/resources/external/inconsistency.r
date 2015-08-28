@@ -25,9 +25,8 @@
 # @param databasedriver database driver
 #
 mecsim.inconsistency <- function(
-    instance,
-    configuration = file.path( Sys.getenv("HOME"), ".mecsim" ),
-    onlymyself=TRUE
+    onlymyself=TRUE,
+    configuration = file.path( Sys.getenv("HOME"), ".mecsim" )
 ){
     # --- check required packages ---
     # RJDBC (https://cran.r-project.org/web/packages/RJDBC/)
@@ -58,10 +57,6 @@ mecsim.inconsistency <- function(
         #print("")
         #print("")
 
-
-        #if (!is.na(lo_driver[1]))
-        #    break
-
     }
 
 
@@ -80,6 +75,5 @@ mecsim.inconsistency <- function(
 
 
     # --- close database connetion and clear result ---
-    #RJDBC::dbClearResult(lo_result)
     RJDBC::dbDisconnect(lo_connection);
 }

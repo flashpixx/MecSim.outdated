@@ -114,7 +114,7 @@ public class CEvaluationStore extends IDatabase
         public CCollectorInconsistency() throws SQLException
         {
             m_statement = c_datasource.getConnection().prepareStatement(
-                    "insert into " + CEvaluationStore.this.getTableName( c_tablename ) + " values ( ?, ?,  ?, ?,  ?, ?, ? )"
+                    "insert into " + CEvaluationStore.this.getTableName( c_tablename ) + " values ( ?, ?,  ?, ?,  ?, ?,  ? )"
             );
 
             m_statement.setString( 1, CConfiguration.getInstance().get().<String>get( "uuid" ) );

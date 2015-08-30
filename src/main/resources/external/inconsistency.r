@@ -45,19 +45,17 @@ mecsim.inconsistency <- function(
     # --- try to load JDBC driver from Jar ---
     lo_connection <- NULL
     for ( i  in list.files( file.path(configuration, "jar"), pattern= ".jar", full.names = TRUE ) )
-    {
-        #print(i)
-        lo_connection <-RJDBC::dbConnect( RJDBC::JDBC( lo_config$database$driver, i ), lo_config$database$url, lo_config$database$username, lo_config$database$password )
+        tryCatch({
+            lo_connection <-RJDBC::dbConnect( RJDBC::JDBC( lo_config$database$driver, i ), lo_config$database$url, lo_config$database$username, lo_config$database$password )
+            break;
+        },
+            # ignore driver error
+            error = function(p_error) {}
+        )
 
-        #print( RJDBC::dbGetInfo(lo_driver) )
-        #RJDBC::dbListConnections(lo_driver)
-
-        #print( RJDBC::dbGetTables(lo_connection) )
-        #print( lo_connection )
-        #print("")
-        #print("")
-
-    }
+    # if connection not exsists stop
+    if (is.null(lo_connection))
+        stop(sprintf("cannot connect to database [%s] with driver [%s]", lo_config$database$url, lo_config$database$driver))
 
 
 

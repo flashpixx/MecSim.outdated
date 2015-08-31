@@ -21,7 +21,7 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas;
+package de.tu_clausthal.in.mec.object.mas.generic;
 
 
 /**
@@ -29,6 +29,13 @@ package de.tu_clausthal.in.mec.object.mas;
  */
 public interface IWorldAction<N, M>
 {
+
+    /**
+     * name of the action
+     *
+     * @return name of the action
+     */
+    public String getName();
 
     /**
      * runs the action *

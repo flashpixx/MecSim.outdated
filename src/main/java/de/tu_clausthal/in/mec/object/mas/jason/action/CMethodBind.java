@@ -26,7 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
-import de.tu_clausthal.in.mec.object.mas.IWorldAction;
+import de.tu_clausthal.in.mec.object.mas.generic.IWorldAction;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.NoValueException;
 import jason.asSemantics.Agent;
@@ -84,6 +84,12 @@ public class CMethodBind implements IWorldAction<Agent, Structure>
     }
 
     @Override
+    public String getName()
+    {
+        return "mecsim_invokemethod";
+    }
+
+    @Override
     public final void act( final Agent p_agent, final Structure p_args )
     {
         // check number of argument first
@@ -99,7 +105,6 @@ public class CMethodBind implements IWorldAction<Agent, Structure>
 
         try
         {
-
             // build argument data & types and invoke the method
             final List<Class<?>> l_argumenttypes = new LinkedList<>();
             final List<Object> l_argumentdata = new LinkedList<>();

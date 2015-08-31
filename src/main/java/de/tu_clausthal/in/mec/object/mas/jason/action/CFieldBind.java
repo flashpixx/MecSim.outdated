@@ -27,16 +27,13 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
-import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
-import de.tu_clausthal.in.mec.object.mas.IWorldAction;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.IFieldBind;
 import jason.asSemantics.Agent;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,37 +42,29 @@ import java.util.Set;
 /**
  * action to synchronize bind-object with agent value
  */
-public class CFieldBind implements IWorldAction<Agent, Structure>
+public class CFieldBind extends IFieldBind<Agent, Structure>
 {
-    /**
-     * add field filter *
-     */
-    private static final CFieldFilter c_filter = new CFieldFilter();
-    /**
-     * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
-     * setter handles, so each bind can configurate individual
-     */
-    private final Map<String, Pair<Object, Map<String, CReflection.CGetSet>>> m_bind = new HashMap<>();
-
 
     /**
      * ctor - default
      */
     public CFieldBind()
     {
+        super();
     }
 
 
     /**
      * ctor bind an object
      *
-     * @param p_name name / annotation of the bind object
-     * @param p_object bind object
+     * @param p_name name of the binding object
+     * @param p_object object
      */
     public CFieldBind( final String p_name, final Object p_object )
     {
-        this.push( p_name, p_object, null );
+        super( p_name, p_object );
     }
+
 
     /**
      * ctor
@@ -86,13 +75,13 @@ public class CFieldBind implements IWorldAction<Agent, Structure>
      */
     public CFieldBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
-        this.push( p_name, p_object, p_forbiddennames );
+        super( p_name, p_object, p_forbiddennames );
     }
+
 
     @Override
     public final void act( final Agent p_agent, final Structure p_args )
     {
-
         // check number of argument first
         final List<Term> l_args = p_args.getTerms();
         if ( l_args.size() < 3 )
@@ -127,42 +116,4 @@ public class CFieldBind implements IWorldAction<Agent, Structure>
         }
     }
 
-    /**
-     * adds / binds an object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     */
-    public final void push( final String p_name, final Object p_object )
-    {
-        this.push( p_name, p_object, null );
-    }
-
-    /**
-     * adds a new bind object
-     *
-     * @param p_name name / annotation of the object
-     * @param p_object object
-     * @param p_forbiddennames set with forbidden names of the object fields
-     */
-    public final void push( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
-    {
-        m_bind.put(
-                p_name, new ImmutablePair<Object, Map<String, CReflection.CGetSet>>(
-                        p_object, CReflection.getClassFields(
-                        p_object.getClass(), c_filter
-                )
-                )
-        );
-    }
-
-    /**
-     * removes an object from the bind
-     *
-     * @param p_name name
-     */
-    public final void remove( final String p_name )
-    {
-        m_bind.remove( p_name );
-    }
 }

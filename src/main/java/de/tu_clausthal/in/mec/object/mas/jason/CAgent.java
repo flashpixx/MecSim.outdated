@@ -28,9 +28,10 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
-import de.tu_clausthal.in.mec.object.mas.IWorldAction;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.generic.IWorldAction;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefMaskStorage;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
@@ -83,10 +84,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
      * name of the invoke-command
      */
     private static final String c_invokecommandname = "mecsim_invokemethod";
-    /**
-     * name of the set/property-command
-     */
-    private static final String c_setpropertycommandname = "mecsim_propertyset";
     /**
      * name of the root beliefbase and its mask
      */
@@ -224,7 +221,9 @@ public class CAgent<T> implements IVoidAgent<Literal>
         if ( p_bind != null )
         {
             // register possible actions
-            m_action.put( c_setpropertycommandname, new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
+            final CFieldBind l_fieldbind = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind );
+            m_action.put( l_fieldbind.getName(), l_fieldbind );
+            //m_action.put( c_setpropertycommandname, new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
             m_action.put( c_invokecommandname, m_methodBind );
 
             m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );

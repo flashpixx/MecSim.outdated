@@ -73,7 +73,7 @@ public interface IAgent<T> extends Painter, IReceiver
      * @param p_name binding name of the action
      * @param p_object binding object
      */
-    public void registerAction( final String p_name, final Object p_object );
+    public void bind( final String p_name, final Object p_object );
 
     /**
      * register a beliefbase mask
@@ -81,7 +81,7 @@ public interface IAgent<T> extends Painter, IReceiver
      * @param p_path path in which the mask is added
      * @param p_mask mask
      */
-    public void registerMask( final CPath p_path, final IBeliefBaseMask<T> p_mask );
+    public void addBeliefBase( final CPath p_path, final IBeliefBaseMask<T> p_mask );
 
     /**
      * release agent call *
@@ -93,13 +93,13 @@ public interface IAgent<T> extends Painter, IReceiver
      *
      * @param p_name binding name of the action
      */
-    public void unregisterAction( final String p_name );
+    public void unbind( final String p_name );
 
     /**
      * unregister a beliefbase mask
      *
      * @param p_path path of the mask (last element is the mask name)
      */
-    public void unregisterMask( final CPath p_path );
+    public void removeBeliefBase( final CPath p_path );
 
 }

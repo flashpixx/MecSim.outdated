@@ -27,7 +27,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
-import de.tu_clausthal.in.mec.object.mas.generic.implementation.IFieldBind;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.IPropertyBind;
 import jason.asSemantics.Agent;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
@@ -42,13 +42,13 @@ import java.util.Set;
 /**
  * action to synchronize bind-object with agent value
  */
-public class CFieldBind extends IFieldBind<Agent, Structure>
+public class CPropertyBind extends IPropertyBind<Agent, Structure>
 {
 
     /**
      * ctor - default
      */
-    public CFieldBind()
+    public CPropertyBind()
     {
         super();
     }
@@ -60,7 +60,7 @@ public class CFieldBind extends IFieldBind<Agent, Structure>
      * @param p_name name of the binding object
      * @param p_object object
      */
-    public CFieldBind( final String p_name, final Object p_object )
+    public CPropertyBind( final String p_name, final Object p_object )
     {
         super( p_name, p_object );
     }
@@ -73,7 +73,7 @@ public class CFieldBind extends IFieldBind<Agent, Structure>
      * @param p_object bind object
      * @param p_forbiddennames set with forbidden field names of the object fields
      */
-    public CFieldBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
+    public CPropertyBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
         super( p_name, p_object, p_forbiddennames );
     }

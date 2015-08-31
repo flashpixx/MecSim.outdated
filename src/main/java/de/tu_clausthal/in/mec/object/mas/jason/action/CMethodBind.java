@@ -25,8 +25,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 
 import de.tu_clausthal.in.mec.common.CReflection;
-import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
-import de.tu_clausthal.in.mec.object.mas.generic.IWorldAction;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.IMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.NoValueException;
 import jason.asSemantics.Agent;
@@ -38,10 +37,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -49,20 +46,12 @@ import java.util.Map;
  *
  * @warning methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
  */
-public class CMethodBind implements IWorldAction<Agent, Structure>
+public class CMethodBind extends IMethodBind<Agent, Structure>
 {
-    /**
-     * method filter
-     */
-    private static final CMethodFilter c_filter = new CMethodFilter();
     /**
      * name of the source literal on returning argument
      */
     private static final String c_returnannotation = "source";
-    /**
-     * bind object *
-     */
-    private final Map<String, CReflection.CMethodCache<Object>> m_bind = new HashMap<>();
 
 
     /**
@@ -83,11 +72,6 @@ public class CMethodBind implements IWorldAction<Agent, Structure>
         this.push( p_name, p_object );
     }
 
-    @Override
-    public String getName()
-    {
-        return "mecsim_invokemethod";
-    }
 
     @Override
     public final void act( final Agent p_agent, final Structure p_args )
@@ -131,26 +115,6 @@ public class CMethodBind implements IWorldAction<Agent, Structure>
         }
     }
 
-    /**
-     * adds a new bind object
-     *
-     * @param p_name name
-     * @param p_object bind object
-     */
-    public final void push( final String p_name, final Object p_object )
-    {
-        m_bind.put( p_name, new CReflection.CMethodCache( p_object, c_filter ) );
-    }
-
-    /**
-     * removes an object from the bind
-     *
-     * @param p_name name
-     */
-    public final void remove( final String p_name )
-    {
-        m_bind.remove( p_name );
-    }
 
     /**
      * converts a list of terms int an array of class objects
@@ -278,42 +242,4 @@ public class CMethodBind implements IWorldAction<Agent, Structure>
         return new ImmutablePair<>( l_returntype, l_returnname );
     }
 
-    /**
-     * invokes a method
-     *
-     * @param p_object invoking object
-     * @param p_methodname method name
-     * @param p_returntype return type
-     * @param p_argumenttypes argument type list
-     * @param p_argumentdata argument data list
-     * @return return value
-     *
-     * @throws Throwable on invoking error
-     */
-    private Object invokeMethod( final CReflection.CMethodCache<Object> p_object, final String p_methodname, final Class<?> p_returntype,
-            final List<Class<?>> p_argumenttypes, final List<Object> p_argumentdata
-    ) throws Throwable
-    {
-        // method has got any arguments
-        if ( ( !p_argumentdata.isEmpty() ) && ( !p_argumenttypes.isEmpty() ) )
-        {
-            // convert argumenttypes to array
-            final Class<?>[] l_argumenttypes = new Class[p_argumenttypes.size()];
-            p_argumenttypes.toArray( l_argumenttypes );
-
-            // add to invoker-argument list and call invoker
-            return p_returntype.cast(
-                    p_object.get( p_methodname, l_argumenttypes ).getHandle().invokeWithArguments(
-                            new LinkedList<Object>()
-                            {{
-                                    add( p_object.getObject() );
-                                    addAll( p_argumentdata );
-                                }}
-                    )
-            );
-        }
-
-        // call invoker
-        return p_returntype.cast( p_object.get( p_methodname ).getHandle().invoke( p_object.getObject() ) );
-    }
 }

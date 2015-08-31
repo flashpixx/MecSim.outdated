@@ -39,7 +39,7 @@ import java.util.Set;
  * action to set a property value
  * of an object from an agent
  */
-public abstract class IFieldBind<N, M> implements IWorldAction<N, M>
+public abstract class IPropertyBind<N, M> implements IWorldAction<N, M>
 {
     /**
      * bind objects - map uses a name / annotation as key value and a pair of object and the map of fields and getter /
@@ -55,7 +55,7 @@ public abstract class IFieldBind<N, M> implements IWorldAction<N, M>
     /**
      * ctor - default
      */
-    public IFieldBind()
+    public IPropertyBind()
     {
     }
 
@@ -65,7 +65,7 @@ public abstract class IFieldBind<N, M> implements IWorldAction<N, M>
      * @param p_name name / annotation of the bind object
      * @param p_object bind object
      */
-    public IFieldBind( final String p_name, final Object p_object )
+    public IPropertyBind( final String p_name, final Object p_object )
     {
         this.push( p_name, p_object, null );
     }
@@ -78,7 +78,7 @@ public abstract class IFieldBind<N, M> implements IWorldAction<N, M>
      * @param p_object bind object
      * @param p_forbiddennames set with forbidden field names of the object fields
      */
-    public IFieldBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
+    public IPropertyBind( final String p_name, final Object p_object, final Set<String> p_forbiddennames )
     {
         this.push( p_name, p_object, p_forbiddennames );
     }

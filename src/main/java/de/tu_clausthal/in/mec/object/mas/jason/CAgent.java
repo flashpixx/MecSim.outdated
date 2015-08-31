@@ -31,8 +31,8 @@ import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.IWorldAction;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefMaskStorage;
-import de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CPropertyBind;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
@@ -81,10 +81,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
      */
     private static final String c_beliefbindprefixreplace = "m_";
     /**
-     * name of the invoke-command
-     */
-    private static final String c_invokecommandname = "mecsim_invokemethod";
-    /**
      * name of the root beliefbase and its mask
      */
     private static final CPath c_beliefbaseroot = new CPath( "root" );
@@ -100,11 +96,22 @@ public class CAgent<T> implements IVoidAgent<Literal>
      * bind name of the initial object
      */
     private static final String c_bindname = "self";
-
+    /**
+     * property bind
+     **/
+    private final CPropertyBind m_propertybind = new CPropertyBind();
+    /**
+     * method bind
+     */
+    private final CMethodBind m_methodbind = new CMethodBind();
     /**
      * set with actions of this implementation
      */
-    private final Map<String, IWorldAction> m_action = new HashMap<>();
+    private final Map<String, IWorldAction> m_action = new HashMap<String, IWorldAction>()
+    {{
+            put( m_propertybind.getName(), m_propertybind );
+            put( m_methodbind.getName(), m_methodbind );
+        }};
     /**
      * agent object
      */
@@ -122,14 +129,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
      * agent)
      */
     private int m_cycle;
-    /**
-     * mapping from functor to path
-     */
-    private final Map<String, CPath> m_mapping = new HashMap<>();
-    /**
-     * method bind
-     */
-    private final CMethodBind m_methodBind;
     /**
      * name of the agent
      */
@@ -205,7 +204,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
 
 
         // --- create beliefbase structure with tree structure
-        m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
+        //m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
         m_beliefbaserootmask.add(
                 new CBeliefBase(
                         new CMessageStorage( m_agent.getTS(), c_agentnameseparator ), c_agentbeliefseparator
@@ -220,12 +219,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
 
         if ( p_bind != null )
         {
-            // register possible actions
-            final CFieldBind l_fieldbind = new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind );
-            m_action.put( l_fieldbind.getName(), l_fieldbind );
-            //m_action.put( c_setpropertycommandname, new de.tu_clausthal.in.mec.object.mas.jason.action.CFieldBind( c_bindname, p_bind ) );
-            m_action.put( c_invokecommandname, m_methodBind );
-
+            this.bind( c_bindname, p_bind );
             m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );
         }
     }
@@ -265,16 +259,14 @@ public class CAgent<T> implements IVoidAgent<Literal>
     }
 
     @Override
-    public void registerAction( final String p_name, final Object p_object )
+    public void bind( final String p_name, final Object p_object )
     {
-        if ( m_methodBind == null )
-            return;
-
-        m_methodBind.push( p_name, p_object );
+        m_propertybind.push( p_name, p_object );
+        m_methodbind.push( p_name, p_object );
     }
 
     @Override
-    public void registerMask( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
+    public void addBeliefBase( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
     {
         m_beliefbaserootmask.add( p_mask );
     }
@@ -288,18 +280,16 @@ public class CAgent<T> implements IVoidAgent<Literal>
     }
 
     @Override
-    public void unregisterAction( final String p_name )
+    public void unbind( final String p_name )
     {
-        if ( m_methodBind == null )
-            return;
-
-        m_methodBind.remove( p_name );
+        m_propertybind.remove( p_name );
+        m_methodbind.remove( p_name );
     }
 
     @Override
-    public void unregisterMask( final CPath p_path )
+    public void removeBeliefBase( final CPath p_path )
     {
-
+        m_beliefbaserootmask.remove( p_path );
     }
 
     @Override

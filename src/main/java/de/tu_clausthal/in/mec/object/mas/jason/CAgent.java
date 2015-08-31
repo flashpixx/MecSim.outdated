@@ -28,10 +28,10 @@ import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
+import de.tu_clausthal.in.mec.object.mas.IWorldAction;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefMaskStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
-import de.tu_clausthal.in.mec.object.mas.jason.action.IAction;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
@@ -107,7 +107,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
     /**
      * set with actions of this implementation
      */
-    private final Map<String, IAction> m_action = new HashMap<>();
+    private final Map<String, IWorldAction> m_action = new HashMap<>();
     /**
      * agent object
      */
@@ -236,7 +236,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
      *
      * @return action set
      */
-    public final Map<String, IAction> getActions()
+    public final Map<String, IWorldAction> getActions()
     {
         return m_action;
     }
@@ -391,7 +391,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
         @Override
         public final void act( final ActionExec p_action, final List<ActionExec> p_feedback )
         {
-            final IAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
+            final IWorldAction l_action = m_action.get( p_action.getActionTerm().getFunctor() );
             if ( l_action != null )
                 try
                 {

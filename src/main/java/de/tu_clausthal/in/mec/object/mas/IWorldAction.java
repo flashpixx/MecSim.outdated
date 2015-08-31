@@ -21,25 +21,21 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.jason.action;
-
-
-import jason.asSemantics.Agent;
-import jason.asSyntax.Structure;
+package de.tu_clausthal.in.mec.object.mas;
 
 
 /**
- * action of an agent
+ * world-action of an agent
  */
-public abstract class IAction
+public interface IWorldAction<N, M>
 {
 
     /**
      * runs the action *
      *
-     * @param p_agent agent which is run the action
+     * @param p_agent agent which runs the action
      * @param p_args arguments of the action
      */
-    public abstract void act( final Agent p_agent, final Structure p_args );
+    public void act( final N p_agent, final M p_args );
 
 }

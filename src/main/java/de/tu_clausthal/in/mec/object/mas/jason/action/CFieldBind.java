@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
+import de.tu_clausthal.in.mec.object.mas.IWorldAction;
 import jason.asSemantics.Agent;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
@@ -44,7 +45,7 @@ import java.util.Set;
 /**
  * action to synchronize bind-object with agent value
  */
-public class CFieldBind extends IAction
+public class CFieldBind implements IWorldAction<Agent, Structure>
 {
     /**
      * add field filter *

@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason.action;
 
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
+import de.tu_clausthal.in.mec.object.mas.IWorldAction;
 import de.tu_clausthal.in.mec.object.mas.jason.CCommon;
 import jason.NoValueException;
 import jason.asSemantics.Agent;
@@ -48,7 +49,7 @@ import java.util.Map;
  *
  * @warning methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
  */
-public class CMethodBind extends IAction
+public class CMethodBind implements IWorldAction<Agent, Structure>
 {
     /**
      * method filter

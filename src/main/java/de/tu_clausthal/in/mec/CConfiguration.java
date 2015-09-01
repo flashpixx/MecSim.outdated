@@ -203,7 +203,7 @@ public class CConfiguration
                                                                             );
                                                                             put(
                                                                                     "northamerica-usa-southdakota",
-                                                                                    "http://download.geofabrik.de/north-america/us/south-dakota.html"
+                                                                                    "http://download.geofabrik.de/north-america/us/south-dakota-latest.osm.pbf"
                                                                             );
                                                                         }}
                                                             );

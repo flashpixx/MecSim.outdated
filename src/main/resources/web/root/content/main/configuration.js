@@ -194,11 +194,7 @@ Configuration.prototype.buildUIElements = function()
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_cellsampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_timesampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
 
-        //'<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_map"),               label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) +
-
-        '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_map_name"),          label : "",  list: lo_elements.texts,     value: this.mo_configuration.simulation.traffic.map.name })     + '</p>' +
-        '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_map_url"),           label : "",  list: lo_elements.texts,     value: this.mo_configuration.simulation.traffic.map.url })      + ' <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
-
+        '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: keys(this.mo_configuration.simulation.traffic.map.graphs).convert( function( pc_item ) { return { id: pc_item }; } ) }) + ' <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("simulation_traffic_map_reimport"),      label : "",  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_routing_algorithm"), label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.routing.algorithm,  options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) +
         '</div>' +
@@ -239,7 +235,7 @@ Configuration.prototype.buildUIElements = function()
 Configuration.prototype.generateSubIDElements = function(pc_id, pc_prefix)
 {
     var lc = this.generateSubIDElementsInit(pc_id, pc_prefix);
-    if (["language_current", "simulation_traffic_routing_algorithm"].indexOf(pc_id) > -1)
+    if (["language_current", "simulation_traffic_routing_algorithm", "simulation_traffic_map_current"].indexOf(pc_id) > -1)
         lc += "-button";
 
     return lc;

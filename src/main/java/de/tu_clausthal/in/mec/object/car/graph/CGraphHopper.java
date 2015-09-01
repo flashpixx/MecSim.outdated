@@ -108,16 +108,13 @@ public class CGraphHopper extends GraphHopper
         // set the default settings
         m_cellsize = p_cellsize;
         this.setCHShortcuts( "default" );
-
+        //2b33cdf620fe693dd2ce7c7369445dc8
         // define graph location (use configuration)
-        final Pair<String, String> l_current = getCurrentGraph();
-
+        final Pair<String, String> l_currentgraph = getCurrentGraph();
         final File l_graphlocation = CConfiguration.getInstance().getLocation(
-                "root", "graphs", CConfiguration.getInstance().get().<String>get(
-                        "simulation/traffic/map/name"
-                ).replace( '/', '_' )
+                "root", "graphs", CCommon.getHash( l_currentgraph.getLeft(), "MD5" )
         );
-        CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
+        CLogger.out( CCommon.getResourceString( this, "path", l_currentgraph.getLeft(), l_graphlocation.getAbsolutePath() ) );
 
         // if reimported is set, delete graph directory
         if ( CConfiguration.getInstance().get().<Boolean>get( "simulation/traffic/map/reimport" ) )
@@ -128,7 +125,7 @@ public class CGraphHopper extends GraphHopper
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
             CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
-            final File l_osm = this.downloadOSMData( CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/url" ) );
+            final File l_osm = this.downloadOSMData( l_currentgraph.getRight() );
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
             this.setOSMFile( l_osm.getAbsolutePath() );

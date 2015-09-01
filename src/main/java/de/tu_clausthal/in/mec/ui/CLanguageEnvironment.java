@@ -63,8 +63,11 @@ public class CLanguageEnvironment
                             CLanguageEnvironment.class, "ui_configuration_simulation_traffic_timesampling"
                     )
             );
-            put( "label_simulation_traffic_map_name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_simulation_traffic_map_name" ) );
-            put( "label_simulation_traffic_map_url", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_simulation_traffic_map_url" ) );
+            put(
+                    "label_simulation_traffic_map_current", CCommon.getResourceString(
+                            CLanguageEnvironment.class, "ui_configuration_simulation_traffic_map_current"
+                    )
+            );
             put(
                     "label_simulation_traffic_map_reimport", CCommon.getResourceString(
                             CLanguageEnvironment.class, "ui_configuration_simulation_traffic_map_reimport"

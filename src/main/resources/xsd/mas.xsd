@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema" xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning"
-           elementFormDefault = "qualified" targetNamespace = "mas" vc:minVersion = "1.1"
-           xmlns = "mas">
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema"
+           xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault = "qualified"
+           targetNamespace = "mas" vc:minVersion = "1.1" xmlns = "mas">
     <xs:complexType abstract="true" name="iagent" final="#all" id="iagent">
         <xs:annotation>
             <xs:documentation>agent definition</xs:documentation>
@@ -12,7 +12,7 @@
                     <xs:documentation>an unique name of the agent without extension</xs:documentation>
                 </xs:annotation>
                 <xs:simpleType>
-                    <xs:restriction base = "xs:string">
+                    <xs:restriction base = "xs:ID">
                         <xs:whiteSpace fixed = "true" value = "collapse" />
                     </xs:restriction>
                 </xs:simpleType>

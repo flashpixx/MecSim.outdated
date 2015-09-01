@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    vc:minVersion="1.1" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema" xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning"
+           elementFormDefault = "qualified" vc:minVersion = "1.1"
     targetNamespace="distribution" xmlns="distribution">
     <xs:simpleType final="restriction" id="probability" name="probability">
         <xs:annotation>
@@ -29,19 +29,19 @@
         <xs:annotation>
             <xs:documentation>abstract type of an uniform distribution</xs:documentation>
         </xs:annotation>
-        <xs:attribute name="min" type="probability"> </xs:attribute>
-        <xs:attribute name="max" type="probability"/>
+        <xs:attribute name = "min" type = "probability" default = "0" use = "optional"></xs:attribute>
+        <xs:attribute name = "max" type = "probability" default = "1" use = "optional" />
     </xs:complexType>
     <xs:complexType name="idistribution_normal" abstract="true" final="#all">
         <xs:annotation>
             <xs:documentation>abstract type of a normal distribution</xs:documentation>
         </xs:annotation>
-        <xs:attribute name="expectedvalue">
+        <xs:attribute name = "expectedvalue" default = "0">
             <xs:simpleType>
                 <xs:restriction base="xs:double"/>
             </xs:simpleType>
         </xs:attribute>
-        <xs:attribute name="variance">
+        <xs:attribute name = "variance" default = "1">
             <xs:simpleType>
                 <xs:restriction base="xs:double"/>
             </xs:simpleType>
@@ -51,7 +51,7 @@
         <xs:annotation>
             <xs:documentation>abstract type of an exponential distribution</xs:documentation>
         </xs:annotation>
-        <xs:attribute name="expectedvalue">
+        <xs:attribute name = "expectedvalue" default = "0.5">
             <xs:simpleType>
                 <xs:restriction base="xs:double"/>
             </xs:simpleType>

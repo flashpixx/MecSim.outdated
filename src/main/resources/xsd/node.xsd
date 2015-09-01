@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema" xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning"
-           xmlns:vehicle = "vehicle" xmlns:distribution = "distribution" elementFormDefault = "qualified"
-           targetNamespace = "node" vc:minVersion = "1.1"
-           xmlns = "node">
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema"
+           xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning" xmlns:vehicle = "vehicle"
+           xmlns:distribution = "distribution" elementFormDefault = "qualified" targetNamespace = "node"
+           vc:minVersion = "1.1" xmlns = "node">
     <xs:import namespace="vehicle" schemaLocation="vehicle.xsd"/>
     <xs:import namespace="distribution" schemaLocation="distribution.xsd"/>
     <xs:attributeGroup id="gps" name="gps">
@@ -39,10 +39,10 @@
         <xs:attributeGroup ref="gps"/>
         <xs:attribute name="name" use="required">
             <xs:annotation>
-                <xs:documentation>name of the source</xs:documentation>
+                <xs:documentation>unique name of the source</xs:documentation>
             </xs:annotation>
             <xs:simpleType>
-                <xs:restriction base="xs:string"/>
+                <xs:restriction base = "xs:ID" />
             </xs:simpleType>
         </xs:attribute>
         <xs:attribute name = "nameexpression" use = "optional">

@@ -110,6 +110,8 @@ public class CGraphHopper extends GraphHopper
         this.setCHShortcuts( "default" );
 
         // define graph location (use configuration)
+        final Pair<String, String> l_current = getCurrentGraph();
+
         final File l_graphlocation = CConfiguration.getInstance().getLocation(
                 "root", "graphs", CConfiguration.getInstance().get().<String>get(
                         "simulation/traffic/map/name"
@@ -126,7 +128,7 @@ public class CGraphHopper extends GraphHopper
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
             CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
-            final File l_osm = this.downloadOSMData();
+            final File l_osm = this.downloadOSMData( CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/url" ) );
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
             this.setOSMFile( l_osm.getAbsolutePath() );
@@ -405,7 +407,7 @@ public class CGraphHopper extends GraphHopper
      *
      * @return pair of graph name and download URL
      */
-    private static Pair<String, String> getCurrentgraph()
+    private static Pair<String, String> getCurrentGraph()
     {
         final String l_current = CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/current" );
         return new ImmutablePair<>( l_current, CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/graphs/" + l_current ) );
@@ -414,14 +416,15 @@ public class CGraphHopper extends GraphHopper
     /**
      * downloads the OSM data
      *
+     * @param p_url URL for downloading as string
      * @return download file with full path
      */
-    private final File downloadOSMData()
+    private final File downloadOSMData( final String p_url )
     {
         try
         {
             final File l_output = File.createTempFile( "mecsim", ".osm.pbf" );
-            final URL l_url = new URL( CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/url" ) );
+            final URL l_url = new URL( p_url );
 
             CLogger.out( CCommon.getResourceString( this, "download", l_url, l_output ) );
 

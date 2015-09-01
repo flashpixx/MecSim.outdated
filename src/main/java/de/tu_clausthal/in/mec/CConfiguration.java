@@ -208,9 +208,9 @@ public class CConfiguration
                                                                         }}
                                                             );
 
-                                                            // storing directory in the graph directory
+                                                            // @deprecated storing directory in the graph directory
                                                             put( "name", "europe/germany/lowersaxony" );
-                                                            // URL of downloading the PBF file
+                                                            // @deprecated  URL of downloading the PBF file
                                                             put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
                                                         }}
                                             );
@@ -353,6 +353,7 @@ public class CConfiguration
                             add( new CClassType( Boolean.class ) );
                         }}
             );
+            // @deprecated
             put(
                     "simulation/traffic/map/name", new LinkedList<ICheck>()
                     {{
@@ -360,6 +361,7 @@ public class CConfiguration
                             add( new CStringNotEmpty() );
                         }}
             );
+            // @deprecated
             put(
                     "simulation/traffic/map/url", new LinkedList<ICheck>()
                     {{
@@ -370,6 +372,7 @@ public class CConfiguration
             put(
                     "simulation/traffic/map/current", new LinkedList<ICheck>()
                     {{
+                            add( new CStringNotContains( CPath.DEFAULTSEPERATOR ) );
                             add( new CContains<String>( m_configuration.<Map<String, String>>get( "simulation/traffic/map/graphs" ).keySet() ) );
                         }}
             );
@@ -910,6 +913,43 @@ public class CConfiguration
         public String toString()
         {
             return CCommon.getResourceString( this, "text", m_lower, m_upper );
+        }
+    }
+
+    /**
+     * string not-allowed char check
+     */
+    protected class CStringNotContains extends ICheck<String>
+    {
+        /**
+         * string with non-allowed chars
+         **/
+        private final char[] m_notallowed;
+
+        /**
+         * String with not allowed chars
+         *
+         * @param p_notallowed not allowed chars
+         */
+        public CStringNotContains( final String p_notallowed )
+        {
+            m_notallowed = p_notallowed.toCharArray();
+        }
+
+        @Override
+        public boolean isCorrect( final String p_value )
+        {
+            for ( final Character l_char : m_notallowed )
+                if ( p_value.indexOf( l_char ) > -1 )
+                    return false;
+
+            return true;
+        }
+
+        @Override
+        public String toString()
+        {
+            return CCommon.getResourceString( this, "text" );
         }
     }
 

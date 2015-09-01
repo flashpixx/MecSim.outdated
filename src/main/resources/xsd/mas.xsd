@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema"
            xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault = "qualified"
            targetNamespace = "mas" vc:minVersion = "1.1" xmlns = "mas">
-    <xs:complexType abstract="true" name="iagent" final="#all" id="iagent">
+    <xs:complexType name = "iagent" final = "#all">
         <xs:annotation>
             <xs:documentation>agent definition</xs:documentation>
         </xs:annotation>

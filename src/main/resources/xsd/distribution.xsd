@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema" xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning"
            elementFormDefault = "qualified" vc:minVersion = "1.1"
     targetNamespace="distribution" xmlns="distribution">
-    <xs:simpleType final="restriction" id="probability" name="probability">
+    <xs:simpleType final = "restriction" name = "probability">
         <xs:annotation>
             <xs:documentation>datatype of a probability value [0,1]</xs:documentation>
         </xs:annotation>
@@ -15,7 +15,7 @@
             </xs:simpleType>
         </xs:restriction>
     </xs:simpleType>
-    <xs:complexType abstract="true" id="idistribution" name="idistribution" final="#all">
+    <xs:complexType name = "idistribution" final = "#all">
         <xs:annotation>
             <xs:documentation>abstract distribution type</xs:documentation>
         </xs:annotation>
@@ -25,14 +25,14 @@
             <xs:element name="normal" type="idistribution_exponential"/>
         </xs:choice>
     </xs:complexType>
-    <xs:complexType name="idistribution_uniform" final="#all" abstract="true">
+    <xs:complexType name = "idistribution_uniform" final = "#all">
         <xs:annotation>
             <xs:documentation>abstract type of an uniform distribution</xs:documentation>
         </xs:annotation>
         <xs:attribute name = "min" type = "probability" default = "0" use = "optional"></xs:attribute>
         <xs:attribute name = "max" type = "probability" default = "1" use = "optional" />
     </xs:complexType>
-    <xs:complexType name="idistribution_normal" abstract="true" final="#all">
+    <xs:complexType name = "idistribution_normal" final = "#all">
         <xs:annotation>
             <xs:documentation>abstract type of a normal distribution</xs:documentation>
         </xs:annotation>
@@ -47,7 +47,7 @@
             </xs:simpleType>
         </xs:attribute>
     </xs:complexType>
-    <xs:complexType abstract="true" final="#all" name="idistribution_exponential">
+    <xs:complexType final = "#all" name = "idistribution_exponential">
         <xs:annotation>
             <xs:documentation>abstract type of an exponential distribution</xs:documentation>
         </xs:annotation>

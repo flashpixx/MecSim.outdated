@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema" xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning"
-           xmlns:distribution = "distribution" xmlns:mas = "mas" elementFormDefault = "qualified"
-           targetNamespace = "vehicle" vc:minVersion = "1.1"
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema"
+           xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning" xmlns:distribution = "distribution"
+           xmlns:mas = "mas" elementFormDefault = "qualified" targetNamespace = "vehicle" vc:minVersion = "1.1"
            xmlns = "vehicle">
     <xs:import namespace="distribution" schemaLocation="distribution.xsd"/>
     <xs:import namespace="mas" schemaLocation="mas.xsd"/>
@@ -14,7 +14,7 @@
             <xs:element name="vehicleagent" type="ivehicleagent"/>
         </xs:choice>
     </xs:complexType>
-    <xs:complexType abstract = "true" final = "#all" name = "nonnegativeintattribute">
+    <xs:complexType final = "#all" name = "nonnegativeintattribute">
         <xs:annotation>
             <xs:documentation>type of an numeric value within a vehicle (constant value or distribution)</xs:documentation>
         </xs:annotation>
@@ -23,7 +23,7 @@
             <xs:element name="value" type="xs:nonNegativeInteger"/>
         </xs:choice>
     </xs:complexType>
-    <xs:complexType abstract = "true" final = "#all" name = "normalizeddoubleattribute">
+    <xs:complexType final = "#all" name = "normalizeddoubleattribute">
         <xs:annotation>
             <xs:documentation>normalized double value within a vehicle (const value or distribution)</xs:documentation>
         </xs:annotation>
@@ -32,7 +32,7 @@
             <xs:element name = "value" type = "distribution:probability" />
         </xs:choice>
     </xs:complexType>
-    <xs:complexType name="ivehicle" abstract="true">
+    <xs:complexType name = "ivehicle">
         <xs:annotation>
             <xs:documentation>default vehicle definition</xs:documentation>
         </xs:annotation>
@@ -65,7 +65,7 @@
             </xs:element>
         </xs:all>
     </xs:complexType>
-    <xs:complexType abstract="true" final="#all" name="ivehicleagent">
+    <xs:complexType final = "#all" name = "ivehicleagent">
         <xs:annotation>
             <xs:documentation>agent-based vehicle definition</xs:documentation>
         </xs:annotation>

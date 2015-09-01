@@ -5,7 +5,7 @@
            vc:minVersion = "1.1" xmlns = "node">
     <xs:import namespace="vehicle" schemaLocation="vehicle.xsd"/>
     <xs:import namespace="distribution" schemaLocation="distribution.xsd"/>
-    <xs:attributeGroup id="gps" name="gps">
+    <xs:attributeGroup name = "gps">
         <xs:annotation>
             <xs:documentation>attribute definition for GPS data</xs:documentation>
         </xs:annotation>
@@ -28,7 +28,7 @@
             </xs:simpleType>
         </xs:attribute>
     </xs:attributeGroup>
-    <xs:complexType id="iorigin" name="iorigin" abstract="true">
+    <xs:complexType name = "iorigin">
         <xs:annotation>
             <xs:documentation>abstract origin definition</xs:documentation>
         </xs:annotation>
@@ -66,13 +66,13 @@
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>
-    <xs:complexType name="idestination" id="idestination" abstract="true">
+    <xs:complexType name = "idestination">
         <xs:annotation>
             <xs:documentation>destination definition</xs:documentation>
         </xs:annotation>
         <xs:attributeGroup ref="gps"/>
     </xs:complexType>
-    <xs:complexType abstract="true" name="igenerator">
+    <xs:complexType name = "igenerator">
         <xs:annotation>
             <xs:documentation>generator definition</xs:documentation>
         </xs:annotation>
@@ -90,7 +90,7 @@
         </xs:annotation>
         <xs:list itemType="xs:nonNegativeInteger"/>
     </xs:simpleType>
-    <xs:complexType abstract="true" name="igenerator_timedistribution" final="#all">
+    <xs:complexType name = "igenerator_timedistribution" final = "#all">
         <xs:annotation>
             <xs:documentation>time distribution generates a number of cars depend on the distribution</xs:documentation>
         </xs:annotation>
@@ -107,7 +107,7 @@
             </xs:element>
         </xs:all>
     </xs:complexType>
-    <xs:complexType abstract="true" name="igenerator_histogram" final="#all">
+    <xs:complexType name = "igenerator_histogram" final = "#all">
         <xs:annotation>
             <xs:documentation>histogram generator generates a sequence of vehicles</xs:documentation>
         </xs:annotation>
@@ -124,7 +124,7 @@
             </xs:element>
         </xs:all>
     </xs:complexType>
-    <xs:complexType name="igenerator_constant" abstract="true" final="#all">
+    <xs:complexType name = "igenerator_constant" final = "#all">
         <xs:annotation>
             <xs:documentation>constant generator generates a number of cars on each simulation step</xs:documentation>
         </xs:annotation>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="mecsim" vc:minVersion="1.1" xmlns="mecsim"
-    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:dist="distribution"
-    xmlns:node="node">
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema" xmlns:vc = "http://www.w3.org/2007/XMLSchema-versioning"
+           xmlns:node = "node" elementFormDefault = "qualified" targetNamespace = "mecsim"
+           vc:minVersion = "1.1"
+           xmlns = "mecsim">
     <xs:import namespace="node" schemaLocation="node.xsd" id="node"/>
-    <xs:element name="odmatrix" id="odmatrix">
+    <xs:element name = "odmatrix">
         <xs:annotation>
             <xs:documentation>root element to define an origin/destination matrix
             </xs:documentation>
@@ -21,7 +21,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType final="#all" name="odtupel" id="odtupel" abstract="true">
+    <xs:complexType final = "#all" name = "odtupel">
         <xs:annotation>
             <xs:documentation>tupel of origin-destination structure</xs:documentation>
         </xs:annotation>
@@ -31,7 +31,7 @@
         </xs:all>
     </xs:complexType>
 
-    <xs:simpleType name="version" id="version">
+    <xs:simpleType name = "version">
         <xs:annotation>
             <xs:documentation>MecSim version definition</xs:documentation>
         </xs:annotation>

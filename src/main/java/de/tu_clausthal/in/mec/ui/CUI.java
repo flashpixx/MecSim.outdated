@@ -249,9 +249,9 @@ public class CUI extends Application
         p_stage.setScene(
                 new Scene(
                         l_root, Math.min(
-                        Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Double>get( "ui/windowwidth" )
+                        Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Number>get( "ui/windowwidth" ).doubleValue()
                 ), Math.min(
-                        Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Double>get( "ui/windowheight" )
+                        Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Number>get( "ui/windowheight" ).doubleValue()
                 )
                 )
         );

@@ -949,7 +949,7 @@ public class CConfiguration
         @Override
         public String toString()
         {
-            return CCommon.getResourceString( this, "text" );
+            return CCommon.getResourceString( this, "text", m_notallowed );
         }
     }
 

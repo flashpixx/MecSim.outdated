@@ -210,7 +210,9 @@ Configuration.prototype.buildUIElements = function()
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_cellsampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_timesampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
 
-        '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: Object.keys(this.mo_configuration.simulation.traffic.map.graphs).convert( function( pc_item ) { return { id: pc_item }; } ) }) + ' <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
+        '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: Object.keys(this.mo_configuration.simulation.traffic.map.graphs).convert( function( pc_item ) { return { id: pc_item }; } ) }) +
+        ' <button id="' + this.generateSubID("addgraph") + '" /> <button id="' + this.generateSubID("removegraph") + '" /> <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
+
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("simulation_traffic_map_reimport"),      label : "",  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_routing_algorithm"), label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.routing.algorithm,  options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) +
         '</div>' +

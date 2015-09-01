@@ -195,7 +195,7 @@ public class CConfiguration
                                                             put( "current", "europe/germany/lowersaxony" );
                                                             // map with selectable graph entries
                                                             put(
-                                                                    "map", new CImmutable()
+                                                                    "graphs", new CImmutable()
                                                                     {{
                                                                             put(
                                                                                     "europe/germany/lowersaxony",
@@ -365,6 +365,12 @@ public class CConfiguration
                     {{
                             add( new CClassType( String.class ) );
                             add( new CStringNotEmpty() );
+                        }}
+            );
+            put(
+                    "simulation/traffic/map/current", new LinkedList<ICheck>()
+                    {{
+                            add( new CContains<String>( m_configuration.<Map<String, String>>get( "simulation/traffic/map/graphs" ).keySet() ) );
                         }}
             );
 

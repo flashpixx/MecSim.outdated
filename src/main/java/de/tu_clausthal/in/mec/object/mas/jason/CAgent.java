@@ -204,7 +204,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
 
 
         // --- create beliefbase structure with tree structure
-        //m_methodBind = p_bind == null ? null : new CMethodBind( c_bindname, p_bind );
         m_beliefbaserootmask.add(
                 new CBeliefBase(
                         new CMessageStorage( m_agent.getTS(), c_agentnameseparator ), c_agentbeliefseparator

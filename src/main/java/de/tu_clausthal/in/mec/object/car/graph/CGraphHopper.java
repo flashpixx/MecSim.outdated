@@ -400,6 +400,18 @@ public class CGraphHopper extends GraphHopper
     }
 
     /**
+     * gets the current graph with its download URL from
+     * the configuration
+     *
+     * @return pair of graph name and download URL
+     */
+    private static Pair<String, String> getCurrentgraph()
+    {
+        final String l_current = CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/current" );
+        return new ImmutablePair<>( l_current, CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/graphs/" + l_current ) );
+    }
+
+    /**
      * downloads the OSM data
      *
      * @return download file with full path

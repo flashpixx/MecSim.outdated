@@ -192,17 +192,17 @@ public class CConfiguration
                                                             // graph should be reimported
                                                             put( "reimport", false );
                                                             // active element on the graph map
-                                                            put( "current", "europe/germany/lowersaxony" );
+                                                            put( "current", "europe-germany-lowersaxony" );
                                                             // map with selectable graph entries
                                                             put(
                                                                     "graphs", new CImmutable()
                                                                     {{
                                                                             put(
-                                                                                    "europe/germany/lowersaxony",
+                                                                                    "europe-germany-lowersaxony",
                                                                                     "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf"
                                                                             );
                                                                             put(
-                                                                                    "northamerica/usa/southdakota",
+                                                                                    "northamerica-usa-southdakota",
                                                                                     "http://download.geofabrik.de/north-america/us/south-dakota.html"
                                                                             );
                                                                         }}

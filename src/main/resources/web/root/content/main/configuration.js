@@ -57,6 +57,20 @@ Configuration.prototype.getContent = function()
 /**
  * @Overwrite
 **/
+Configuration.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+                   id        : this.generateSubID("dialog"),
+                   contentid : this.generateSubID("text"),
+                   title     : this.generateSubID("dialogtitle")
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
+}
+
+
+/**
+ * @Overwrite
+**/
 Configuration.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
@@ -171,6 +185,7 @@ Configuration.prototype.buildUIElements = function()
         '<li><a href="' + this.generateSubID("database", "#")   + '"></a></li>' +
         '</ul>' +
 
+
         // general tab
         '<div id="' + this.generateSubID("general") + '">' +
         '<p>' + Layout.input({ id: this.generateSubIDElementsInit("uuid"),                   label : "",   list: lo_elements.texts,      value: this.mo_configuration.uuid })               + '</p>' +
@@ -179,6 +194,7 @@ Configuration.prototype.buildUIElements = function()
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("deleteonshutdown"),    label : "",   list: lo_elements.switches,   value: this.mo_configuration.deleteonshutdown })   + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("language_current"),    label : "",   list: lo_elements.selects,    value: this.mo_configuration.language.current,   options: this.mo_configuration.language.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) + '</p>' +
         '</div>' +
+
 
         // UI tab
         '<div id="' + this.generateSubID("ui") + '">' +
@@ -194,7 +210,7 @@ Configuration.prototype.buildUIElements = function()
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_cellsampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_timesampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
 
-        '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: keys(this.mo_configuration.simulation.traffic.map.graphs).convert( function( pc_item ) { return { id: pc_item }; } ) }) + ' <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
+        '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: Object.keys(this.mo_configuration.simulation.traffic.map.graphs).convert( function( pc_item ) { return { id: pc_item }; } ) }) + ' <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("simulation_traffic_map_reimport"),      label : "",  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_routing_algorithm"), label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.routing.algorithm,  options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) +
         '</div>' +

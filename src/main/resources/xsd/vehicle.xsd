@@ -14,10 +14,36 @@
             <xs:element name="vehicleagent" type="ivehicleagent"/>
         </xs:choice>
     </xs:complexType>
+    <xs:complexType name="nonnegativeintattribute">
+        <xs:annotation>
+            <xs:documentation>type of an numeric value within a vehicle (constant value or distribution)</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="distribution" type="distribution:idistribution"/>
+            <xs:element name="value" type="xs:nonNegativeInteger"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:simpleType name="normalizeddouble">
+        <xs:annotation>
+            <xs:documentation>double value in [0,1]</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:double">
+            <xs:minInclusive fixed="true" value="0"/>
+            <xs:maxInclusive fixed="true" value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="normalizeddoubleattribute">
+        <xs:annotation>
+            <xs:documentation>normalized double value within a vehicle (const value or distribution)</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="distribution" type="distribution:idistribution"/>
+            <xs:element name="value" type="normalizeddouble"/>
+        </xs:choice>
+    </xs:complexType>
     <xs:complexType name="ivehicle" abstract="true">
         <xs:annotation>
             <xs:documentation>default vehicle definition</xs:documentation>
-            <xs:documentation>@bug parameter must be also be fixed values</xs:documentation>
         </xs:annotation>
         <xs:all>
             <xs:element name="maxspeedfactor" type="distribution:probability">
@@ -26,22 +52,22 @@
                         speed</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="maxspeed" type="distribution:idistribution">
+            <xs:element name="maxspeed" type="nonnegativeintattribute">
                 <xs:annotation>
                     <xs:documentation>distribution of max speed in km/h</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="acceleration" type="distribution:idistribution">
+            <xs:element name="acceleration" type="nonnegativeintattribute">
                 <xs:annotation>
                     <xs:documentation>distribution of acceleration in m/sec^2</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="deceleration" type="distribution:idistribution">
+            <xs:element name="deceleration" type="nonnegativeintattribute">
                 <xs:annotation>
                     <xs:documentation>distribution of deceleration in m/sec^2</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="linger" type="distribution:idistribution">
+            <xs:element name="linger" type="normalizeddoubleattribute">
                 <xs:annotation>
                     <xs:documentation>linger probability in [0,1]</xs:documentation>
                 </xs:annotation>
@@ -51,6 +77,7 @@
     <xs:complexType abstract="true" final="#all" name="ivehicleagent">
         <xs:annotation>
             <xs:documentation>agent-based vehicle definition</xs:documentation>
+            <xs:documentation>@bug object naming must be added</xs:documentation>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="ivehicle">

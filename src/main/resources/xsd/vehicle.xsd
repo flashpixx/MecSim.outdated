@@ -17,6 +17,7 @@
     <xs:complexType name="ivehicle" abstract="true">
         <xs:annotation>
             <xs:documentation>default vehicle definition</xs:documentation>
+            <xs:documentation>@bug parameter must be also be fixed values</xs:documentation>
         </xs:annotation>
         <xs:all>
             <xs:element name="maxspeedfactor" type="distribution:probability">

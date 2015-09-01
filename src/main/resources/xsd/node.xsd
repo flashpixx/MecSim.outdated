@@ -47,7 +47,7 @@
         </xs:attribute>
         <xs:attribute name="invisible" type="xs:boolean" use="required">
             <xs:annotation>
-                <xs:documentation>flag for full-invisible on the UI</xs:documentation>
+                <xs:documentation>flag for full-invisibility within the UI</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>

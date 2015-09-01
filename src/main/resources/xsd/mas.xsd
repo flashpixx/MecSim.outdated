@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="mas" vc:minVersion="1.1" xmlns="mas"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning">
+    <xs:complexType abstract="true" name="iagent" final="#all" id="iagent">
+        <xs:annotation>
+            <xs:documentation>agent definition</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="name" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>an unique name of the agent without extension</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="script" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>optional agent script</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="language"/>
+        </xs:all>
+    </xs:complexType>
+    <xs:element name="language">
+        <xs:annotation>
+            <xs:documentation>supported multi-agent system languages</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="Jason"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+</xs:schema>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    vc:minVersion="1.1" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    targetNamespace="distribution" xmlns="distribution">
+    <xs:simpleType final="restriction" id="probability" name="probability">
+        <xs:annotation>
+            <xs:documentation>datatype of a probability value [0,1]</xs:documentation>
+        </xs:annotation>
+        <xs:restriction>
+            <xs:simpleType>
+                <xs:restriction base="xs:double">
+                    <xs:minInclusive fixed="true" value="0"/>
+                    <xs:maxInclusive fixed="true" value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType abstract="true" id="idistribution" name="idistribution" final="#all">
+        <xs:annotation>
+            <xs:documentation>abstract distribution type</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="uniform" type="idistribution_exponential"/>
+            <xs:element name="exponential" type="idistribution_normal"/>
+            <xs:element name="normal" type="idistribution_exponential"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="idistribution_uniform" final="#all" abstract="true">
+        <xs:annotation>
+            <xs:documentation>abstract type of an uniform distribution</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="min" type="probability"> </xs:attribute>
+        <xs:attribute name="max" type="probability"/>
+    </xs:complexType>
+    <xs:complexType name="idistribution_normal" abstract="true" final="#all">
+        <xs:annotation>
+            <xs:documentation>abstract type of a normal distribution</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="expectedvalue">
+            <xs:simpleType>
+                <xs:restriction base="xs:double"/>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="variance">
+            <xs:simpleType>
+                <xs:restriction base="xs:double"/>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType abstract="true" final="#all" name="idistribution_exponential">
+        <xs:annotation>
+            <xs:documentation>abstract type of an exponential distribution</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="expectedvalue">
+            <xs:simpleType>
+                <xs:restriction base="xs:double"/>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+</xs:schema>

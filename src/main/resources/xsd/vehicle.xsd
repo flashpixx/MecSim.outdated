@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="vehicle" vc:minVersion="1.1" xmlns="vehicle"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:distribution="distribution"
+    xmlns:mas="mas">
+    <xs:import namespace="distribution" schemaLocation="distribution.xsd"/>
+    <xs:import namespace="mas" schemaLocation="mas.xsd"/>
+    <xs:complexType name="vehicle">
+        <xs:annotation>
+            <xs:documentation>vehicle type</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="vehicle" type="ivehicle"/>
+            <xs:element name="vehicleagent" type="ivehicleagent"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="ivehicle" abstract="true">
+        <xs:annotation>
+            <xs:documentation>default vehicle definition</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="maxspeedfactor" type="distribution:probability">
+                <xs:annotation>
+                    <xs:documentation>factor multiplier in [0,1] of maxspeed value to define initial
+                        speed</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="maxspeed" type="distribution:idistribution">
+                <xs:annotation>
+                    <xs:documentation>distribution of max speed in km/h</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="acceleration" type="distribution:idistribution">
+                <xs:annotation>
+                    <xs:documentation>distribution of acceleration in m/sec^2</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="deceleration" type="distribution:idistribution">
+                <xs:annotation>
+                    <xs:documentation>distribution of deceleration in m/sec^2</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="linger" type="distribution:idistribution">
+                <xs:annotation>
+                    <xs:documentation>linger probability in [0,1]</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType abstract="true" final="#all" name="ivehicleagent">
+        <xs:annotation>
+            <xs:documentation>agent-based vehicle definition</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ivehicle">
+                <xs:all>
+                    <xs:element name="agent" type="mas:iagent"/>
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

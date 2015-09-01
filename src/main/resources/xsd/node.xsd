@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="node" vc:minVersion="1.1" xmlns="node"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:vehicle="vehicle"
+    xmlns:distribution="distribution">
+    <xs:import namespace="vehicle" schemaLocation="vehicle.xsd"/>
+    <xs:import namespace="distribution" schemaLocation="distribution.xsd"/>
+    <xs:attributeGroup id="gps" name="gps">
+        <xs:annotation>
+            <xs:documentation>attribute definition for GPS data</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="latitude" use="required">
+            <xs:annotation>
+                <xs:documentation>latitude value (positive values = east, negativ values =
+                    west)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:double"/>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="longitude" use="required">
+            <xs:annotation>
+                <xs:documentation>longitude value (positive values = north, negative values =
+                    south)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:double"/>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:complexType id="iorigin" name="iorigin" abstract="true">
+        <xs:annotation>
+            <xs:documentation>abstract origin definition</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="generator" type="igenerator"/>
+            <xs:element name="vehicle" type="vehicle:vehicle"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="gps"/>
+        <xs:attribute name="name" use="required">
+            <xs:annotation>
+                <xs:documentation>name of the source</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="invisible" type="xs:boolean" use="required">
+            <xs:annotation>
+                <xs:documentation>flag for full-invisible on the UI</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="idestination" id="idestination" abstract="true">
+        <xs:annotation>
+            <xs:documentation>destination definition</xs:documentation>
+        </xs:annotation>
+        <xs:attributeGroup ref="gps"/>
+    </xs:complexType>
+    <xs:complexType abstract="true" name="igenerator">
+        <xs:annotation>
+            <xs:documentation>generator definition</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="timedistribution" type="igenerator_timedistribution"/>
+            <xs:element name="histogram" type="igenerator_histogram"/>
+            <xs:element name="constant" type="igenerator_constant"/>
+            <xs:element name="once" type="igenerator_once"/>
+            <xs:element name="loop" type="igenerator_loop"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:simpleType name="nonnegativintlist">
+        <xs:annotation>
+            <xs:documentation>non-negative integer arraylist</xs:documentation>
+        </xs:annotation>
+        <xs:list itemType="xs:nonNegativeInteger"/>
+    </xs:simpleType>
+    <xs:complexType abstract="true" name="igenerator_timedistribution" final="#all">
+        <xs:annotation>
+            <xs:documentation>time distribution generates a number of cars depend on the distribution</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="distribution" type="distribution:idistribution">
+                <xs:annotation>
+                    <xs:documentation>generator distribution</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="numberofcars" type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>maximum generated vehicles</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType abstract="true" name="igenerator_histogram" final="#all">
+        <xs:annotation>
+            <xs:documentation>histogram generator generates a sequence of vehicles</xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="duration" type="xs:dayTimeDuration">
+                <xs:annotation>
+                    <xs:documentation>duration of the histogramm (histogram will be interpolated)</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="histogram" type="nonnegativintlist">
+                <xs:annotation>
+                    <xs:documentation>histogram definition with non-negativ integervalues</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="igenerator_constant" abstract="true" final="#all">
+        <xs:annotation>
+            <xs:documentation>constant generator generates a number of cars on each simulation step</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="numberofcars" type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>number of vehicles</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="igenerator_once">
+        <xs:annotation>
+            <xs:documentation>once generate create the number of cars on a time value after simulation start</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="time" type="xs:time">
+                <xs:annotation>
+                    <xs:documentation>time value of simulation time at which the vehicles are generated
+</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="numberofcars" type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>number of vehicles</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="igenerator_loop">
+        <xs:annotation>
+            <xs:documentation>loop generator that generate a set of vehicles on each duration</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="duration" type="xs:dayTimeDuration">
+                <xs:annotation>
+                    <xs:documentation>time duration at which the vehicles are generated</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="numberofcars" type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>number of vehicles</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

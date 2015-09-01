@@ -143,6 +143,20 @@ Array.prototype.convert = Array.prototype.convert || function( px_value )
 
 
 /**
+ * global function for returning object keys
+ *
+ * @param po_object json object
+ * @return array with key names
+**/
+function keys( po_object )
+{
+    var la = [];
+    for(var i in po_object)
+        la.push(i);
+    return la;
+}
+
+/**
  * global function to get the object-type of a variable
  *
  * @param px_value value type

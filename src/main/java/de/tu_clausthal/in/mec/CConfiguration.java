@@ -91,9 +91,11 @@ public class CConfiguration
      */
     private final CNameHashMap.CImmutable m_configuration = new CNameHashMap.CImmutable()
     {{
+            // on shutdown delete full configuration folder
+            put( "deleteonshutdown", false );
+
             // flag for resetting the full configuration - accessible within the UI
             put( "reset", false );
-
 
             // extract all MAS files from the Jar to the home path (should be run once) - accessible within the UI
             put( "extractmasexamples", true );
@@ -189,6 +191,23 @@ public class CConfiguration
                                                     {{
                                                             // graph should be reimported
                                                             put( "reimport", false );
+                                                            // active element on the graph map
+                                                            put( "current", "europe/germany/lowersaxony" );
+                                                            // map with selectable graph entries
+                                                            put(
+                                                                    "map", new CImmutable()
+                                                                    {{
+                                                                            put(
+                                                                                    "europe/germany/lowersaxony",
+                                                                                    "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf"
+                                                                            );
+                                                                            put(
+                                                                                    "northamerica/usa/southdakota",
+                                                                                    "http://download.geofabrik.de/north-america/us/south-dakota.html"
+                                                                            );
+                                                                        }}
+                                                            );
+
                                                             // storing directory in the graph directory
                                                             put( "name", "europe/germany/lowersaxony" );
                                                             // URL of downloading the PBF file

@@ -49,6 +49,7 @@ import de.tu_clausthal.in.mec.ui.CWaypointEnvironment;
 import de.tu_clausthal.in.mec.ui.web.CMarkdownRenderer;
 import de.tu_clausthal.in.mec.ui.web.CServer;
 import de.tu_clausthal.in.mec.ui.web.CWorkspace;
+import org.apache.commons.io.FileUtils;
 
 
 /**
@@ -180,9 +181,16 @@ public class CBootstrap
 
     }
 
+    /**
+     * is called on application closed
+     */
     public static void onApplicationClose()
     {
         CSummary.getInstance().store();
+
+        // delete configuration directory
+        if ( CConfiguration.getInstance().get().<Boolean>get( "deleteonshutdown" ) )
+            FileUtils.deleteQuietly( CConfiguration.getInstance().getLocation( "root" ) );
     }
 
 }

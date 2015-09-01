@@ -43,6 +43,7 @@ public class CLanguageEnvironment
             put( "label_uuid", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_uuid" ) );
             put( "label_reset", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_reset" ) );
             put( "label_extractmasexamples", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_extractmasexample" ) );
+            put( "label_deleteonshutdown", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_deleteonshutdown" ) );
             put( "label_language_current", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_language_current" ) );
             put( "label_ui_server_host", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_ui_server_host" ) );
             put( "label_ui_server_port", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_ui_server_port" ) );

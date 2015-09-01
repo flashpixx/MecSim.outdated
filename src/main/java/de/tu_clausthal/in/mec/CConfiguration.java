@@ -207,11 +207,6 @@ public class CConfiguration
                                                                             );
                                                                         }}
                                                             );
-
-                                                            // @deprecated storing directory in the graph directory
-                                                            put( "name", "europe/germany/lowersaxony" );
-                                                            // @deprecated  URL of downloading the PBF file
-                                                            put( "url", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
                                                         }}
                                             );
                                         }}

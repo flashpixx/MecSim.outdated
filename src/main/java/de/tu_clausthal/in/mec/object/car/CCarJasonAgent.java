@@ -59,6 +59,10 @@ import java.util.Set;
 public class CCarJasonAgent extends CDefaultCar implements IReceiver
 {
     /**
+     * number of predecessors that can be seen by the agents
+     */
+    private int m_seenpredecessors = 2;
+    /**
      * agent object *
      */
     @CFieldFilter.CAgent( bind = false )
@@ -251,6 +255,18 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
          */
         private static final String c_label_endposition = "endposition";
         /**
+         * label of the drived-history
+         */
+        private static final String c_label_drivedhistory = "drived";
+        /**
+         * label of the drived-distance
+         */
+        private static final String c_label_driveddistance = "distance";
+        /**
+         * label of the drived-time
+         */
+        private static final String c_label_drivedtime = "time";
+        /**
          * label of source annotation
          */
         private static final String c_label_source = "source";
@@ -267,10 +283,6 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
          */
         private static final String c_label_routesize = "size";
         /**
-         * number of predecessors which are shown within the beliefbase
-         */
-        private static final int c_numberofpredecssor = 3;
-        /**
          * start position as literal
          */
         private final Literal m_startposition = this.getLiteralGeoposition( c_label_startposition, 0 ).addAnnots(
@@ -286,9 +298,17 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
             this.add(
                     de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
                             c_label_predecessor,
-                            CCarJasonAgent.this.getPredecessorWithName( c_numberofpredecssor )
+                            CCarJasonAgent.this.getPredecessorWithName( CCarJasonAgent.this.m_seenpredecessors )
                     )
             ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+
+            // start- / end-position
+            this.add( m_startposition );
+            this.add(
+                    this.getLiteralGeoposition( c_label_endposition, m_route.size() - 1 ).addAnnots(
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION
+                    )
+            );
 
             // current position
             this.add(
@@ -304,13 +324,21 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
                     )
             ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
 
-            // start- / end-position
-            this.add( m_startposition );
+            // drived-history
             this.add(
-                    this.getLiteralGeoposition( c_label_endposition, m_route.size() - 1 ).addAnnots(
-                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION
+                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                            c_label_drivedhistory,
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                                    c_label_driveddistance,
+                                    CCarJasonAgent.this.m_layer.getUnitConvert().getCellToKiloMeter( CCarJasonAgent.this.m_routeindex )
+                            ),
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                                    c_label_drivedtime,
+                                    CCarJasonAgent.this.m_layer.getUnitConvert().getTimeInMinutes( m_agents.iterator().next().getCycle() )
+                            )
                     )
-            );
+            ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+
 
 
             // --- agent inconsistency value ---

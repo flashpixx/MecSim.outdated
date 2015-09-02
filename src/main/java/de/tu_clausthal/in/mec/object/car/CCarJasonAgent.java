@@ -231,52 +231,71 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
     private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
     {
         /**
-         * name of the inconsistency belief
+         * label of the inconsistency belief
          **/
-        private static final String c_inconsistencyname = "inconsistency";
+        private static final String c_label_inconsistency = "inconsistency";
         /**
-         * name of the predecessor
+         * label of the predecessor belief
          **/
-        private static final String c_predecessor = "predecessor";
+        private static final String c_label_predecessor = "predecessor";
+        /**
+         * label of the position belief
+         */
+        private static final String c_label_position = "position";
+        /**
+         * label of source annotation
+         */
+        private static final String c_label_source = "source";
+        /**
+         * label of route index belief
+         */
+        private static final String c_label_routeindex = "routeindex";
+        /**
+         * label of route cell number
+         */
+        private static final String c_label_routesize = "routeindexlength";
         /**
          * number of predecessors which are shown within the beliefbase
          */
         private static final int c_numberofpredecssor = 3;
-        /**
-         * source name
-         */
-        private static final String c_source = "source";
-        /**
-         * self name
-         */
-        private static final String c_self = "self";
 
 
         @Override
         protected void updating()
         {
-            // add traffic values
+            // --- traffic values ---
+
+            // predecessor
             this.add(
                     de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
-                            c_predecessor, CCarJasonAgent.this.getPredecessorWithName(
-                                    c_numberofpredecssor
-                            )
+                            c_label_predecessor,
+                            CCarJasonAgent.this.getPredecessorWithName( c_numberofpredecssor )
                     )
-            ).addAnnot(
-                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, c_self )
-            );
+            ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
 
-            // add for each agent the inconsistency value, so each agent knows the inconsistency value of the other agents within the same car,
+            // current position
+            this.add(
+                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                            c_label_position,
+                            CCarJasonAgent.this.getGeoposition(),
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_routeindex, CCarJasonAgent.this.m_routeindex ),
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_routesize, CCarJasonAgent.this.m_route.size() )
+                    )
+            ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+
+
+            // --- agent inconsistency value ---
+            // each agent knows the inconsistency value of the other agents within the same car (all binded agents within this object),
             // the name of the agent is get by the receiver and not bei the getName() call, because the getName() returns the full path of the agent
             for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
             {
                 final Literal l_literal = this.add(
                         de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
-                                c_inconsistencyname, m_agentlayer.getInconsistencyValue( l_agent )
+                                c_label_inconsistency, m_agentlayer.getInconsistencyValue( l_agent )
                         )
                 );
-                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, c_self ) );
-                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, l_agent.getReceiverPath().getSuffix() ) );
+                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_source, l_agent.getReceiverPath().getSuffix() ) );
             }
         }
 

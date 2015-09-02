@@ -239,26 +239,43 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
          **/
         private static final String c_label_predecessor = "predecessor";
         /**
-         * label of the position belief
+         * label of the current position belief
          */
-        private static final String c_label_position = "position";
+        private static final String c_label_currentposition = "currentposition";
+        /**
+         * label of the start position belief
+         */
+        private static final String c_label_startposition = "startposition";
+        /**
+         * label of the end position belief
+         */
+        private static final String c_label_endposition = "endposition";
         /**
          * label of source annotation
          */
         private static final String c_label_source = "source";
         /**
+         * label of route sampling information
+         */
+        private static final String c_label_route = "routesample";
+        /**
          * label of route index belief
          */
-        private static final String c_label_routeindex = "routeindex";
+        private static final String c_label_routeindex = "index";
         /**
-         * label of route cell number
+         * label of route cell number / count
          */
-        private static final String c_label_routesize = "routeindexlength";
+        private static final String c_label_routesize = "size";
         /**
          * number of predecessors which are shown within the beliefbase
          */
         private static final int c_numberofpredecssor = 3;
-
+        /**
+         * start position as literal
+         */
+        private final Literal m_startposition = this.getLiteralGeoposition( c_label_startposition, 0 ).addAnnots(
+                de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION
+        );
 
         @Override
         protected void updating()
@@ -276,12 +293,24 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
             // current position
             this.add(
                     de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
-                            c_label_position,
+                            c_label_currentposition,
                             CCarJasonAgent.this.getGeoposition(),
-                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_routeindex, CCarJasonAgent.this.m_routeindex ),
-                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_routesize, CCarJasonAgent.this.m_route.size() )
+                            CCarJasonAgent.this.getEdge(),
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                                    c_label_route,
+                                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_routeindex, CCarJasonAgent.this.m_routeindex ),
+                                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_routesize, CCarJasonAgent.this.m_route.size() )
+                            )
                     )
             ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+
+            // start- / end-position
+            this.add( m_startposition );
+            this.add(
+                    this.getLiteralGeoposition( c_label_endposition, m_route.size() - 1 ).addAnnots(
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION
+                    )
+            );
 
 
             // --- agent inconsistency value ---
@@ -297,6 +326,21 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
                 l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
                 l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_source, l_agent.getReceiverPath().getSuffix() ) );
             }
+        }
+
+        /**
+         * returns the geo position as literal
+         *
+         * @param p_name literal name
+         * @param p_routeindex route index
+         * @return literal
+         */
+        private Literal getLiteralGeoposition( final String p_name, final int p_routeindex )
+        {
+            final Pair<EdgeIteratorState, Integer> l_cell = CCarJasonAgent.this.m_route.get( p_routeindex );
+            return de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                    p_name, CCarJasonAgent.this.m_layer.getGraph().getEdge( l_cell.getLeft() ).getGeoPositions( l_cell.getRight() )
+            );
         }
 
         /**

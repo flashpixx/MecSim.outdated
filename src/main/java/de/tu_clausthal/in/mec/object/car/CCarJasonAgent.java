@@ -54,6 +54,13 @@ import java.util.Set;
 /**
  * agent car
  *
+ * @note the agent gets the following traffic-beliefs during runtime:
+ * @note predecessor that show the predecessor vehicles and can be manipulated with the belief seenpredecessors
+ * @note start-/endposition defines the start and the end geo position of the route
+ * @note currentposition defines the current geo position and the edge information e.g. name and length of the edge, and
+ * the routesample shows the current route sampling information
+ * @note inconsistency defines the inconsistency value of each agent
+ * @note drived defines the history drived-time and -distance of the vehicle
  * @bug refactor ctor (reduce parameter)
  */
 public class CCarJasonAgent extends CDefaultCar implements IReceiver
@@ -338,7 +345,6 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
                             )
                     )
             ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
-
 
 
             // --- agent inconsistency value ---

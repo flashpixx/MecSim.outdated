@@ -290,6 +290,10 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
          */
         private static final String c_label_routesize = "size";
         /**
+         * label of the allowed-speed belief
+         */
+        private static final String c_label_allowedspeed = "allowedspeed";
+        /**
          * start position as literal
          */
         private final Literal m_startposition = this.getLiteralGeoposition( c_label_startposition, 0 ).addAnnots(
@@ -316,6 +320,14 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
                             de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION
                     )
             );
+
+            // current allowed speed
+            this.add(
+                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                            c_label_allowedspeed,
+                            CCarJasonAgent.this.m_layer.getGraph().getEdgeSpeed( CCarJasonAgent.this.getEdge() )
+                    )
+            ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
 
             // current position
             this.add(

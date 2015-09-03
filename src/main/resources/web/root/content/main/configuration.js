@@ -144,7 +144,7 @@ Configuration.prototype.buildViewAndBind = function()
     // add graph
     jQuery( this.generateSubID("addgraph", "#") ).button().click( function(po_event){
 
-        //console.log("add");
+        //@todo add a new item and set it to the selected
 
     });
 
@@ -155,9 +155,9 @@ Configuration.prototype.buildViewAndBind = function()
             return;
 
         var lc_selected = jQuery(self.generateSubIDElementsInit("simulation_traffic_map_current", "#")).val();
-            $("select#mySelect option[value='option1']").remove();
+        jQuery( ["select", self.generateSubIDElementsInit("simulation_traffic_map_current", "#"), " option[value='", lc_selected,"']"].join("") ).remove();
 
-        //console.log( lo_select.val() );
+        //@todo refresh items - first selected, add call for physical removing
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }

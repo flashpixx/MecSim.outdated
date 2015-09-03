@@ -54,6 +54,19 @@ Configuration.prototype.getContent = function()
 }
 
 
+/**
+ * @Overwrite
+**/
+Configuration.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("text"),
+        title     : this.generateSubID("dialogtitle")
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
+}
+
 
 /**
  * @Overwrite
@@ -144,7 +157,39 @@ Configuration.prototype.buildViewAndBind = function()
     // add graph
     jQuery( this.generateSubID("addgraph", "#") ).button().click( function(po_event){
 
-        //@todo add a new item and set it to the selected
+        // set dialog content
+        jQuery(self.generateSubID("text", "#")).empty().append(
+            "<p>" +
+            Layout.input({
+
+                id: self.generateSubID("graphname"),
+                label : "Graph Name"
+
+            }) +
+            "</p><p>" +
+            Layout.input({
+
+                id: self.generateSubID("graphurl"),
+                label : "Graph Download URL (PBF File)"
+
+            }) +
+            "</p>"
+        );
+
+        // open dialog
+        jQuery(self.generateSubID("dialog", "#")).dialog({
+            width   : "auto",
+            modal   : true,
+            buttons : {
+
+                Add : function() {
+                    jQuery(this).dialog("close");
+                },
+
+                Cancel : function() { jQuery(this).dialog("close"); }
+
+            }
+        });
 
     });
 

@@ -54,19 +54,6 @@ Configuration.prototype.getContent = function()
 }
 
 
-/**
- * @Overwrite
-**/
-Configuration.prototype.getGlobalContent = function()
-{
-    return Layout.dialog({
-                   id        : this.generateSubID("dialog"),
-                   contentid : this.generateSubID("text"),
-                   title     : this.generateSubID("dialogtitle")
-    }) +
-    Pane.prototype.getGlobalContent.call(this);
-}
-
 
 /**
  * @Overwrite
@@ -154,7 +141,24 @@ Configuration.prototype.buildViewAndBind = function()
         });
     });
 
-    // @todo add button-bind for add / remove graph
+    // add graph
+    jQuery( this.generateSubID("addgraph", "#") ).button().click( function(po_event){
+
+        //console.log("add");
+
+    });
+
+    // remove graph
+    jQuery( this.generateSubID("removegraph", "#") ).button().click( function(po_event){
+
+        if (Object.keys(self.mo_configuration.simulation.traffic.map.graphs).length < 2)
+            return;
+
+        var lc_selected = jQuery(self.generateSubIDElementsInit("simulation_traffic_map_current", "#")).val();
+            $("select#mySelect option[value='option1']").remove();
+
+        //console.log( lo_select.val() );
+    });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
 
@@ -211,7 +215,7 @@ Configuration.prototype.buildUIElements = function()
         '<div id="' + this.generateSubID("simulation") + '">' +
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_cellsampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_timesampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
-        '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: Object.keys(this.mo_configuration.simulation.traffic.map.graphs).convert( function( pc_item ) { return { id: pc_item }; } ) }) +
+        '<p>' + Layout.select({   id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: Object.keys(this.mo_configuration.simulation.traffic.map.graphs).convert( function( pc_item ) { return { id: pc_item }; } ) }) +
         ' <button id="' + this.generateSubID("addgraph") + '" /> <button id="' + this.generateSubID("removegraph") + '" /> <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("simulation_traffic_map_reimport"),      label : "",  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_routing_algorithm"), label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.routing.algorithm,  options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) +

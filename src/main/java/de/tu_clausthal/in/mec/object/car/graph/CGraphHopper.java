@@ -111,9 +111,7 @@ public class CGraphHopper extends GraphHopper
         //2b33cdf620fe693dd2ce7c7369445dc8
         // define graph location (use configuration)
         final Pair<String, String> l_currentgraph = getCurrentGraph();
-        final File l_graphlocation = CConfiguration.getInstance().getLocation(
-                "root", "graphs", CCommon.getHash( l_currentgraph.getLeft(), "MD5" )
-        );
+        final File l_graphlocation = getGraphLocation( l_currentgraph.getLeft() );
         CLogger.out( CCommon.getResourceString( this, "path", l_currentgraph.getLeft(), l_graphlocation.getAbsolutePath() ) );
 
         // if reimported is set, delete graph directory
@@ -408,6 +406,19 @@ public class CGraphHopper extends GraphHopper
     {
         final String l_current = CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/current" );
         return new ImmutablePair<>( l_current, CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/graphs/" + l_current ) );
+    }
+
+    /**
+     * returns the full path of a graph location
+     *
+     * @param p_name name of the graph (any string name)
+     * @return graph path location
+     */
+    public static File getGraphLocation( final String p_name )
+    {
+        return CConfiguration.getInstance().getLocation(
+                "root", "graphs", CCommon.getHash( p_name, "MD5" )
+        );
     }
 
     /**

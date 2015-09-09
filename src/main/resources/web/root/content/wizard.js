@@ -24,8 +24,6 @@
 
 "use strict";
 
-//@todo fix HTML5 data attributes
-
 
 /**
  * ctor to create the wizard

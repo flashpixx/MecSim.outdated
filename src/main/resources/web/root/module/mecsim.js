@@ -24,6 +24,7 @@
 
 "use strict";
 
+
 /**
  * base modul to represent base algorithms
  * and structure to encapsulate structures

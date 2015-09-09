@@ -27,17 +27,21 @@ import de.tu_clausthal.in.mec.object.mas.generic.ITerm;
 import de.tu_clausthal.in.mec.object.mas.generic.ITermCollection;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 
 /**
  * generic term set for agent literals
- *
- * @todo empty set initialization with static EMPTY_SET
  */
 public class CTermSet extends HashSet<ITerm> implements ITermCollection
 {
+    /**
+     * empty term set
+     **/
+    public static final CTermSet EMPTY_TERMSET = new CTermSet( Collections.EMPTY_SET );
+
     /**
      * default ctor
      */

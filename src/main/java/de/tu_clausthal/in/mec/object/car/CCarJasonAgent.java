@@ -54,10 +54,21 @@ import java.util.Set;
 /**
  * agent car
  *
+ * @note the agent gets the following traffic-beliefs during runtime:
+ * @note predecessor that show the predecessor vehicles and can be manipulated with the belief seenpredecessors
+ * @note start-/endposition defines the start and the end geo position of the route
+ * @note currentposition defines the current geo position and the edge information e.g. name and length of the edge, and
+ * the routesample shows the current route sampling information
+ * @note inconsistency defines the inconsistency value of each agent
+ * @note drived defines the history drived-time and -distance of the vehicle
  * @bug refactor ctor (reduce parameter)
  */
 public class CCarJasonAgent extends CDefaultCar implements IReceiver
 {
+    /**
+     * number of predecessors that can be seen by the agents
+     */
+    private int m_seenpredecessors = 2;
     /**
      * agent object *
      */
@@ -231,53 +242,151 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
     private class CTrafficStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
     {
         /**
-         * name of the inconsistency belief
+         * label of the inconsistency belief
          **/
-        private static final String c_inconsistencyname = "inconsistency";
+        private static final String c_label_inconsistency = "inconsistency";
         /**
-         * name of the predecessor
+         * label of the predecessor belief
          **/
-        private static final String c_predecessor = "predecessor";
+        private static final String c_label_predecessor = "predecessor";
         /**
-         * number of predecessors which are shown within the beliefbase
+         * label of the current position belief
          */
-        private static final int c_numberofpredecssor = 3;
+        private static final String c_label_currentposition = "currentposition";
         /**
-         * source name
+         * label of the start position belief
          */
-        private static final String c_source = "source";
+        private static final String c_label_startposition = "startposition";
         /**
-         * self name
+         * label of the end position belief
          */
-        private static final String c_self = "self";
-
+        private static final String c_label_endposition = "endposition";
+        /**
+         * label of the drived-history
+         */
+        private static final String c_label_drivedhistory = "drived";
+        /**
+         * label of the drived-distance
+         */
+        private static final String c_label_driveddistance = "distance";
+        /**
+         * label of the drived-time
+         */
+        private static final String c_label_drivedtime = "time";
+        /**
+         * label of source annotation
+         */
+        private static final String c_label_source = "source";
+        /**
+         * label of route sampling information
+         */
+        private static final String c_label_route = "routesample";
+        /**
+         * label of route index belief
+         */
+        private static final String c_label_routeindex = "index";
+        /**
+         * label of route cell number / count
+         */
+        private static final String c_label_routesize = "size";
+        /**
+         * label of the allowed-speed belief
+         */
+        private static final String c_label_allowedspeed = "allowedspeed";
+        /**
+         * start position as literal
+         */
+        private final Literal m_startposition = this.getLiteralGeoposition( c_label_startposition, 0 ).addAnnots(
+                de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION
+        );
 
         @Override
         protected void updating()
         {
-            // add traffic values
+            // --- traffic values ---
+
+            // predecessor
             this.add(
                     de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
-                            c_predecessor, CCarJasonAgent.this.getPredecessorWithName(
-                                    c_numberofpredecssor
-                            )
+                            c_label_predecessor,
+                            CCarJasonAgent.this.getPredecessorWithName( CCarJasonAgent.this.m_seenpredecessors )
                     )
-            ).addAnnot(
-                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, c_self )
+            ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+
+            // start- / end-position
+            this.add( m_startposition );
+            this.add(
+                    this.getLiteralGeoposition( c_label_endposition, m_route.size() - 1 ).addAnnots(
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION
+                    )
             );
 
-            // add for each agent the inconsistency value, so each agent knows the inconsistency value of the other agents within the same car,
+            // current allowed speed
+            this.add(
+                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                            c_label_allowedspeed,
+                            CCarJasonAgent.this.m_layer.getGraph().getEdgeSpeed( CCarJasonAgent.this.getEdge() )
+                    )
+            ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+
+            // current position
+            this.add(
+                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                            c_label_currentposition,
+                            CCarJasonAgent.this.getGeoposition(),
+                            CCarJasonAgent.this.getEdge(),
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                                    c_label_route,
+                                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_routeindex, CCarJasonAgent.this.m_routeindex ),
+                                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_routesize, CCarJasonAgent.this.m_route.size() )
+                            )
+                    )
+            ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+
+            // drived-history
+            this.add(
+                    de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                            c_label_drivedhistory,
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                                    c_label_driveddistance,
+                                    CCarJasonAgent.this.m_layer.getUnitConvert().getCellToKiloMeter( CCarJasonAgent.this.m_routeindex )
+                            ),
+                            de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                                    c_label_drivedtime,
+                                    CCarJasonAgent.this.m_layer.getUnitConvert().getTimeInMinutes( m_agents.iterator().next().getCycle() )
+                            )
+                    )
+            ).addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+
+
+            // --- agent inconsistency value ---
+            // each agent knows the inconsistency value of the other agents within the same car (all binded agents within this object),
             // the name of the agent is get by the receiver and not bei the getName() call, because the getName() returns the full path of the agent
             for ( final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent : m_agents )
             {
                 final Literal l_literal = this.add(
                         de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
-                                c_inconsistencyname, m_agentlayer.getInconsistencyValue( l_agent )
+                                c_label_inconsistency, m_agentlayer.getInconsistencyValue( l_agent )
                         )
                 );
-                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, c_self ) );
-                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_source, l_agent.getReceiverPath().getSuffix() ) );
+                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.DEFAULTANNOTATION );
+                l_literal.addAnnot( de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( c_label_source, l_agent.getReceiverPath().getSuffix() ) );
             }
+        }
+
+        /**
+         * returns the geo position as literal
+         *
+         * @param p_name literal name
+         * @param p_routeindex route index
+         * @return literal
+         */
+        private Literal getLiteralGeoposition( final String p_name, final int p_routeindex )
+        {
+            final Pair<EdgeIteratorState, Integer> l_cell = CCarJasonAgent.this.m_route.get( p_routeindex );
+            return de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral(
+                    p_name, CCarJasonAgent.this.m_layer.getGraph().getEdge( l_cell.getLeft() ).getGeoPositions( l_cell.getRight() )
+            );
         }
 
         /**

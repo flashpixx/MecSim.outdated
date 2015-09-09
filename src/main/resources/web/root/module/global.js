@@ -141,20 +141,14 @@ Array.prototype.convert = Array.prototype.convert || function( px_value )
     return la_result;
 }
 
-
 /**
- * global function for returning object keys
- *
- * @param po_object json object
- * @return array with key names
+ * uniquefy the array
 **/
-function keys( po_object )
+Array.prototype.unique = Array.prototype.unique || function( px_value )
 {
-    var la = [];
-    for(var i in po_object)
-        la.push(i);
-    return la;
-}
+    return function(){ return this.filter( px_value) }
+}(function( a, b, c ) { return c.indexOf(a,b+1) < 0 });
+
 
 /**
  * global function to get the object-type of a variable

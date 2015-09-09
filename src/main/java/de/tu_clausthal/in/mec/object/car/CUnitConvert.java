@@ -93,6 +93,17 @@ public class CUnitConvert
     }
 
     /**
+     * returns cell number to distance in kilometer
+     *
+     * @param p_cells cell number
+     * @return kilometer value
+     */
+    public final double getCellToKiloMeter( final int p_cells )
+    {
+        return this.getCellToMeter( p_cells ) / 1000.0;
+    }
+
+    /**
      * returns the speed for traveling the given distance in one timestep
      *
      * @param p_distance distance in meter
@@ -128,9 +139,33 @@ public class CUnitConvert
 
     /**
      * returns the timestep in seconds
+     *
+     * @return timestep
      */
     public final int getTime()
     {
         return m_timestep;
+    }
+
+    /**
+     * returns the time in seconds for n steps
+     *
+     * @param p_step step number
+     * @return time in seconds
+     */
+    public final int getTime( final int p_step )
+    {
+        return m_timestep * p_step;
+    }
+
+    /**
+     * returns the time in minutes for n steps
+     *
+     * @param p_step step number
+     * @return time in minutes
+     */
+    public final double getTimeInMinutes( final int p_step )
+    {
+        return this.getTime( p_step ) / 60.0;
     }
 }

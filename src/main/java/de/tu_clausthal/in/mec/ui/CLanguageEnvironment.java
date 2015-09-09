@@ -103,6 +103,8 @@ public class CLanguageEnvironment
             put( "name", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_name" ) );
             put( "id_mappopup", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_mappopup" ) );
             put( "mappopup_content", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_mappopup_content" ) );
+            put( "id_addgraph", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_addgraph" ) );
+            put( "id_removegraph", CCommon.getResourceString( CLanguageEnvironment.class, "ui_configuration_removegraph" ) );
         }};
     /**
      * labels of the help menu

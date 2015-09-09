@@ -58,7 +58,7 @@ var Layout = (function (px_modul) {
     **/
     px_modul.dialog = function( po_options )
     {
-        return lx_basetag("div", {
+        return lx_basetag('div', {
 
             class   : po_options.outerclass,
             id      : po_options.id,
@@ -89,7 +89,7 @@ var Layout = (function (px_modul) {
             po_options.list.push(po_options.id);
 
         return [ (po_options.label !== undefined ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + " ",
-                 lx_basetag( "input", {
+                 lx_basetag( 'input', {
 
                     id    : po_options.id,
                     class : po_options.class,
@@ -114,11 +114,11 @@ var Layout = (function (px_modul) {
             po_options.list.push(po_options.id);
 
         return [ (po_options.label !== undefined ? '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' : "") + " ",
-                 lx_basetag( "input", {
+                 lx_basetag( 'input', {
 
                     id    : po_options.id,
                     class : po_options.class,
-                    addon : ['type="text"', po_options.value ? 'value="' + po_options.value + '"' : "", po_options.name ? 'name="' + po_options.name + '"' : ""].join(" ")
+                    addon : ['type="text"', po_options.value ? 'value="' + po_options.value + '"' : '', po_options.name ? 'name="' + po_options.name + '"' : ""].join(" ")
 
                  })
                ].join("");
@@ -139,7 +139,7 @@ var Layout = (function (px_modul) {
             po_options.list.push(po_options.id);
 
         return [ (po_options.label !== undefined ? '<label for="' + po_options.id + '" >' + po_options.label + '</label > ' : "") + " ",
-                 lx_basetag( "textarea", {
+                 lx_basetag( 'textarea', {
 
                     id      : po_options.id,
                     class   : po_options.class,
@@ -162,9 +162,9 @@ var Layout = (function (px_modul) {
     **/
     px_modul.optionbyvalue = function( pc_id, pc_value )
     {
-        jQuery( pc_id + " option").removeAttr("selected");
-        jQuery( pc_id + ' option[value="'+pc_value+'"]').attr("selected", "selected");
-        jQuery( pc_id ).val(pc_value).selectmenu("refresh").change();
+        jQuery( pc_id + ' option').removeAttr('selected');
+        jQuery( pc_id + ' option[value="'+pc_value+'"]').attr('selected', 'selected');
+        jQuery( pc_id ).val(pc_value).selectmenu('refresh').change();
     }
 
     /**
@@ -176,13 +176,13 @@ var Layout = (function (px_modul) {
     **/
     px_modul.option = function( px, px_select )
     {
-        if (classof(px, "string"))
+        if (classof(px, 'string'))
             return lx_basetag("option", {
                 addon   : ['value="' + px + '"', px_select && px == px_select ? 'selected' : ''].join(" "),
                 content : px
             });
 
-        return lx_basetag("option", {
+        return lx_basetag('option', {
             addon   : ['value="' + px.id + '"', px_select && px.id == px_select ? 'selected' : ''].join(" "),
             content : px.label ? px.label : px.id
         });
@@ -200,11 +200,16 @@ var Layout = (function (px_modul) {
             po_options.list.push(po_options.id);
 
         var la = [];
+        var lx_selected = po_options.value;
+
         if (po_options.options)
-            po_options.options.forEach( function(px_item) { la.push( px_modul.option(px_item, po_options.value) ); } );
+            po_options.options.forEach( function(px_item) { la.push( px_modul.option(px_item, lx_selected) ); } );
+
+        if (classof(lx_selected, 'number'))
+            lx_selected = po_options.options[lx_selected];
 
         return (po_options.label !== undefined ? '<label for="' + po_options.id + '" >' + po_options.label + '</label >' : "") + " " +
-                lx_basetag("select", {
+                lx_basetag('select', {
 
                     id      : po_options.id,
                     class   : po_options.class,
@@ -259,13 +264,17 @@ var Layout = (function (px_modul) {
         if (Array.isArray(po.list))
             po.list.push(po.id);
 
+        var lx_selected = po.value;
+        if (classof(lx_selected, 'number'))
+            lx_selected = po.options[lx_selected];
+
         return (po.label !== undefined  ? '<label for="' + po.id + '" >' + po.label + '</label >' : "") + " " +
-                lx_basetag("select", {
+                lx_basetag('select', {
 
                     id      : po.id,
                     class   : po.class,
                     addon   : po.name ? 'name="' + po.name + '"' : '',
-                    content : po.options ? px_modul.opentiongroup(po.options, po.value) : ""
+                    content : po.options ? px_modul.opentiongroup(po.options, lx_selected) : ""
 
         });
     }

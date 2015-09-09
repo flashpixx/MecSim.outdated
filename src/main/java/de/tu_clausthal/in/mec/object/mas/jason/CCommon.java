@@ -58,6 +58,11 @@ import java.util.Set;
  */
 public class CCommon
 {
+    /**
+     * default source annotation "source(self)"
+     */
+    public static final Literal DEFAULTANNOTATION = de.tu_clausthal.in.mec.object.mas.jason.CCommon.getLiteral( "source", "self" );
+
 
     /**
      * private ctor - avoid instantiation
@@ -65,7 +70,6 @@ public class CCommon
     private CCommon()
     {
     }
-
 
     /**
      * Jason creates quoted string, so we need to clean the string to create corrected Java strings
@@ -253,9 +257,13 @@ public class CCommon
      * @return literal object
      */
     @SuppressWarnings( "unchecked" )
-    public static Literal getLiteral( final String p_name, final Object p_data )
+    public static Literal getLiteral( final String p_name, final Object... p_data )
     {
-        return ASSyntax.createLiteral( p_name, getTerm( p_data ) );
+        final Term[] l_terms = new Term[p_data.length];
+        for ( int i = 0; i < p_data.length; ++i )
+            l_terms[i] = getTerm( p_data[i] );
+
+        return ASSyntax.createLiteral( p_name, l_terms );
     }
 
     /**
@@ -331,6 +339,10 @@ public class CCommon
         // null value into atom
         if ( p_data == null )
             return ASSyntax.createAtom( "" );
+
+        // term pass back
+        if ( p_data instanceof Term )
+            return (Term) p_data;
 
         // number value into number
         if ( p_data instanceof Number )

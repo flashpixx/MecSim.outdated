@@ -57,6 +57,20 @@ Configuration.prototype.getContent = function()
 /**
  * @Overwrite
 **/
+Configuration.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("text"),
+        title     : this.generateSubID("dialogtitle")
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
+}
+
+
+/**
+ * @Overwrite
+**/
 Configuration.prototype.afterDOMAdded = function()
 {
     Pane.prototype.afterDOMAdded.call(this);
@@ -137,7 +151,96 @@ Configuration.prototype.buildViewAndBind = function()
     lo_elements.texts.forEach( function(pc_item) {
         jQuery( "#"+pc_item ).jqxInput({ height: 25, width: 450 }).on("change", function( po_event ) {
             self.updateConfiguration( po_event.target.id, jQuery(this).val() );
+            console.log(po_event.target.id);
         });
+    });
+
+    // add graph
+    jQuery( this.generateSubID("addgraph", "#") ).button().click( function(po_event){
+
+        // set dialog content
+        jQuery(self.generateSubID("text", "#")).empty().append(
+            "<p>" +
+            Layout.input({
+
+                id: self.generateSubID("graphurl"),
+                label : "Graph Download URL (PBF File)"
+
+            }) +
+            "</p>"
+        );
+
+        // open dialog
+        jQuery(self.generateSubID("dialog", "#")).dialog({
+            width   : "auto",
+            modal   : true,
+            buttons : {
+
+                Add : function() {
+
+                    // add element to the graph list and create an unique list
+                    self.mo_configuration.simulation.traffic.map.graphs.push( jQuery(self.generateSubID("graphurl", "#")).val() );
+                    self.mo_configuration.simulation.traffic.map.graphs = self.mo_configuration.simulation.traffic.map.graphs.unique();
+
+                    // set data into configuration
+                    MecSim.configuration().set(
+                        self.buildObject( "simulation_traffic_map".split("_"), self.mo_configuration.simulation.traffic.map )
+                    );
+
+                    // update UI element
+                    var lc_id = self.generateSubIDElementsInit("simulation_traffic_map_current", "#");
+
+                    jQuery(lc_id).empty();
+                    self.mo_configuration.simulation.traffic.map.graphs.forEach( function(pc_value) {
+                        jQuery(lc_id).append( jQuery('<option></option>').attr("value", pc_value).text(pc_value) );
+                    } );
+                    jQuery(lc_id).val( self.mo_configuration.simulation.traffic.map.current );
+                    jQuery(lc_id).selectmenu("refresh", true);
+
+                    // close dialog
+                    jQuery(this).dialog("close");
+                },
+
+                Cancel : function() { jQuery(this).dialog("close"); }
+
+            }
+        });
+
+    });
+
+    // remove graph
+    jQuery( this.generateSubID("removegraph", "#") ).button().click( function(po_event){
+        if (self.mo_configuration.simulation.traffic.map.graphs.length < 2)
+            return;
+
+        // get DOM id and remove item from the UI list and set first element by default
+        var lc_id     = self.generateSubIDElementsInit("simulation_traffic_map_current", "#");
+        var lc_remove = jQuery(lc_id).val();
+
+        var ln_index = self.mo_configuration.simulation.traffic.map.graphs.indexOf(lc_remove);
+        if (ln_index == -1)
+            return;
+
+        // remove element of the datastructures check for array type
+        self.mo_configuration.simulation.traffic.map.graphs.splice(ln_index, 1);
+        self.mo_configuration.simulation.traffic.map.current = self.mo_configuration.simulation.traffic.map.graphs[0];
+
+        // remove element of the UI elements and refresh
+        jQuery( ["select", lc_id, " option[value='", lc_remove,"']"].join("") ).remove();
+        jQuery(lc_id).val( jQuery(lc_id).val() );
+        jQuery(lc_id).selectmenu("refresh", true);
+
+        // set data into configuration
+        MecSim.configuration().set(
+            self.buildObject( "simulation_traffic_map".split("_"), self.mo_configuration.simulation.traffic.map )
+        );
+
+        // delete graph by name
+        MecSim.ajax({
+            url     : "/cconfiguration/deletegraph",
+            data    : { url : lc_remove }
+        });
+
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }
@@ -150,6 +253,10 @@ Configuration.prototype.buildViewAndBind = function()
 **/
 Configuration.prototype.buildUIElements = function()
 {
+    // graph elements can be one, so it is a string and must convert into an array
+    if (!Array.isArray(this.mo_configuration.simulation.traffic.map.graphs))
+        this.mo_configuration.simulation.traffic.map.graphs = [this.mo_configuration.simulation.traffic.map.graphs];
+
     // list with IDs
     var lo_elements = {
         selects  : [],
@@ -171,6 +278,7 @@ Configuration.prototype.buildUIElements = function()
         '<li><a href="' + this.generateSubID("database", "#")   + '"></a></li>' +
         '</ul>' +
 
+
         // general tab
         '<div id="' + this.generateSubID("general") + '">' +
         '<p>' + Layout.input({ id: this.generateSubIDElementsInit("uuid"),                   label : "",   list: lo_elements.texts,      value: this.mo_configuration.uuid })               + '</p>' +
@@ -179,6 +287,7 @@ Configuration.prototype.buildUIElements = function()
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("deleteonshutdown"),    label : "",   list: lo_elements.switches,   value: this.mo_configuration.deleteonshutdown })   + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("language_current"),    label : "",   list: lo_elements.selects,    value: this.mo_configuration.language.current,   options: this.mo_configuration.language.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) + '</p>' +
         '</div>' +
+
 
         // UI tab
         '<div id="' + this.generateSubID("ui") + '">' +
@@ -193,8 +302,8 @@ Configuration.prototype.buildUIElements = function()
         '<div id="' + this.generateSubID("simulation") + '">' +
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_cellsampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.cellsampling }) + '</p>' +
         '<p>' + Layout.input({    id: this.generateSubIDElementsInit("simulation_traffic_timesampling"),      label : "",  list: lo_elements.spinners,  value: this.mo_configuration.simulation.traffic.timesampling }) + '</p>' +
-
-        '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: keys(this.mo_configuration.simulation.traffic.map.graphs).convert( function( pc_item ) { return { id: pc_item }; } ) }) + ' <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
+        '<p>' + Layout.select({   id: this.generateSubIDElementsInit("simulation_traffic_map_current"),       label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.map.current,  options: this.mo_configuration.simulation.traffic.map.graphs }) +
+        ' <button id="' + this.generateSubID("addgraph") + '" /> <button id="' + this.generateSubID("removegraph") + '" /> <a id="' + this.generateSubID("mappopup") + '"></a></p>' +
         '<p>' + Layout.checkbox({ id: this.generateSubIDElementsInit("simulation_traffic_map_reimport"),      label : "",  list: lo_elements.switches,  value: this.mo_configuration.simulation.traffic.map.reimport }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubIDElementsInit("simulation_traffic_routing_algorithm"), label : "",  list: lo_elements.selects,   value: this.mo_configuration.simulation.traffic.routing.algorithm,  options: this.mo_configuration.simulation.traffic.routing.allow.convert( function( pc_item ) { return { id: pc_item }; } ) }) +
         '</div>' +
@@ -215,7 +324,6 @@ Configuration.prototype.buildUIElements = function()
     );
 
     // webui-popover-content / -title
-
     MecSim.language({ url : "/clanguageenvironment/configurationlabel",    target : this });
     MecSim.language({ url : "/clanguageenvironment/configurationelements", target : this, idgenerator : this.generateSubIDElements });
     MecSim.language({ url : "/clanguageenvironment/configurationheader",   target : this, idgenerator : this.generateSubIDHeader   });

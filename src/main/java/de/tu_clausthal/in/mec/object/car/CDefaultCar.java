@@ -76,6 +76,16 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      */
     protected Integer m_speed;
     /**
+     * cell structure of the route
+     */
+    @CFieldFilter.CAgent( bind = false )
+    protected final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
+    /**
+     * current position on the route
+     */
+    @CFieldFilter.CAgent( bind = false )
+    protected int m_routeindex;
+    /**
      * individual acceleration in m/sec^2
      */
     private final int m_acceleration;
@@ -100,16 +110,6 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * linger probability value
      */
     private final double m_lingerprobability;
-    /**
-     * cell structure of the route
-     */
-    @CFieldFilter.CAgent( bind = false )
-    private final ArrayList<Pair<EdgeIteratorState, Integer>> m_route;
-    /**
-     * current position on the route
-     */
-    @CFieldFilter.CAgent( bind = false )
-    private int m_routeindex;
 
     /**
      * ctor to create the initial values
@@ -187,6 +187,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     }
 
     @Override
+    @CMethodFilter.CAgent( bind = false )
     public final GeoPosition getGeoposition()
     {
         final EdgeIteratorState l_edgeid = this.getEdge();
@@ -224,7 +225,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         final Map<Double, ICar> l_predecessordistance = new HashMap<>();
 
         // we get the nearest predecessor within the speed range (performance boost)
-        for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_speed ) && ( i < m_route.size() ) && ( l_predecessordistance.size() < p_count ); i++ )
+        for ( int i = m_routeindex + 1; ( i <= m_routeindex + m_layer.getUnitConvert().getSpeedToCell( m_speed ) ) && ( i < m_route.size() ) &&
+                                        ( l_predecessordistance.size() < p_count ); i++
+                )
         {
             final ICar l_object = m_layer.getGraph().getEdge( m_route.get( i ).getLeft() ).getObject( m_route.get( i ).getRight() );
             if ( l_object != null )

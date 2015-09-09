@@ -25,6 +25,7 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
+import de.tu_clausthal.in.mec.common.EDistribution;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CAgentCarFactory;
@@ -38,9 +39,6 @@ import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
-import org.apache.commons.math3.distribution.ExponentialDistribution;
-import org.apache.commons.math3.distribution.NormalDistribution;
-import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
@@ -328,149 +326,6 @@ public class CWaypointEnvironment
 
                 )
         );
-
-    }
-
-    /**
-     * enum for distributions
-     */
-    private enum EDistribution
-    {
-        /**
-         * normal distribution
-         **/
-        Normal(
-                CCommon.getResourceString( EDistribution.class, "normaldistribution" ), CCommon.getResourceString(
-                EDistribution.class, "normaldistributionleft"
-        ), CCommon.getResourceString( EDistribution.class, "normaldistributionright" )
-        ),
-        /**
-         * uniform distribution
-         **/
-        Uniform(
-                CCommon.getResourceString( EDistribution.class, "uniformdistribution" ), CCommon.getResourceString(
-                EDistribution.class, "uniformdistributionleft"
-        ), CCommon.getResourceString( EDistribution.class, "uniformdistributionright" )
-        ),
-        /**
-         * exponential distribution
-         **/
-        Exponential(
-                CCommon.getResourceString( EDistribution.class, "exponentialdistribution" ), CCommon.getResourceString(
-                EDistribution.class, "exponentialdistributionleft"
-        )
-        );
-
-
-        /**
-         * left / lower / first momentum description
-         **/
-        private final String m_firstmomentum;
-        /**
-         * right / higher / second momentum description
-         **/
-        private final String m_secondmomentum;
-        /**
-         * name of this distribution type
-         */
-        private final String m_text;
-
-        /**
-         * ctor
-         *
-         * @param p_text language depend name,
-         * @param p_firstmomentum lower / first momentum language depend name
-         */
-        private EDistribution( final String p_text, final String p_firstmomentum )
-        {
-            this( p_text, p_firstmomentum, null );
-        }
-
-        /**
-         * ctor
-         *
-         * @param p_text language depend name,
-         * @param p_firstmomentum lower / first momentum language depend name
-         * @param p_secondmomentum higher / second momentum language depend name
-         */
-        private EDistribution( final String p_text, final String p_firstmomentum, final String p_secondmomentum )
-        {
-            m_text = p_text;
-            m_firstmomentum = p_firstmomentum;
-            m_secondmomentum = p_secondmomentum;
-        }
-
-        /**
-         * returns a distribution object
-         *
-         * @param p_firstmomentum lower / first momentum
-         * @param p_secondmomentum higher / second momentum
-         * @return distribution
-         */
-        public final AbstractRealDistribution get( final double p_firstmomentum, final double p_secondmomentum )
-        {
-            switch ( this )
-            {
-                case Uniform:
-                    return new UniformRealDistribution( p_firstmomentum, p_secondmomentum );
-
-                case Normal:
-                    return new NormalDistribution( p_firstmomentum, p_secondmomentum );
-
-                case Exponential:
-                    return new ExponentialDistribution( p_firstmomentum );
-
-                default:
-                    throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unknowndistribution" ) );
-            }
-        }
-
-        /**
-         * returns the label of the first momentum
-         *
-         * @return label
-         */
-        public final String getFirstMomentum()
-        {
-            return m_firstmomentum;
-        }
-
-        /**
-         * returns the label of the second momentum
-         *
-         * @return label
-         */
-        public final String getSecondMomentum()
-        {
-            return m_secondmomentum;
-        }
-
-        /**
-         * returns bool value that a first momentum is used
-         *
-         * @return flag
-         */
-        public final boolean hasFirstMomentum()
-        {
-            return m_firstmomentum != null;
-        }
-
-        /**
-         * returns bool value that a second momentum is used
-         *
-         * @return flag
-         */
-        public final boolean hasSecondMomentum()
-        {
-            return m_secondmomentum != null;
-        }
-
-        @Override
-        public String toString()
-        {
-            return m_text;
-        }
-
 
     }
 

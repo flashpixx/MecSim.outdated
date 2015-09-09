@@ -141,6 +141,14 @@ Array.prototype.convert = Array.prototype.convert || function( px_value )
     return la_result;
 }
 
+/**
+ * uniquefy the array
+**/
+Array.prototype.unique = Array.prototype.unique || function( px_value )
+{
+    return function(){ return this.filter( px_value) }
+}(function( a, b, c ) { return c.indexOf(a,b+1) < 0 });
+
 
 /**
  * global function to get the object-type of a variable

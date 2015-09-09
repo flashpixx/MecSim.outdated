@@ -108,11 +108,11 @@ public class CGraphHopper extends GraphHopper
         // set the default settings
         m_cellsize = p_cellsize;
         this.setCHShortcuts( "default" );
-        //2b33cdf620fe693dd2ce7c7369445dc8
+
         // define graph location (use configuration)
-        final Pair<String, String> l_currentgraph = getCurrentGraph();
-        final File l_graphlocation = getGraphLocation( l_currentgraph.getLeft() );
-        CLogger.out( CCommon.getResourceString( this, "path", l_currentgraph.getLeft(), l_graphlocation.getAbsolutePath() ) );
+        final String l_currentgraphurl = getCurrentGraph();
+        final File l_graphlocation = getGraphLocation( l_currentgraphurl );
+        CLogger.out( CCommon.getResourceString( this, "path", l_graphlocation.getAbsolutePath() ) );
 
         // if reimported is set, delete graph directory
         if ( CConfiguration.getInstance().get().<Boolean>get( "simulation/traffic/map/reimport" ) )
@@ -123,7 +123,7 @@ public class CGraphHopper extends GraphHopper
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
             CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
-            final File l_osm = this.downloadOSMData( l_currentgraph.getRight() );
+            final File l_osm = this.downloadOSMData( l_currentgraphurl );
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
             this.setOSMFile( l_osm.getAbsolutePath() );
@@ -397,27 +397,36 @@ public class CGraphHopper extends GraphHopper
     }
 
     /**
+     * deletes a graph by URL
+     *
+     * @param p_url URL
+     */
+    public static void deleteGraph( final String p_url )
+    {
+        FileUtils.deleteQuietly( getGraphLocation( p_url ) );
+    }
+
+    /**
      * gets the current graph with its download URL from
      * the configuration
      *
-     * @return pair of graph name and download URL
+     * @return string URL
      */
-    private static Pair<String, String> getCurrentGraph()
+    private static String getCurrentGraph()
     {
-        final String l_current = CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/current" );
-        return new ImmutablePair<>( l_current, CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/graphs/" + l_current ) );
+        return CConfiguration.getInstance().get().<String>get( "simulation/traffic/map/current" );
     }
 
     /**
      * returns the full path of a graph location
      *
-     * @param p_name name of the graph (any string name)
+     * @param p_url download URL
      * @return graph path location
      */
-    public static File getGraphLocation( final String p_name )
+    private static File getGraphLocation( final String p_url )
     {
         return CConfiguration.getInstance().getLocation(
-                "root", "graphs", CCommon.getHash( p_name, "MD5" )
+                "root", "graphs", CCommon.getHash( p_url, "MD5" )
         );
     }
 

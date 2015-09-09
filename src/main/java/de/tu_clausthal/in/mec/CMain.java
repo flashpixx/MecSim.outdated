@@ -76,6 +76,7 @@ public class CMain
         final Options l_clioptions = new Options();
         l_clioptions.addOption( "help", false, CCommon.getResourceString( CMain.class, "help" ) );
         l_clioptions.addOption( "configuration", true, CCommon.getResourceString( CMain.class, "config" ) );
+        l_clioptions.addOption( "resetconfig", false, CCommon.getResourceString( CMain.class, "resetconfig" ) );
         l_clioptions.addOption( "nogui", true, CCommon.getResourceString( CMain.class, "nogui" ) );
         l_clioptions.addOption( "uibindport", true, CCommon.getResourceString( CMain.class, "uibindport" ) );
         l_clioptions.addOption( "uibindhost", true, CCommon.getResourceString( CMain.class, "uibindhost" ) );
@@ -129,6 +130,8 @@ public class CMain
             l_defaultconfig = new File( l_cli.getOptionValue( "configuration" ) );
 
         CConfiguration.getInstance().setConfigDir( l_defaultconfig );
+        if ( l_cli.hasOption( "resetconfig" ) )
+            CConfiguration.getInstance().delete();
         if ( !CConfiguration.getInstance().read() )
         {
             System.err.println( CCommon.getResourceString( CMain.class, "configload" ) );

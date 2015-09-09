@@ -27,6 +27,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.common.CReflection;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -192,19 +193,13 @@ public class CConfiguration
                                                             // graph should be reimported
                                                             put( "reimport", false );
                                                             // active element on the graph map
-                                                            put( "current", "europe-germany-lowersaxony" );
-                                                            // map with selectable graph entries
+                                                            put( "current", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                                                            // list with download URL
                                                             put(
-                                                                    "graphs", new CImmutable()
+                                                                    "graphs", new ArrayList<String>()
                                                                     {{
-                                                                            put(
-                                                                                    "europe-germany-lowersaxony",
-                                                                                    "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf"
-                                                                            );
-                                                                            put(
-                                                                                    "northamerica-usa-southdakota",
-                                                                                    "http://download.geofabrik.de/north-america/us/south-dakota-latest.osm.pbf"
-                                                                            );
+                                                                            add( "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                                                                            add( "http://download.geofabrik.de/north-america/us/south-dakota-latest.osm.pbf" );
                                                                         }}
                                                             );
                                                         }}
@@ -348,27 +343,11 @@ public class CConfiguration
                             add( new CClassType( Boolean.class ) );
                         }}
             );
-            // @deprecated
-            put(
-                    "simulation/traffic/map/name", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                            add( new CStringNotEmpty() );
-                        }}
-            );
-            // @deprecated
-            put(
-                    "simulation/traffic/map/url", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                            add( new CStringNotEmpty() );
-                        }}
-            );
             put(
                     "simulation/traffic/map/current", new LinkedList<ICheck>()
                     {{
-                            add( new CStringNotContains( CPath.DEFAULTSEPERATOR ) );
-                            add( new CContains<String>( m_configuration.<Map<String, String>>get( "simulation/traffic/map/graphs" ).keySet() ) );
+                            add( new CClassType( String.class ) );
+                            add( new CContains<String>( m_configuration.<List<String>>get( "simulation/traffic/map/graphs" ) ) );
                         }}
             );
 
@@ -645,6 +624,14 @@ public class CConfiguration
     }
 
     /**
+     * deletes the configuration filename
+     */
+    public void delete()
+    {
+        FileUtils.deleteQuietly( this.getLocation( "root", c_filename ) );
+    }
+
+    /**
      * creates the configuration directories
      */
     private void createDirectories() throws IOException
@@ -675,7 +662,6 @@ public class CConfiguration
      */
     private void setConfiguration( final CNameHashMap p_input ) throws IOException, ClassNotFoundException, IllegalArgumentException
     {
-
         // convert special data into individual types
         if ( p_input.traverseContainsKey( "ui/geoposition" ) )
             p_input.set(
@@ -686,7 +672,6 @@ public class CConfiguration
 
         // check allowed values - traverse default map and transfer values if type is equal - need a local copy of the map for traversing
         final Set<String> l_errors = new HashSet<>();
-
         for ( final Map.Entry<CPath, Object> l_item : m_configuration )
             if ( p_input.traverseContainsKey( l_item.getKey() ) )
             {
@@ -713,9 +698,11 @@ public class CConfiguration
                     m_configuration.set( l_item.getKey(), l_data );
             }
 
+
         if ( !l_errors.isEmpty() )
             throw new IllegalArgumentException( StringUtils.join( l_errors, "\n" ) );
     }
+
 
     /**
      * creates the default directories relative to the root dir
@@ -748,6 +735,17 @@ public class CConfiguration
             throw new IllegalStateException( CCommon.getResourceString( this, "notallowed" ) );
 
         this.setConfiguration( new CNameHashMap.CImmutable( p_data ) );
+    }
+
+    /**
+     * UI method - set data
+     *
+     * @param p_data input data
+     **/
+    private void web_static_deletegraph( final Map<String, Object> p_data )
+    {
+        if ( p_data.containsKey( "url" ) )
+            CGraphHopper.deleteGraph( (String) p_data.get( "url" ) );
     }
 
     /**

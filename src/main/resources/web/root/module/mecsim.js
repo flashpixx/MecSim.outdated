@@ -318,7 +318,7 @@ var MecSim = (function (px_modul) {
             // resizing iFrame to the full parent element size
             'iframe{ width: 100%; height: 100%; position: absolute; }' +
             // jQuery button is set to a minimale size
-            '.ui-button-text-only { min-height: 1.8em; min-width: 50px; padding-top: 0.5em; padding-bottom: 0.5em; padding-left: 2em; padding-right: 2em; }' +
+            '.ui-button-text-only { min-height: 1.8em; min-width: 35px; padding-top: 0.25em; padding-bottom: 0.25em; padding-left: 1em; padding-right: 1em; }' +
             // jQuery sortable without bullet
             '.ui-sortable { list-style-type: none; }' +
             'li.ui-state-default { min-height: 0.5em; padding: 0.5em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }' +

@@ -42,22 +42,19 @@ Simulation.prototype = Object.create(Pane.prototype);
 
 
 /**
- * @Overload
-**/
-Simulation.prototype.getGlobalCSS = function()
-{
-    return this.generateSubID("content", ".") + "{ display: block; width: 100% }" + Pane.prototype.getGlobalCSS.call(this);
-}
-
-/**
  * @Overwrite
 **/
 Simulation.prototype.getContent = function()
 {
-    return '<p> <button id = "' + this.generateSubID("start") + '" ></button > <button id = "' + this.generateSubID("stop")  + '" ></button > </p>' +
-           '<p> <button id = "' + this.generateSubID("reset") + '" ></button > </p>' +
-           '<p> <button id = "' + this.generateSubID("load") + '" ></button > <input type = "file" id = "' + this.generateSubID("loadfile") + '" /> ' +
-           '<button id = "' + this.generateSubID("save") + '" ></button > <input type = "file" id = "' + this.generateSubID("savefile") + '" /></p>' +
+    return '<p> <button id = "' + this.generateSubID("start") + '" ></button> ' +
+           '<button id = "' + this.generateSubID("stop")  + '" ></button> ' +
+           '<button id = "' + this.generateSubID("reset") + '" ></button> </p>' +
+
+           '<p> <button id = "' + this.generateSubID("load") + '" ></button> <button id = "' + this.generateSubID("save") + '" ></button>' +
+           '<input type = "file" id = "' + this.generateSubID("loadfile") + '" /> <input type = "file" id = "' + this.generateSubID("savefile") + '" /></p>' +
+
+           '<p><div id="' + this.generateSubID("threadsleeptime") + '"></div></p>' +
+
            Pane.prototype.getContent.call(this);
 }
 
@@ -125,6 +122,28 @@ Simulation.prototype.afterDOMAdded = function()
             jQuery( self.generateSubID(pc_item + "file", "#") ).trigger( "click" );
 
         });
+    });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- thread-sleep-time slider ----------------------------------------------------------------------------------------------------------------------------
+    MecSim.ajax({
+        url  : "/csimulation/getthreadsleep"
+    }).done(function(po) {
+
+        jQuery( self.generateSubID("threadsleeptime", "#") ).slider({
+            value  : po.time,
+            min    : 1,
+            max    : 150,
+            change : function( po_event, po_ui )
+            {
+                MecSim.ajax({
+                    url     : "/csimulation/setthreadsleep",
+                    data    : { time : po_ui.value  },
+                });
+            }
+        });
+
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 }

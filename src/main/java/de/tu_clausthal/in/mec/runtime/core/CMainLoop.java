@@ -23,7 +23,6 @@
 
 package de.tu_clausthal.in.mec.runtime.core;
 
-import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
@@ -66,6 +65,40 @@ public class CMainLoop implements Runnable
      * simulation counter
      */
     private int m_simulationcount;
+    /**
+     * thread sleep time
+     */
+    private volatile int m_sleeptime;
+
+    /**
+     * ctor
+     *
+     * @param p_sleeptime thread-sleep time
+     */
+    public CMainLoop( final int p_sleeptime )
+    {
+        this.setSleepTime( p_sleeptime );
+    }
+
+    /**
+     * returns the thread-sleep time
+     *
+     * @return thread-sleep time
+     */
+    public int getSleepTime()
+    {
+        return m_sleeptime;
+    }
+
+    /**
+     * changes the thread-sleep time
+     *
+     * @param p_sleeptime thread-sleep time
+     **/
+    public void setSleepTime( final int p_sleeptime )
+    {
+        m_sleeptime = Math.abs( p_sleeptime );
+    }
 
     /**
      * returns the simulation step
@@ -173,7 +206,7 @@ public class CMainLoop implements Runnable
                 this.processObjects( l_layerorder );
 
                 m_simulationcount++;
-                Thread.sleep( CConfiguration.getInstance().get().<Integer>get( "simulation/threadsleeptime" ) );
+                Thread.sleep( m_sleeptime );
             }
             catch ( final InterruptedException l_exception )
             {

@@ -64,7 +64,7 @@ WaypointPreset.prototype.getContent = function()
     // add manual error dialog
     jQuery(Layout.dialog({
         id        : this.generateSubID("dialog"),
-        contentid : this.generateSubID("text"),
+        contentid : this.generateSubID("dialogtext"),
         title     : "Information"
     })).appendTo("body");
 

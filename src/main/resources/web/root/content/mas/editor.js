@@ -346,20 +346,19 @@ MASEditor.prototype.readAgents = function()
  * @param pc_group option group name
  * @param pc_agent agent name
  * @param pc_content content of the agent
+ * @param px_done function which is called on done
+ * @param px_fail function which is called on fail
 **/
-MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content )
+MASEditor.prototype.writeAgent = function( pc_group, pc_agent, pc_content, px_done, px_fail )
 {
+    var self = this;
+
     MecSim.ajax({
 
         url     : this.mo_configuration[pc_group].write,
         data    : { "name" : pc_agent, "source" : pc_content }
 
-    }).fail( function( po ) {
-
-        jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
-        jQuery(self.generateSubID("errordialog", "#")).dialog("open");
-
-    });
+    }).done(px_done).fail(px_fail);
 }
 
 
@@ -488,7 +487,17 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
 
             // create editor bind action, on blur (focus lost) the data are written to the REST-API and the textarea
             lo_editor.on( "blur", function( po_editor ) {
-                self.writeAgent( pc_group, pc_agent, po_editor.getValue() ); po_editor.save();
+                self.writeAgent( pc_group, pc_agent, po_editor.getValue(),
+
+                    function() {
+                        po_editor.save();
+                    },
+
+                    function( po ) {
+                        jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
+                        jQuery(self.generateSubID("errordialog", "#")).dialog("open");
+                    }
+                );
             });
 
             // set active tab to the last inserted tab

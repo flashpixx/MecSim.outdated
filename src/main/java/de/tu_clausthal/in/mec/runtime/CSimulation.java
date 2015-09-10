@@ -329,6 +329,14 @@ public class CSimulation
     }
 
     /**
+     * stores the current settings within the configuration
+     */
+    public final void setConfiguration()
+    {
+        CConfiguration.getInstance().get().set( "simulation/threadsleeptime", m_mainloop.getSleepTime() );
+    }
+
+    /**
      * UI method - gets the layer name from the map
      *
      * @param p_data input data
@@ -360,6 +368,8 @@ public class CSimulation
 
     /**
      * UI method - disables / enables a layer
+     *
+     * @param p_data input data
      */
     private void web_static_disableenablelayer( final Map<String, Object> p_data )
     {
@@ -373,6 +383,8 @@ public class CSimulation
 
     /**
      * UI method - hide / show a layer
+     *
+     * @param p_data input data
      */
     private void web_static_hideshowlayer( final Map<String, Object> p_data )
     {
@@ -387,7 +399,7 @@ public class CSimulation
     /**
      * UI method - returns a list with available layers
      *
-     * @return
+     * @return data map
      */
     private Map<String, Map<String, Object>> web_static_listlayer()
     {
@@ -429,6 +441,26 @@ public class CSimulation
     private void web_static_stop()
     {
         this.stop();
+    }
+
+    /**
+     * UI method - set thread-sleep time
+     *
+     * @param p_data input data
+     */
+    private void web_static_setthreadsleep( final Map<String, Object> p_data )
+    {
+        m_mainloop.setSleepTime( ( (Number) p_data.getOrDefault( "time", m_mainloop.getSleepTime() ) ).intValue() );
+    }
+
+    /**
+     * UI method - set thread-sleep time
+     *
+     * @return data map
+     */
+    private Map<String, Object> web_static_getthreadsleep()
+    {
+        return CCommon.getMap( "time", m_mainloop.getSleepTime() );
     }
 
     /**

@@ -154,6 +154,7 @@ public class CBootstrap
      */
     public static void beforeStageShutdown( final CUI p_ui )
     {
+        CSimulation.getInstance().setConfiguration();
         p_ui.<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().setConfiguration();
     }
 

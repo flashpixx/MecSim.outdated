@@ -310,7 +310,7 @@ public class CConfiguration
                     "simulation/threadsleeptime", new LinkedList<ICheck>()
                     {{
                             add( new CClassType( Number.class ) );
-                            add( new CInRange( 1, 50 ) );
+                            add( new CInRange( 1, 150 ) );
                         }}
             );
 

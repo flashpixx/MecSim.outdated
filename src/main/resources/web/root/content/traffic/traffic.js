@@ -48,7 +48,7 @@ Traffic.prototype.getGlobalContent = function()
 {
     return Layout.dialog({
         id        : this.generateSubID("dialog"),
-        contentid : this.generateSubID("text"),
+        contentid : this.generateSubID("dialogtext"),
         title     : this.generateSubID("dialogtitle")
     }) +
     Pane.prototype.getGlobalContent.call(this);
@@ -106,7 +106,7 @@ Traffic.prototype.afterDOMAdded = function()
         // fail closure function to open an error dialog
         var lx_failclosure = function( po_event ) {
             return function( po_data ) {
-                jQuery(self.generateSubID("text", "#")).text(po_data.responseJSON.error);
+                jQuery(self.generateSubID("dialogtext", "#")).text(po_data.responseJSON.error);
                 jQuery(self.generateSubID("dialog", "#")).dialog({
                     modal    : true,
                     overlay  : { background: "black" }

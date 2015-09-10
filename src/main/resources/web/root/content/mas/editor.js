@@ -24,6 +24,8 @@
 
 "use strict";
 
+// @todo check translation
+// @bug agent list refresh does not work in Java browser component (in external browsers it works well)
 
 /**
  * ctor to create the source editor for the MAS
@@ -70,13 +72,8 @@ MASEditor.prototype.getGlobalContent = function()
 {
     return Layout.dialog({
                    id        : this.generateSubID("dialog"),
-                   contentid : this.generateSubID("text"),
+                   contentid : this.generateSubID("dialogtext"),
                    title     : this.generateSubID("dialogtitle")
-    }) +
-    Layout.dialog({
-                       id        : this.generateSubID("errordialog"),
-                       contentid : this.generateSubID("errortext"),
-                       title     : this.generateSubID("errordialogtitle")
     }) +
     Pane.prototype.getGlobalContent.call(this);
 }
@@ -142,68 +139,42 @@ MASEditor.prototype.afterDOMAdded = function()
 {
     var self = this;
 
-    // bind reading action
+    // read agents
     this.readAgents();
-
-    // --- error dialog ----------------------------------------------------------------------------------------------------------------------------------------
-    jQuery(this.generateSubID("errordialog", "#")).dialog({
-        dialogClass : "error",
-        width       : "auto",
-        modal       : true,
-        resizable   : false,
-        autoOpen    : false,
-
-        buttons     : {
-            Ok : function () {
-                jQuery(this).dialog("close");
-            }
-
-        }
-    });
-    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
     // --- bind new-agent button action ------------------------------------------------------------------------------------------------------------------------
     jQuery( this.generateSubID("new", "#") ).button().click( function() {
 
-        // set dialog content
-        jQuery(self.generateSubID("text", "#")).empty().append(
+        self.showDialog( "Agent Generation",
+
+            // set dialog content
             "<p>" +
-            Layout.select({
+                Layout.select({
+                    id      : self.generateSubID("agenttype"),
+                    label   : "Agent Type",
+                    options : Object.keys( self.mo_configuration )
+                }) +
+                "</p><p>" +
+                Layout.input({
+                    id: self.generateSubID("agentname"),
+                    label : "Agent Name"
+                }) +
+            "</p>",
 
-                id      : self.generateSubID("agenttype"),
-                label   : "Agent Type",
-                options : Object.keys( self.mo_configuration )
-
-            }) +
-            "</p><p>" +
-            Layout.input({
-
-                id: self.generateSubID("agentname"),
-                label : "Agent Name"
-
-            }) +
-            "</p>"
-        );
-        jQuery(self.generateSubID("agenttype", "#")).selectmenu();
-
-
-        // open dialog
-        jQuery(self.generateSubID("dialog", "#")).dialog({
-            width   : "auto",
-            modal   : true,
-            buttons : {
-
+            // set dialog buttons
+            {
                 Create : function() {
-                    self.createAgent( jQuery(self.generateSubID("agenttype", "#")).val(), jQuery(self.generateSubID("agentname", "#")).val() );
                     jQuery(this).dialog("close");
+                    self.createAgent( jQuery(self.generateSubID("agenttype", "#")).val(), jQuery(self.generateSubID("agentname", "#")).val() );
                 },
 
                 Cancel : function() { jQuery(this).dialog("close"); }
+            },
 
-            }
-        });
+            // set after DOM-add-handler
+            function() { jQuery(self.generateSubID("agenttype", "#")).selectmenu() }
 
+        );
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -212,17 +183,8 @@ MASEditor.prototype.afterDOMAdded = function()
     jQuery( this.generateSubID("remove", "#") ).button().click( function() {
 
         var lo = self.getSelectedAgent();
-
-        // set dialog content
-        // @todo translation
-        jQuery( self.generateSubID("content", "#") ).empty().append( "<p>Should the [" + lo.group + "] agent [" + lo.value + "] be deleted?</p>" );
-
-         // open dialog
-        jQuery(self.generateSubID("dialog", "#")).dialog({
-            width   : "auto",
-            modal   : true,
-            overlay  : { background: "black" },
-            buttons : {
+        self.showDialog( "Agent Removing", "<p>Should the [" + lo.group + "] agent [" + lo.value + "] be deleted?</p>",
+            {
 
                 Remove : function() {
                     self.removeAgent( lo.group, lo.value );
@@ -232,8 +194,7 @@ MASEditor.prototype.afterDOMAdded = function()
                 Cancel : function() { jQuery(this).dialog("close"); }
 
             }
-        });
-
+        );
 
     });
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -247,14 +208,9 @@ MASEditor.prototype.afterDOMAdded = function()
             url     : self.mo_configuration[lo.group].check,
             data    : { "name" : lo.value  },
         }).fail(function( po ) {
-
-            jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error.nl2br());
-            jQuery(self.generateSubID("errordialog", "#")).dialog("open");
-
+            self.showDialog( "Agent Syntax Check", po.responseJSON.error.nl2br(), { Ok : function() { jQuery(this).dialog("close"); } } );
         }).done(function() {
-
-            //@todo correct message dialog
-
+            self.showDialog( "Agent Syntax Check", "<p>Syntax of the [" + lo.group + "] agent [" + lo.value + "] is correct", { Ok : function() { jQuery(this).dialog("close"); } } );
         });
 
     });
@@ -375,14 +331,12 @@ MASEditor.prototype.createAgent = function( pc_group, pc_agent )
     MecSim.ajax({
 
         url     : this.mo_configuration[pc_group].create,
-        data    : { "name" : pc_agent },
-        success : function() { self.readAgents(); }
+        data    : { "name" : pc_agent }
 
+    }).done(function() {
+        self.readAgents();
     }).fail( function( po ) {
-
-        jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
-        jQuery(self.generateSubID("errordialog", "#")).dialog("open");
-
+        self.showDialog( "Agent Generation", po.responseJSON.error, { Ok : function() { jQuery(this).dialog("close"); } } );
     });
 }
 
@@ -400,26 +354,23 @@ MASEditor.prototype.removeAgent = function( pc_group, pc_agent )
     MecSim.ajax({
 
         url     : this.mo_configuration[pc_group].remove,
-        data    : { "name" : pc_agent },
-        success : function() {
+        data    : { "name" : pc_agent }
 
-            self.readAgents();
+    }).done(function() {
 
-            // remove an existing tab
-            var lc_tabid = self.generateSubID( pc_group+"_"+pc_agent );
-            jQuery( "#"+lc_tabid ).remove();
-            jQuery( "#"+lc_tabid+"_nav" ).remove();
+        // remove an existing tab
+        var lc_tabid = self.generateSubID( pc_group+"_"+pc_agent );
+        jQuery( "#"+lc_tabid ).remove();
+        jQuery( "#"+lc_tabid+"_nav" ).remove();
 
-            self.mo_tabs.tabs( "refresh" );
-            self.mo_tabs.tabs({ active: 0 });
+        self.mo_tabs.tabs( "refresh" );
+        self.mo_tabs.tabs({ active: 0 });
 
-        }
+        // reread agent list
+        self.readAgents();
 
     }).fail( function( po ) {
-
-        jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
-        jQuery(self.generateSubID("errordialog", "#")).dialog("open");
-
+        self.showDialog( "Agent Removing", po.responseJSON.error, { Ok : function() { jQuery(this).dialog("close"); } } );
     });
 }
 
@@ -480,22 +431,39 @@ MASEditor.prototype.addTab = function( pc_group, pc_agent  )
 
             var lo_editor = CodeMirror.fromTextArea( document.getElementById( lc_tabid + "_edit" ), {
 
-                lineNumbers    : true,
-                viewportMargin : Infinity
+                lineNumbers       : true,
+                viewportMargin    : Infinity,
+
+                // own option to store the last checkpoint within the instance
+                historycheckpoint : null
 
             });
+
+            // setup first history checkpoint
+            lo_editor.options.historycheckpoint = lo_editor.changeGeneration(true);
+
 
             // create editor bind action, on blur (focus lost) the data are written to the REST-API and the textarea
             lo_editor.on( "blur", function( po_editor ) {
                 self.writeAgent( pc_group, pc_agent, po_editor.getValue(),
 
                     function() {
+
+                        // update history checkpoint
+                        po_editor.options.historycheckpoint = lo_editor.changeGeneration(true);
                         po_editor.save();
+
                     },
 
                     function( po ) {
-                        jQuery(self.generateSubID("errortext", "#")).empty().append(po.responseJSON.error);
-                        jQuery(self.generateSubID("errordialog", "#")).dialog("open");
+
+                        // undo all changes until the last checkpoint
+                        if (po_editor.options.historycheckpoint)
+                            while ((!po_editor.isClean(po_editor.options.historycheckpoint)) && (po_editor.historySize().undo > 0))
+                                po_editor.undo()
+
+                        // show error messages
+                        self.showDialog( "Agent Storing", po.responseJSON.error, { Ok : function() { jQuery(this).dialog("close"); } } );
                     }
                 );
             });
@@ -537,3 +505,29 @@ MASEditor.prototype.addTabView = function()
         self.mo_tabs.tabs( "refresh" );
     });
 }
+
+
+
+/**
+ * opens a dialog
+ *
+ * @param pc_title title of the dialog
+ * @param pc_content content of the dialog
+ * @param po_buttons dialog buttons with function-handler
+ * @param px_domadd function-handler which is called after the content is added into the DOM
+ **/
+ MASEditor.prototype.showDialog = function( pc_title, pc_content, po_buttons, px_domadd )
+ {
+    jQuery( this.generateSubID("dialogtext", "#") ).empty().append( pc_content );
+    if (px_domadd)
+        px_domadd();
+
+    // open dialog
+    jQuery( this.generateSubID("dialog", "#") ).dialog({
+        title   : pc_title,
+        width   : "auto",
+        modal   : true,
+        overlay : { background: "black" },
+        buttons : po_buttons
+    });
+ }

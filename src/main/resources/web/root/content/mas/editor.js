@@ -93,10 +93,9 @@ MASEditor.prototype.getGlobalCSS = function()
 **/
 MASEditor.prototype.getContent = function()
 {
-    return '<span id="' + this.generateSubID("agentlist") + '"></span>' +
-    '<p><button id = "' + this.generateSubID("new") + '" ></button ></p>' +
-    '<p><button id = "' + this.generateSubID("remove") + '" ></button ></p>' +
-    '<p><button id = "' + this.generateSubID("check") + '" ></button ></p>' +
+    return '<br/><span id="' + this.generateSubID("agentlist") + '"></span>' +
+    '<p><button id = "' + this.generateSubID("new") + '" ></button> <button id = "' + this.generateSubID("remove") + '" ></button></p>' +
+    '<p><button id = "' + this.generateSubID("check") + '"></button></p>' +
     Pane.prototype.getContent.call(this);
 }
 

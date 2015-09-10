@@ -44,17 +44,6 @@ MAS.prototype = Object.create(Pane.prototype);
 /**
  * @Overwrite
 **/
-MAS.prototype.getContent = function()
-{
-    var lc_result = "";
-    this.ma_children.forEach( function(po_item) { lc_result += po_item.getContent() + "<br/>"; } );
-    return lc_result.trim();
-}
-
-
-/**
- * @Overwrite
-**/
 MAS.prototype.afterDOMAdded = function()
 {
     MecSim.language({ url : "/clanguageenvironment/mas", target : this });

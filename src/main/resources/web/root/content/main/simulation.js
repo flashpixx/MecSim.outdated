@@ -54,10 +54,13 @@ Simulation.prototype.getGlobalCSS = function()
 **/
 Simulation.prototype.getContent = function()
 {
-    return '<p> <button id = "' + this.generateSubID("start") + '" ></button > <button id = "' + this.generateSubID("stop")  + '" ></button > </p>' +
-           '<p> <button id = "' + this.generateSubID("reset") + '" ></button > </p>' +
-           '<p> <button id = "' + this.generateSubID("load") + '" ></button > <input type = "file" id = "' + this.generateSubID("loadfile") + '" /> ' +
-           '<button id = "' + this.generateSubID("save") + '" ></button > <input type = "file" id = "' + this.generateSubID("savefile") + '" /></p>' +
+    return '<p> <button id = "' + this.generateSubID("start") + '" ></button> ' +
+           '<button id = "' + this.generateSubID("stop")  + '" ></button> ' +
+           '<button id = "' + this.generateSubID("reset") + '" ></button> </p>' +
+
+           '<p> <button id = "' + this.generateSubID("load") + '" ></button> <button id = "' + this.generateSubID("save") + '" ></button>' +
+           '<input type = "file" id = "' + this.generateSubID("loadfile") + '" /> <input type = "file" id = "' + this.generateSubID("savefile") + '" /></p>' +
+
            Pane.prototype.getContent.call(this);
 }
 

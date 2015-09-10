@@ -72,9 +72,9 @@ Help.prototype.getGlobalContent = function()
 **/
 Help.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.generateSubID("about") + '" ></button ></p>' +
-           '<p><button id = "' + this.generateSubID("userdoc") + '" ></button ></p>' +
-           '<p><button id = "' + this.generateSubID("devdoc") + '" ></button ></p>' +
+    return '<p><button id = "' + this.generateSubID("about") + '" ></button></p>' +
+           '<p><button id = "' + this.generateSubID("userdoc") + '" ></button> ' +
+           '<button id = "' + this.generateSubID("devdoc") + '" ></button></p>' +
            Pane.prototype.getContent.call(this);
 
            /*

@@ -299,7 +299,7 @@ var MecSim = (function (px_modul) {
             // sets the menu layout
             px_modul.ui().menu("#")    + ' { z-index: 0; background-image: url(theme/images/tuc_small.gif); background-position: 50% 97%; background-repeat: no-repeat; }' +
             // sets the content layout (with logo)
-            px_modul.ui().content("#") + '::before { z-index: 0; content: ""; position: fixed; top: 30%; left: 40%; opacity: 0.35; height: 145px; width: 515px; background-image: url(theme/images/tuc.svg); background-repeat: no-repeat; }' +
+            px_modul.ui().content("#") + '::before { z-index: 0; content: ""; position: fixed; top: 30%; left: 50%; opacity: 0.35; height: 145px; width: 515px; background-image: url(theme/images/tuc.svg); background-repeat: no-repeat; }' +
             px_modul.ui().content("#") + ' { z-index: 0; overflow: auto; }' +
             /** sets the static content layout **/
             px_modul.ui().static("#") + ' { z-index: 1; position: absolute; }' +

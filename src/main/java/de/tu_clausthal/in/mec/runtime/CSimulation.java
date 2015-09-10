@@ -24,6 +24,7 @@
 package de.tu_clausthal.in.mec.runtime;
 
 import de.tu_clausthal.in.mec.CBootstrap;
+import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
@@ -61,7 +62,7 @@ public class CSimulation
     /**
      * main loop
      */
-    private final CMainLoop m_mainloop = new CMainLoop();
+    private final CMainLoop m_mainloop = new CMainLoop( CConfiguration.getInstance().get().<Integer>get( "simulation/threadsleeptime" ) );
     /**
      * object of the thread loop *
      */

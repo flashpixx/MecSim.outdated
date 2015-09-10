@@ -34,7 +34,6 @@ import de.tu_clausthal.in.mec.object.waypoint.factory.ICarFactory;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
-import de.tu_clausthal.in.mec.object.waypoint.point.CCarPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -358,7 +357,7 @@ public class CWaypointEnvironment
          * @param p_text language depended name of the factory
          * @param p_requireAgent boolean flag that an agent-program is required
          */
-        private EFactory( final String p_text, final boolean p_requireAgent )
+        EFactory( final String p_text, final boolean p_requireAgent )
         {
             this.m_text = p_text;
             this.m_requireAgent = p_requireAgent;
@@ -448,7 +447,7 @@ public class CWaypointEnvironment
          *
          * @param p_text language depended text
          */
-        private EGenerator( final String p_text )
+        EGenerator( final String p_text )
         {
             m_text = p_text;
         }
@@ -483,17 +482,19 @@ public class CWaypointEnvironment
 
     /**
      * enum for waypoints
+     *
+     * @todo activate path waypoint
      */
     private enum EWaypoint
     {
         /**
          * random car waypoint
          **/
-        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) ),
+        CarWaypointRandom( CCommon.getResourceString( EWaypoint.class, "carwaypointrandom" ) );
         /**
          * path car waypoint
          */
-        CarWaypointPah( CCommon.getResourceString( EWaypoint.class, "carwaypointpath" ) );
+        //CarWaypointPah( CCommon.getResourceString( EWaypoint.class, "carwaypointpath" ) );
 
         /**
          * name of this waypoint type
@@ -505,7 +506,7 @@ public class CWaypointEnvironment
          *
          * @param p_text language dependend name
          */
-        private EWaypoint( final String p_text )
+        EWaypoint( final String p_text )
         {
             this.m_text = p_text;
         }
@@ -521,10 +522,12 @@ public class CWaypointEnvironment
 
             switch ( this )
             {
+                /*
                 case CarWaypointPah:
                     return new CCarPathWayPoint(
                             (GeoPosition) p_data[0], (IGenerator) p_data[1], (ICarFactory) p_data[2], (Color) p_data[4], (String) p_data[5]
                     );
+                */
 
                 case CarWaypointRandom:
                     return new CCarRandomWayPoint(

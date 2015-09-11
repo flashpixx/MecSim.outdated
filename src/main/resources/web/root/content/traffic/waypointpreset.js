@@ -266,8 +266,7 @@ WaypointPreset.prototype.finish = function()
 
         jQuery( self.generateSubID("text", "#")   ).text(po_data.responseJSON.error);
         jQuery(self.generateSubID("dialog", "#")).dialog({
-            modal    : true,
-            overlay  : { background: "black" }
+            modal    : true
         });
     });
 }

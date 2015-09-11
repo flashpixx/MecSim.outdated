@@ -99,7 +99,6 @@ MASInconsistency.prototype.afterDOMAdded = function()
             jQuery( self.generateSubID("dialog", "#") ).dialog({
                 modal    : true,
                 autoOpen : false,
-                overlay  : { background: "black" },
                 buttons  : {
 
                     OK   : function() {

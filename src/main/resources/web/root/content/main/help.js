@@ -101,8 +101,7 @@ Help.prototype.afterDOMAdded = function()
     jQuery(this.generateSubID("dialog", "#")).dialog({
         width    : "auto",
         modal    : true,
-        autoOpen : false,
-        overlay  : { background: "black" }
+        autoOpen : false
     });
 
 

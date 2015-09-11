@@ -108,8 +108,7 @@ Traffic.prototype.afterDOMAdded = function()
             return function( po_data ) {
                 jQuery(self.generateSubID("dialogtext", "#")).text(po_data.responseJSON.error);
                 jQuery(self.generateSubID("dialog", "#")).dialog({
-                    modal    : true,
-                    overlay  : { background: "black" }
+                    modal    : true
                 });
             }
 

@@ -526,7 +526,6 @@ MASEditor.prototype.addTabView = function()
         title   : pc_title,
         width   : "auto",
         modal   : true,
-        overlay : { background: "black" },
         buttons : po_buttons
     });
  }

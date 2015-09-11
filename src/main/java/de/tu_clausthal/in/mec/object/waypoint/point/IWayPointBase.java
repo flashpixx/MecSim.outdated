@@ -3,7 +3,8 @@
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # This file is part of the micro agent-based traffic simulation MecSim of            #
+ * # Clausthal University of Technology - Mobile and Enterprise Computing               #
  * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU General Public License as                            #
@@ -53,7 +54,10 @@ import java.util.Map;
  */
 public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerator> extends IInspectorDefault implements IWayPoint<T>
 {
-
+    /**
+     * visible definition - wapoints can be full invisible
+     */
+    protected final boolean m_visible = true;
     /**
      * factory of this source
      */
@@ -97,9 +101,9 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     /**
      * ctor for empty waypoints
      *
-     * @param p_position
-     * @param p_color
-     * @param p_name
+     * @param p_position position
+     * @param p_color color
+     * @param p_name name
      */
     public IWayPointBase( final GeoPosition p_position, final Color p_color, final String p_name )
     {
@@ -193,7 +197,7 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     @Override
     public final void onClick( final MouseEvent p_event, final JXMapViewer p_viewer )
     {
-        if ( m_position == null )
+        if ( ( !m_visible ) || ( m_position == null ) )
             return;
 
         final int l_zoom = this.iconsize( p_viewer );
@@ -211,6 +215,9 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     @Override
     public final void paint( final Graphics2D p_graphic, final COSMViewer p_viewer, final int p_width, final int p_height )
     {
+        if ( !m_visible )
+            return;
+
         //if the zoom change calculate the new scaled image
         if ( p_viewer.getZoom() != m_lastZoom )
             m_scaledimage = this.getScaledImage(

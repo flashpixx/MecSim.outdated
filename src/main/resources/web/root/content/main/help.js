@@ -3,7 +3,8 @@
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # This file is part of the micro agent-based traffic simulation MecSim of            #
+ * # Clausthal University of Technology - Mobile and Enterprise Computing               #
  * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU General Public License as                            #
@@ -76,15 +77,6 @@ Help.prototype.getContent = function()
            '<p><button id = "' + this.generateSubID("userdoc") + '" ></button> ' +
            '<button id = "' + this.generateSubID("devdoc") + '" ></button></p>' +
            Pane.prototype.getContent.call(this);
-
-           /*
-           blockquote {
-               text-align: center;
-               margin:0 auto;
-               width:auto;
-               display:table
-           }
-           */
 }
 
 
@@ -101,8 +93,7 @@ Help.prototype.afterDOMAdded = function()
     jQuery(this.generateSubID("dialog", "#")).dialog({
         width    : "auto",
         modal    : true,
-        autoOpen : false,
-        overlay  : { background: "black" }
+        autoOpen : false
     });
 
 
@@ -114,7 +105,7 @@ Help.prototype.afterDOMAdded = function()
 
             jQuery(self.generateSubID("name", "#"))
                 .attr("href", po_data.manifest["project-url"])
-                .text(po_data.manifest["project-name"]);
+                .html(po_data.manifest["project-name"].replace(/-/g, "<br/>"));
 
             jQuery(self.generateSubID("license", "#"))
                 .attr("href", po_data.manifest["license-url"])

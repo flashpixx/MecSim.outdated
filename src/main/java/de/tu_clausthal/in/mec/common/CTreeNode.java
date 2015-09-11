@@ -3,7 +3,8 @@
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # This file is part of the micro agent-based traffic simulation MecSim of            #
+ * # Clausthal University of Technology - Mobile and Enterprise Computing               #
  * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU General Public License as                            #
@@ -145,6 +146,16 @@ public class CTreeNode<T>
     }
 
     /**
+     * sets the data to the current node
+     *
+     * @param p_data data
+     */
+    public final void setData( final T p_data )
+    {
+        m_data = p_data;
+    }
+
+    /**
      * adds a collection of pair with path and data
      *
      * @param p_data collection of pair with path and data
@@ -153,16 +164,6 @@ public class CTreeNode<T>
     {
         for ( final Pair<CPath, T> l_item : p_data )
             this.getNode( l_item.getKey() ).setData( l_item.getValue() );
-    }
-
-    /**
-     * sets the data to the current node
-     *
-     * @param p_data data
-     */
-    public final void setData( final T p_data )
-    {
-        m_data = p_data;
     }
 
     /**

@@ -56,7 +56,7 @@
     <script type = "text/javascript" src = "content/widget.js" ></script >
     <script type = "text/javascript" src = "content/wizard.js" ></script >
 
-
+    <script type = "text/javascript" src = "content/main/startupchecks.js" ></script >
     <script type = "text/javascript" src = "content/main/inspector.js" ></script >
     <script type = "text/javascript" src = "content/main/logger.js" ></script >
 
@@ -80,6 +80,8 @@
     <script type = "text/javascript" >
         jQuery(document).ready(function() {
             MecSim.uiinitialize([
+
+                new StartUpChecks( "startupchecks" ),
 
                 new Inspector( "inspector" ),
 

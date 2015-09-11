@@ -22,37 +22,78 @@
  * @endcond
  */
 
-package de.tu_clausthal.in.mec.object.mas.inconsistency;
 
-
-import java.util.Collection;
+"use strict";
 
 
 /**
- * metric interface of the inconsistency structure
+ * ctor to create the start-up checks instance
  *
- * @see http://en.wikipedia.org/wiki/Metric_space
- */
-public interface IMetric<T, N>
+ * @param pc_id ID
+ * @param pc_name name of the panel
+ * @param pa_panel array with child elements
+**/
+function StartUpChecks( pc_id, pc_name, pa_panel )
 {
+    Pane.call(this, pc_id, pc_name, pa_panel );
+}
 
-    /**
-     * calculates the metric value between two objects
-     *
-     * @param p_first first object
-     * @param p_second second object
-     * @return double metric
-     */
-    double calculate( final T p_first, final T p_second );
+/** inheritance call **/
+StartUpChecks.prototype = Object.create(Pane.prototype);
 
 
-    /**
-     * returns the selectors
-     *
-     * @return selector
-     *
-     * @tparam N returns a collection of belief selectors
-     */
-    public Collection<N> getSelector();
+/**
+ * @Overwrite
+**/
+StartUpChecks.prototype.getGlobalContent = function()
+{
+    return Layout.dialog({
+        id        : this.generateSubID("dialog"),
+        contentid : this.generateSubID("dialogtext"),
+        title     : this.generateSubID("dialogtitle")
+    }) +
+    Pane.prototype.getGlobalContent.call(this);
+}
 
+
+/**
+ * @Overwrite
+**/
+StartUpChecks.prototype.afterDOMAdded = function()
+{
+    var self = this;
+    Pane.prototype.afterDOMAdded.call(this);
+
+    // run startup checks and show result
+    MecSim.ajax({
+        url : "/cconfiguration/startupchecks"
+    }).done(function(po) {
+
+        if (po.messages.length == 0)
+            return;
+
+        jQuery(self.generateSubID("dialogtext", "#")).empty().append(
+            "<p><ul><li>" +
+            po.messages.join("</li><li>") +
+            "</li></ul></p>"
+        );
+
+        jQuery(self.generateSubID("dialog", "#")).dialog({
+            title   : "Start-Up Checks",
+            width   : "auto",
+            modal   : true,
+            buttons : {
+                Ok : function() { jQuery(this).dialog("close"); }
+            }
+        });
+
+    });
+}
+
+/**
+ * @Overwrite
+**/
+StartUpChecks.prototype.isHidden = function()
+{
+    return true;
 }

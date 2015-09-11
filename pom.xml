@@ -8,11 +8,11 @@
     <packaging>jar</packaging>
 
     <!-- project meta information -->
-    <name>TUC Wirtschaftsinformatik - MecSim</name>
+    <name>Clausthal University of Technology - Mobile and Enterprise Computing - MecSim</name>
     <url>http://tu-c.de/mecsim</url>
 
     <organization>
-        <name>TU Clausthal - MecLab</name>
+        <name>Clausthal University of Technology - Mobile and Enterprise Computing</name>
         <url>http://meclab.in.tu-clausthal.de/</url>
     </organization>
 

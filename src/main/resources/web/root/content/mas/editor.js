@@ -3,7 +3,8 @@
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # This file is part of the micro agent-based traffic simulation MecSim of            #
+ * # Clausthal University of Technology - Mobile and Enterprise Computing               #
  * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU General Public License as                            #
@@ -526,7 +527,6 @@ MASEditor.prototype.addTabView = function()
         title   : pc_title,
         width   : "auto",
         modal   : true,
-        overlay : { background: "black" },
         buttons : po_buttons
     });
  }

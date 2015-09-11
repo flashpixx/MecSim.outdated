@@ -3,7 +3,8 @@
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # This file is part of the micro agent-based traffic simulation MecSim of            #
+ * # Clausthal University of Technology - Mobile and Enterprise Computing               #
  * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU General Public License as                            #
@@ -746,6 +747,16 @@ public class CConfiguration
     {
         if ( p_data.containsKey( "url" ) )
             CGraphHopper.deleteGraph( (String) p_data.get( "url" ) );
+    }
+
+    /**
+     * UI method - run startup checks
+     *
+     * @return error / warning messages
+     **/
+    private Map<String, Object> web_static_startupchecks()
+    {
+        return CCommon.getMap( "messages", CCommon.startupchecks() );
     }
 
     /**

@@ -3,7 +3,8 @@
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # This file is part of the micro agent-based traffic simulation MecSim of            #
+ * # Clausthal University of Technology - Mobile and Enterprise Computing               #
  * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU General Public License as                            #
@@ -35,10 +36,8 @@ import org.apache.commons.cli.Options;
 import org.pmw.tinylog.Level;
 
 import java.io.File;
-import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 
 /**
@@ -46,17 +45,6 @@ import java.util.List;
  */
 public class CMain
 {
-
-    /**
-     * gigabyte multiplier
-     */
-    private static final long c_gigabyte = 1024 * 1024 * 1024;
-    /**
-     * needed memory in gigabyte
-     */
-    private static final float c_neededmemory = 3f;
-
-
     /**
      * private ctor - avoid instantiation
      */
@@ -103,7 +91,6 @@ public class CMain
         {
             final HelpFormatter l_formatter = new HelpFormatter();
             l_formatter.printHelp( ( new java.io.File( CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() ).getName() ), l_clioptions );
-            System.out.println( "\n" + CCommon.getResourceString( CMain.class, "vmoptions", Math.ceil( c_neededmemory ) ) );
             System.exit( 0 );
         }
 
@@ -120,8 +107,9 @@ public class CMain
         CLogger.create( l_loglevel, l_logfile );
 
 
-        // check VM arguments of heap size and parallel GC
-        checkVMArguments( new String[]{"-Xmx", "-XX:+UseParallelGC"} );
+        // run startup checks
+        for ( final String l_item : CCommon.startupchecks() )
+            CLogger.out( l_item );
 
 
         // read the configuration directory (default ~/.mecsim)
@@ -146,10 +134,6 @@ public class CMain
 
 
         // --- invoke UI or start simulation ---------------------------------------------------------------------------
-        CLogger.out(
-                CCommon.getResourceString( CMain.class, "memory", c_neededmemory, Runtime.getRuntime().maxMemory() / c_gigabyte ),
-                Runtime.getRuntime().maxMemory() / c_gigabyte < c_neededmemory
-        );
         try
         {
             if ( ( l_cli.hasOption( "uibindport" ) ) )
@@ -191,29 +175,6 @@ public class CMain
             }
         }
 
-    }
-
-    /**
-     * checkes the VM arguments on startup
-     * and writes a warning information
-     *
-     * @param p_arguments argument prefixes
-     */
-    private static void checkVMArguments( final String[] p_arguments )
-    {
-        final List<String> l_argumentlist = ManagementFactory.getRuntimeMXBean().getInputArguments();
-        for ( final String l_checkargument : p_arguments )
-        {
-            boolean l_found = false;
-            for ( final String l_vmargument : l_argumentlist )
-                if ( l_vmargument.startsWith( l_checkargument ) )
-                {
-                    l_found = true;
-                    break;
-                }
-
-            CLogger.out( CCommon.getResourceString( CMain.class, "vmargumentmissing", l_checkargument ), !l_found );
-        }
     }
 
 }

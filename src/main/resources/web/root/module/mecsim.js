@@ -330,6 +330,17 @@ var MecSim = (function (px_modul) {
         jQuery( px_modul.ui().screen("#") ).jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
         jQuery( px_modul.ui().screenmenu("#") ).jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
         jQuery( px_modul.ui().accordion("#") ).accordion({ active: false, collapsible: true, heightStyle: "content" });
+
+        // run startup checks and show result
+        px_modul.ajax({
+            url : "/cconfiguration/startupchecks"
+        }).done(function(po) {
+            if (po.messages.length == 0)
+                return;
+
+            //console.log(po.messages);
+        });
+
     }
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 

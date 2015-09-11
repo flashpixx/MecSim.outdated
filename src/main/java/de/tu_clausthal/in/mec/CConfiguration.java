@@ -749,6 +749,16 @@ public class CConfiguration
     }
 
     /**
+     * UI method - run startup checks
+     *
+     * @return error / warning messages
+     **/
+    private Map<String, Object> web_static_startupchecks()
+    {
+        return CCommon.getMap( "messages", CCommon.startupchecks() );
+    }
+
+    /**
      * class type check
      */
     protected class CClassType extends ICheck<Object>

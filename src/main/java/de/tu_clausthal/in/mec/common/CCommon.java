@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -46,6 +47,8 @@ import java.security.MessageDigest;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
@@ -55,12 +58,53 @@ import java.util.MissingResourceException;
  */
 public class CCommon
 {
+    /**
+     * gigabyte multiplier
+     */
+    private static final long c_gigabyte = 1024 * 1024 * 1024;
+    /**
+     * needed memory in gigabyte
+     */
+    private static final float c_neededmemory = 3f;
+
 
     /**
      * private ctor - avoid instantiation
      */
     private CCommon()
     {
+    }
+
+    /**
+     * checkes the VM structures on startup
+     *
+     * @return list with all error / warning information
+     */
+    public static List<String> startupchecks()
+    {
+        final List<String> l_return = new LinkedList<>();
+
+        // check VM arguments
+        final List<String> l_argumentlist = ManagementFactory.getRuntimeMXBean().getInputArguments();
+        for ( final String l_checkargument : new String[]{"-Xmx", "-XX:+UseParallelGC"} )
+        {
+            boolean l_found = false;
+            for ( final String l_vmargument : l_argumentlist )
+                if ( l_vmargument.startsWith( l_checkargument ) )
+                {
+                    l_found = true;
+                    break;
+                }
+
+            if ( !l_found )
+                l_return.add( CCommon.getResourceString( CCommon.class, "vmargumentmissing", l_checkargument ) );
+        }
+
+        // check memory usage
+        if ( Runtime.getRuntime().maxMemory() / c_gigabyte < c_neededmemory )
+            l_return.add( CCommon.getResourceString( CCommon.class, "memory", c_neededmemory, Runtime.getRuntime().maxMemory() / c_gigabyte ) );
+
+        return l_return;
     }
 
     /**

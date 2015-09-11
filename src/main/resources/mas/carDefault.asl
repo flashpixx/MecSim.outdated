@@ -33,36 +33,37 @@
     :    root_bind_speed(Speed) &
          root_bind_deceleration(Deceleration) &
          root_mytraffic_predecessor([Predecessor]) &
-	     not (.empty([Predecessor]))
+         not (.empty([Predecessor]))
 
     <-
          // get distance to predecessing car
          Predecessor =.. [X|_];
          mecsim.literal2number(X,Distance);
 
-	     // add the speed range
+         // add the speed range
          for ( .range(I, 1, math.ceil( Speed / 10 ) ) )
          {
              +speed_range(I * 10);
          }
 
-	     // calculate braking distance with gaussian sum
-	     // @see https://de.wikipedia.org/wiki/Gau%C3%9Fsche_Summenformel
+         // calculate braking distance with gaussian sum
+         // @see https://de.wikipedia.org/wiki/Gau%C3%9Fsche_Summenformel
          UpperSumIndex = math.floor( Speed / Deceleration );
          BrakingDistance = UpperSumIndex * ( Speed - 0.5 * Deceleration * ( UpperSumIndex + 1 ) );
 
-	 	// check if predecessing car is too close
-	 	if ( BrakingDistance > Scramble*Distance )
-    	{
-		    !decelerate;
-    	}
-    	else
-    	{
-		    !accelerate;
-	    }.
+        // check if predecessing car is too close
+        if ( BrakingDistance > Scramble*Distance )
+        {
+             !decelerate;
+        }
+        else
+        {
+             !accelerate;
+        }.
 
 
 // default behaviour - accelerate
 +!drive
-   :  true
-   <- !accelerate.
+   :    true
+   <- 
+        !accelerate.

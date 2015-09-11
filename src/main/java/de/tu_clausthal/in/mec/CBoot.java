@@ -3,7 +3,8 @@
  * ######################################################################################
  * # GPL License                                                                        #
  * #                                                                                    #
- * # This file is part of the TUC Wirtschaftsinformatik - MecSim                        #
+ * # This file is part of the micro agent-based traffic simulation MecSim of            #
+ * # Clausthal University of Technology - Mobile and Enterprise Computing               #
  * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
  * # This program is free software: you can redistribute it and/or modify               #
  * # it under the terms of the GNU General Public License as                            #
@@ -27,8 +28,8 @@ package de.tu_clausthal.in.mec;
 /**
  * bootstrap for the Java main call - checking of the correct installed JRE
  *
- * @warning the class must be compiled with a lower target version of the JRE, the Maven build script uses different
- * profiles to do this
+ * @warning the class must be compiled with a lower target version of the JRE,
+ * the Maven build script uses different profiles to do this
  */
 public class CBoot
 {

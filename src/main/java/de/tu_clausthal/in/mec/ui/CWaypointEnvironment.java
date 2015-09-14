@@ -163,6 +163,14 @@ public class CWaypointEnvironment
 
         }};
     /**
+     * static label for waypoint connection UI
+     */
+    private static final Map<String, String> c_labelwaypointconnection = new HashMap<String, String>()
+    {{
+            // window title
+            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_name" ) );
+        }};
+    /**
      * map with name and ID
      */
     private final static Map<String, String> c_waypoint = new HashMap<String, String>()
@@ -239,6 +247,16 @@ public class CWaypointEnvironment
     private final Map<String, String> web_static_labelpresetwizard()
     {
         return c_labelpresetwizard;
+    }
+
+    /**
+     * returns all static label information for waypoint connection
+     *
+     * @return map with static labels
+     */
+    private final Map<String, String> web_static_labelwaypointconnection()
+    {
+        return c_labelwaypointconnection;
     }
 
     /**

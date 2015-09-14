@@ -40,3 +40,21 @@ function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
 
 /** inheritance call **/
 WaypointConnection.prototype = Object.create(Widget.prototype);
+
+
+/**
+ * @Overwrite
+**/
+WaypointConnection.prototype.afterDOMAdded = function()
+{
+    var self = this;
+    MecSim.language({
+
+        url    : "/cwaypointenvironment/labelwaypointconnection",
+        target : this,
+
+        finish : function() {
+            Widget.prototype.afterDOMAdded.call(self);
+        }
+    });
+}

@@ -73,7 +73,7 @@ Waypoint.prototype.getGlobalContent = function()
 Waypoint.prototype.getContent = function()
 {
     return '<p><button id = "' + this.generateSubID("newpreset") + '" ></button ></p>' +
-           '<p><button id = "' + this.generateSubID("listpreset") + '" ></button ></p>' +
+           '<p><button id = "' + this.generateSubID("waypointconnection") + '" ></button ></p>' +
            '<p><div id="' + this.generateSubID("list")  + '"></div></p>' +
            Pane.prototype.getContent.call(this);
 }
@@ -92,7 +92,7 @@ Waypoint.prototype.afterDOMAdded = function()
 
     MecSim.language({ url : "/cwaypointenvironment/labelmainmenu", target : this });
 
-    jQuery( this.generateSubID("listpreset", "#") ).button().click(function() {
+    jQuery( this.generateSubID("waypointconnection", "#") ).button().click(function() {
         jQuery(MecSim.ui().content("#")).empty();
         self.mo_waypointconnection.show();
     });

@@ -100,7 +100,7 @@ public class CWaypointEnvironment
     {{
             put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypoint_name" ) );
             put( "id_newpreset", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_newpreset" ) );
-            put( "id_listpreset", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_listpreset" ) );
+            put( "id_waypointconnection", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_waypointconnection" ) );
         }};
     /**
      * static label for preset wizard UI

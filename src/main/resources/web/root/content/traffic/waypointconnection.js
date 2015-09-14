@@ -117,7 +117,7 @@ WaypointConnection.prototype.afterDOMAdded = function()
             Widget.prototype.afterDOMAdded.call(self);
 
             MecSim.ajax({
-                url : "/cwaypointenvironment/listpathwaypoints", 
+                url : "/cwaypointenvironment/listpathwaypoints",
                 success : function(po_data){
                     jQuery.each(po_data, function(pc_waypoint, po_info){
                         var l_data = jQuery("<tr></tr>");

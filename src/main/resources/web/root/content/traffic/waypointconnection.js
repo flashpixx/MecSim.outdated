@@ -33,9 +33,9 @@
  * @param pc_name name of the panel
  * @param pa_panel array with child elements
 **/
-function WaypointConnection( pc_id, pc_name, pa_panel )
+function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
 {
-    Widget.call(this, pc_id, pc_name, pa_panel, lo_options );
+    Widget.call(this, pc_id, pc_name, pa_panel, po_options );
 }
 
 /** inheritance call **/

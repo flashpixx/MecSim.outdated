@@ -39,11 +39,12 @@ function Waypoint( pc_id, pc_name, pa_panel )
 
     this.mo_wizardpreset = new WaypointPreset( "waypointpreset" );
     this.mo_wizardpreset.setParent(this);
+    this.mo_waypointconnection = new WaypointConnection( "waypointconnection" );
+    this.mo_waypointconnection.setParent(this);
 }
 
 /** inheritance call **/
 Waypoint.prototype = Object.create(Pane.prototype);
-
 
 
 /**
@@ -51,7 +52,7 @@ Waypoint.prototype = Object.create(Pane.prototype);
 **/
 Waypoint.prototype.getGlobalCSS = function()
 {
-    return this.mo_wizardpreset.getGlobalCSS() + Pane.prototype.getGlobalCSS.call(this);
+    return this.mo_waypointconnection.getGlobalCSS() + this.mo_wizardpreset.getGlobalCSS() + Pane.prototype.getGlobalCSS.call(this);
 }
 
 
@@ -61,6 +62,7 @@ Waypoint.prototype.getGlobalCSS = function()
 Waypoint.prototype.getGlobalContent = function()
 {
     jQuery( MecSim.ui().static("#") ).append(this.mo_wizardpreset.getContent());
+    jQuery( MecSim.ui().static("#") ).append(this.mo_waypointconnection.getContent());
 
     return Pane.prototype.getGlobalContent.call(this);
 }
@@ -86,9 +88,15 @@ Waypoint.prototype.afterDOMAdded = function()
 
     Pane.prototype.afterDOMAdded.call(this);
     this.mo_wizardpreset.afterDOMAdded();
+    this.mo_waypointconnection.afterDOMAdded();
+
     MecSim.language({ url : "/cwaypointenvironment/labelmainmenu", target : this });
 
-    jQuery( this.generateSubID("listpreset", "#") ).button();
+    jQuery( this.generateSubID("listpreset", "#") ).button().click(function() {
+        jQuery(MecSim.ui().content("#")).empty();
+        self.mo_waypointconnection.show();
+    });
+
     jQuery( this.generateSubID("newpreset", "#") ).button().click( function() {
         jQuery(MecSim.ui().content("#")).empty();
         self.mo_wizardpreset.show();

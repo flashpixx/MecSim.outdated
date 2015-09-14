@@ -43,9 +43,6 @@ import java.util.Random;
 
 /**
  * waypoint class to describe a route
- * todo check if reflexive routes are a problem
- * todo do not allow editing chain while simulation is running
- * todo implement getPath correctly
  */
 public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerator> extends IWayPointBase<T, P, N>
 {
@@ -65,6 +62,10 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      * random interface
      */
     private final Random m_random = new Random();
+    /**
+     * default target
+     */
+    private static final GeoPosition m_defaultTarget = new GeoPosition( 51.80135377062704, 10.32871163482666 );
 
     /**
      * ctor
@@ -96,8 +97,10 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
         HashSet<Pair<GeoPosition, GeoPosition>> l_path = new HashSet<>();
+        l_path.add( new ImmutablePair<>( this.getPosition(), m_defaultTarget ) );
 
-        //falls kein eintrag mehr da ist fahre zu default und breche ab
+        /**
+         * @todo will be refactored in a few commits
 
         //inital position
         Map<IWayPoint, MutablePair<Double, Double>> l_currentNode = m_makrovChain.get( this );
@@ -135,6 +138,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
                 }
             }
         }
+        **/
 
         return l_path;
     }

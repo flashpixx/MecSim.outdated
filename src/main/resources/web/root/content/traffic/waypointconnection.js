@@ -51,59 +51,56 @@ WaypointConnection.prototype.getContent = function()
     // add waypoint connection content
     return Widget.prototype.getContent.call( this,
 
-			'<div id="' + this.generateSubID("waypointlist") + '">' +
-			'<table id="' + this.generateSubID("waypointtable") + '">' +
-			'<tr>' +
-			'<td id="' + this.generateSubID("waypointname") + '"></td>' +
-			'<td id="' + this.generateSubID("latitude") + '"></td>' +
-			'<td id="' + this.generateSubID("longitude") + '"></td>' +
-			'<td id="' + this.generateSubID("edit") + '"></td>' +
-			'</tr>' +
-			'</table>' +
-			'</div>' +
-			'<div id="' + this.generateSubID("waypointeditor") + '">' +
-			'</div>'
-	);
+            '<div id="' + this.generateSubID("waypointlist") + '">' +
+            '<table id="' + this.generateSubID("waypointtable") + '">' +
+            '<tr>' +
+            '<td id="' + this.generateSubID("waypointname") + '"></td>' +
+            '<td id="' + this.generateSubID("latitude") + '"></td>' +
+            '<td id="' + this.generateSubID("longitude") + '"></td>' +
+            '<td id="' + this.generateSubID("edit") + '"></td>' +
+            '</tr>' +
+            '</table>' +
+            '</div>' +
+            '<div id="' + this.generateSubID("waypointeditor") + '">' +
+            '</div>'
+    );
 }
+
 
 /**
  * @Overwrite
 **/
 WaypointConnection.prototype.getGlobalCSS = function()
 {
-	return  Widget.prototype.getGlobalCSS.call(this) +
+    return  Widget.prototype.getGlobalCSS.call(this) +
 
-			this.generateSubID("waypointlist", "#") +
+            this.generateSubID("waypointlist", "#") +
            '{' +
            '    float: left;' +
            '    width: 50%;' +
            '}' +
 
-			this.generateSubID("waypointtable", "#") +
+            this.generateSubID("waypointtable", "#") +
            '{' +
            '    width: 100%;' +
            '}' +
 
-			this.generateSubID("waypointname", "#") +
+            this.generateSubID("waypointname", "#") +
            '{' +
-           '    width: 30%;' +
+           '    width: 20%;' +
            '}'+
 
-			this.generateSubID("waypointname", "#") +
+            this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
            '{' +
-           '    width: 30%;' +
+           '    width: 35%;' +
            '}'+
 
-			this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
-           '{' +
-           '    width: 30%;' +
-           '}'+
-
-			this.generateSubID("edit", "#") +
+            this.generateSubID("edit", "#") +
            '{' +
            '    width: 10%;' +
            '}'
 }
+
 
 /**
  * @Overwrite
@@ -118,6 +115,20 @@ WaypointConnection.prototype.afterDOMAdded = function()
 
         finish : function() {
             Widget.prototype.afterDOMAdded.call(self);
+
+            MecSim.ajax({
+                url : "/cwaypointenvironment/listpathwaypoints", 
+                success : function(po_data){
+                    jQuery.each(po_data, function(pc_waypoint, po_info){
+                        var l_data = jQuery("<tr></tr>");
+                        jQuery("<td></td>").text(po_info.name).appendTo(l_data);
+                        jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
+                        jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
+                        jQuery("<td></td>").append("<button>+</button>").appendTo(l_data);
+                        l_data.appendTo(jQuery(self.generateSubID("waypointtable", "#")));
+                    });
+                }
+            })
         }
     });
 }

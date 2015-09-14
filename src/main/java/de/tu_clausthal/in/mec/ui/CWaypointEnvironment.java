@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.CTimeDistribution;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.object.waypoint.point.CCarRandomWayPoint;
+import de.tu_clausthal.in.mec.object.waypoint.point.IPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
@@ -263,6 +264,35 @@ public class CWaypointEnvironment
     private final Map<String, String> web_static_labelwaypointconnection()
     {
         return c_labelwaypointconnection;
+    }
+
+    /**
+     * returns all available path waypoints with additional information
+     *
+     * @return map all available path waypoints and additional information
+     */
+    private final Map<String, Map<String, String>> web_static_listpathwaypoints()
+    {
+        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped("Car WayPoints");
+        Map<String, Map<String, String>> result = new HashMap<>();
+
+        for(IWayPoint l_waypoint : l_waypointLayer){
+            Map<String, String> l_info = new HashMap<>();
+
+            l_info.put("name", l_waypoint.getName());
+            l_info.put("latitude", String.valueOf(l_waypoint.getPosition().getLatitude()));
+            l_info.put("longitude", String.valueOf(l_waypoint.getPosition().getLatitude()));
+
+            if(l_waypoint instanceof IPathWayPoint){
+                l_info.put("type", "path");
+            }else{
+                l_info.put("type", "random");
+            }
+
+            result.put(l_waypoint.toString(), l_info);
+        }
+
+        return result;
     }
 
     /**

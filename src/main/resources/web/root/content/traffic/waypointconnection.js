@@ -45,6 +45,69 @@ WaypointConnection.prototype = Object.create(Widget.prototype);
 /**
  * @Overwrite
 **/
+WaypointConnection.prototype.getContent = function()
+{
+
+    // add waypoint connection content
+    return Widget.prototype.getContent.call( this,
+
+			'<div id="' + this.generateSubID("waypointlist") + '">' +
+			'<table id="' + this.generateSubID("waypointtable") + '">' +
+			'<tr>' +
+			'<td id="' + this.generateSubID("waypointname") + '"></td>' +
+			'<td id="' + this.generateSubID("latitude") + '"></td>' +
+			'<td id="' + this.generateSubID("longitude") + '"></td>' +
+			'<td id="' + this.generateSubID("edit") + '"></td>' +
+			'</tr>' +
+			'</table>' +
+			'</div>' +
+			'<div id="' + this.generateSubID("waypointeditor") + '">' +
+			'</div>'
+	);
+}
+
+/**
+ * @Overwrite
+**/
+WaypointConnection.prototype.getGlobalCSS = function()
+{
+	return  Widget.prototype.getGlobalCSS.call(this) +
+
+			this.generateSubID("waypointlist", "#") +
+           '{' +
+           '    float: left;' +
+           '    width: 50%;' +
+           '}' +
+
+			this.generateSubID("waypointtable", "#") +
+           '{' +
+           '    width: 100%;' +
+           '}' +
+
+			this.generateSubID("waypointname", "#") +
+           '{' +
+           '    width: 30%;' +
+           '}'+
+
+			this.generateSubID("waypointname", "#") +
+           '{' +
+           '    width: 30%;' +
+           '}'+
+
+			this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
+           '{' +
+           '    width: 30%;' +
+           '}'+
+
+			this.generateSubID("edit", "#") +
+           '{' +
+           '    width: 10%;' +
+           '}'
+}
+
+/**
+ * @Overwrite
+**/
 WaypointConnection.prototype.afterDOMAdded = function()
 {
     var self = this;

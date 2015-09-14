@@ -169,6 +169,12 @@ public class CWaypointEnvironment
     {{
             // window title
             put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_name" ) );
+
+            // waypoint list
+            put( "id_waypointname", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_waypointname" ) );
+            put( "id_latitude", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_latitude" ) );
+            put( "id_longitude", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_longitude" ) );
+            put( "id_edit", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_edit" ) );
         }};
     /**
      * map with name and ID

@@ -39,7 +39,7 @@ function Waypoint( pc_id, pc_name, pa_panel )
 
     this.mo_wizardpreset = new WaypointPreset( "waypointpreset" );
     this.mo_wizardpreset.setParent(this);
-    this.mo_waypointconnection = new WaypointConnection( "waypointconnection" );
+    this.mo_waypointconnection = new WaypointConnection( "waypointconnection", null, null, {width: 1000} );
     this.mo_waypointconnection.setParent(this);
 }
 

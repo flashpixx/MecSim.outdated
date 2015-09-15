@@ -239,7 +239,6 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         final Literal l_literal = ASSyntax.createLiteral( !p_literal.negated(), l_path.getSuffix() );
         l_literal.addAnnot( p_literal.getAnnots() );
         l_literal.addTerms( p_literal.getTerms() );
-        l_literal.addSource( p_literal.getSources() );
 
         return new ImmutablePair<>( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_literal ) );
     }

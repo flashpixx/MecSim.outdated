@@ -158,10 +158,10 @@ WaypointConnection.prototype.refresh = function()
 				jQuery("<td></td>").text(po_info.name).appendTo(l_data);
 				jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
 				jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
-				jQuery("<td></td>").append("<button>Add</button>").appendTo(l_data);
+				jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Add</button>").click(self.add).appendTo(l_data);
 
 				if(po_info.type === "path"){
-					jQuery("<td></td>").append("<button>Edit</button>").appendTo(l_data);
+					jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Edit</button>").click(self.edit).appendTo(l_data);
 				}else{
 					jQuery("<td></td>").appendTo(l_data);
 				}
@@ -170,4 +170,22 @@ WaypointConnection.prototype.refresh = function()
 			});
 		}
 	})
+}
+
+
+/**
+ * method to load makrov chain
+**/
+WaypointConnection.prototype.edit = function(p_event)
+{
+	console.log(p_event.target.value)
+}
+
+
+/**
+ *method to add a waypoint to another makrov chain
+**/
+WaypointConnection.prototype.add = function(p_event)
+{
+	console.log(p_event.target.value)
 }

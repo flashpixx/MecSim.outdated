@@ -286,6 +286,36 @@ WaypointPreset.prototype.setErrorLabelCSS = function( pc_selector, pl_error )
 
 
 /**
+ * function for distribution check
+ * @param pc distribution name
+ * @return bool if values are okay
+**/
+WaypointPreset.prototype.validDistribution = function( pc )
+{
+    var ln_first  = parseFloat(jQuery( this.generateSubID(pc+"firstmomentum", "#") ).val());
+    var ln_second = parseFloat(jQuery( this.generateSubID(pc+"secondmomentum", "#") ).val());
+
+    switch (jQuery( this.generateSubID(pc, "#") ).val())
+    {
+
+        case "Uniform" :
+            return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first >= 0) && (ln_first < ln_second)  === true;
+
+        case "Normal" :
+            return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second >= 0) && (ln_first > 0) === true;
+
+        case "Exponential" :
+            return (!isNaN(ln_first)) && (ln_first > 0) === true;
+
+        case "Beta" :
+            return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first > 0) && (ln_second > 0) === true;
+    }
+
+    return false;
+}
+
+
+/**
  * @Overwrite
 **/
 WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next )
@@ -295,33 +325,6 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
         return true;
 
     var self = this;
-
-    /**
-     * function for distribution check
-     * @param pc distribution name
-     * @return bool if values are okay
-    **/
-    var lx_checkDistribution = function( pc )
-    {
-        var ln_first  = parseFloat(jQuery( self.generateSubID(pc+"firstmomentum", "#") ).val());
-        var ln_second = parseFloat(jQuery( self.generateSubID(pc+"secondmomentum", "#") ).val());
-
-        switch (jQuery( self.generateSubID(pc, "#") ).val())
-        {
-
-            case "Uniform" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first >= 0) && (ln_first < ln_second)  === true;
-
-            case "Normal" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second >= 0) && (ln_first > 0) === true;
-
-            case "Exponential" :
-                return (!isNaN(ln_first)) && (ln_first > 0) === true;
-
-        }
-
-        return false;
-    }
 
 
     // check wizard steps
@@ -350,8 +353,8 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
             // check generator distribution
             this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) );
-            if (!lx_checkDistribution("generatordistribution"))
-                return this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ), true );
+            if (!this.validDistribution("generatordistribution"))
+                return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ), true );
 
             // agent need not to be checked, because the value is also set by default
             return true;
@@ -364,7 +367,7 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
             // check max speed distribution
             if ([ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].some( function( pc_key ) {
-                return self.setErrorLabelCSS( self.getLabelSelector( self.generateSubID(pc_key)+"-button" ), !lx_checkDistribution(pc_key) );
+                return self.setErrorLabelCSS( self.getLabelSelector( self.generateSubID(pc_key)+"-button" ), !self.validDistribution(pc_key) );
             }))
                 return false;
 

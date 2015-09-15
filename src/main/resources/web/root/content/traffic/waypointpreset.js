@@ -276,9 +276,9 @@ WaypointPreset.prototype.finish = function()
 /**
  * function for distribution check
  * @param pc distribution name
- * @return bool if values are okay
+ * @return true if values are okay, false if values are incorrect
 **/
-WaypointPreset.prototype.validDistribution = function( pc )
+WaypointPreset.prototype.checkValidDistribution = function( pc )
 {
     var ln_first  = parseFloat(jQuery( this.generateSubID(pc+"firstmomentum", "#") ).val());
     var ln_second = parseFloat(jQuery( this.generateSubID(pc+"secondmomentum", "#") ).val());
@@ -314,7 +314,6 @@ WaypointPreset.prototype.validatestep0 = function()
     [ this.getLabelSelector( this.generateSubID("radius") ), this.getLabelSelector( this.generateSubID("carcount") ),
       this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) ].forEach( function(pc) {self.clearErrorCSS(pc);} );
 
-
     // check random waypoint & radius
     if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
     {
@@ -329,8 +328,8 @@ WaypointPreset.prototype.validatestep0 = function()
         return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("carcount") ) );
 
     // check generator distribution
-    if (!this.validDistribution("generatordistribution"))
-    return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) );
+    if (!this.checkValidDistribution("generatordistribution"))
+        return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) );
 
     // agent need not to be checked, because the value is also set by default
     return true;
@@ -349,7 +348,7 @@ WaypointPreset.prototype.validatestep1 = function()
     if ([ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].some( function( pc_key ) {
         var lc = self.getLabelSelector( self.generateSubID(pc_key)+"-button" );
         self.clearErrorCSS(lc);
-        return !self.setErrorCSS( lc, !self.validDistribution(pc_key) );
+        return self.setErrorCSS( lc, !self.checkValidDistribution(pc_key) );
     }))
         return false;
 

@@ -151,6 +151,8 @@ Wizard.prototype.init = function()
 /**
  * is called on every step
  *
+ * @note the function that validates the step must have the name "validatestept<stepnumber>"
+ * and must return false on error and true on correct values
  * @param po_event event
  * @param pn_current current step
  * @param pn_next next step
@@ -163,7 +165,7 @@ Wizard.prototype.validatestep = function( po_event , pn_current, pn_next )
         return true;
 
     // check if a method exists with the name "validatestep<number>"
-    // on exists call it
+    // call it if exists
     var lx = this["validatestep"+pn_current];
     if (classof( lx, "function" ))
         return lx.call(this, pn_current, pn_next);

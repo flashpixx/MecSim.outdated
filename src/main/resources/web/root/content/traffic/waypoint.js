@@ -94,6 +94,7 @@ Waypoint.prototype.afterDOMAdded = function()
 
     jQuery( this.generateSubID("waypointconnection", "#") ).button().click(function() {
         jQuery(MecSim.ui().content("#")).empty();
+        self.mo_waypointconnection.refresh();
         self.mo_waypointconnection.show();
     });
 

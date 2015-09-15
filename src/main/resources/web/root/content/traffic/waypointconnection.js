@@ -61,6 +61,8 @@ WaypointConnection.prototype.getContent = function()
 		'<td id="' + this.generateSubID("add") + '"></td>' +
 		'<td id="' + this.generateSubID("edit") + '"></td>' +
 		'</tr>' +
+		'<tbody id="' + this.generateSubID("tbody") + '">' +
+		'</tbody>' +
 		'</table>' +
 		'</div>' +
 		'<div id="' + this.generateSubID("waypointeditor") + '">' +
@@ -110,6 +112,9 @@ WaypointConnection.prototype.getGlobalCSS = function()
 WaypointConnection.prototype.afterDOMAdded = function()
 {
 	var self = this;
+
+	self.refresh();
+
 	MecSim.language({
 
 		url    : "/cwaypointenvironment/labelwaypointconnection",
@@ -117,28 +122,39 @@ WaypointConnection.prototype.afterDOMAdded = function()
 
 		finish : function() {
 			Widget.prototype.afterDOMAdded.call(self);
-
-			MecSim.ajax({
-				url : "/cwaypointenvironment/listpathwaypoints",
-				success : function(po_data){
-					jQuery.each(po_data, function(pc_waypoint, po_info){
-						var l_data = jQuery("<tr></tr>");
-						jQuery("<td></td>").text(po_info.id).appendTo(l_data);
-						jQuery("<td></td>").text(po_info.name).appendTo(l_data);
-						jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
-						jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
-						jQuery("<td></td>").append("<button>Add</button>").appendTo(l_data);
-
-						if(po_info.type === "path"){
-							jQuery("<td></td>").append("<button>Edit</button>").appendTo(l_data);
-						}else{
-							jQuery("<td></td>").appendTo(l_data);
-						}
-
-						l_data.appendTo(jQuery(self.generateSubID("waypointtable", "#")));
-					});
-				}
-			})
 		}
 	});
+}
+
+
+/**
+ * method to refresh table data
+**/
+WaypointConnection.prototype.refresh = function()
+{
+	var self = this;
+
+	jQuery(self.generateSubID("tbody", "#")).empty();
+
+	MecSim.ajax({
+		url : "/cwaypointenvironment/listpathwaypoints",
+		success : function(po_data){
+			jQuery.each(po_data, function(pc_waypoint, po_info){
+				var l_data = jQuery("<tr></tr>");
+				jQuery("<td></td>").text(po_info.id).appendTo(l_data);
+				jQuery("<td></td>").text(po_info.name).appendTo(l_data);
+				jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
+				jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
+				jQuery("<td></td>").append("<button>Add</button>").appendTo(l_data);
+
+				if(po_info.type === "path"){
+					jQuery("<td></td>").append("<button>Edit</button>").appendTo(l_data);
+				}else{
+					jQuery("<td></td>").appendTo(l_data);
+				}
+
+				l_data.appendTo(jQuery(self.generateSubID("tbody", "#")));
+			});
+		}
+	})
 }

@@ -39,6 +39,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -516,6 +517,16 @@ public class CReflection
             m_field = p_field;
             m_getter = p_getter;
             m_setter = p_setter;
+        }
+
+        /**
+         * checks transient flag of the field
+         *
+         * @return boolean if field is transient
+         */
+        public final boolean isTransient()
+        {
+            return Modifier.isTransient( m_field.getModifiers() );
         }
 
         /**

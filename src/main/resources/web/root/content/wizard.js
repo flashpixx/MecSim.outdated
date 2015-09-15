@@ -106,12 +106,18 @@ Wizard.prototype.afterDOMAdded = function()
 /**
  * sets the CSS error element
  * @param pc_select DOM selector
- * @return pl_error true / false for set error
+ * @return pl_error true / false for set error (false = undefinied)
 **/
 Wizard.prototype.setErrorCSS = function( pc_selector, pl_error )
-{
-    jQuery(pc_selector).addClass("ui-state-error");
-    return pl_error == undefined ? false : pl_error;
+{   if (pl_error === undefined)
+    {
+        jQuery(pc_selector).addClass("ui-state-error");
+        return false;
+    }
+
+    if (pl_error)
+        jQuery(pc_selector).addClass("ui-state-error");
+    return pl_error;
 }
 
 

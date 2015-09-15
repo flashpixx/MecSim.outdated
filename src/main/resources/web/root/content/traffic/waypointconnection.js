@@ -35,7 +35,7 @@
 **/
 function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
 {
-    Widget.call(this, pc_id, pc_name, pa_panel, po_options );
+	Widget.call(this, pc_id, pc_name, pa_panel, po_options );
 }
 
 /** inheritance call **/
@@ -48,24 +48,24 @@ WaypointConnection.prototype = Object.create(Widget.prototype);
 WaypointConnection.prototype.getContent = function()
 {
 
-    // add waypoint connection content
-    return Widget.prototype.getContent.call( this,
+	// add waypoint connection content
+	return Widget.prototype.getContent.call( this,
 
-            '<div id="' + this.generateSubID("waypointlist") + '">' +
-            '<table id="' + this.generateSubID("waypointtable") + '">' +
-            '<tr>' +
-            '<td id="' + this.generateSubID("identifier") + '"></td>' +
-            '<td id="' + this.generateSubID("waypointname") + '"></td>' +
-            '<td id="' + this.generateSubID("latitude") + '"></td>' +
-            '<td id="' + this.generateSubID("longitude") + '"></td>' +
-            '<td id="' + this.generateSubID("add") + '"></td>' +
-            '<td id="' + this.generateSubID("edit") + '"></td>' +
-            '</tr>' +
-            '</table>' +
-            '</div>' +
-            '<div id="' + this.generateSubID("waypointeditor") + '">' +
-            '</div>'
-    );
+		'<div id="' + this.generateSubID("waypointlist") + '">' +
+		'<table id="' + this.generateSubID("waypointtable") + '">' +
+		'<tr>' +
+		'<td id="' + this.generateSubID("identifier") + '"></td>' +
+		'<td id="' + this.generateSubID("waypointname") + '"></td>' +
+		'<td id="' + this.generateSubID("latitude") + '"></td>' +
+		'<td id="' + this.generateSubID("longitude") + '"></td>' +
+		'<td id="' + this.generateSubID("add") + '"></td>' +
+		'<td id="' + this.generateSubID("edit") + '"></td>' +
+		'</tr>' +
+		'</table>' +
+		'</div>' +
+		'<div id="' + this.generateSubID("waypointeditor") + '">' +
+		'</div>'
+	);
 }
 
 
@@ -74,33 +74,33 @@ WaypointConnection.prototype.getContent = function()
 **/
 WaypointConnection.prototype.getGlobalCSS = function()
 {
-    return  Widget.prototype.getGlobalCSS.call(this) +
+	return  Widget.prototype.getGlobalCSS.call(this) +
 
-            this.generateSubID("waypointlist", "#") +
-           '{' +
-           '    float: left;' +
-           '    width: 50%;' +
-           '}' +
+		this.generateSubID("waypointlist", "#") +
+		'{' +
+		'    float: left;' +
+		'    width: 50%;' +
+		'}' +
 
-            this.generateSubID("waypointtable", "#") +
-           '{' +
-           '    width: 100%;' +
-           '}' +
+		this.generateSubID("waypointtable", "#") +
+		'{' +
+		'    width: 100%;' +
+		'}' +
 
-            this.generateSubID("waypointname", "#") +
-           '{' +
-           '    width: 15%;' +
-           '}'+
+		this.generateSubID("waypointname", "#") +
+		'{' +
+		'    width: 15%;' +
+		'}'+
 
-            this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
-           '{' +
-           '    width: 35%;' +
-           '}'+
+		this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
+		'{' +
+		'    width: 35%;' +
+		'}'+
 
-            this.generateSubID("id", "#") + "," + this.generateSubID("add", "#") + "," + this.generateSubID("edit", "#") +
-           '{' +
-           '    width: 5%;' +
-           '}'
+		this.generateSubID("id", "#") + "," + this.generateSubID("add", "#") + "," + this.generateSubID("edit", "#") +
+		'{' +
+		'    width: 5%;' +
+		'}'
 }
 
 
@@ -109,30 +109,30 @@ WaypointConnection.prototype.getGlobalCSS = function()
 **/
 WaypointConnection.prototype.afterDOMAdded = function()
 {
-    var self = this;
-    MecSim.language({
+	var self = this;
+	MecSim.language({
 
-        url    : "/cwaypointenvironment/labelwaypointconnection",
-        target : this,
+		url    : "/cwaypointenvironment/labelwaypointconnection",
+		target : this,
 
-        finish : function() {
-            Widget.prototype.afterDOMAdded.call(self);
+		finish : function() {
+			Widget.prototype.afterDOMAdded.call(self);
 
-            MecSim.ajax({
-                url : "/cwaypointenvironment/listpathwaypoints",
-                success : function(po_data){
-                    jQuery.each(po_data, function(pc_waypoint, po_info){
-                        var l_data = jQuery("<tr></tr>");
-                        jQuery("<td></td>").text(po_info.id).appendTo(l_data);
-                        jQuery("<td></td>").text(po_info.name).appendTo(l_data);
-                        jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
-                        jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
-                        jQuery("<td></td>").append("<button>Add</button>").appendTo(l_data);
-                        jQuery("<td></td>").append("<button>Edit</button>").appendTo(l_data);
-                        l_data.appendTo(jQuery(self.generateSubID("waypointtable", "#")));
-                    });
-                }
-            })
-        }
-    });
+			MecSim.ajax({
+				url : "/cwaypointenvironment/listpathwaypoints",
+				success : function(po_data){
+					jQuery.each(po_data, function(pc_waypoint, po_info){
+						var l_data = jQuery("<tr></tr>");
+						jQuery("<td></td>").text(po_info.id).appendTo(l_data);
+						jQuery("<td></td>").text(po_info.name).appendTo(l_data);
+						jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
+						jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
+						jQuery("<td></td>").append("<button>Add</button>").appendTo(l_data);
+						jQuery("<td></td>").append("<button>Edit</button>").appendTo(l_data);
+						l_data.appendTo(jQuery(self.generateSubID("waypointtable", "#")));
+					});
+				}
+			})
+		}
+	});
 }

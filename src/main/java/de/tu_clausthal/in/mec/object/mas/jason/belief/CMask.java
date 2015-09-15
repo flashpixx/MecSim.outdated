@@ -35,6 +35,8 @@ import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PredicateIndicator;
 import jason.bb.BeliefBase;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -96,11 +98,8 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     @Override
     public boolean add( final int p_index, final Literal p_literal )
     {
-        CPath l_path = null;
-        Literal l_literal = null;
-        this.cloneLiteral( p_literal, l_path, l_literal );
-
-        this.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_literal ) );
+        final Pair<CPath, CLiteral> l_split = this.cloneLiteral( p_literal );
+        this.add( l_split.getLeft().getSubPath( 0, l_split.getLeft().size() - 1 ), l_split.getRight() );
         return true;
     }
 
@@ -158,11 +157,8 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     @Override
     public boolean remove( final Literal p_literal )
     {
-        CPath l_path = null;
-        Literal l_literal = null;
-        this.cloneLiteral( p_literal, l_path, l_literal );
-
-        this.remove( l_path, new CLiteral( l_literal ) );
+        final Pair<CPath, CLiteral> l_split = this.cloneLiteral( p_literal );
+        this.remove( l_split.getLeft(), l_split.getRight() );
         return true;
     }
 
@@ -235,17 +231,17 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
      * clones a literal with path
      *
      * @param p_literal input literal
-     * @param p_path returning literal path
-     * @param p_output output / modified literal
+     * @return pair of literal path and modified literal
      */
-    private void cloneLiteral( final Literal p_literal, CPath p_path, Literal p_output )
+    private Pair<CPath, CLiteral> cloneLiteral( final Literal p_literal )
     {
-        p_path = this.splitPath( p_literal.getFunctor() );
+        final CPath l_path = this.splitPath( p_literal.getFunctor() );
+        final Literal l_literal = ASSyntax.createLiteral( !p_literal.negated(), l_path.getSuffix() );
+        l_literal.addAnnot( p_literal.getAnnots() );
+        l_literal.addTerms( p_literal.getTerms() );
+        l_literal.addSource( p_literal.getSources() );
 
-        p_output = ASSyntax.createLiteral( !p_literal.negated(), p_path.getSuffix() );
-        p_output.addAnnot( p_literal.getAnnots() );
-        p_output.addTerms( p_literal.getTerms() );
-        p_output.addSource( p_literal.getSources() );
+        return new ImmutablePair<>( l_path, new CLiteral( l_literal ) );
     }
 
 }

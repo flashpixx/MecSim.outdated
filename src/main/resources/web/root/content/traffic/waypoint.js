@@ -70,8 +70,8 @@ Waypoint.prototype.getGlobalContent = function()
 **/
 Waypoint.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.generateSubID("newpreset") + '" ></button ></p>' +
-           '<p><button id = "' + this.generateSubID("listpreset") + '" ></button ></p>' +
+    return '<p><button class = "ui-menu-button" id = "' + this.generateSubID("newpreset") + '" ></button ></p>' +
+           '<p><button class = "ui-menu-button" id = "' + this.generateSubID("listpreset") + '" ></button ></p>' +
            '<p><div id="' + this.generateSubID("list")  + '"></div></p>' +
            Pane.prototype.getContent.call(this);
 }

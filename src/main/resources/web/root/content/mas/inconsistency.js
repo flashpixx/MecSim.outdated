@@ -78,7 +78,7 @@ MASInconsistency.prototype.getGlobalContent = function()
 **/
 MASInconsistency.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.getID() + '" ></button></p>' + Pane.prototype.getContent.call(this);
+    return '<p><button class = "ui-menu-button" id = "' + this.getID() + '" ></button></p>' + Pane.prototype.getContent.call(this);
 }
 
 

@@ -47,11 +47,12 @@ Simulation.prototype = Object.create(Pane.prototype);
 **/
 Simulation.prototype.getContent = function()
 {
-    return '<p> <button id = "' + this.generateSubID("start") + '" ></button> ' +
-           '<button id = "' + this.generateSubID("stop")  + '" ></button> ' +
-           '<button id = "' + this.generateSubID("reset") + '" ></button> </p>' +
+    return '<p> <button class = "ui-menu-button" id = "' + this.generateSubID("start") + '" ></button> ' +
+           '<button class = "ui-menu-button" id = "' + this.generateSubID("stop")  + '" ></button> ' +
+           '<button class = "ui-menu-button" id = "' + this.generateSubID("reset") + '" ></button> </p>' +
 
-           '<p> <button id = "' + this.generateSubID("load") + '" ></button> <button id = "' + this.generateSubID("save") + '" ></button>' +
+           '<p> <button class = "ui-menu-button" id = "' + this.generateSubID("load") + '" >' +
+           '</button> <button class = "ui-menu-button" id = "' + this.generateSubID("save") + '" ></button>' +
            '<input type = "file" id = "' + this.generateSubID("loadfile") + '" /> <input type = "file" id = "' + this.generateSubID("savefile") + '" /></p>' +
 
            '<p><div id="' + this.generateSubID("threadsleeptime") + '"></div></p>' +

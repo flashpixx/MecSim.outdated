@@ -50,7 +50,7 @@ MASMessageFlow.prototype = Object.create(Pane.prototype);
 **/
 MASMessageFlow.prototype.getContent = function()
 {
-    return '<button id = "' + this.getID() + '" ></button>' + Pane.prototype.getContent.call(this);
+    return '<button class = "ui-menu-button" id = "' + this.getID() + '" ></button>' + Pane.prototype.getContent.call(this);
 }
 
 

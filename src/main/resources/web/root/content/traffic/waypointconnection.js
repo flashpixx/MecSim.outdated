@@ -53,6 +53,7 @@ WaypointConnection.prototype.getContent = function()
 
 		'<div id="' + this.generateSubID("waypointlist") + '">' +
 		'<table id="' + this.generateSubID("waypointtable") + '">' +
+		'<thead id="' + this.generateSubID("thead") + '">' +
 		'<tr>' +
 		'<td id="' + this.generateSubID("identifier") + '"></td>' +
 		'<td id="' + this.generateSubID("waypointname") + '"></td>' +
@@ -61,6 +62,7 @@ WaypointConnection.prototype.getContent = function()
 		'<td id="' + this.generateSubID("add") + '"></td>' +
 		'<td id="' + this.generateSubID("edit") + '"></td>' +
 		'</tr>' +
+		'</thead>' +
 		'<tbody id="' + this.generateSubID("tbody") + '">' +
 		'</tbody>' +
 		'</table>' +
@@ -88,6 +90,17 @@ WaypointConnection.prototype.getGlobalCSS = function()
 		'{' +
 		'    width: 100%;' +
 		'}' +
+
+        this.generateSubID("thead", "#") +
+        '{' +
+        '    margin: 0;' +
+        '    color: white;' +
+        '    background: #008C4F;' +
+        '    border: 1px solid #CACACA;' +
+        '    position: relative;' +
+        '    text-align: center;' +
+        '    margin-bottom: 10px;' +
+        '}' +
 
 		this.generateSubID("waypointname", "#") +
 		'{' +

@@ -54,9 +54,11 @@ WaypointConnection.prototype.getContent = function()
             '<div id="' + this.generateSubID("waypointlist") + '">' +
             '<table id="' + this.generateSubID("waypointtable") + '">' +
             '<tr>' +
+            '<td id="' + this.generateSubID("identifier") + '"></td>' +
             '<td id="' + this.generateSubID("waypointname") + '"></td>' +
             '<td id="' + this.generateSubID("latitude") + '"></td>' +
             '<td id="' + this.generateSubID("longitude") + '"></td>' +
+            '<td id="' + this.generateSubID("add") + '"></td>' +
             '<td id="' + this.generateSubID("edit") + '"></td>' +
             '</tr>' +
             '</table>' +
@@ -87,7 +89,7 @@ WaypointConnection.prototype.getGlobalCSS = function()
 
             this.generateSubID("waypointname", "#") +
            '{' +
-           '    width: 20%;' +
+           '    width: 15%;' +
            '}'+
 
             this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
@@ -95,9 +97,9 @@ WaypointConnection.prototype.getGlobalCSS = function()
            '    width: 35%;' +
            '}'+
 
-            this.generateSubID("edit", "#") +
+            this.generateSubID("id", "#") + "," + this.generateSubID("add", "#") + "," + this.generateSubID("edit", "#") +
            '{' +
-           '    width: 10%;' +
+           '    width: 5%;' +
            '}'
 }
 
@@ -121,10 +123,12 @@ WaypointConnection.prototype.afterDOMAdded = function()
                 success : function(po_data){
                     jQuery.each(po_data, function(pc_waypoint, po_info){
                         var l_data = jQuery("<tr></tr>");
+                        jQuery("<td></td>").text(po_info.id).appendTo(l_data);
                         jQuery("<td></td>").text(po_info.name).appendTo(l_data);
                         jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
                         jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
-                        jQuery("<td></td>").append("<button>+</button>").appendTo(l_data);
+                        jQuery("<td></td>").append("<button>Add</button>").appendTo(l_data);
+                        jQuery("<td></td>").append("<button>Edit</button>").appendTo(l_data);
                         l_data.appendTo(jQuery(self.generateSubID("waypointtable", "#")));
                     });
                 }

@@ -173,9 +173,11 @@ public class CWaypointEnvironment
             put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_name" ) );
 
             // waypoint list
+            put( "id_identifier", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_identifier" ) );
             put( "id_waypointname", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_waypointname" ) );
             put( "id_latitude", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_latitude" ) );
             put( "id_longitude", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_longitude" ) );
+            put( "id_add", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_add" ) );
             put( "id_edit", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_edit" ) );
         }};
     /**
@@ -280,6 +282,7 @@ public class CWaypointEnvironment
         for(IWayPoint l_waypoint : l_waypointLayer){
             Map<String, String> l_info = new HashMap<>();
 
+            l_info.put("id", String.valueOf(l_waypoint.getID()));
             l_info.put("name", l_waypoint.getName());
             l_info.put("latitude", String.valueOf(l_waypoint.getPosition().getLatitude()));
             l_info.put("longitude", String.valueOf(l_waypoint.getPosition().getLatitude()));

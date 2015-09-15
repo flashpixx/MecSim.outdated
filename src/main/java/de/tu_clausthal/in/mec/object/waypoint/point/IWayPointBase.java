@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.object.waypoint.point;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -89,6 +90,11 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      * user defined name of the source (so that users can differ between sources)
      */
     private final String m_name;
+    /**
+     * ID of this waypoint instance
+     * Is required to identify waypoint instances in the graph editor
+     */
+    private final int m_id = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).size();
     /**
      * position of the source within the map
      */
@@ -156,6 +162,12 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
     public final String getName()
     {
         return m_name;
+    }
+
+    @Override
+    public final int getID()
+    {
+        return m_id;
     }
 
     @Override

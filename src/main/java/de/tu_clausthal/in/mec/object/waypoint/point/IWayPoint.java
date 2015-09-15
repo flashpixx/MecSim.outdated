@@ -56,6 +56,12 @@ public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, 
     public String getName();
 
     /**
+     * method to get waypoint id
+     * @return waypoint id
+     */
+    public int getID();
+
+    /**
      * returns a list of geoposition, which represent a path from this waypoint
      *
      * @return collection with tupel of geoposition

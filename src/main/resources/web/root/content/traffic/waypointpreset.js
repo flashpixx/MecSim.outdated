@@ -274,18 +274,6 @@ WaypointPreset.prototype.finish = function()
 
 
 /**
- * sets the CSS error element
- * @param pc_select DOM selector
- * @return pl_error true / false for set error
-**/
-WaypointPreset.prototype.setErrorLabelCSS = function( pc_selector, pl_error )
-{
-    jQuery(pc_selector).css( "background-color", pl_error ? "#ff0000" : "" );
-    return pl_error;
-}
-
-
-/**
  * function for distribution check
  * @param pc distribution name
  * @return bool if values are okay
@@ -335,26 +323,26 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
         case 0 :
 
             var ln = null;
+            [ this.getLabelSelector( this.generateSubID("radius") ), this.getLabelSelector( this.generateSubID("carcount") ),
+              this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) ].forEach( function(pc) {self.clearErrorCSS(pc);} );
+
 
             // check random waypoint & radius
             if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
             {
-                this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("radius") ) );
                 ln = parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
                 if ( ((isNaN(ln))) || (ln <= 0) )
-                    return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("radius") ), true );
+                    return this.setErrorCSS( this.getLabelSelector( this.generateSubID("radius") ) );
             }
 
             // check car count
-            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("carcount") ) );
             ln = parseInt( jQuery(this.generateSubID("carcount", "#")).val() );
             if ( ((isNaN(ln))) || (ln <= 0) )
-                return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("carcount") ), true );
+                return this.setErrorCSS( this.getLabelSelector( this.generateSubID("carcount") ) );
 
             // check generator distribution
-            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) );
             if (!this.validDistribution("generatordistribution"))
-                return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ), true );
+                return this.setErrorCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) );
 
             // agent need not to be checked, because the value is also set by default
             return true;
@@ -367,15 +355,17 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
             // check max speed distribution
             if ([ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].some( function( pc_key ) {
-                return self.setErrorLabelCSS( self.getLabelSelector( self.generateSubID(pc_key)+"-button" ), !self.validDistribution(pc_key) );
+                var lc = self.getLabelSelector( self.generateSubID(pc_key)+"-button" );
+                self.clearErrorCSS(lc);
+                return self.setErrorCSS( lc, !self.validDistribution(pc_key) );
             }))
                 return false;
 
             // check speed factor
-            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("speedfactor") ) );
+            this.clearErrorCSS( this.getLabelSelector( this.generateSubID("speedfactor") ) );
             ln = parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
             if ( ((isNaN(ln))) || (ln < 0) || (ln > 100) )
-                return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("speedfactor") ), true );;
+                return this.setErrorCSS( this.getLabelSelector( this.generateSubID("speedfactor") ) );
 
             return true;
 
@@ -391,7 +381,7 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 WaypointPreset.prototype.validatefinish = function( po_event, pn_current )
 {
     var lc_name = jQuery(this.generateSubID("name", "#")).val();
-    return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("name") ), !(lc_name && lc_name.length > 0 === true) );
+    return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("name") ), !(lc_name && lc_name.length > 0 === true) );
 }
 
 

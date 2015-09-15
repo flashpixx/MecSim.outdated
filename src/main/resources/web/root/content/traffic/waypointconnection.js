@@ -128,7 +128,13 @@ WaypointConnection.prototype.afterDOMAdded = function()
 						jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
 						jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
 						jQuery("<td></td>").append("<button>Add</button>").appendTo(l_data);
-						jQuery("<td></td>").append("<button>Edit</button>").appendTo(l_data);
+
+						if(po_info.type === "path"){
+							jQuery("<td></td>").append("<button>Edit</button>").appendTo(l_data);
+						}else{
+							jQuery("<td></td>").appendTo(l_data);
+						}
+
 						l_data.appendTo(jQuery(self.generateSubID("waypointtable", "#")));
 					});
 				}

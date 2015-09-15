@@ -104,6 +104,28 @@ Wizard.prototype.afterDOMAdded = function()
 
 
 /**
+ * sets the CSS error element
+ * @param pc_select DOM selector
+ * @return pl_error true / false for set error
+**/
+Wizard.prototype.setErrorCSS = function( pc_selector, pl_error )
+{
+    jQuery(pc_selector).addClass("ui-state-error");
+    return pl_error == undefined ? false : pl_error;
+}
+
+
+/**
+ * removes the CSS error element
+ * @param pc_select DOM selector
+ **/
+Wizard.prototype.clearErrorCSS = function( pc_selector )
+{
+    jQuery(pc_selector).removeClass("ui-state-error");
+}
+
+
+/**
  * cancel action, is called on the cancel button click
  * @param po_event event
 **/

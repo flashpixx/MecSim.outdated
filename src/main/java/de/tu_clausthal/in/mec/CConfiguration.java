@@ -85,10 +85,6 @@ public class CConfiguration
      */
     private static final String[] c_externalfiles = new String[]{"benchmark.r", "inconsistency.r"};
     /**
-     * user configuration name
-     */
-    private static final String c_userconfiguration = "user";
-    /**
      * configuration map
      */
     private final CNameHashMap.CImmutable m_configuration = new CNameHashMap.CImmutable()
@@ -229,11 +225,6 @@ public class CConfiguration
                             put( "password", null );
                         }}
             );
-
-
-            // web UI interface configuration
-            put( c_userconfiguration, new CNameHashMap.CImmutable() );
-
 
             // manifest data
             put( "manifest", new CNameHashMap.CImmutable() );

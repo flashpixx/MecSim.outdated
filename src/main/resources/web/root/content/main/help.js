@@ -105,7 +105,7 @@ Help.prototype.afterDOMAdded = function()
 
             jQuery(self.generateSubID("name", "#"))
                 .attr("href", po_data.manifest["project-url"])
-                .html(po_data.manifest["project-name"].replace(/-/g, "<br/>"));
+                .html( po_data.manifest["project-name"] ? po_data.manifest["project-name"].replace(/-/g, "<br/>") :  "" ) ;
 
             jQuery(self.generateSubID("license", "#"))
                 .attr("href", po_data.manifest["license-url"])

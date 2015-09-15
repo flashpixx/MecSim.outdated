@@ -99,7 +99,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     public boolean add( final int p_index, final Literal p_literal )
     {
         final Pair<CPath, CLiteral> l_split = this.cloneLiteral( p_literal );
-        this.add( l_split.getLeft().getSubPath( 0, l_split.getLeft().size() - 1 ), l_split.getRight() );
+        this.add( l_split.getLeft(), l_split.getRight() );
         return true;
     }
 
@@ -224,7 +224,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
      */
     private CPath splitPath( final String p_functor )
     {
-        return CPath.createPath( m_pathseparator, p_functor );
+        return new CPath( p_functor.split( m_pathseparator ) );
     }
 
     /**
@@ -241,7 +241,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         l_literal.addTerms( p_literal.getTerms() );
         l_literal.addSource( p_literal.getSources() );
 
-        return new ImmutablePair<>( l_path, new CLiteral( l_literal ) );
+        return new ImmutablePair<>( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_literal ) );
     }
 
 }

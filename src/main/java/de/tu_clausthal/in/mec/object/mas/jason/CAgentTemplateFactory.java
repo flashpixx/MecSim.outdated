@@ -29,11 +29,9 @@ import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.IAgentTemplateFactory;
 import jason.JasonException;
 import jason.architecture.AgArch;
-import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.Agent;
 import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.PlanLibrary;
-import jason.bb.BeliefBase;
 import jason.bb.DefaultBeliefBase;
 
 import java.io.File;
@@ -48,14 +46,13 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
     private final AgArch m_architecture = new AgArch();
 
 
-
     @Override
     protected final CAgent clone( final Agent p_agent )
     {
         final CAgent l_agent = null;
 
 
-        MindInspectorWeb.get().registerAg( l_agent );
+        //MindInspectorWeb.get().registerAg( l_agent );
 
 
         return l_agent;
@@ -64,35 +61,49 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
     @Override
     protected final Agent create( final File p_source )
     {
-        final Agent l_agent = new Agent();
+        return new CAgentTemplate( p_source, m_architecture );
+    }
 
-        // --- initialize the agent, that is used within the simulation context ---
-        l_agent.setTS( new TransitionSystem( l_agent, null, null, m_architecture ) );
-        //l_agent.setBB( (BeliefBase) m_beliefbaserootmask );
-        l_agent.setBB( new DefaultBeliefBase() );
-        l_agent.setPL( new PlanLibrary() );
-        l_agent.initDefaultFunctions();
 
-        try
+    /**
+     * template class to initialize the agent manually
+     * to handle Jason stdlib internal action includes
+     *
+     * @note we do the initialization process manually, because some internal actions are removed from the default
+     * behaviour
+     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
+     */
+    private static class CAgentTemplate extends Agent
+    {
+
+        public CAgentTemplate( final File p_source, final AgArch p_architecture )
         {
-            CReflection.getClassField( l_agent.getClass(), "initialGoals" ).getSetter().invoke( l_agent, new ArrayList<>() );
-            CReflection.getClassField( l_agent.getClass(), "initialBels" ).getSetter().invoke( l_agent, new ArrayList<>() );
+            // --- initialize the agent, that is used within the simulation context ---
+            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
+            this.setBB( new DefaultBeliefBase() );
+            this.setPL( new PlanLibrary() );
+            this.initDefaultFunctions();
 
-            // create internal actions map - reset the map and overwrite not useable actions with placeholder
-            CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, IEnvironment.INTERNALACTION );
+            try
+            {
+                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
+                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
 
-            // read ASL file
-            l_agent.load( p_source.toString() );
-        }
-        catch ( final JasonException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
+                // create internal actions map - reset the map and overwrite not useable actions with placeholder
+                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, IEnvironment.INTERNALACTION );
+
+                // read ASL file
+                this.load( p_source.toString() );
+            }
+            catch ( final JasonException l_exception )
+            {
+                CLogger.error( l_exception );
+            }
+            catch ( final Throwable l_throwable )
+            {
+                CLogger.error( l_throwable );
+            }
         }
 
-        return l_agent;
     }
 }

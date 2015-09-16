@@ -200,7 +200,19 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_architecture.insertAgArch( m_architecture );
 
         // --- create agent to handle manual internal actions, create participant object for message communication
-        m_agent = new CJasonAgent( IEnvironment.getAgentFile( p_asl ), m_architecture );
+
+
+
+
+        IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ) );
+        //m_agent = new CJasonAgent( , m_architecture );
+
+
+
+
+
+
+
         m_participant = new CParticipant( this );
 
 
@@ -353,27 +365,9 @@ public class CAgent<T> implements IVoidAgent<Literal>
             // read plans, iterates over trigger & conditions & plan-bodies extract beliefs (literals)
 
 
-            // --- initialize the agent, that is used within the simulation context ---
-            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setBB( (BeliefBase) m_beliefbaserootmask );
-            this.setPL( new PlanLibrary() );
-            this.initDefaultFunctions();
 
-            try
-            {
-                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
-                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
 
-                // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, IEnvironment.getInternalActions() );
-            }
-            catch ( final Throwable l_throwable )
-            {
-                CLogger.error( l_throwable );
-            }
 
-            this.load( p_asl.toString() );
-            MindInspectorWeb.get().registerAg( this );
         }
 
     }

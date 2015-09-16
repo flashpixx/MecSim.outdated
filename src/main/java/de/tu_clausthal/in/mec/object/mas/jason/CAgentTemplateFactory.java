@@ -33,6 +33,7 @@ import jason.asSemantics.Agent;
 import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.PlanLibrary;
 import jason.bb.BeliefBase;
+import jason.bb.DefaultBeliefBase;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,9 +51,22 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
     {
         final CAgent l_agent = null;
 
+
+        MindInspectorWeb.get().registerAg( l_agent );
+
+
+        return l_agent;
+    }
+
+    @Override
+    protected final Agent create( final File p_source )
+    {
+        final Agent l_agent = new Agent();
+
         // --- initialize the agent, that is used within the simulation context ---
         l_agent.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-        l_agent.setBB( (BeliefBase) m_beliefbaserootmask );
+        //l_agent.setBB( (BeliefBase) m_beliefbaserootmask );
+        l_agent.setBB( new DefaultBeliefBase() );
         l_agent.setPL( new PlanLibrary() );
         l_agent.initDefaultFunctions();
 
@@ -63,30 +77,17 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
 
             // create internal actions map - reset the map and overwrite not useable actions with placeholder
             CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, IEnvironment.INTERNALACTION );
-        }
-        catch ( final Throwable l_throwable )
-        {
-            CLogger.error( l_throwable );
-        }
 
-        this.load( p_asl.toString() );
-        MindInspectorWeb.get().registerAg( this );
-
-
-        return null;
-    }
-
-    @Override
-    protected final Agent create( final File p_source )
-    {
-        final Agent l_agent = new Agent();
-        try
-        {
-            l_agent.initAg( p_source.toString() );
+            // read ASL file
+            l_agent.load( p_source.toString() );
         }
         catch ( final JasonException l_exception )
         {
             CLogger.error( l_exception );
+        }
+        catch ( final Throwable l_throwable )
+        {
+            CLogger.error( l_throwable );
         }
 
         return l_agent;

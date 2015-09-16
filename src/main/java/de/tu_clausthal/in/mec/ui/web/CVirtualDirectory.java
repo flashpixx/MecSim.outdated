@@ -132,7 +132,7 @@ public class CVirtualDirectory implements IVirtualLocation
     @Override
     public final URL get( final NanoHTTPD.IHTTPSession p_session ) throws MalformedURLException, URISyntaxException
     {
-        // URL concatination must be run with string manually, because otherwise last URL element can be removed
+        // URL concatination must be performtemplate with string manually, because otherwise last URL element can be removed
         if ( p_session.getUri().equals( m_uri ) )
             return CCommon.concatURL( m_directory, m_index );
 

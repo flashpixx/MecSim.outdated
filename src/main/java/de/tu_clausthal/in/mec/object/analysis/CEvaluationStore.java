@@ -74,14 +74,14 @@ public class CEvaluationStore extends IDatabase
                 new String[]{
                         "instance char(36) not null",
                         "process bigint not null",
-                        "run int unsigned not null",
+                        "performtemplate int unsigned not null",
                         "step int unsigned not null",
                         "agenthash int not null",
                         "agentsource varchar(256) not null",
                         "value double not null"
                 },
                 new String[]{
-                        "add primary key (instance, process, run, step, agenthash)"
+                        "add primary key (instance, process, performtemplate, step, agenthash)"
                 }
         );
     }

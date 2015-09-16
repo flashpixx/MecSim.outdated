@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
- * singleton object to run the simulation
+ * singleton object to performtemplate the simulation
  */
 @SuppressWarnings( "serial" )
 public class CSimulation
@@ -89,7 +89,7 @@ public class CSimulation
      */
     private CWorld m_world = new CWorld();
     /**
-     * run count - counts each start call
+     * performtemplate count - counts each start call
      */
     private int m_runs = 0;
 
@@ -254,7 +254,7 @@ public class CSimulation
 
         CLogger.info( CCommon.getResourceString( this, "startsteps", p_steps ) );
 
-        // run thread and wait until thread is finished
+        // performtemplate thread and wait until thread is finished
         m_mainloop.resume( p_steps );
         m_mainloopthread.join();
 
@@ -280,7 +280,7 @@ public class CSimulation
     /**
      * returns the number of runs
      *
-     * @return run number
+     * @return performtemplate number
      */
     public int getNumberOfRuns()
     {

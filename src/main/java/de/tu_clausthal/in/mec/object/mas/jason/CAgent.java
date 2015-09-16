@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.mas.jason;
 
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.ILayer;
+import de.tu_clausthal.in.mec.object.mas.IAgentTemplateFactory;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.IWorldAction;
@@ -63,7 +64,7 @@ import java.util.Set;
  * @tparam T typ of binding objects
  */
 @SuppressWarnings( "serial" )
-public class CAgent<T> implements IVoidAgent<Literal>
+public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITask<Agent>
 {
     /**
      * path seperator of agent name
@@ -114,7 +115,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
      */
     private final Agent m_agent;
     /**
-     * Jason interal agent architecture to run the reasoning cycle
+     * Jason interal agent architecture to performtemplate the reasoning cycle
      */
     private final CJasonArchitecture m_architecture;
     /**
@@ -196,7 +197,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_architecture = new CJasonArchitecture();
         m_architecture.insertAgArch( m_architecture );
 
-        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ) );
+        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this );
         m_agent.setTS( new TransitionSystem( m_agent, null, null, m_architecture ) );
 
         // --- create beliefbase structure with tree structure
@@ -322,6 +323,12 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_architecture.cycle( p_currentstep );
     }
 
+    @Override
+    public void performtemplate( final Agent p_agent )
+    {
+
+    }
+
     /**
      * class to create an own agent architecture to define the reasoning cycle one agent uses one agent architecture
      *
@@ -393,7 +400,7 @@ public class CAgent<T> implements IVoidAgent<Literal>
         {
             m_beliefbaserootmask.update();
 
-            // run agent reasoning cycle for deducing new beliefs
+            // performtemplate agent reasoning cycle for deducing new beliefs
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();

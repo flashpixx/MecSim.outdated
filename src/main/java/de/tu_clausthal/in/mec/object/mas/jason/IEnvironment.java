@@ -120,7 +120,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             final as2j l_parser = new as2j( FileUtils.openInputStream( getAgentFile( p_agentname ) ) );
             CReflection.getClassField( as2j.class, "logger" ).getSetter().invokeWithArguments( l_logger );
 
-            // run agent initalizing and parsing
+            // performtemplate agent initalizing and parsing
             l_agent.initAg();
             l_parser.agent( l_agent );
 

@@ -32,7 +32,7 @@ import java.lang.instrument.Instrumentation;
 /**
  * premain executable class for benchmarking
  *
- * @note Jar file must be run with @code java -javaagent:<MecSim Jar> -jar <MecSim Jar> --benchmark <output Json file> @endcode
+ * @note Jar file must be performtemplate with @code java -javaagent:<MecSim Jar> -jar <MecSim Jar> --benchmark <output Json file> @endcode
  */
 public final class CBenchmark
 {

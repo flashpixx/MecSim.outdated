@@ -67,7 +67,7 @@ public abstract class IRunnable<T> implements Runnable, Callable<Object>
     }
 
     /**
-     * run method to perform the action on runnable and callable interface
+     * performtemplate method to perform the action on runnable and callable interface
      */
     protected abstract void perform();
 

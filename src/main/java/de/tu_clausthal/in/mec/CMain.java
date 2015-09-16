@@ -123,7 +123,7 @@ public class CMain
         CBootstrap.configurationIsLoaded( CConfiguration.getInstance() );
 
 
-        // run startup checks
+        // performtemplate startup checks
         for ( final String l_item : CCommon.startupchecks() )
             CLogger.out( l_item );
 
@@ -152,7 +152,7 @@ public class CMain
         }
 
 
-        // run application
+        // performtemplate application
         if ( !l_cli.hasOption( "nogui" ) )
             CUI.main( null );
         else

@@ -164,7 +164,7 @@ public class CMainLoop implements Runnable
     /**
      * resumes thread and shut down thread after
      *
-     * @param p_steps number of steps which are run
+     * @param p_steps number of steps which are performtemplate
      */
     public final void resume( final int p_steps )
     {
@@ -202,7 +202,7 @@ public class CMainLoop implements Runnable
                 if ( m_simulationcount >= m_shutdownstep )
                     break;
 
-                // run simulation objects
+                // performtemplate simulation objects
                 this.processLayer( l_layerorder );
                 this.processObjects( l_layerorder );
 

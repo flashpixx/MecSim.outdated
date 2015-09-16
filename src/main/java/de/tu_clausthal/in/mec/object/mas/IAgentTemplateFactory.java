@@ -58,7 +58,7 @@ public abstract class IAgentTemplateFactory<T>
 
         if ( p_tasks != null )
             for ( final ITask<T> l_item : p_tasks )
-                l_item.run( l_agenttemplate );
+                l_item.performtemplate( l_agenttemplate );
 
         return this.clone( l_agenttemplate );
     }
@@ -83,7 +83,7 @@ public abstract class IAgentTemplateFactory<T>
 
 
     /**
-     * task interface which to run action on the template
+     * task interface which to performtemplate action on the template
      *
      * @tparam <O> template agent type
      */
@@ -91,11 +91,11 @@ public abstract class IAgentTemplateFactory<T>
     {
 
         /**
-         * run method
+         * performtemplate method
          *
          * @param p_agent agent template
          */
-        public void run( final O p_agent );
+        public void performtemplate( final O p_agent );
 
     }
 }

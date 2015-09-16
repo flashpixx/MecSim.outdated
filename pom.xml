@@ -440,7 +440,7 @@
                 </executions>
             </plugin>
 
-            <!-- checkstyle is run at compile / validation phase
+            <!-- checkstyle is performtemplate at compile / validation phase
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>

@@ -196,22 +196,12 @@ public class CAgent<T> implements IVoidAgent<Literal>
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself,
         // beware that beliefbase must exists before agent ctor is called !
         m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
+
         m_architecture = new CJasonArchitecture();
         m_architecture.insertAgArch( m_architecture );
 
-        // --- create agent to handle manual internal actions, create participant object for message communication
-
-
-
-
-        IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ) );
-        //m_agent = new CJasonAgent( , m_architecture );
-
-
-
-
-
-
+        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ) );
+        m_agent.setTS( new TransitionSystem( m_agent, null, null, m_architecture ) );
 
         m_participant = new CParticipant( this );
 
@@ -332,44 +322,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
     public final void step( final int p_currentstep, final ILayer p_layer )
     {
         m_architecture.cycle( p_currentstep );
-    }
-
-    /**
-     * class of an own Jason agent to handle Jason stdlib internal action includes
-     *
-     * @note we do the initialization process manually, because some internal actions are removed from the default
-     * behaviour
-     * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
-     */
-    protected class CJasonAgent extends Agent
-    {
-
-        /**
-         * ctor - for building a "blank / empty" agent
-         *
-         * @note Jason programming structure does not allow to read all literals on-fly
-         * but we need the literals to create the correct beliefbase-tree-structure,
-         * so we build a default Jason agent first, read the data and build the tree-beliefbases
-         * and add the initial beliefs
-         * @param p_asl ASL file
-         * @param p_architecture architecture
-         */
-        public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
-        {
-            // --- initialize the agent, that is used to read all required data ---
-            //final Agent l_agent = Agent.create( p_architecture, Agent.class.getCanonicalName(), null, p_asl.toString(), null );
-
-            //l_agent.getInitialBels();
-
-            // read initial beliefs
-            // read plans, iterates over trigger & conditions & plan-bodies extract beliefs (literals)
-
-
-
-
-
-        }
-
     }
 
     /**

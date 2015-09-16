@@ -47,11 +47,9 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
 
 
     @Override
-    protected final CAgent clone( final Agent p_agent )
+    protected final CJasonAgent clone( final Agent p_agent )
     {
-        final CAgent l_agent = null;
-
-
+        final CJasonAgent l_agent = null;
         //MindInspectorWeb.get().registerAg( l_agent );
 
 
@@ -64,6 +62,11 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
         return new CAgentTemplate( p_source, m_architecture );
     }
 
+
+    public static class CJasonAgent extends Agent
+    {
+
+    }
 
     /**
      * template class to initialize the agent manually

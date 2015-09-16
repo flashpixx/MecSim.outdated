@@ -32,6 +32,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * storage to create templates of agents for avoid reparsing on instantiation
+ *
+ * @tparam T agent template type
  */
 public abstract class IAgentTemplateFactory<T>
 {
@@ -46,12 +48,18 @@ public abstract class IAgentTemplateFactory<T>
      * agent instantiate function
      *
      * @param p_source source of the agent
+     * @param p_tasks optional tasks which runs over the agenttemplate
      * @return agent
      */
-    public final <N> N instantiate( final File p_source )
+    public final <N> N instantiate( final File p_source, final ITask<T>... p_tasks )
     {
         final T l_agenttemplate = m_storage.getOrDefault( p_source, this.create( p_source ) );
         m_storage.putIfAbsent( p_source, l_agenttemplate );
+
+        if ( p_tasks != null )
+            for ( final ITask<T> l_item : p_tasks )
+                l_item.run( l_agenttemplate );
+
         return this.clone( l_agenttemplate );
     }
 
@@ -73,4 +81,21 @@ public abstract class IAgentTemplateFactory<T>
      */
     protected abstract T create( final File p_source );
 
+
+    /**
+     * task interface which to run action on the template
+     *
+     * @tparam <O> template agent type
+     */
+    public interface ITask<O>
+    {
+
+        /**
+         * run method
+         *
+         * @param p_agent agent template
+         */
+        public void run( final O p_agent );
+
+    }
 }

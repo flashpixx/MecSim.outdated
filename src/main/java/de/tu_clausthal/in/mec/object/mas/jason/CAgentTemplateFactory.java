@@ -35,6 +35,7 @@ import jason.asSyntax.PlanLibrary;
 import jason.bb.DefaultBeliefBase;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -49,8 +50,15 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
     @Override
     protected final Agent clone( final Agent p_agent )
     {
-        final Agent l_agent = null;
-        return l_agent;
+        try
+        {
+            return de.tu_clausthal.in.mec.common.CCommon.deepCopy( p_agent );
+        }
+        catch ( final ClassNotFoundException | IOException l_exception )
+        {
+            CLogger.error( l_exception );
+        }
+        return null;
     }
 
     @Override

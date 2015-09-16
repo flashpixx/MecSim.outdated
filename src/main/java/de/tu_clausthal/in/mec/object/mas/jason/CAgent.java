@@ -47,6 +47,7 @@ import jason.asSemantics.Message;
 import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
+import jason.bb.BeliefBase;
 
 import java.awt.*;
 import java.io.File;
@@ -198,9 +199,6 @@ public class CAgent<T> implements IVoidAgent<Literal>
         m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ) );
         m_agent.setTS( new TransitionSystem( m_agent, null, null, m_architecture ) );
 
-        m_participant = new CParticipant( this );
-
-
         // --- create beliefbase structure with tree structure
         m_beliefbaserootmask.add(
                 new CBeliefBase(
@@ -219,6 +217,9 @@ public class CAgent<T> implements IVoidAgent<Literal>
             this.bind( c_bindname, p_bind );
             m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );
         }
+
+        m_agent.setBB( (BeliefBase) m_beliefbaserootmask );
+        m_participant = new CParticipant( this );
 
         MindInspectorWeb.get().registerAg( m_agent );
     }

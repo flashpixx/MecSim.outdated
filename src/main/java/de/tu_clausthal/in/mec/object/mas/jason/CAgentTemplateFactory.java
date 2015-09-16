@@ -47,9 +47,9 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
 
 
     @Override
-    protected final CJasonAgent clone( final Agent p_agent )
+    protected final Agent clone( final Agent p_agent )
     {
-        final CJasonAgent l_agent = null;
+        final Agent l_agent = null;
         return l_agent;
     }
 
@@ -57,12 +57,6 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
     protected final Agent create( final File p_source )
     {
         return new CAgentTemplate( p_source, m_architecture );
-    }
-
-
-    public static class CJasonAgent extends Agent
-    {
-
     }
 
     /**

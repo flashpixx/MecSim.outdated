@@ -274,108 +274,29 @@ WaypointPreset.prototype.finish = function()
 
 
 /**
- * sets the CSS error element
- * @param pc_select DOM selector
- * @return pl_error true / false for set error
+ * function for distribution check
+ * @param pc distribution name
+ * @return true if values are okay, false if values are incorrect
 **/
-WaypointPreset.prototype.setErrorLabelCSS = function( pc_selector, pl_error )
+WaypointPreset.prototype.checkValidDistribution = function( pc )
 {
-    jQuery(pc_selector).css( "background-color", pl_error ? "#ff0000" : "" );
-    return pl_error;
-}
+    var ln_first  = parseFloat(jQuery( this.generateSubID(pc+"firstmomentum", "#") ).val());
+    var ln_second = parseFloat(jQuery( this.generateSubID(pc+"secondmomentum", "#") ).val());
 
-
-/**
- * @Overwrite
-**/
-WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next )
-{
-    // call for previous step is always okay
-    if (pn_current > pn_next)
-        return true;
-
-    var self = this;
-
-    /**
-     * function for distribution check
-     * @param pc distribution name
-     * @return bool if values are okay
-    **/
-    var lx_checkDistribution = function( pc )
-    {
-        var ln_first  = parseFloat(jQuery( self.generateSubID(pc+"firstmomentum", "#") ).val());
-        var ln_second = parseFloat(jQuery( self.generateSubID(pc+"secondmomentum", "#") ).val());
-
-        switch (jQuery( self.generateSubID(pc, "#") ).val())
-        {
-
-            case "Uniform" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first >= 0) && (ln_first < ln_second)  === true;
-
-            case "Normal" :
-                return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second >= 0) && (ln_first > 0) === true;
-
-            case "Exponential" :
-                return (!isNaN(ln_first)) && (ln_first > 0) === true;
-
-        }
-
-        return false;
-    }
-
-
-    // check wizard steps
-    switch (pn_current)
+    switch (jQuery( this.generateSubID(pc, "#") ).val())
     {
 
-        // first step
-        case 0 :
+        case "Uniform" :
+            return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first >= 0) && (ln_first < ln_second)  === true;
 
-            var ln = null;
+        case "Normal" :
+            return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first - 6*ln_second >= 0) && (ln_first > 0) === true;
 
-            // check random waypoint & radius
-            if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
-            {
-                this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("radius") ) );
-                ln = parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
-                if ( ((isNaN(ln))) || (ln <= 0) )
-                    return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("radius") ), true );
-            }
+        case "Exponential" :
+            return (!isNaN(ln_first)) && (ln_first > 0) === true;
 
-            // check car count
-            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("carcount") ) );
-            ln = parseInt( jQuery(this.generateSubID("carcount", "#")).val() );
-            if ( ((isNaN(ln))) || (ln <= 0) )
-                return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("carcount") ), true );
-
-            // check generator distribution
-            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) );
-            if (!lx_checkDistribution("generatordistribution"))
-                return this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ), true );
-
-            // agent need not to be checked, because the value is also set by default
-            return true;
-
-
-        // second step
-        case 1 :
-
-            var ln = null;
-
-            // check max speed distribution
-            if ([ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].some( function( pc_key ) {
-                return self.setErrorLabelCSS( self.getLabelSelector( self.generateSubID(pc_key)+"-button" ), !lx_checkDistribution(pc_key) );
-            }))
-                return false;
-
-            // check speed factor
-            this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("speedfactor") ) );
-            ln = parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
-            if ( ((isNaN(ln))) || (ln < 0) || (ln > 100) )
-                return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("speedfactor") ), true );;
-
-            return true;
-
+        case "Beta" :
+            return (!isNaN(ln_first)) && (!isNaN(ln_second)) && (ln_first > 0) && (ln_second > 0) === true;
     }
 
     return false;
@@ -383,12 +304,71 @@ WaypointPreset.prototype.validatestep = function( po_event , pn_current, pn_next
 
 
 /**
+ * validates the first wizard step
+ **/
+WaypointPreset.prototype.validatestep0 = function()
+{
+    var self = this;
+    var ln = null;
+
+    [ this.getLabelSelector( this.generateSubID("radius") ), this.getLabelSelector( this.generateSubID("carcount") ),
+      this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) ].forEach( function(pc) {self.clearErrorCSS(pc);} );
+
+    // check random waypoint & radius
+    if ( jQuery(this.generateSubID("waypoint", "#")).val() == "CarWaypointRandom")
+    {
+        ln = parseFloat( jQuery(this.generateSubID("radius", "#")).val() );
+        if ( ((isNaN(ln))) || (ln <= 0) )
+            return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("radius") ) );
+    }
+
+    // check car count
+    ln = parseInt( jQuery(this.generateSubID("carcount", "#")).val() );
+    if ( ((isNaN(ln))) || (ln <= 0) )
+        return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("carcount") ) );
+
+    // check generator distribution
+    if (!this.checkValidDistribution("generatordistribution"))
+        return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("generatordistribution")+"-button" ) );
+
+    // agent need not to be checked, because the value is also set by default
+    return true;
+}
+
+
+/**
+ * validates the first wizard step
+ **/
+WaypointPreset.prototype.validatestep1 = function()
+{
+    var self = this;
+    var ln = null;
+
+    // check max speed distribution
+    if ([ "accelerationdistribution", "decelerationdistribution", "lingerdistribution", "maxspeeddistribution" ].some( function( pc_key ) {
+        var lc = self.getLabelSelector( self.generateSubID(pc_key)+"-button" );
+        self.clearErrorCSS(lc);
+        return self.setErrorCSS( lc, !self.checkValidDistribution(pc_key) );
+    }))
+        return false;
+
+    // check speed factor
+    this.clearErrorCSS( this.getLabelSelector( this.generateSubID("speedfactor") ) );
+    ln = parseInt( jQuery(this.generateSubID("speedfactor", "#")).val() );
+    if ( ((isNaN(ln))) || (ln < 0) || (ln > 100) )
+        return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("speedfactor") ) );
+
+    return true;
+}
+
+
+/**
  * @Overwrite
 **/
-WaypointPreset.prototype.validatefinish = function( po_event, pn_current )
+WaypointPreset.prototype.validatefinish = function()
 {
     var lc_name = jQuery(this.generateSubID("name", "#")).val();
-    return !this.setErrorLabelCSS( this.getLabelSelector( this.generateSubID("name") ), !(lc_name && lc_name.length > 0 === true) );
+    return !this.setErrorCSS( this.getLabelSelector( this.generateSubID("name") ), !(lc_name && lc_name.length > 0 === true) );
 }
 
 

@@ -319,7 +319,7 @@ var MecSim = (function (px_modul) {
             // resizing iFrame to the full parent element size
             'iframe{ width: 100%; height: 100%; position: absolute; }' +
             // jQuery button is set to a minimale size
-            '.ui-button-text-only { min-height: 1.8em; min-width: 35px; padding-top: 0.25em; padding-bottom: 0.25em; padding-left: 1em; padding-right: 1em; }' +
+            '.ui-menu-button { min-height: 1.8em; min-width: 35px; padding-top: 0.25em; padding-bottom: 0.25em; padding-left: 1em; padding-right: 1em; }' +
             // jQuery sortable without bullet
             '.ui-sortable { list-style-type: none; }' +
             'li.ui-state-default { min-height: 0.5em; padding: 0.5em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }' +
@@ -328,7 +328,7 @@ var MecSim = (function (px_modul) {
         );
 
         // initialize the content pane with the three layer structures - must be called at the end, because of correct layout structure
-        jQuery( px_modul.ui().screen("#") ).jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "20%", min: 250 }, { size: "80%"}] });
+        jQuery( px_modul.ui().screen("#") ).jqxSplitter({ width: "100%", height: "100%", panels: [{ size: "22%", min: 250 }, { size: "78%"}] });
         jQuery( px_modul.ui().screenmenu("#") ).jqxSplitter({ width: "100%", height: "100%", orientation: "horizontal", panels: [{ size: "85%", collapsible: false }] });
         jQuery( px_modul.ui().accordion("#") ).accordion({ active: false, collapsible: true, heightStyle: "content" });
     }

@@ -107,11 +107,6 @@ public class CMain
         CLogger.create( l_loglevel, l_logfile );
 
 
-        // run startup checks
-        for ( final String l_item : CCommon.startupchecks() )
-            CLogger.out( l_item );
-
-
         // read the configuration directory (default ~/.mecsim)
         File l_defaultconfig = CConfiguration.getInstance().getLocation( "root" );
         if ( l_cli.hasOption( "configuration" ) )
@@ -126,6 +121,11 @@ public class CMain
             System.exit( -1 );
         }
         CBootstrap.configurationIsLoaded( CConfiguration.getInstance() );
+
+
+        // run startup checks
+        for ( final String l_item : CCommon.startupchecks() )
+            CLogger.out( l_item );
 
 
         // define benchmark

@@ -400,6 +400,17 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
+     * check of a path starts with another path
+     *
+     * @param p_path path
+     * @return boolean
+     */
+    public final boolean startsWith( final String p_path )
+    {
+        return this.startsWith( new CPath( p_path ) );
+    }
+
+    /**
      * splits the string data
      *
      * @param p_fqn full path

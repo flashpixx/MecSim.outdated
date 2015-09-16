@@ -1,3 +1,4 @@
 {
-  "directory" : "src/main/resources/web/root/lib"
+  "directory" : "src/main/resources/web/root/lib",
+  "analytics": false
 }

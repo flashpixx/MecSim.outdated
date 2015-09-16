@@ -335,16 +335,29 @@ public class CAgent<T> implements IVoidAgent<Literal>
         /**
          * ctor - for building a "blank / empty" agent
          *
+         * @note Jason programming structure does not allow to read all literals on-fly
+         * but we need the literals to create the correct beliefbase-tree-structure,
+         * so we build a default Jason agent first, read the data and build the tree-beliefbases
+         * and add the initial beliefs
          * @param p_asl ASL file
          * @param p_architecture architecture
          */
         public CJasonAgent( final File p_asl, final AgArch p_architecture ) throws JasonException
         {
+            // --- initialize the agent, that is used to read all required data ---
+            //final Agent l_agent = Agent.create( p_architecture, Agent.class.getCanonicalName(), null, p_asl.toString(), null );
+
+            //l_agent.getInitialBels();
+
+            // read initial beliefs
+            // read plans, iterates over trigger & conditions & plan-bodies extract beliefs (literals)
+
+
+            // --- initialize the agent, that is used within the simulation context ---
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.setBB( (BeliefBase) m_beliefbaserootmask );
             this.setPL( new PlanLibrary() );
             this.initDefaultFunctions();
-
 
             try
             {

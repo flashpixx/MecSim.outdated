@@ -73,9 +73,9 @@ Help.prototype.getGlobalContent = function()
 **/
 Help.prototype.getContent = function()
 {
-    return '<p><button id = "' + this.generateSubID("about") + '" ></button></p>' +
-           '<p><button id = "' + this.generateSubID("userdoc") + '" ></button> ' +
-           '<button id = "' + this.generateSubID("devdoc") + '" ></button></p>' +
+    return '<p><button class = "ui-menu-button" id = "' + this.generateSubID("about") + '" ></button></p>' +
+           '<p><button class = "ui-menu-button" id = "' + this.generateSubID("userdoc") + '" ></button> ' +
+           '<button class = "ui-menu-button" id = "' + this.generateSubID("devdoc") + '" ></button></p>' +
            Pane.prototype.getContent.call(this);
 }
 
@@ -105,7 +105,7 @@ Help.prototype.afterDOMAdded = function()
 
             jQuery(self.generateSubID("name", "#"))
                 .attr("href", po_data.manifest["project-url"])
-                .html(po_data.manifest["project-name"].replace(/-/g, "<br/>"));
+                .html( po_data.manifest["project-name"] ? po_data.manifest["project-name"].replace(/-/g, "<br/>") :  "" ) ;
 
             jQuery(self.generateSubID("license", "#"))
                 .attr("href", po_data.manifest["license-url"])

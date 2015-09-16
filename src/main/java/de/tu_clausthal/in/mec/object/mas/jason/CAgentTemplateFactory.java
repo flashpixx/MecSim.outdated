@@ -28,6 +28,7 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.mas.IAgentTemplateFactory;
 import jason.JasonException;
+import jason.architecture.AgArch;
 import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.Agent;
 import jason.asSemantics.TransitionSystem;
@@ -44,6 +45,8 @@ import java.util.ArrayList;
  */
 public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
 {
+    private final AgArch m_architecture = new AgArch();
+
 
 
     @Override
@@ -64,7 +67,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
         final Agent l_agent = new Agent();
 
         // --- initialize the agent, that is used within the simulation context ---
-        l_agent.setTS( new TransitionSystem( this, null, null, p_architecture ) );
+        l_agent.setTS( new TransitionSystem( l_agent, null, null, m_architecture ) );
         //l_agent.setBB( (BeliefBase) m_beliefbaserootmask );
         l_agent.setBB( new DefaultBeliefBase() );
         l_agent.setPL( new PlanLibrary() );

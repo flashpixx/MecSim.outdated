@@ -66,14 +66,6 @@ import java.util.logging.Level;
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements ISerializable
 {
     /**
-     * browser of the mindinspector - binding to the server port can be done after the first agent is exists
-     */
-    private transient CBrowser m_mindinspector;
-    /**
-     * agent file suffix *
-     */
-    private static final String c_filesuffix = ".asl";
-    /**
      * agent storage for fast instantiation
      */
     public static final CAgentTemplateFactory AGENTTEMPLATEFACTORY = new CAgentTemplateFactory();
@@ -94,7 +86,14 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             put( "mecsim.literal2number", new CLiteral2Number() );
             put( "mecsim.removeBelief", new CBeliefRemove() );
         }};
-
+    /**
+     * browser of the mindinspector - binding to the server port can be done after the first agent is exists
+     */
+    private transient CBrowser m_mindinspector;
+    /**
+     * agent file suffix *
+     */
+    private static final String c_filesuffix = ".asl";
 
     /**
      * checks the syntax of an agent

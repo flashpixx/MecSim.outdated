@@ -50,9 +50,6 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
     protected final CJasonAgent clone( final Agent p_agent )
     {
         final CJasonAgent l_agent = null;
-        //MindInspectorWeb.get().registerAg( l_agent );
-
-
         return l_agent;
     }
 

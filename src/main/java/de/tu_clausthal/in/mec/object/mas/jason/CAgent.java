@@ -24,9 +24,7 @@
 
 package de.tu_clausthal.in.mec.object.mas.jason;
 
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CPath;
-import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
@@ -49,12 +47,9 @@ import jason.asSemantics.Message;
 import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
-import jason.asSyntax.PlanLibrary;
-import jason.bb.BeliefBase;
 
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -224,6 +219,8 @@ public class CAgent<T> implements IVoidAgent<Literal>
             this.bind( c_bindname, p_bind );
             m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );
         }
+
+        MindInspectorWeb.get().registerAg( m_agent );
     }
 
     /**

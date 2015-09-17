@@ -55,11 +55,13 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, AgArch>
         return p_agent.clone( p_any );
     }
 
+
     @Override
     protected final Agent create( final File p_source )
     {
         return new CAgentTemplate( p_source, m_architecture );
     }
+
 
     /**
      * template class to initialize the agent manually
@@ -69,9 +71,15 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, AgArch>
      * behaviour
      * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
      */
-    private static class CAgentTemplate extends Agent
+    public static class CAgentTemplate extends Agent
     {
 
+        /**
+         * ctor
+         *
+         * @param p_source agent source
+         * @param p_architecture architecture
+         */
         public CAgentTemplate( final File p_source, final AgArch p_architecture )
         {
             // --- initialize the agent, that is used within the simulation context ---

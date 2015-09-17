@@ -136,6 +136,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
      */
     private final CParticipant m_participant;
 
+
     /**
      * ctor
      *
@@ -146,6 +147,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     {
         this( null, p_asl, null );
     }
+
 
     /**
      * ctor
@@ -159,6 +161,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         this( p_namepath, p_asl, null );
     }
 
+
     /**
      * ctor
      *
@@ -170,6 +173,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     {
         this( null, p_asl, p_bind );
     }
+
 
     /**
      * ctor
@@ -225,6 +229,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         MindInspectorWeb.get().registerAg( m_agent );
     }
 
+
     /**
      * returns the set of actions
      *
@@ -235,11 +240,13 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         return m_action;
     }
 
+
     @Override
     public IBeliefBaseMask<Literal> getBeliefBase()
     {
         return m_beliefbaserootmask;
     }
+
 
     @Override
     public final int getCycle()
@@ -247,17 +254,20 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         return m_cycle;
     }
 
+
     @Override
     public final String getName()
     {
         return m_namepath.getPath();
     }
 
+
     @Override
     public final String getSource()
     {
         return new File( m_agent.getASLSrc() ).getName();
     }
+
 
     @Override
     public void bind( final String p_name, final Object p_object )
@@ -266,11 +276,13 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_methodbind.push( p_name, p_object );
     }
 
+
     @Override
     public void addBeliefBase( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
     {
         m_beliefbaserootmask.add( p_mask );
     }
+
 
     @Override
     public final void release()
@@ -280,6 +292,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         MindInspectorWeb.get().removeAg( m_agent );
     }
 
+
     @Override
     public void unbind( final String p_name )
     {
@@ -287,17 +300,20 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_methodbind.remove( p_name );
     }
 
+
     @Override
     public void removeBeliefBase( final CPath p_path )
     {
         m_beliefbaserootmask.remove( p_path );
     }
 
+
     @Override
     public final CPath getReceiverPath()
     {
         return m_namepath;
     }
+
 
     /**
      * pass messages to message containing beliefbase
@@ -310,11 +326,13 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_beliefbaserootmask.getMask( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
     }
 
+
     @Override
     public void paint( final Graphics2D p_graphic, final Object p_object, final int p_width, final int p_height )
     {
 
     }
+
 
     @Override
     @IBenchmark
@@ -323,11 +341,13 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_architecture.cycle( p_currentstep );
     }
 
+
     @Override
     public void performtemplate( final Agent p_agent )
     {
         System.out.println( p_agent.getInitialBels() );
     }
+
 
     /**
      * class to create an own agent architecture to define the reasoning cycle one agent uses one agent architecture

@@ -48,19 +48,18 @@ public abstract class IAgentTemplateFactory<T>
      * agent instantiate function
      *
      * @param p_source source of the agent
-     * @param p_tasks optional tasks which runs over the agenttemplate
+     * @param p_task optional tasks which runs over the agenttemplate
      * @return agent
      */
-    public final <N> N instantiate( final File p_source, final ITask<T>... p_tasks )
+    public final <N,L> N instantiate( final File p_source, final ITask<T> p_task, final L p_any )
     {
         final T l_agenttemplate = m_storage.getOrDefault( p_source, this.create( p_source ) );
         m_storage.putIfAbsent( p_source, l_agenttemplate );
 
-        if ( p_tasks != null )
-            for ( final ITask<T> l_item : p_tasks )
-                l_item.performtemplate( l_agenttemplate );
+        if ( p_task != null )
+            p_task.performtemplate( l_agenttemplate );
 
-        return this.clone( l_agenttemplate );
+        return this.clone( l_agenttemplate, p_any );
     }
 
 
@@ -70,7 +69,7 @@ public abstract class IAgentTemplateFactory<T>
      * @param p_agent agent object, which should be cloned
      * @return cloned agent
      */
-    protected abstract <N> N clone( final T p_agent );
+    protected abstract <N,L> N clone( final T p_agent, final L p_any );
 
 
     /**

@@ -48,16 +48,8 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
 
 
     @Override
-    protected final Agent clone( final Agent p_agent )
+    protected <Agent, L> Agent clone( final Agent p_agent, final L p_any )
     {
-        try
-        {
-            return de.tu_clausthal.in.mec.common.CCommon.deepCopy( p_agent );
-        }
-        catch ( final ClassNotFoundException | IOException l_exception )
-        {
-            CLogger.error( l_exception );
-        }
         return null;
     }
 

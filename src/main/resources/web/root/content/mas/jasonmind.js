@@ -47,7 +47,7 @@ MASJasonMind.prototype = Object.create(Pane.prototype);
 **/
 MASJasonMind.prototype.getContent = function()
 {
-    return '<button id = "' + this.getID() + '" ></button>' + Pane.prototype.getContent.call(this);
+    return '<button class = "ui-menu-button" id = "' + this.getID() + '" ></button>' + Pane.prototype.getContent.call(this);
 }
 
 

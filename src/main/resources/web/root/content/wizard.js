@@ -106,12 +106,18 @@ Wizard.prototype.afterDOMAdded = function()
 /**
  * sets the CSS error element
  * @param pc_select DOM selector
- * @return pl_error true / false for set error
+ * @return pl_error true (error exists) / false (false = undefinied)
 **/
 Wizard.prototype.setErrorCSS = function( pc_selector, pl_error )
-{
-    jQuery(pc_selector).addClass("ui-state-error");
-    return pl_error == undefined ? false : pl_error;
+{   if (pl_error === undefined)
+    {
+        jQuery(pc_selector).addClass("ui-state-error");
+        return true;
+    }
+
+    if (pl_error)
+        jQuery(pc_selector).addClass("ui-state-error");
+    return pl_error;
 }
 
 
@@ -145,6 +151,8 @@ Wizard.prototype.init = function()
 /**
  * is called on every step
  *
+ * @note the function that validates the step must have the name "validatestept<stepnumber>"
+ * and must return false on error and true on correct values
  * @param po_event event
  * @param pn_current current step
  * @param pn_next next step
@@ -152,6 +160,16 @@ Wizard.prototype.init = function()
 **/
 Wizard.prototype.validatestep = function( po_event , pn_current, pn_next )
 {
+    // call for previous step is always okay
+    if (pn_current > pn_next)
+        return true;
+
+    // check if a method exists with the name "validatestep<number>"
+    // call it if exists
+    var lx = this["validatestep"+pn_current];
+    if (classof( lx, "function" ))
+        return lx.call(this, pn_current, pn_next);
+
     return true;
 }
 

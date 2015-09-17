@@ -1,31 +1,3 @@
-/**
- * @cond LICENSE
- * ######################################################################################
- * # GPL License                                                                        #
- * #                                                                                    #
- * # This file is part of the micro agent-based traffic simulation MecSim of            #
- * # Clausthal University of Technology - Mobile and Enterprise Computing               #
- * # Copyright (c) 2014-15, Philipp Kraus (philipp.kraus@tu-clausthal.de)               #
- * # This program is free software: you can redistribute it and/or modify               #
- * # it under the terms of the GNU General Public License as                            #
- * # published by the Free Software Foundation, either version 3 of the                 #
- * # License, or (at your option) any later version.                                    #
- * #                                                                                    #
- * # This program is distributed in the hope that it will be useful,                    #
- * # but WITHOUT ANY WARRANTY; without even the implied warranty of                     #
- * # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                      #
- * # GNU General Public License for more details.                                       #
- * #                                                                                    #
- * # You should have received a copy of the GNU General Public License                  #
- * # along with this program. If not, see http://www.gnu.org/licenses/                  #
- * ######################################################################################
- * @endcond
- */
-
-/**
- * This is a D3.js Graph Editor Modul
- * which was extended from http://bl.ocks.org/rkirsling/5001347
-**/
 GraphEditor = function(element, options){
 
     //data
@@ -43,7 +15,7 @@ GraphEditor = function(element, options){
 
     //config
     this._radius        = this._options.radius       || 12;
-    this._mouseMode     = this._options.mouseMode    || false;
+    this._mouseMode     = this._options.mouseMode    || true;
     this._textMode      = this._options.textMode     || true;
     this._onAddNode     = this._options.onAddNode    || function(){};
     this._onAddLink     = this._options.onAddLink    || function(){};
@@ -52,39 +24,39 @@ GraphEditor = function(element, options){
     //container
     this._svg = d3.select(this._div)
         .append('svg')
-        .attr('class', 'mecsim_graphEditor_svg')
+        .attr('class', 'graphEditor_svg')
         .attr('width', this._width)
         .attr('height', this._height);
 
     //end arrow
     this._svg.append('svg:defs').append('svg:marker')
-            .attr('class', 'mecsim_graphEditor_path')
-            .attr('id', 'end-arrow')
-            .attr('viewBox', '0 -5 10 10')
-            .attr('refX', 6)
-            .attr('markerWidth', 3)
-            .attr('markerHeight', 3)
-            .attr('orient', 'auto')
-        .append('svg:path')
-            .attr('d', 'M0,-5L10,0L0,5')
-            .attr('fill', '#000');
+        .attr('class', 'graphEditor_path')
+        .attr('id', 'end-arrow')
+        .attr('viewBox', '0 -5 10 10')
+        .attr('refX', 6)
+        .attr('markerWidth', 3)
+        .attr('markerHeight', 3)
+        .attr('orient', 'auto')
+    .append('svg:path')
+        .attr('d', 'M0,-5L10,0L0,5')
+        .attr('fill', '#000');
 
     //start arrow
     this._svg.append('svg:defs').append('svg:marker')
-            .attr('class', 'mecsim_graphEditor_path')
-            .attr('id', 'start-arrow')
-            .attr('viewBox', '0 -5 10 10')
-            .attr('refX', 4)
-            .attr('markerWidth', 3)
-            .attr('markerHeight', 3)
-            .attr('orient', 'auto')
-      .append('svg:path')
-            .attr('d', 'M10,-5L0,0L10,5')
-            .attr('fill', '#000');
+        .attr('class', 'graphEditor_path')
+        .attr('id', 'start-arrow')
+        .attr('viewBox', '0 -5 10 10')
+        .attr('refX', 4)
+        .attr('markerWidth', 3)
+        .attr('markerHeight', 3)
+        .attr('orient', 'auto')
+  .append('svg:path')
+        .attr('d', 'M10,-5L0,0L10,5')
+        .attr('fill', '#000');
 
     //drag line
     this._drag_line = this._svg.append('svg:path')
-        .attr('class', 'mecsim_graphEditor_path link dragline hidden')
+        .attr('class', 'graphEditor_path link dragline hidden')
         .attr('d', 'M0,0L0,0');
 
     //layout
@@ -121,10 +93,10 @@ GraphEditor = function(element, options){
     this.restart();
 };
 
-//update position
 GraphEditor.prototype.tick = function(){
     //update path position
     this._path.attr('d', function(d) {
+        
         var deltaX = d.target.x - d.source.x,
             deltaY = d.target.y - d.source.y,
             dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
@@ -146,7 +118,6 @@ GraphEditor.prototype.tick = function(){
     });
 };
 
-//update data
 GraphEditor.prototype.restart = function restart(){
     var self = this;
 
@@ -159,11 +130,11 @@ GraphEditor.prototype.restart = function restart(){
 
     //enter section (path)
     this._path.enter().append('svg:path')
-        .attr('class', 'mecsim_graphEditor_path link')
+        .attr('class', 'graphEditor_path link')
         .classed('selected', function(d) { return d === self._selected_link; })
         .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
         .style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; })
-        .on('mousedown', this.mousePathDown.bind(self));
+        .on('mousedown', this.mousePathUp.bind(self));
 
     //exit section (path)
     this._path.exit().remove();
@@ -179,7 +150,7 @@ GraphEditor.prototype.restart = function restart(){
     var g = this._circle.enter().append('svg:g');
 
     g.append('svg:circle')
-        .attr('class', 'mecsim_graphEditor_circle node')
+        .attr('class', 'graphEditor_circle node')
         .attr('r', this._radius)
         .style('fill', function(d) { return (d === self._selected_node) ? d3.rgb(self._color(d.id)).brighter().toString() : self._color(d.id); })
         .style('stroke', function(d) { return d3.rgb(self._color(d.id)).darker().toString(); })
@@ -188,7 +159,7 @@ GraphEditor.prototype.restart = function restart(){
         .on('mouseup', this.mouseCircleUp.bind(self));
 
     g.append('svg:text')
-        .attr('class', 'mecsim_graphEditor_circleText mecsim_graphEditor_circleID')
+        .attr('class', 'graphEditor_circleText graphEditor_circleID')
         .attr('x', 0)
         .attr('y', 4)
         .text(function(d) { return self._textMode ? d.id : ""; });
@@ -200,7 +171,6 @@ GraphEditor.prototype.restart = function restart(){
     this._force.start();
 };
 
-//reload data
 GraphEditor.prototype.reload = function reload(options){
     var self = this;
 
@@ -220,15 +190,7 @@ GraphEditor.prototype.reload = function reload(options){
     this.restart();
 };
 
-//add node
 GraphEditor.prototype.addNode = function(options){
-
-    //temp disable multiple ids
-    for(var l_node in this._nodes){
-        if(this._nodes[l_node].id === options.id)
-            return;
-    }
-
     //create node
     options = options || {};
     var node        = {};
@@ -246,7 +208,6 @@ GraphEditor.prototype.addNode = function(options){
     this._onAddNode(node);
 };
 
-//add link
 GraphEditor.prototype.addLink = function(options){
 
     if(!options.source || !options.target)
@@ -273,7 +234,6 @@ GraphEditor.prototype.addLink = function(options){
     this._onAddLink(link);
 };
 
-//listener mouse down
 GraphEditor.prototype.mousedown = function(){
     //return if ctrl was pressed or a circle or link already selected (prevent multiple selec)
     if(d3.event.ctrlKey || this._mousedown_node || this._mousedown_link || !this._mouseMode) return;
@@ -282,7 +242,6 @@ GraphEditor.prototype.mousedown = function(){
     this.addNode({x : point[0], y : point[1]});
 };
 
-//listener mouse move
 GraphEditor.prototype.mousemove = function(){
     //return if dragline was not started on a circle
     if(!this._mousedown_node) return;
@@ -292,7 +251,6 @@ GraphEditor.prototype.mousemove = function(){
     this.restart();
 };
 
-//listener mouse up
 GraphEditor.prototype.mouseup = function(){
     //hide drag line (defa)
     if(this._mousedown_node) {
@@ -304,7 +262,6 @@ GraphEditor.prototype.mouseup = function(){
     this.resetMouseVars();
 };
 
-//listener mouse down (circle)
 GraphEditor.prototype.mouseCircleDown = function(d){
     if(d3.event.ctrlKey) return;
 
@@ -326,7 +283,6 @@ GraphEditor.prototype.mouseCircleDown = function(d){
     this.restart();
 };
 
-//listener mouse up (circle)
 GraphEditor.prototype.mouseCircleUp = function(d){
     if(!this._mousedown_node) return;
 
@@ -359,8 +315,7 @@ GraphEditor.prototype.mouseCircleUp = function(d){
     this.addLink({source : source, target : target, left : left, right : right});
 };
 
-//listener mouse down (path)
-GraphEditor.prototype.mousePathDown = function(d){
+GraphEditor.prototype.mousePathUp = function(d){
 
     //if ctrl is pressed return
     if(d3.event.ctrlKey) return;
@@ -377,10 +332,10 @@ GraphEditor.prototype.mousePathDown = function(d){
     this.restart();
 };
 
-//listener key down
 GraphEditor.prototype.keydown = function(){
 
     //general
+    d3.event.preventDefault();
     if(this._lastKeyDown !== -1) return;
     this._lastKeyDown = d3.event.keyCode;
 
@@ -441,7 +396,6 @@ GraphEditor.prototype.keydown = function(){
     }
 };
 
-//listener key up
 GraphEditor.prototype.keyup = function(){
     this._lastKeyDown = -1;
 
@@ -454,7 +408,6 @@ GraphEditor.prototype.keyup = function(){
     }
 };
 
-//delete all links of a node
 GraphEditor.prototype.spliceLinksForNode = function(node){
     var self = this;
 
@@ -469,7 +422,6 @@ GraphEditor.prototype.spliceLinksForNode = function(node){
     });
 };
 
-//reset mouse variables
 GraphEditor.prototype.resetMouseVars = function(){
     this._mousedown_node = null;
     this._mouseup_node = null;

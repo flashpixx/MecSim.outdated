@@ -82,39 +82,45 @@ WaypointConnection.prototype.getGlobalCSS = function()
 
 		this.generateSubID("waypointlist", "#") +
 		'{' +
-		'    float: left;' +
-		'    width: 50%;' +
+			'float: left;' +
+			'width: 50%;' +
 		'}' +
 
 		this.generateSubID("waypointtable", "#") +
 		'{' +
-		'    width: 100%;' +
+			'width: 100%;' +
 		'}' +
 
-        this.generateSubID("thead", "#") +
-        '{' +
-        '    margin: 0;' +
-        '    color: white;' +
-        '    background: #008C4F;' +
-        '    border: 1px solid #CACACA;' +
-        '    position: relative;' +
-        '    text-align: center;' +
-        '    margin-bottom: 10px;' +
-        '}' +
+		this.generateSubID("thead", "#") +
+		'{' +
+			'margin: 0;' +
+			'color: white;' +
+			'background: #008C4F;' +
+			'border: 1px solid #CACACA;' +
+			'position: relative;' +
+			'text-align: center;' +
+			'margin-bottom: 10px;' +
+		'}' +
 
 		this.generateSubID("waypointname", "#") +
 		'{' +
-		'    width: 15%;' +
+			'width: 15%;' +
 		'}'+
 
 		this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
 		'{' +
-		'    width: 35%;' +
+			'width: 35%;' +
 		'}'+
 
 		this.generateSubID("id", "#") + "," + this.generateSubID("add", "#") + "," + this.generateSubID("edit", "#") +
 		'{' +
-		'    width: 5%;' +
+			'width: 5%;' +
+		'}' +
+
+		this.generateSubID("waypointeditor", "#") +
+		'{' +
+			'float: left;' +
+			'width: 50%;' +
 		'}'
 }
 

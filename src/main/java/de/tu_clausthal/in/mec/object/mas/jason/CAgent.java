@@ -197,7 +197,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_architecture = new CJasonArchitecture();
         m_architecture.insertAgArch( m_architecture );
 
-        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this );
+        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture );
         m_agent.setTS( new TransitionSystem( m_agent, null, null, m_architecture ) );
 
         // --- create beliefbase structure with tree structure

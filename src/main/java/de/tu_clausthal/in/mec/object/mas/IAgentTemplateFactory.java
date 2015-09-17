@@ -35,9 +35,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @tparam T agent template type
  */
-public abstract class IAgentTemplateFactory<T>
+public abstract class IAgentTemplateFactory<T, L>
 {
-
     /**
      * thread-safe storage
      */
@@ -51,7 +50,7 @@ public abstract class IAgentTemplateFactory<T>
      * @param p_task optional tasks which runs over the agenttemplate
      * @return agent
      */
-    public final <N,L> N instantiate( final File p_source, final ITask<T> p_task, final L p_any )
+    public final <N> N instantiate( final File p_source, final ITask<T> p_task, final L p_any )
     {
         final T l_agenttemplate = m_storage.getOrDefault( p_source, this.create( p_source ) );
         m_storage.putIfAbsent( p_source, l_agenttemplate );
@@ -69,7 +68,7 @@ public abstract class IAgentTemplateFactory<T>
      * @param p_agent agent object, which should be cloned
      * @return cloned agent
      */
-    protected abstract <N,L> N clone( final T p_agent, final L p_any );
+    protected abstract <N> N clone( final T p_agent, final L p_any );
 
 
     /**

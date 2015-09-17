@@ -35,22 +35,24 @@ import jason.asSyntax.PlanLibrary;
 import jason.bb.DefaultBeliefBase;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
 /**
  * Jason agent template factory
  */
-public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent>
+public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, AgArch>
 {
+    /**
+     * internal agent architecture which is used on template instantiation
+     **/
     private final AgArch m_architecture = new AgArch();
 
 
     @Override
-    protected <Agent, L> Agent clone( final Agent p_agent, final L p_any )
+    protected Agent clone( final Agent p_agent, final AgArch p_any )
     {
-        return null;
+        return p_agent.clone( p_any );
     }
 
     @Override

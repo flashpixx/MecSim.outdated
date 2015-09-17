@@ -1,5 +1,8 @@
 .graphEditor_svg {
   background-color: #FFF;
+  border: 1px solid #008C4F; /** custom **/
+  float: right; /** custom **/
+  margin-right: 10px; /** custom **/
   cursor: default;
   -webkit-user-select: none;
   -moz-user-select: none;

@@ -335,7 +335,7 @@ GraphEditor.prototype.mousePathUp = function(d){
 GraphEditor.prototype.keydown = function(){
 
     //general
-    d3.event.preventDefault();
+    //d3.event.preventDefault(); /** custom **/
     if(this._lastKeyDown !== -1) return;
     this._lastKeyDown = d3.event.keyCode;
 

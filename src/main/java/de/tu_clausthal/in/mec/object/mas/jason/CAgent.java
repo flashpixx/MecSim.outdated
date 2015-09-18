@@ -45,10 +45,8 @@ import jason.architecture.MindInspectorWeb;
 import jason.asSemantics.ActionExec;
 import jason.asSemantics.Agent;
 import jason.asSemantics.Message;
-import jason.asSemantics.TransitionSystem;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
-import jason.bb.BeliefBase;
 
 import java.awt.*;
 import java.io.File;
@@ -143,7 +141,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
      * @param p_asl agent ASL file
      * @throws JasonException throws an Jason exception
      */
-    public CAgent( final String p_asl ) throws JasonException
+    public CAgent( final String p_asl ) throws Exception
     {
         this( null, p_asl, null );
     }
@@ -156,7 +154,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
      * @param p_asl agent ASL file
      * @throws JasonException throws an Jason exception
      */
-    public CAgent( final CPath p_namepath, final String p_asl ) throws JasonException
+    public CAgent( final CPath p_namepath, final String p_asl ) throws Exception
     {
         this( p_namepath, p_asl, null );
     }
@@ -169,7 +167,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
      * @param p_bind object that should be bind with the agent
      * @throws JasonException throws an Jason exception
      */
-    public CAgent( final String p_asl, final T p_bind ) throws JasonException
+    public CAgent( final String p_asl, final T p_bind ) throws Exception
     {
         this( null, p_asl, p_bind );
     }
@@ -185,7 +183,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
      * @note a default behaviour is defined: the name of the agent is the Java object information (class name and object hash)
      * and all properties and methods will be bind to the agent with the source "self"
      */
-    public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws JasonException
+    public CAgent( final CPath p_namepath, final String p_asl, final T p_bind ) throws Exception
     {
         m_namepath = ( p_namepath == null ) || ( p_namepath.isEmpty() ) ? new CPath( this.getClass().getSimpleName() + "@" + this.hashCode() ).setSeparator(
                 c_agentnameseparator
@@ -196,13 +194,13 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         // Jason code design error: the agent name is stored within the AgArch, but it can read if an AgArch has got an AgArch
         // successor (AgArchs are a linked list), so we insert a cyclic reference to the AgArch itself,
         // beware that beliefbase must exists before agent ctor is called !
-        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
-
         m_architecture = new CJasonArchitecture();
         m_architecture.insertAgArch( m_architecture );
 
-        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture );
-        m_agent.setTS( new TransitionSystem( m_agent, null, null, m_architecture ) );
+        m_participant = new CParticipant( this );
+        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
+        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture, m_beliefbaserootmask );
+
 
         // --- create beliefbase structure with tree structure
         m_beliefbaserootmask.add(
@@ -223,8 +221,6 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
             m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );
         }
 
-        m_agent.setBB( (BeliefBase) m_beliefbaserootmask );
-        m_participant = new CParticipant( this );
 
         MindInspectorWeb.get().registerAg( m_agent );
     }

@@ -48,9 +48,10 @@ public abstract class IAgentTemplateFactory<T, L>
      *
      * @param p_source source of the agent
      * @param p_task optional tasks which runs over the agenttemplate
+     * @param p_any any object definition
      * @return agent
      */
-    public final <N> N instantiate( final File p_source, final ITask<T> p_task, final L p_any )
+    public final <N> N instantiate( final File p_source, final ITask<T> p_task, final L... p_any ) throws Exception
     {
         final T l_agenttemplate = m_storage.getOrDefault( p_source, this.create( p_source ) );
         m_storage.putIfAbsent( p_source, l_agenttemplate );
@@ -66,9 +67,10 @@ public abstract class IAgentTemplateFactory<T, L>
      * clones the agent from template
      *
      * @param p_agent agent object, which should be cloned
+     * @param p_any any object definition
      * @return cloned agent
      */
-    protected abstract <N> N clone( final T p_agent, final L p_any );
+    protected abstract <N> N clone( final T p_agent, final L... p_any ) throws Exception;
 
 
     /**
@@ -77,7 +79,7 @@ public abstract class IAgentTemplateFactory<T, L>
      * @param p_source source file
      * @return agent template
      */
-    protected abstract T create( final File p_source );
+    protected abstract T create( final File p_source ) throws Exception;
 
 
     /**

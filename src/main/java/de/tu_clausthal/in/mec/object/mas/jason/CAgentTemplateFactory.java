@@ -30,9 +30,9 @@ import de.tu_clausthal.in.mec.object.mas.IAgentTemplateFactory;
 import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
+import jason.asSemantics.GoalListenerForMetaEvents;
 import jason.asSemantics.TransitionSystem;
-import jason.asSyntax.PlanLibrary;
-import jason.bb.DefaultBeliefBase;
+import jason.bb.BeliefBase;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 /**
  * Jason agent template factory
  */
-public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, AgArch>
+public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
 {
     /**
      * internal agent architecture which is used on template instantiation
@@ -50,44 +50,55 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, AgArch>
 
 
     @Override
-    protected Agent clone( final Agent p_agent, final AgArch p_any )
+    @SuppressWarnings( "unchecked" )
+    protected Agent clone( final Agent p_agent, final Object... p_any ) throws Exception
     {
-        return p_agent.clone( p_any );
+        return new CAgent( p_agent, (AgArch) p_any[0], (BeliefBase) p_any[1] );
     }
 
 
     @Override
-    protected final Agent create( final File p_source )
+    protected final Agent create( final File p_source ) throws JasonException
     {
-        return new CAgentTemplate( p_source, m_architecture );
+        // build the agent with Jason default behaviour
+        return Agent.create( m_architecture, Agent.class.getCanonicalName(), null, p_source.toString(), null );
     }
 
 
     /**
-     * template class to initialize the agent manually
-     * to handle Jason stdlib internal action includes
+     * template class to initialize the agent manually on cloning
+     * process to handle Jason stdlib internal action includes
      *
-     * @note we do the initialization process manually, because some internal actions are removed from the default
-     * behaviour
+     * @note we do the initialization process manually, because some internal
+     * actions are removed from the default behaviour
      * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
      */
-    public static class CAgentTemplate extends Agent
+    public static class CAgent extends Agent
     {
 
         /**
          * ctor
          *
-         * @param p_source agent source
+         * @note adaptet from Agent.clone
+         * @param p_template template agent
          * @param p_architecture architecture
          */
-        public CAgentTemplate( final File p_source, final AgArch p_architecture )
+        public CAgent( final Agent p_template, final AgArch p_architecture, final BeliefBase p_beliefbase )
         {
             // --- initialize the agent, that is used within the simulation context ---
+            // Jason design bug, the setLogger method need an agent architecture see
+            // http://sourceforge.net/p/jason/svn/1834/tree//trunk/src/jason/asSemantics/Agent.java#l357 and not the logger itself
+            this.setLogger( p_architecture );
+            this.setASLSrc( p_template.getASLSrc() );
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setBB( new DefaultBeliefBase() );
-            this.setPL( new PlanLibrary() );
+            this.setBB( p_beliefbase );
+            this.setPL( p_template.getPL().clone() );
             this.initDefaultFunctions();
 
+            if ( p_template.getPL().hasMetaEventPlans() )
+                this.getTS().addGoalListener( new GoalListenerForMetaEvents( this.getTS() ) );
+
+            // --- internal data structure are private, so set with reflection ---
             try
             {
                 CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
@@ -95,9 +106,6 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, AgArch>
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, IEnvironment.INTERNALACTION );
-
-                // read ASL file
-                this.load( p_source.toString() );
             }
             catch ( final JasonException l_exception )
             {
@@ -107,6 +115,9 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, AgArch>
             {
                 CLogger.error( l_throwable );
             }
+
+            // --- initialize ---
+            this.initAg();
         }
 
     }

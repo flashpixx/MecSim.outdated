@@ -35,7 +35,7 @@ import jason.asSemantics.TransitionSystem;
 import jason.bb.BeliefBase;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.lang.invoke.MethodHandle;
 
 
 /**
@@ -53,6 +53,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
     @SuppressWarnings( "unchecked" )
     protected Agent clone( final Agent p_agent, final Object... p_any ) throws Exception
     {
+        // build a new agent defined on the simulation behaviour
         return new CAgent( p_agent, (AgArch) p_any[0], (BeliefBase) p_any[1] );
     }
 
@@ -75,11 +76,28 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
      */
     public static class CAgent extends Agent
     {
+        static
+        {
+            try
+            {
+                c_fixfunctionmethod = CReflection.getClassMethod( CAgent.class, "fixAgInIAandFunctions" ).getHandle();
+            }
+            catch ( final IllegalAccessException l_exception )
+            {
+                CLogger.error( l_exception );
+            }
+        }
+
+        private static MethodHandle c_initializegoalsfieldsetter = CReflection.getClassField( CAgent.class, "initialGoals" ).getSetter();
+        private static MethodHandle c_initialzebelieffieldsetter = CReflection.getClassField( CAgent.class, "initialBels" ).getSetter();
+        private static MethodHandle c_internalactionfieldsetter = CReflection.getClassField( CAgent.class, "internalActions" ).getSetter();
+        private static MethodHandle c_fixfunctionmethod;
+
 
         /**
          * ctor
          *
-         * @note adaptet from Agent.clone
+         * @note adapted from Agent.clone
          * @param p_template template agent
          * @param p_architecture architecture
          */
@@ -89,23 +107,28 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             // Jason design bug, the setLogger method need an agent architecture see
             // http://sourceforge.net/p/jason/svn/1834/tree//trunk/src/jason/asSemantics/Agent.java#l357 and not the logger itself
             this.setLogger( p_architecture );
-            this.setASLSrc( p_template.getASLSrc() );
-            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setBB( p_beliefbase );
-            this.setPL( p_template.getPL().clone() );
-            this.initDefaultFunctions();
-
-            if ( p_template.getPL().hasMetaEventPlans() )
-                this.getTS().addGoalListener( new GoalListenerForMetaEvents( this.getTS() ) );
 
             // --- internal data structure are private, so set with reflection ---
             try
             {
-                CReflection.getClassField( this.getClass(), "initialGoals" ).getSetter().invoke( this, new ArrayList<>() );
-                CReflection.getClassField( this.getClass(), "initialBels" ).getSetter().invoke( this, new ArrayList<>() );
+                this.setBB( p_beliefbase );
+                this.setPL( p_template.getPL().clone() );
+
+                //c_initializegoalsfieldsetter.invoke( this, new ArrayList<>() );
+                //c_initialzebelieffieldsetter.invoke( this, new ArrayList<>() );
+
+                // on clone we need to call fixAgInIAandFunctions with private access
+                c_fixfunctionmethod.invoke( this, this );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
-                CReflection.getClassField( this.getClass(), "internalActions" ).getSetter().invoke( this, IEnvironment.INTERNALACTION );
+                c_internalactionfieldsetter.invoke( this, IEnvironment.INTERNALACTION );
+
+                this.setASLSrc( p_template.getASLSrc() );
+                this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
+                this.initDefaultFunctions();
+
+                if ( this.getPL().hasMetaEventPlans() )
+                    this.getTS().addGoalListener( new GoalListenerForMetaEvents( this.getTS() ) );
             }
             catch ( final JasonException l_exception )
             {

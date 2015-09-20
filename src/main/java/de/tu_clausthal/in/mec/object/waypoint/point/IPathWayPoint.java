@@ -154,20 +154,20 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      *
      * @param <T>
      */
-    public static class CMakrovChain<T> extends HashMap<T, Map<T, MutablePair<Double, Double>>>
+    public static class CMakrovChain<T> extends HashMap<T, Map<T, double[]>>
     {
         @Override
-        public Map<T, MutablePair<Double, Double>> put( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
+        public Map<T, double[]> put( final T p_key, final Map<T, double[]> p_value )
         {
-            final Map<T, MutablePair<Double, Double>> l_result = super.put( p_key, p_value );
+            final Map<T, double[]> l_result = super.put( p_key, p_value );
             this.updateRelativeWeighting();
             return l_result;
         }
 
         @Override
-        public Map<T, MutablePair<Double, Double>> remove( final Object p_key )
+        public Map<T, double[]> remove( final Object p_key )
         {
-            final Map<T, MutablePair<Double, Double>> l_result = super.remove(p_key);
+            final Map<T, double[]> l_result = super.remove(p_key);
             this.removeNode( p_key );
             this.updateRelativeWeighting();
             return l_result;
@@ -189,7 +189,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         public final void addNode( final T p_node )
         {
-            this.put( p_node, new HashMap<T, MutablePair<Double, Double>>() );
+            this.put( p_node, new HashMap<T, double[]>() );
             this.updateRelativeWeighting();
         }
 
@@ -208,7 +208,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             if ( !this.containsKey( p_end ) )
                 this.addNode( p_end );
 
-            this.get( p_start ).put(p_end, new MutablePair<>(p_value, p_value));
+            this.get( p_start ).put(p_end, new double[]{ p_value, p_value });
             this.updateRelativeWeighting();
         }
 
@@ -220,9 +220,9 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         public final void removeNode( final Object p_node )
         {
-            for ( final Map<T, MutablePair<Double, Double>> l_in : this.values() )
-                if ( l_in.containsKey( p_node ) )
-                    l_in.remove( p_node );
+            for ( final Map<T, double[]> l_edge : this.values() )
+                if ( l_edge.containsKey( p_node ) )
+                    l_edge.remove( p_node );
 
             this.updateRelativeWeighting();
         }
@@ -246,19 +246,19 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         private void updateRelativeWeighting()
         {
-            for ( final Map<T, MutablePair<Double, Double>> l_edge : this.values() )
-            {
-                //calculate the new sum
-                double l_sum = 0.0;
-                for ( final MutablePair l_pair : l_edge.values() )
-                    l_sum += (double) l_pair.left;
 
-                //update relative weighting
-                for ( final MutablePair l_pair : l_edge.values() )
-                    l_pair.right = (double) l_pair.left / l_sum;
+            for ( final Map<T, double[]> l_edge : this.values() )
+            {
+                //calculate sum
+                double l_sum = 0.0;
+                for ( final double[] l_weighting : l_edge.values() )
+                        l_sum += l_weighting[0];
+
+                //calculate relativ weighting
+                for ( final double[] l_weighting : l_edge.values() )
+                        l_weighting[1] = (double) l_weighting[0] / l_sum;
             }
         }
-
     }
 
 }

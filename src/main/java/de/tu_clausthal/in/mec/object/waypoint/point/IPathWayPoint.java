@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.waypoint.factory.IFactory;
 import de.tu_clausthal.in.mec.object.waypoint.generator.IGenerator;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -154,20 +153,20 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      *
      * @param <T>
      */
-    public static class CMakrovChain<T> extends HashMap<T, Map<T, double[]>>
+    public static class CMakrovChain<T> extends HashMap<T, HashMap<T, double[]>>
     {
         @Override
-        public Map<T, double[]> put( final T p_key, final Map<T, double[]> p_value )
+        public HashMap<T, double[]> put( final T p_key, final HashMap<T, double[]> p_value )
         {
-            final Map<T, double[]> l_result = super.put( p_key, p_value );
+            final HashMap<T, double[]> l_result = super.put( p_key, p_value );
             this.updateRelativeWeighting();
             return l_result;
         }
 
         @Override
-        public Map<T, double[]> remove( final Object p_key )
+        public HashMap<T, double[]> remove( final Object p_key )
         {
-            final Map<T, double[]> l_result = super.remove(p_key);
+            final HashMap<T, double[]> l_result = super.remove(p_key);
             this.removeNode( p_key );
             this.updateRelativeWeighting();
             return l_result;

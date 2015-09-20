@@ -211,7 +211,13 @@ WaypointConnection.prototype.refresh = function()
 **/
 WaypointConnection.prototype.edit = function(p_event)
 {
-	console.log(p_event.target.value)
+	MecSim.ajax({
+		url : "cwaypointenvironment/getmakrovchain",
+		data : {"waypoint" : p_event.target.value},
+		success : function(po_data){
+			console.log(po_data);
+		}
+	});
 }
 
 

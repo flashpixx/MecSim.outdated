@@ -276,7 +276,7 @@ public class CWaypointEnvironment
      */
     private final Map<String, Map<String, String>> web_static_listpathwaypoints()
     {
-        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped("Car WayPoints");
+        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
         Map<String, Map<String, String>> result = new HashMap<>();
 
         for(IWayPoint l_waypoint : l_waypointLayer){
@@ -297,6 +297,20 @@ public class CWaypointEnvironment
         }
 
         return result;
+    }
+
+    /**
+     * method to get the makrov chain
+     * @return
+     */
+    private final String web_static_getmakrovchain(final Map<String, Object> p_data)
+    {
+        for( IWayPoint l_waypoint : CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ) )
+            if( l_waypoint.toString().equals( p_data.get("waypoint") ) )
+                if( l_waypoint instanceof IPathWayPoint )
+                    return "found";
+
+        return "not found";
     }
 
     /**

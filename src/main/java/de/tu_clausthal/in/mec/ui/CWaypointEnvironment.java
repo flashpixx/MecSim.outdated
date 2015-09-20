@@ -303,14 +303,14 @@ public class CWaypointEnvironment
      * method to get the makrov chain
      * @return
      */
-    private final String web_static_getmakrovchain(final Map<String, Object> p_data)
+    private final IPathWayPoint.CMakrovChain web_static_getmakrovchain(final Map<String, Object> p_data)
     {
         for( IWayPoint l_waypoint : CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ) )
             if( l_waypoint.toString().equals( p_data.get("waypoint") ) )
                 if( l_waypoint instanceof IPathWayPoint )
-                    return "found";
+                    return ((IPathWayPoint) l_waypoint).getMakrovChain();
 
-        return "not found";
+        return null;
     }
 
     /**

@@ -194,7 +194,7 @@ WaypointConnection.prototype.refresh = function()
 				jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Add</button>").click(self.add).appendTo(l_data);
 
 				if(po_info.type === "path"){
-					jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Edit</button>").click(self.edit).appendTo(l_data);
+					jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Edit</button>").click(self.edit.bind(self)).appendTo(l_data);
 				}else{
 					jQuery("<td></td>").appendTo(l_data);
 				}
@@ -211,11 +211,24 @@ WaypointConnection.prototype.refresh = function()
 **/
 WaypointConnection.prototype.edit = function(p_event)
 {
+	var self = this;
+
 	MecSim.ajax({
 		url : "cwaypointenvironment/getmakrovchain",
 		data : {"waypoint" : p_event.target.value},
 		success : function(po_data){
-			console.log(po_data);
+
+			//build nodes array (maybe on java side)
+			var i = 0;
+			var nodes = [];
+			var links = [];
+
+			jQuery.each(po_data, function(p_node){
+				nodes.push({id : i, reflexive : false, waypointname : p_node});
+				i++
+			});
+
+			self.mo_graphEditor.reload({nodes : nodes, links : links, lastNodeID : --i})
 		}
 	});
 }

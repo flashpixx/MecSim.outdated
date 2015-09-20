@@ -78,8 +78,8 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     public IPathWayPoint( final GeoPosition p_position, final N p_generator, final P p_factory, final Color p_color, final String p_name )
     {
         super( p_position, p_generator, p_factory, p_color, p_name );
-        m_makrovChain.addNode( this );
-        m_inspect.put( CCommon.getResourceString( IRandomWayPoint.class, "radius" ), m_makrovChain );
+        m_makrovChain.addNode(this);
+        m_inspect.put(CCommon.getResourceString(IRandomWayPoint.class, "radius"), m_makrovChain);
     }
 
     /**
@@ -156,26 +156,30 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     public static class CMakrovChain<T> extends HashMap<T, Map<T, MutablePair<Double, Double>>>
     {
-        /**
-         * add edge to makrov chain
-         *
-         * @param p_start
-         * @param p_end
-         * @param p_value
-         */
-        public final void addEdge( final T p_start, final T p_end, final double p_value )
+        @Override
+        public Map<T, MutablePair<Double, Double>> put( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
         {
-            if ( p_value < 0 )
-                return;
-
-            //create node if does not exist
-            if ( !this.containsKey( p_start ) )
-                this.addNode( p_start );
-            if ( !this.containsKey( p_end ) )
-                this.addNode( p_end );
-
-            this.get( p_start ).put( p_end, new MutablePair<>( p_value, p_value ) );
+            final Map<T, MutablePair<Double, Double>> l_result = super.put( p_key, p_value );
             this.updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public Map<T, MutablePair<Double, Double>> remove( final Object p_key )
+        {
+            final Map<T, MutablePair<Double, Double>> l_result = super.remove(p_key);
+            this.removeNode( p_key );
+            this.updateRelativeWeighting();
+            return l_result;
+        }
+
+        @Override
+        public boolean remove( final Object p_key, final Object p_value )
+        {
+            final boolean l_result = super.remove( p_key, p_value );
+            this.removeNode( p_key );
+            this.updateRelativeWeighting();
+            return l_result;
         }
 
         /**
@@ -189,43 +193,38 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             this.updateRelativeWeighting();
         }
 
-        @Override
-        public Map<T, MutablePair<Double, Double>> put( final T p_key, final Map<T, MutablePair<Double, Double>> p_value )
+        /**
+         * add edge to makrov chain
+         *
+         * @param p_start
+         * @param p_end
+         * @param p_value
+         */
+        public final void addEdge( final T p_start, final T p_end, final double p_value )
         {
-            final Map<T, MutablePair<Double, Double>> l_result = super.put( p_key, p_value );
-            this.updateRelativeWeighting();
-            return l_result;
-        }
+            //create node if does not exist
+            if ( !this.containsKey( p_start ) )
+                this.addNode( p_start );
+            if ( !this.containsKey( p_end ) )
+                this.addNode( p_end );
 
-        @Override
-        public Map<T, MutablePair<Double, Double>> remove( final Object p_key )
-        {
-            final Map<T, MutablePair<Double, Double>> l_result = super.remove( p_key );
-            this.removeAllNodeEdge( p_key );
+            this.get( p_start ).put(p_end, new MutablePair<>(p_value, p_value));
             this.updateRelativeWeighting();
-            return l_result;
-        }
-
-        @Override
-        public boolean remove( final Object p_key, final Object p_value )
-        {
-            final boolean l_result = super.remove( p_key, p_value );
-            this.removeAllNodeEdge( p_key );
-            this.updateRelativeWeighting();
-            return l_result;
         }
 
         /**
-         * remove all edges of a node
+         * remove node from makrov chain
+         * also removes all connected edges
          *
          * @param p_node
          */
-        public final void removeAllNodeEdge( final Object p_node )
+        public final void removeNode( final Object p_node )
         {
             for ( final Map<T, MutablePair<Double, Double>> l_in : this.values() )
                 if ( l_in.containsKey( p_node ) )
                     l_in.remove( p_node );
 
+            this.updateRelativeWeighting();
         }
 
         /**
@@ -241,7 +240,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
 
             this.updateRelativeWeighting();
         }
-
 
         /**
          * update all relative weightings

@@ -36,6 +36,8 @@
 function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
 {
 	Widget.call(this, pc_id, pc_name, pa_panel, po_options );
+	this.mo_graphEditor = null;
+	this.mo_waypointList = {};
 }
 
 /** inheritance call **/
@@ -186,6 +188,10 @@ WaypointConnection.prototype.refresh = function()
 		url : "/cwaypointenvironment/listpathwaypoints",
 		success : function(po_data){
 			jQuery.each(po_data, function(pc_waypoint, po_info){
+				//create client list
+				self.mo_waypointList[pc_waypoint] = {id : po_info.id, name : po_info.name, type : po_info.type, lat : po_info.latitude, lon : po_info.longitudem};
+
+				//create table entry
 				var l_data = jQuery("<tr></tr>");
 				jQuery("<td></td>").text(po_info.id).appendTo(l_data);
 				jQuery("<td></td>").text(po_info.name).appendTo(l_data);

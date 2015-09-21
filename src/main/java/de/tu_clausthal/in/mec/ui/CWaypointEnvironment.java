@@ -306,11 +306,37 @@ public class CWaypointEnvironment
     private final IPathWayPoint.CMakrovChain web_static_getmakrovchain(final Map<String, Object> p_data)
     {
         for( IWayPoint l_waypoint : CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ) )
-            if( l_waypoint.toString().equals( p_data.get("waypoint") ) )
+            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
                 if( l_waypoint instanceof IPathWayPoint )
                     return ((IPathWayPoint) l_waypoint).getMakrovChain();
 
         return null;
+    }
+
+    /**
+     * method to add a node to a makrov chain
+     * @param p_data
+     */
+    private final void web_static_addnode(final Map<String, Object> p_data)
+    {
+        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
+
+        IPathWayPoint l_makrovWaypoint = null;
+        IWayPoint l_newWaypoint = null;
+
+        for( IWayPoint l_waypoint : l_waypointLayer ){
+            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) ){
+                if( l_waypoint instanceof IPathWayPoint )
+                    l_makrovWaypoint = (IPathWayPoint) l_waypoint;
+            }
+
+            if( l_waypoint.toString().equals( p_data.get("newwaypoint") ) ){
+                l_newWaypoint = l_waypoint;
+            }
+        }
+
+        if( l_makrovWaypoint != null && l_newWaypoint != null )
+            l_makrovWaypoint.getMakrovChain().addNode(l_newWaypoint);
     }
 
     /**

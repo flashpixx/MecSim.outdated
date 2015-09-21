@@ -36,6 +36,7 @@
 function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
 {
 	Widget.call(this, pc_id, pc_name, pa_panel, po_options );
+	this.mc_currentMakrovWaypoint = null;
 	this.mo_graphEditor = null;
 	this.mo_waypointList = {};
 }
@@ -183,6 +184,7 @@ WaypointConnection.prototype.refresh = function()
 	var self = this;
 
 	jQuery(self.generateSubID("tbody", "#")).empty();
+	self.mo_waypointList = {};
 
 	MecSim.ajax({
 		url : "/cwaypointenvironment/listpathwaypoints",
@@ -197,7 +199,7 @@ WaypointConnection.prototype.refresh = function()
 				jQuery("<td></td>").text(po_info.name).appendTo(l_data);
 				jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
 				jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
-				jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Add</button>").click(self.add).appendTo(l_data);
+				jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Add</button>").click(self.add.bind(self)).appendTo(l_data);
 
 				if(po_info.type === "path"){
 					jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Edit</button>").click(self.edit.bind(self)).appendTo(l_data);
@@ -208,7 +210,7 @@ WaypointConnection.prototype.refresh = function()
 				l_data.appendTo(jQuery(self.generateSubID("tbody", "#")));
 			});
 		}
-	})
+	});
 }
 
 
@@ -217,34 +219,55 @@ WaypointConnection.prototype.refresh = function()
 **/
 WaypointConnection.prototype.edit = function(p_event)
 {
+	this.mc_currentMakrovWaypoint = p_event.target.value;
+	this.reload(p_event.target.value);
+}
+
+
+/**
+ * method to add a waypoint to another makrov chain
+**/
+WaypointConnection.prototype.add = function(p_event)
+{
 	var self = this;
 
+	//add node to makrov chain and reload after success
 	MecSim.ajax({
-		url : "cwaypointenvironment/getmakrovchain",
-		data : {"waypoint" : p_event.target.value},
-		success : function(po_data){
-
-			//build nodes array (maybe on java side)
-			var l_lastID = 0;
-			var l_nodes = [];
-			var l_links = [];
-
-			jQuery.each(po_data, function(p_node){
-				var l_waypointID = self.mo_waypointList[p_node].id
-				nodes.push({id : l_waypointID, reflexive : false});
-				if(l_waypointID > l_lastID) l_lastID = ++l_waypointID;
-			});
-
-			self.mo_graphEditor.reload({nodes : l_nodes, links : l_links, lastNodeID : --l_lastID})
+		url : "cwaypointenvironment/addnode",
+		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "newwaypoint" : p_event.target.value},
+		success : function(){
+			self.reload(self.mc_currentMakrovWaypoint);
 		}
 	});
 }
 
 
 /**
- *method to add a waypoint to another makrov chain
+ * method to reload the graph editor
 **/
-WaypointConnection.prototype.add = function(p_event)
+WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 {
-	console.log(p_event.target.value)
+	var self = this;
+
+	MecSim.ajax({
+		url : "cwaypointenvironment/getmakrovchain",
+		data : {"makrovwaypoint" : p_makrovwaypoint},
+		success : function(po_data){
+
+			//build nodes array (maybe on java side)
+			var l_lastID = 0;
+			var l_newnodes = [];
+			var l_newlinks = [];
+
+			//build nodes array
+			jQuery.each(po_data, function(p_node){
+				var l_waypointID = self.mo_waypointList[p_node].id
+				l_newnodes.push({id : l_waypointID, reflexive : false});
+				if(l_waypointID > l_lastID) l_lastID = ++l_waypointID;
+			});
+
+			//actual graph reload
+			self.mo_graphEditor.reload({nodes : l_newnodes, links : l_newlinks, lastNodeID : --l_lastID})
+		}
+	});
 }

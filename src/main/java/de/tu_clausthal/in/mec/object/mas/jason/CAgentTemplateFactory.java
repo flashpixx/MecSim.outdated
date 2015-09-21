@@ -36,6 +36,7 @@ import jason.bb.BeliefBase;
 
 import java.io.File;
 import java.lang.invoke.MethodHandle;
+import java.util.ArrayList;
 
 
 /**
@@ -43,18 +44,15 @@ import java.lang.invoke.MethodHandle;
  */
 public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
 {
-    /**
-     * internal agent architecture which is used on template instantiation
-     **/
-    private final AgArch m_architecture = new AgArch();
-
 
     @Override
     @SuppressWarnings( "unchecked" )
     protected Agent clone( final Agent p_agent, final Object... p_any ) throws Exception
     {
         // build a new agent defined on the simulation behaviour
-        return new CAgent( p_agent, (AgArch) p_any[0], (BeliefBase) p_any[1] );
+        final Agent x = new CAgent( p_agent, (AgArch) p_any[0], (BeliefBase) p_any[1] );
+        System.out.println(x);
+        return x;
     }
 
 
@@ -62,7 +60,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
     protected final Agent create( final File p_source ) throws JasonException
     {
         // build the agent with Jason default behaviour
-        return Agent.create( m_architecture, Agent.class.getCanonicalName(), null, p_source.toString(), null );
+        return Agent.create( null, Agent.class.getCanonicalName(), null, p_source.toString(), null );
     }
 
 
@@ -74,24 +72,11 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
      * actions are removed from the default behaviour
      * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
      */
-    public static class CAgent extends Agent
+    private static class CAgent extends Agent
     {
-        static
-        {
-            try
-            {
-                c_fixfunctionmethod = CReflection.getClassMethod( CAgent.class, "fixAgInIAandFunctions" ).getHandle();
-            }
-            catch ( final IllegalAccessException l_exception )
-            {
-                CLogger.error( l_exception );
-            }
-        }
-
         private static MethodHandle c_initializegoalsfieldsetter = CReflection.getClassField( CAgent.class, "initialGoals" ).getSetter();
         private static MethodHandle c_initialzebelieffieldsetter = CReflection.getClassField( CAgent.class, "initialBels" ).getSetter();
         private static MethodHandle c_internalactionfieldsetter = CReflection.getClassField( CAgent.class, "internalActions" ).getSetter();
-        private static MethodHandle c_fixfunctionmethod;
 
 
         /**
@@ -112,23 +97,34 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             try
             {
                 this.setBB( p_beliefbase );
+                this.setASLSrc( p_template.getASLSrc() );
                 this.setPL( p_template.getPL().clone() );
 
                 //c_initializegoalsfieldsetter.invoke( this, new ArrayList<>() );
                 //c_initialzebelieffieldsetter.invoke( this, new ArrayList<>() );
 
                 // on clone we need to call fixAgInIAandFunctions with private access
-                c_fixfunctionmethod.invoke( this, this );
+                //c_fixfunctionmethod.invoke( this, this );
 
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 c_internalactionfieldsetter.invoke( this, IEnvironment.INTERNALACTION );
 
-                this.setASLSrc( p_template.getASLSrc() );
                 this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
                 this.initDefaultFunctions();
 
-                if ( this.getPL().hasMetaEventPlans() )
-                    this.getTS().addGoalListener( new GoalListenerForMetaEvents( this.getTS() ) );
+                //if ( this.getPL().hasMetaEventPlans() )
+                //    this.getTS().addGoalListener( new GoalListenerForMetaEvents( this.getTS() ) );
+
+                /*
+
+                zaddInitialBelsFromProjectInBB();
+                addInitialBelsInBB();
+                addInitialGoalsFromProjectInBB();
+                addInitialGoalsInTS();
+                fixAgInIAandFunctions(this);
+
+                 */
+
             }
             catch ( final JasonException l_exception )
             {
@@ -138,6 +134,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             {
                 CLogger.error( l_throwable );
             }
+
 
             // --- initialize ---
             this.initAg();

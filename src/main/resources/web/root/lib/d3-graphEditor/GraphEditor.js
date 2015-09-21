@@ -15,8 +15,8 @@ GraphEditor = function(element, options){
 
     //config
     this._radius        = this._options.radius       || 12;
-    this._mouseMode     = this._options.mouseMode    || true;
-    this._textMode      = this._options.textMode     || true;
+    this._mouseMode     = this._options.mouseMode    && true; /**custom**/
+    this._textMode      = this._options.textMode     && true; /**custom**/
     this._onAddNode     = this._options.onAddNode    || function(){};
     this._onAddLink     = this._options.onAddLink    || function(){};
     this._color         = d3.scale.category10();

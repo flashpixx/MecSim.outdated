@@ -149,28 +149,7 @@ WaypointConnection.prototype.afterDOMAdded = function()
 			self.refresh();
 
 			//initalize waypoint editor
-			var nodes = [
-				{id: 0, reflexive: false, additinalData:"foo"},
-				{id: 1, reflexive: true, additinalData:"bar" },
-				{id: 2, reflexive: false, additinalData:"lorem"}
-			];
-
-			var links = [
-				{source: nodes[0], target: nodes[1], left: false, right: true },
-				{source: nodes[1], target: nodes[2], left: false, right: true }
-			];
-
-			function onAddNode(node){
-				console.log("A node was added!");
-				console.log(node);
-			}
-
-			function onAddLink(link){
-				console.log("A link was added!");
-				console.log(link);
-			}
-
-			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : nodes, links : links, lastNodeID : 2});
+			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : [], links : [], lastNodeID : 0, mouseMode : false, textMode : true});
 		}
 	});
 }

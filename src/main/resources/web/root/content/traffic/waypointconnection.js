@@ -225,16 +225,17 @@ WaypointConnection.prototype.edit = function(p_event)
 		success : function(po_data){
 
 			//build nodes array (maybe on java side)
-			var i = 0;
-			var nodes = [];
-			var links = [];
+			var l_lastID = 0;
+			var l_nodes = [];
+			var l_links = [];
 
 			jQuery.each(po_data, function(p_node){
-				nodes.push({id : i, reflexive : false, waypointname : p_node});
-				i++
+				var l_waypointID = self.mo_waypointList[p_node].id
+				nodes.push({id : l_waypointID, reflexive : false});
+				if(l_waypointID > l_lastID) l_lastID = ++l_waypointID;
 			});
 
-			self.mo_graphEditor.reload({nodes : nodes, links : links, lastNodeID : --i})
+			self.mo_graphEditor.reload({nodes : l_nodes, links : l_links, lastNodeID : --l_lastID})
 		}
 	});
 }

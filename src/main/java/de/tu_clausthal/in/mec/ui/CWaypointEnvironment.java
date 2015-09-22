@@ -325,18 +325,44 @@ public class CWaypointEnvironment
         IWayPoint l_newWaypoint = null;
 
         for( IWayPoint l_waypoint : l_waypointLayer ){
-            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) ){
+            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
                 if( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;
-            }
 
-            if( l_waypoint.toString().equals( p_data.get("newwaypoint") ) ){
+            if( l_waypoint.toString().equals( p_data.get("newwaypoint") ) )
                 l_newWaypoint = l_waypoint;
-            }
         }
 
         if( l_makrovWaypoint != null && l_newWaypoint != null )
             l_makrovWaypoint.getMakrovChain().addNode(l_newWaypoint);
+    }
+
+    /**
+     * method to add an edge to a makrov chain
+     * @param p_data
+     */
+    private final void web_static_addedge(final Map<String, Object> p_data)
+    {
+        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
+
+        IPathWayPoint l_makrovWaypoint = null;
+        IWayPoint l_source = null;
+        IWayPoint l_target = null;
+
+        for( IWayPoint l_waypoint : l_waypointLayer ){
+            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
+                if( l_waypoint instanceof IPathWayPoint )
+                    l_makrovWaypoint = (IPathWayPoint) l_waypoint;
+
+            if( l_waypoint.toString().equals( p_data.get("source") ) )
+                l_source = l_waypoint;
+
+            if( l_waypoint.toString().equals( p_data.get("target") ) )
+                l_target = l_waypoint;
+        }
+
+        if( l_makrovWaypoint != null && l_source != null && l_target != null )
+            l_makrovWaypoint.getMakrovChain().addEdge(l_source, l_target, 1);
     }
 
     /**

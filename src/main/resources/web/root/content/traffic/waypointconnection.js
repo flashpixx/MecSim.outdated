@@ -149,7 +149,7 @@ WaypointConnection.prototype.afterDOMAdded = function()
 			self.refresh();
 
 			//initalize waypoint editor
-			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : [], links : [], lastNodeID : 0, mouseMode : false, textMode : true});
+			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : [], links : [], lastNodeID : 0, mouseMode : false, textMode : true, onAddLink : self.onAddEdge.bind(self)});
 		}
 	});
 }
@@ -233,20 +233,47 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 		data : {"makrovwaypoint" : p_makrovwaypoint},
 		success : function(po_data){
 
-			//build nodes array (maybe on java side)
 			var l_lastID = 0;
 			var l_newnodes = [];
 			var l_newlinks = [];
 
 			//build nodes array
-			jQuery.each(po_data, function(p_node){
-				var l_waypointID = self.mo_waypointList[p_node].id
-				l_newnodes.push({id : l_waypointID, reflexive : false});
+			jQuery.each(po_data, function(p_key, p_value){
+				var l_waypointID = self.mo_waypointList[p_key].id
+				l_newnodes.push({id : l_waypointID, reflexive : false, waypointname : p_key});
 				if(l_waypointID > l_lastID) l_lastID = ++l_waypointID;
+			});
+
+			//build link array
+			jQuery.each(po_data, function(p_key, p_value){
+				jQuery.each(p_value, function(p_key2, p_value2){
+
+					//find node object
+					var l_source, l_target;
+					jQuery.each(l_newnodes, function(l_index){
+						if( l_newnodes[l_index].waypointname === p_key ) l_source = l_newnodes[l_index]
+						if( l_newnodes[l_index].waypointname === p_key2 ) l_target = l_newnodes[l_index]
+					});
+
+					l_newlinks.push({source : l_source, target : l_target, left : false, right : true});
+				});
 			});
 
 			//actual graph reload
 			self.mo_graphEditor.reload({nodes : l_newnodes, links : l_newlinks, lastNodeID : --l_lastID})
 		}
+	});
+}
+
+
+/**
+ * method to add an edge to the makrov chain
+**/
+WaypointConnection.prototype.onAddEdge = function(p_link)
+{
+	var self = this;
+	MecSim.ajax({
+		url : "cwaypointenvironment/addedge",
+		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_link.source.waypointname, "target" : p_link.target.waypointname}
 	});
 }

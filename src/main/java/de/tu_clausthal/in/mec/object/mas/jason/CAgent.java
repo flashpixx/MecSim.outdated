@@ -341,7 +341,6 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     @Override
     public void performtemplate( final Agent p_agent )
     {
-        System.out.println( p_agent.getInitialBels() );
     }
 
 

@@ -70,37 +70,34 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
      */
     private static class CAgent extends Agent
     {
+        /**
+         * handle of the internal actions
+         **/
         private static MethodHandle c_internalactionfieldsetter = CReflection.getClassField( CAgent.class, "internalActions" ).getSetter();
 
 
         /**
          * ctor
          *
-         * @note adapted from Agent.clone
          * @param p_template template agent
-         * @param p_architecture architecture
+         * @param p_architecture individual architecture
+         * @param p_beliefbase individual agent beliefbase
+         * @note adapted from Agent.clone
          */
         public CAgent( final Agent p_template, final AgArch p_architecture, final BeliefBase p_beliefbase )
         {
             // --- initialize the agent, that is used within the simulation context ---
-            // Jason design bug, the setLogger method need an agent architecture see
-            // http://sourceforge.net/p/jason/svn/1834/tree//trunk/src/jason/asSemantics/Agent.java#l357 and not the logger itself
-
             this.setBB( p_beliefbase );
             this.setPL( p_template.getPL().clone() );
             this.setASLSrc( p_template.getASLSrc() );
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.initDefaultFunctions();
+
 
             // --- internal data structure are private, so set with reflection ---
             try
             {
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 c_internalactionfieldsetter.invoke( this, IEnvironment.INTERNALACTION );
-            }
-            catch ( final JasonException l_exception )
-            {
-                CLogger.error( l_exception );
             }
             catch ( final Throwable l_throwable )
             {

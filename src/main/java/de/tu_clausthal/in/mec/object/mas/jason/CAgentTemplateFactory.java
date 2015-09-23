@@ -35,7 +35,6 @@ import jason.bb.BeliefBase;
 
 import java.io.File;
 import java.lang.invoke.MethodHandle;
-import java.util.ArrayList;
 
 
 /**
@@ -71,8 +70,6 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
      */
     private static class CAgent extends Agent
     {
-        private static MethodHandle c_initializegoalsfieldsetter = CReflection.getClassField( CAgent.class, "initialGoals" ).getSetter();
-        private static MethodHandle c_initialzebelieffieldsetter = CReflection.getClassField( CAgent.class, "initialBels" ).getSetter();
         private static MethodHandle c_internalactionfieldsetter = CReflection.getClassField( CAgent.class, "internalActions" ).getSetter();
 
 
@@ -89,27 +86,17 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             // Jason design bug, the setLogger method need an agent architecture see
             // http://sourceforge.net/p/jason/svn/1834/tree//trunk/src/jason/asSemantics/Agent.java#l357 and not the logger itself
 
-            // --- internal data structure are private, so set with reflection ---
-            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.setBB( p_beliefbase );
             this.setPL( p_template.getPL().clone() );
+            this.setASLSrc( p_template.getASLSrc() );
+            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
             this.initDefaultFunctions();
 
-            this.setASLSrc( p_template.getASLSrc() );
-
+            // --- internal data structure are private, so set with reflection ---
             try
             {
-                c_initializegoalsfieldsetter.invoke( this, new ArrayList<>() );
-                c_initialzebelieffieldsetter.invoke( this, new ArrayList<>() );
-
-                // on clone we need to call fixAgInIAandFunctions with private access
-                //c_fixfunctionmethod.invoke( this, this );
-
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 c_internalactionfieldsetter.invoke( this, IEnvironment.INTERNALACTION );
-
-                //if ( this.getPL().hasMetaEventPlans() )
-                //    this.getTS().addGoalListener( new GoalListenerForMetaEvents( this.getTS() ) );
             }
             catch ( final JasonException l_exception )
             {

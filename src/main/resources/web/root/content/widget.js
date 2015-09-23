@@ -68,6 +68,7 @@ Widget.prototype.getGlobalCSS = function()
 {
     return this.generateSubID("widget", "#") +
            '{' +
+           '    -webkit-user-select: none;' +
            '    position: absolute;' +
            '    padding: 5px;' +
            '    margin: 5px;' +

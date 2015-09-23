@@ -10,6 +10,7 @@
     "jquery-steps" : "~1.1.0",
     "spectrum" : "~1.7.1",
     "jqwidgets" : "*",
-    "webui-popover" : "~1.1.6"
+    "webui-popover" : "~1.1.6",
+    "d3-graphEditor": "https://github.com/ChristophKuper/d3-graphEditor.git#e2f00a3f9e170ab8b3656ac24532f67e87927ec3"
   }
 }

@@ -122,8 +122,11 @@ WaypointConnection.prototype.getGlobalCSS = function()
 
 		this.generateSubID("waypointeditor", "#") +
 		'{' +
-			'float: left;' +
-			'width: 50%;' +
+			'float: right;' +
+			'margin-right: 10px;' +
+			'border: 1px solid #008C4F;' +
+			'width: 45%;' +
+			'height : 90%' +
 		'}'
 }
 
@@ -143,13 +146,13 @@ WaypointConnection.prototype.afterDOMAdded = function()
 		target : this,
 
 		finish : function() {
-			Widget.prototype.afterDOMAdded.call(self);
-
 			//initalize waypoint list
 			self.refresh();
 
 			//initalize waypoint editor
-			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : [], links : [], lastNodeID : 0, mouseMode : false, textMode : true, onAddLink : self.onAddEdge.bind(self)});
+			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : [], edges : [], lastNodeID : 0, mouseMode : false, onAddLink : self.onAddEdge.bind(self)});
+
+			Widget.prototype.afterDOMAdded.call(self);
 		}
 	});
 }
@@ -234,33 +237,33 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 		success : function(po_data){
 
 			var l_lastID = 0;
-			var l_newnodes = [];
-			var l_newlinks = [];
+			var l_newNodes = [];
+			var l_newEdges = [];
 
 			//build nodes array
 			jQuery.each(po_data, function(p_key, p_value){
 				var l_waypointID = self.mo_waypointList[p_key].id
-				l_newnodes.push({id : l_waypointID, reflexive : false, waypointname : p_key});
+				l_newNodes.push({id : l_waypointID, reflexive : false, waypointname : p_key});
 				if(l_waypointID > l_lastID) l_lastID = ++l_waypointID;
 			});
 
-			//build link array
+			//build edge array
 			jQuery.each(po_data, function(p_key, p_value){
 				jQuery.each(p_value, function(p_key2, p_value2){
 
 					//find node object
 					var l_source, l_target;
-					jQuery.each(l_newnodes, function(l_index){
-						if( l_newnodes[l_index].waypointname === p_key ) l_source = l_newnodes[l_index]
-						if( l_newnodes[l_index].waypointname === p_key2 ) l_target = l_newnodes[l_index]
+					jQuery.each(l_newNodes, function(l_index){
+						if( l_newNodes[l_index].waypointname === p_key ) l_source = l_newNodes[l_index]
+						if( l_newNodes[l_index].waypointname === p_key2 ) l_target = l_newNodes[l_index]
 					});
 
-					l_newlinks.push({source : l_source, target : l_target, left : false, right : true});
+					l_newEdges.push({source : l_source, target : l_target, left : false, right : true});
 				});
 			});
 
 			//actual graph reload
-			self.mo_graphEditor.reload({nodes : l_newnodes, links : l_newlinks, lastNodeID : --l_lastID})
+			self.mo_graphEditor.reload({nodes : l_newNodes, edges : l_newEdges, lastNodeID : --l_lastID})
 		}
 	});
 }
@@ -269,11 +272,11 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 /**
  * method to add an edge to the makrov chain
 **/
-WaypointConnection.prototype.onAddEdge = function(p_link)
+WaypointConnection.prototype.onAddEdge = function(p_edge)
 {
 	var self = this;
 	MecSim.ajax({
 		url : "cwaypointenvironment/addedge",
-		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_link.source.waypointname, "target" : p_link.target.waypointname}
+		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.source.waypointname, "target" : p_edge.target.waypointname}
 	});
 }

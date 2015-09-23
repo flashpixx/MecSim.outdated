@@ -57,6 +57,21 @@ public abstract class ISingleEvaluateLayer implements ILayer, IVoidSteppable
     }
 
     @Override
+    public void onSimulationStart()
+    {
+    }
+
+    @Override
+    public void onSimulationStop()
+    {
+    }
+
+    @Override
+    public void onSimulationReset()
+    {
+    }
+
+    @Override
     public final void release()
     {
 

@@ -67,6 +67,21 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
+    public void onSimulationStart()
+    {
+    }
+
+    @Override
+    public void onSimulationStop()
+    {
+    }
+
+    @Override
+    public void onSimulationReset()
+    {
+    }
+
+    @Override
     public final boolean isVisible()
     {
         return m_visible;
@@ -84,4 +99,8 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     @Override
     public abstract void step( final int p_currentstep, final ILayer p_layer );
 
+    @Override
+    public void release()
+    {
+    }
 }

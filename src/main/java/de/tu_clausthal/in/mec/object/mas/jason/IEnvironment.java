@@ -65,6 +65,7 @@ import java.util.logging.Level;
 @SuppressWarnings( "serial" )
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements ISerializable
 {
+
     /**
      * agent storage for fast instantiation
      */
@@ -189,6 +190,12 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             l_list.add( new File( l_file ).getName().replace( c_filesuffix, "" ) );
 
         return CCommon.convertCollectionToArray( String[].class, l_list );
+    }
+
+    @Override
+    public final void onSimulationReset()
+    {
+        AGENTTEMPLATEFACTORY.clear();
     }
 
     /**

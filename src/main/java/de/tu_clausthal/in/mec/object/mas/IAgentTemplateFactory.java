@@ -62,6 +62,14 @@ public abstract class IAgentTemplateFactory<T, L>
         return this.clone( l_agenttemplate, p_any );
     }
 
+    /**
+     * clears the current cache
+     */
+
+    public final void clear()
+    {
+        m_storage.clear();
+    }
 
     /**
      * clones the agent from template
@@ -72,7 +80,6 @@ public abstract class IAgentTemplateFactory<T, L>
      */
     protected abstract <N> N clone( final T p_agent, final L... p_any ) throws Exception;
 
-
     /**
      * builds the agent-template from source file
      *
@@ -80,7 +87,6 @@ public abstract class IAgentTemplateFactory<T, L>
      * @return agent template
      */
     protected abstract T create( final File p_source ) throws Exception;
-
 
     /**
      * task interface which to performtemplate action on the template

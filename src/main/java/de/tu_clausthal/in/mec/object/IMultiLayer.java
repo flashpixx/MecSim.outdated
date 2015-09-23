@@ -98,6 +98,21 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     }
 
     @Override
+    public void onSimulationStart()
+    {
+    }
+
+    @Override
+    public void onSimulationStop()
+    {
+    }
+
+    @Override
+    public void onSimulationReset()
+    {
+    }
+
+    @Override
     public final boolean isVisible()
     {
         if ( CSimulation.getInstance().getStorage().exists() )
@@ -269,5 +284,4 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
 
     @Override
     public abstract void step( final int p_currentstep, final ILayer p_layer );
-
 }

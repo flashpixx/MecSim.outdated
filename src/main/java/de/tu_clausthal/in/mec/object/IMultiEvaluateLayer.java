@@ -66,6 +66,21 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
     }
 
     @Override
+    public void onSimulationStart()
+    {
+    }
+
+    @Override
+    public void onSimulationStop()
+    {
+    }
+
+    @Override
+    public void onSimulationReset()
+    {
+    }
+
+    @Override
     public void release()
     {
         for ( final ISteppable l_item : m_data )
@@ -154,5 +169,4 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
     public void step( final int p_currentstep, final ILayer p_layer )
     {
     }
-
 }

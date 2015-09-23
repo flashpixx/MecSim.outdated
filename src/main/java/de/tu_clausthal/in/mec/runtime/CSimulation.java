@@ -255,6 +255,7 @@ public class CSimulation
         CLogger.info( CCommon.getResourceString( this, "startsteps", p_steps ) );
 
         // performtemplate thread and wait until thread is finished
+        this.callLayerStart();
         m_mainloop.resume( p_steps );
         m_mainloopthread.join();
 
@@ -273,6 +274,7 @@ public class CSimulation
 
         CLogger.info( CCommon.getResourceString( this, "start" ) );
 
+        this.callLayerStart();
         m_mainloop.resume();
         m_runs++;
     }
@@ -296,6 +298,7 @@ public class CSimulation
             throw new IllegalStateException( CCommon.getResourceString( this, "notrunning" ) );
 
         m_mainloop.pause();
+        this.callLayerStop();
         CLogger.info( CCommon.getResourceString( this, "stop" ) );
     }
 
@@ -335,6 +338,21 @@ public class CSimulation
     public final void setConfiguration()
     {
         CConfiguration.getInstance().get().set( "simulation/threadsleeptime", m_mainloop.getSleepTime() );
+    }
+
+    /**
+     * calls on simulation start on each layer
+     */
+    private void callLayerStart()
+    {
+        for ( final ILayer l_item : m_world.values() )
+            l_item.onSimulationStart();
+    }
+
+    private void callLayerStop()
+    {
+        for ( final ILayer l_item : m_world.values() )
+            l_item.onSimulationReset();
     }
 
     /**

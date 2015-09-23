@@ -52,21 +52,21 @@ public interface IAgent<T> extends Painter, IReceiver
      *
      * @return cycle number
      */
-    int getCycle();
+    public int getCycle();
 
     /**
      * returns the name of the agent
      *
      * @return name of the agent
      */
-    String getName();
+    public String getName();
 
     /**
      * returns the source / file of the agent
      *
      * @return source
      */
-    String getSource();
+    public String getSource();
 
     /**
      * register an object for running actions
@@ -87,7 +87,7 @@ public interface IAgent<T> extends Painter, IReceiver
     /**
      * release agent call *
      */
-    void release();
+    public void release();
 
     /**
      * unregister an action

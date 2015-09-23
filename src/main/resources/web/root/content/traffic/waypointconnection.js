@@ -150,7 +150,7 @@ WaypointConnection.prototype.afterDOMAdded = function()
 			self.refresh();
 
 			//initalize waypoint editor
-			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : [], edges : [], lastNodeID : 0, mouseMode : false, onAddLink : self.onAddEdge.bind(self)});
+			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : [], edges : [], lastNodeID : 0, mouseMode : false, onAddEdge : self.onAddEdge.bind(self)});
 
 			Widget.prototype.afterDOMAdded.call(self);
 		}

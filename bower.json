@@ -11,6 +11,6 @@
     "spectrum" : "~1.7.1",
     "jqwidgets" : "*",
     "webui-popover" : "~1.1.6",
-    "d3-graphEditor": "https://github.com/ChristophKuper/d3-graphEditor.git#e2f00a3f9e170ab8b3656ac24532f67e87927ec3"
+    "d3-graphEditor": "https://github.com/ChristophKuper/d3-graphEditor.git#e56b9f3a99932aa922f8862e539494eef9645cf3"
   }
 }

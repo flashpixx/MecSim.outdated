@@ -30,7 +30,6 @@ import de.tu_clausthal.in.mec.object.mas.IAgentTemplateFactory;
 import jason.JasonException;
 import jason.architecture.AgArch;
 import jason.asSemantics.Agent;
-import jason.asSemantics.GoalListenerForMetaEvents;
 import jason.asSemantics.TransitionSystem;
 import jason.bb.BeliefBase;
 
@@ -50,9 +49,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
     protected Agent clone( final Agent p_agent, final Object... p_any ) throws Exception
     {
         // build a new agent defined on the simulation behaviour
-        final Agent x = new CAgent( p_agent, (AgArch) p_any[0], (BeliefBase) p_any[1] );
-        System.out.println(x);
-        return x;
+        return new CAgent( p_agent, (AgArch) p_any[0], (BeliefBase) p_any[1] );
     }
 
 
@@ -60,7 +57,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
     protected final Agent create( final File p_source ) throws JasonException
     {
         // build the agent with Jason default behaviour
-        return Agent.create( null, Agent.class.getCanonicalName(), null, p_source.toString(), null );
+        return Agent.create( new AgArch(), Agent.class.getCanonicalName(), null, p_source.toString(), null );
     }
 
 
@@ -91,17 +88,19 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             // --- initialize the agent, that is used within the simulation context ---
             // Jason design bug, the setLogger method need an agent architecture see
             // http://sourceforge.net/p/jason/svn/1834/tree//trunk/src/jason/asSemantics/Agent.java#l357 and not the logger itself
-            this.setLogger( p_architecture );
 
             // --- internal data structure are private, so set with reflection ---
+            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
+            this.setBB( p_beliefbase );
+            this.setPL( p_template.getPL().clone() );
+            this.initDefaultFunctions();
+
+            this.setASLSrc( p_template.getASLSrc() );
+
             try
             {
-                this.setBB( p_beliefbase );
-                this.setASLSrc( p_template.getASLSrc() );
-                this.setPL( p_template.getPL().clone() );
-
-                //c_initializegoalsfieldsetter.invoke( this, new ArrayList<>() );
-                //c_initialzebelieffieldsetter.invoke( this, new ArrayList<>() );
+                c_initializegoalsfieldsetter.invoke( this, new ArrayList<>() );
+                c_initialzebelieffieldsetter.invoke( this, new ArrayList<>() );
 
                 // on clone we need to call fixAgInIAandFunctions with private access
                 //c_fixfunctionmethod.invoke( this, this );
@@ -109,22 +108,8 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 c_internalactionfieldsetter.invoke( this, IEnvironment.INTERNALACTION );
 
-                this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-                this.initDefaultFunctions();
-
                 //if ( this.getPL().hasMetaEventPlans() )
                 //    this.getTS().addGoalListener( new GoalListenerForMetaEvents( this.getTS() ) );
-
-                /*
-
-                zaddInitialBelsFromProjectInBB();
-                addInitialBelsInBB();
-                addInitialGoalsFromProjectInBB();
-                addInitialGoalsInTS();
-                fixAgInIAandFunctions(this);
-
-                 */
-
             }
             catch ( final JasonException l_exception )
             {

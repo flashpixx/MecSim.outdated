@@ -106,8 +106,9 @@ public class CPath implements Iterable<CPath>
      * creates a path object by splitting a string
      *
      * @param p_varargs list of string (first element is the seperator)
-     * @return
+     * @return path object
      */
+    @SuppressWarnings( "unchecked" )
     public static CPath createSplitPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )

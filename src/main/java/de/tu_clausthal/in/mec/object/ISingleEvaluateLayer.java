@@ -69,6 +69,7 @@ public abstract class ISingleEvaluateLayer implements ILayer, IVoidSteppable
     @Override
     public void onSimulationReset()
     {
+        this.release();
     }
 
     @Override

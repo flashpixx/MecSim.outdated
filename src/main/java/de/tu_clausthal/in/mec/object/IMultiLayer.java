@@ -110,6 +110,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     @Override
     public void onSimulationReset()
     {
+        this.release();
     }
 
     @Override

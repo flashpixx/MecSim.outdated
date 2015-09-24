@@ -235,6 +235,7 @@ public class CSimulation
         m_mainloop.pause();
         m_mainloop.reset();
         m_objectcounter.set( 0 );
+        this.callLayerReset();
 
         CBootstrap.onSimulationReset( this );
         CLogger.info( CCommon.getResourceString( this, "reset" ) );
@@ -349,7 +350,19 @@ public class CSimulation
             l_item.onSimulationStart();
     }
 
+    /**
+     * calls on simulation stop on each layer
+     */
     private void callLayerStop()
+    {
+        for ( final ILayer l_item : m_world.values() )
+            l_item.onSimulationStop();
+    }
+
+    /**
+     * call on simulation reset on each layer
+     */
+    private void callLayerReset()
     {
         for ( final ILayer l_item : m_world.values() )
             l_item.onSimulationReset();

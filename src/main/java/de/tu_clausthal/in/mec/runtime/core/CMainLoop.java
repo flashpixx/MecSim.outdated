@@ -138,19 +138,7 @@ public class CMainLoop implements Runnable
             throw new IllegalStateException( CCommon.getResourceString( this, "pause" ) );
 
         CLogger.info( CCommon.getResourceString( this, "reset" ) );
-
-        try
-        {
-            m_simulationcount = 0;
-            final Collection<Callable<Object>> l_tasks = new LinkedList<>();
-            for ( final ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-                l_tasks.add( new CLayerReset( l_layer ) );
-            m_pool.invokeAll( l_tasks );
-        }
-        catch ( final InterruptedException l_exception )
-        {
-        }
-
+        m_simulationcount = 0;
     }
 
     /**

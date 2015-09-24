@@ -78,6 +78,7 @@ public abstract class IMultiEvaluateLayer<T extends ISteppable> implements ILaye
     @Override
     public void onSimulationReset()
     {
+        this.release();
     }
 
     @Override

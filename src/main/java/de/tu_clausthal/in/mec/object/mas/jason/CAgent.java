@@ -345,7 +345,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         // beliefs and create beliefbase tree structure (split functor, build beliefbase and masks)
         for ( final Literal l_literal : p_agent.getBB() )
         {
-            //System.out.println( CPath.createSplitPath( c_agentbeliefseparator, l_literal.getFunctor() ));
+            System.out.println( CPath.createSplitPath( c_agentbeliefseparator, l_literal.getFunctor() ) );
         }
     }
 

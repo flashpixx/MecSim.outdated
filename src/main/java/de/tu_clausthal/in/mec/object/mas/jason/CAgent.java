@@ -35,7 +35,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CPropertyBind;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
@@ -347,13 +346,16 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         for ( final Literal l_literal : p_agent.getBB() )
         {
             final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, l_literal.getFunctor() );
-            if ( l_path.startsWith( c_beliefbaseroot ) )
-                l_path.remove( 0, c_beliefbaseroot.size() );
 
-            if ( l_path.size() > 1 )
-                System.out.println( "build bb" );
+            //System.out.println(l_path + "    " + c_beliefbaseroot + "    " + l_path.startsWith( c_beliefbaseroot ));
+            //if ( l_path.startsWith( c_beliefbaseroot ) )
+            //    l_path.remove( 0, c_beliefbaseroot.size() );
 
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), l_literal ) );
+
+            //if ( l_path.size() > 1 )
+            //    System.out.println( "build bb" );
+
+            //m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), l_literal ) );
         }
     }
 

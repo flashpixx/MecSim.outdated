@@ -195,7 +195,7 @@ public class CPath implements Iterable<CPath>
             return false;
 
         for ( int i = m_path.size() - p_path.size(); i < m_path.size(); ++i )
-            if ( m_path.get( i ) != p_path.m_path.get( i ) )
+            if ( !m_path.get( i ).equals( p_path.m_path.get( i ) ) )
                 return false;
 
         return true;
@@ -445,7 +445,7 @@ public class CPath implements Iterable<CPath>
             return false;
 
         for ( int i = 0; i < m_path.size(); ++i )
-            if ( m_path.get( i ) != p_path.m_path.get( i ) )
+            if ( !m_path.get( i ).equals( p_path.m_path.get( i ) ) )
                 return false;
 
         return true;

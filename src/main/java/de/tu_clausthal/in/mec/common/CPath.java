@@ -29,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -89,6 +90,17 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
+     * ctor
+     *
+     * @param p_collection string collection
+     */
+    public CPath( final Collection<String> p_collection )
+    {
+        if ( ( p_collection != null ) && ( !p_collection.isEmpty() ) )
+            m_path.addAll( p_collection );
+    }
+
+    /**
      * creates a path object from different items
      *
      * @param p_varargs list of strings
@@ -99,7 +111,7 @@ public class CPath implements Iterable<CPath>
         if ( ( p_varargs == null ) || ( p_varargs.length < 1 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
-        return new CPath( StringUtils.join( DEFAULTSEPERATOR, p_varargs ) );
+        return new CPath( p_varargs );
     }
 
     /**
@@ -108,7 +120,6 @@ public class CPath implements Iterable<CPath>
      * @param p_varargs list of string (first element is the seperator)
      * @return path object
      */
-    @SuppressWarnings( "unchecked" )
     public static CPath createSplitPath( final String... p_varargs )
     {
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
@@ -118,7 +129,7 @@ public class CPath implements Iterable<CPath>
         for ( int i = 1; i < p_varargs.length; ++i )
             l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[i], p_varargs[0] ) ) );
 
-        return createPath( (String[]) l_pathlist.toArray() );
+        return new CPath( l_pathlist );
     }
 
     /**

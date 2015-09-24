@@ -56,7 +56,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
     protected final Agent create( final File p_source ) throws JasonException
     {
         // build the agent with Jason default behaviour
-        return Agent.create( new AgArch(), Agent.class.getCanonicalName(), null, p_source.toString(), null );
+        return new CAgent( p_source );
     }
 
 
@@ -77,7 +77,19 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
 
 
         /**
-         * ctor
+         * ctor - creating
+         *
+         * @param p_source ASL source file
+         **/
+        public CAgent( final File p_source ) throws JasonException
+        {
+            this.setInternalAction();
+            this.initAg( p_source.toString() );
+        }
+
+
+        /**
+         * ctor - cloning
          *
          * @param p_template template agent
          * @param p_architecture individual architecture
@@ -91,8 +103,17 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             this.setPL( p_template.getPL().clone() );
             this.setASLSrc( p_template.getASLSrc() );
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
+            this.setInternalAction();
+
+            this.initAg();
+        }
 
 
+        /**
+         * set the internal action of the agent based on the simulation context
+         */
+        private void setInternalAction()
+        {
             // --- internal data structure are private, so set with reflection ---
             try
             {
@@ -103,10 +124,6 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             {
                 CLogger.error( l_throwable );
             }
-
-
-            // --- initialize ---
-            this.initAg();
         }
 
     }

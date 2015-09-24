@@ -341,6 +341,10 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     @Override
     public void performtemplate( final Agent p_agent )
     {
+        // the initial beliefs are stored within the beliefbase, so iterate over all
+        // beliefs and create beliefbase tree structure (split functor, build beliefbase and masks)
+        for ( final Literal l_literal : p_agent.getBB() )
+            System.out.println( l_literal );
     }
 
 

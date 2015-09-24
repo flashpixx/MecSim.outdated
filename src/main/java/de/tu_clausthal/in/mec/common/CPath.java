@@ -138,7 +138,7 @@ public class CPath implements Iterable<CPath>
      * @param p_path path
      * @return new path
      */
-    public CPath append( final CPath p_path )
+    public final CPath append( final CPath p_path )
     {
         final CPath l_path = new CPath( this );
         l_path.pushback( p_path );
@@ -151,11 +151,36 @@ public class CPath implements Iterable<CPath>
      * @param p_path string with path
      * @return new path
      */
-    public CPath append( final String p_path )
+    public final CPath append( final String p_path )
     {
         final CPath l_path = new CPath( this );
         l_path.pushback( p_path );
         return l_path;
+    }
+
+    /**
+     * removes an element
+     *
+     * @param p_index index position
+     * @return return the changed object
+     */
+    public final CPath remove( final int p_index )
+    {
+        m_path.remove( p_index );
+        return this;
+    }
+
+    /**
+     * removes all elements from start index until end index (exclusive)
+     *
+     * @param p_start start index
+     * @param p_end end index (exclusive)
+     * @return return the changed object
+     */
+    public final CPath remove( final int p_start, final int p_end )
+    {
+        m_path.subList( p_start, p_end ).clear();
+        return this;
     }
 
     /**
@@ -325,42 +350,50 @@ public class CPath implements Iterable<CPath>
      * adds a path at the end
      *
      * @param p_path path
+     * @return return the changed object
      */
-    public final void pushback( final CPath p_path )
+    public final CPath pushback( final CPath p_path )
     {
         m_path.addAll( p_path.m_path );
+        return this;
     }
 
     /**
      * adds a path at the end
      *
      * @param p_path string path
+     * @return return the changed object
      */
-    public final void pushback( final String p_path )
+    public final CPath pushback( final String p_path )
     {
         this.pushback( new CPath( p_path ) );
+        return this;
     }
 
     /**
      * adds a path at the front
      *
      * @param p_path string path
+     * @return return the changed object
      */
-    public final void pushfront( final String p_path )
+    public final CPath pushfront( final String p_path )
     {
         this.pushfront( new CPath( p_path ) );
+        return this;
     }
 
     /**
      * adds a path to the front of the path
      *
      * @param p_path path
+     * @return return the changed object
      */
-    public final void pushfront( final CPath p_path )
+    public final CPath pushfront( final CPath p_path )
     {
         final ArrayList<String> l_path = new ArrayList<>( p_path.m_path );
         l_path.addAll( m_path );
         m_path = l_path;
+        return this;
     }
 
     /**
@@ -381,10 +414,13 @@ public class CPath implements Iterable<CPath>
 
     /**
      * reverse path
+     *
+     * @return return the changed object
      */
-    public final void reverse()
+    public final CPath reverse()
     {
         Collections.reverse( m_path );
+        return this;
     }
 
     /**

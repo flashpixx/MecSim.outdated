@@ -441,10 +441,10 @@ public class CPath implements Iterable<CPath>
      */
     public final boolean startsWith( final CPath p_path )
     {
-        if ( m_path.size() < p_path.size() )
+        if ( p_path.size() > m_path.size() )
             return false;
 
-        for ( int i = 0; i < m_path.size(); ++i )
+        for ( int i = 0; i < p_path.m_path.size(); ++i )
             if ( !m_path.get( i ).equals( p_path.m_path.get( i ) ) )
                 return false;
 

@@ -91,26 +91,30 @@ public class CPath implements Iterable<CPath>
     /**
      * creates a path object from different items
      *
-     * @param p_varargs list of strings (first element is the separator)
+     * @param p_varargs list of strings
      * @return path object
      */
     public static CPath createPath( final String... p_varargs )
     {
-        if ( p_varargs.length < 2 )
+        if ( ( p_varargs == null ) || ( p_varargs.length < 1 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
-        return new CPath( StringUtils.join( p_varargs[0], p_varargs, 1 ) );
+        return new CPath( StringUtils.join( DEFAULTSEPERATOR, p_varargs ) );
     }
 
+    /**
+     * creates a path object by splitting a string
+     *
+     * @param p_varargs list of string (first element is the seperator)
+     * @return
+     */
     public static CPath createSplitPath( final String... p_varargs )
     {
-        if ( p_varargs.length < 3 )
+        if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
         final List<String> l_pathlist = new LinkedList<>();
-        l_pathlist.add( p_varargs[1] );
-
-        for ( int i = 2; i < p_varargs.length; ++i )
+        for ( int i = 1; i < p_varargs.length; ++i )
             l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[i], p_varargs[0] ) ) );
 
         return createPath( (String[]) l_pathlist.toArray() );

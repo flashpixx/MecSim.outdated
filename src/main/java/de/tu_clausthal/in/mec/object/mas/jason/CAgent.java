@@ -48,6 +48,7 @@ import jason.asSemantics.Agent;
 import jason.asSemantics.Message;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.io.File;
@@ -349,11 +350,9 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
             final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, l_literal.getFunctor() );
 
             if ( l_path.size() > 1 )
-                ;
-            System.out.println( "build bb" );
+                System.out.println( "build bb" );
 
             m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), l_literal ) );
-
         }
     }
 

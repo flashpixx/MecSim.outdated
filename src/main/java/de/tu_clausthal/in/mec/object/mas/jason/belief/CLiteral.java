@@ -65,11 +65,12 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implemen
     @Override
     public ILiteral<Literal> clone( final CPath p_prefix )
     {
-        final Literal l_literal = ASSyntax.createLiteral( p_prefix.append( m_functor.get() ).toString() );
+        // don't use setNegated, because setNegated returns the new literal object, so
+        // we generate a literal directly with the correct negation operator (first parameter
+        // is the "positiv" definition of negated, so we need to invert the data)
+        final Literal l_literal = ASSyntax.createLiteral( !m_literal.negated(), p_prefix.append( m_functor.get() ).toString() );
         l_literal.setAnnots( m_literal.getAnnots() );
         l_literal.setTerms( m_literal.getTerms() );
-        l_literal.setNegated( m_literal.negated() );
-
         return new CLiteral( l_literal );
     }
 

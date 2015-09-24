@@ -30,11 +30,12 @@ import de.tu_clausthal.in.mec.object.mas.IAgentTemplateFactory;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.IWorldAction;
-import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefMaskStorage;
+import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CPropertyBind;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
@@ -198,7 +199,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_architecture.insertAgArch( m_architecture );
 
         m_participant = new CParticipant( this );
-        m_beliefbaserootmask = new CBeliefBase( new CBeliefMaskStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
+        m_beliefbaserootmask = new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
         m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture, m_beliefbaserootmask );
 
 
@@ -342,10 +343,17 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     public void performtemplate( final Agent p_agent )
     {
         // the initial beliefs are stored within the beliefbase, so iterate over all
-        // beliefs and create beliefbase tree structure (split functor, build beliefbase and masks)
+        // beliefs and create beliefbase tree structure and add all beliefs
         for ( final Literal l_literal : p_agent.getBB() )
         {
-            System.out.println( CPath.createSplitPath( c_agentbeliefseparator, l_literal.getFunctor() ) );
+            final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, l_literal.getFunctor() );
+
+            if ( l_path.size() > 1 )
+                ;
+            System.out.println( "build bb" );
+
+            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), l_literal ) );
+
         }
     }
 

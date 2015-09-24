@@ -46,14 +46,19 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implemen
     public CLiteral( final Literal p_literal )
     {
         super( p_literal.getFunctor(), p_literal, p_literal.negated() );
+        this.addAdditionals( p_literal );
+    }
 
-        if ( p_literal.hasTerm() )
-            for ( final Term l_term : p_literal.getTerms() )
-                m_values.add( CCommon.convertGeneric( l_term ) );
-
-        if ( p_literal.hasAnnot() )
-            for ( final Term l_term : p_literal.getAnnots() )
-                m_annotations.add( CCommon.convertGeneric( l_term ) );
+    /**
+     * ctor to create a literal with a new functor
+     *
+     * @param p_functor
+     * @param p_literal
+     */
+    public CLiteral( final String p_functor, final Literal p_literal )
+    {
+        super( p_functor, p_literal, p_literal.negated() );
+        this.addAdditionals( p_literal );
     }
 
 
@@ -66,5 +71,22 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implemen
         l_literal.setNegated( m_literal.negated() );
 
         return new CLiteral( l_literal );
+    }
+
+
+    /**
+     * modifies the interal literal representations
+     *
+     * @param p_literal literal
+     */
+    private void addAdditionals( final Literal p_literal )
+    {
+        if ( p_literal.hasTerm() )
+            for ( final Term l_term : p_literal.getTerms() )
+                m_values.add( CCommon.convertGeneric( l_term ) );
+
+        if ( p_literal.hasAnnot() )
+            for ( final Term l_term : p_literal.getAnnots() )
+                m_annotations.add( CCommon.convertGeneric( l_term ) );
     }
 }

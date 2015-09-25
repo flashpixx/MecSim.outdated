@@ -188,6 +188,9 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         public final void addNode( final T p_node )
         {
+            if(this.containsKey( p_node ))
+                return;
+
             this.put( p_node, new HashMap<T, double[]>() );
             this.updateRelativeWeighting();
         }

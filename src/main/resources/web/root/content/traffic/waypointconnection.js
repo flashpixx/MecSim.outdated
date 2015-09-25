@@ -251,14 +251,32 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 			jQuery.each(po_data, function(p_key, p_value){
 				jQuery.each(p_value, function(p_key2, p_value2){
 
-					//find node object
-					var l_source, l_target;
-					jQuery.each(l_newNodes, function(l_index){
-						if( l_newNodes[l_index].waypointname === p_key ) l_source = l_newNodes[l_index]
-						if( l_newNodes[l_index].waypointname === p_key2 ) l_target = l_newNodes[l_index]
+					//check if edge already exist
+					var l_edge;
+					jQuery.each(l_newEdges, function(l_index){
+						if(l_newEdges[l_index].source.waypointname === p_key && l_newEdges[l_index].target.waypointname === p_key2){
+							l_newEdges[l_index].right = true;
+							l_edge = l_newEdges[l_index];
+							return;
+						}
+
+						if(l_newEdges[l_index].target.waypointname === p_key && l_newEdges[l_index].source.waypointname === p_key2){
+							l_newEdges[l_index].left = true;
+							l_edge = l_newEdges[l_index];
+							return;
+						}
 					});
 
-					l_newEdges.push({source : l_source, target : l_target, left : false, right : true});
+					if(!l_edge){
+						//find node object
+						var l_source, l_target;
+						jQuery.each(l_newNodes, function(l_index){
+							if( l_newNodes[l_index].waypointname === p_key ) l_source = l_newNodes[l_index]
+							if( l_newNodes[l_index].waypointname === p_key2 ) l_target = l_newNodes[l_index]
+						});
+
+						l_newEdges.push({source : l_source, target : l_target, left : false, right : true});
+					}
 				});
 			});
 

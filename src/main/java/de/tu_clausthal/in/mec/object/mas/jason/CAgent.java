@@ -48,6 +48,7 @@ import jason.asSemantics.Agent;
 import jason.asSemantics.Message;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
+import jason.asSyntax.Plan;
 
 import java.awt.*;
 import java.io.File;
@@ -354,6 +355,13 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
                 System.out.println( "build bb" );
 
             m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), l_literal ) );
+        }
+
+        // the plan belief must be collected, so iterate over all plans (plan context stores the logical condition of the plan)
+        for ( final Plan l_plan : p_agent.getPL() )
+        {
+            //System.out.println( l_plan.getContext() );
+            //System.out.println( "---------\n" + l_plan.getBody() + "\n---------" );
         }
     }
 

@@ -191,11 +191,11 @@ public class CPath implements Iterable<CPath>
      */
     public final boolean endsWith( final CPath p_path )
     {
-        if ( p_path.size() > m_path.size() )
+        if ( p_path.size() > this.size() )
             return false;
 
-        for ( int i = m_path.size() - p_path.size(); i < m_path.size(); ++i )
-            if ( !m_path.get( i ).equals( p_path.m_path.get( i ) ) )
+        for ( int i = 0; i < p_path.size(); ++i )
+            if ( !this.get( i - p_path.size() ).equals( p_path.get( i ) ) )
                 return false;
 
         return true;
@@ -204,12 +204,12 @@ public class CPath implements Iterable<CPath>
     /**
      * returns an part of the path
      *
-     * @param p_index index position
+     * @param p_index index position (negativ index is element from the end)
      * @return element
      */
     public final String get( final int p_index )
     {
-        return m_path.get( p_index );
+        return p_index < 0 ? m_path.get( m_path.size() + p_index ) : m_path.get( p_index );
     }
 
     /**
@@ -441,11 +441,11 @@ public class CPath implements Iterable<CPath>
      */
     public final boolean startsWith( final CPath p_path )
     {
-        if ( p_path.size() > m_path.size() )
+        if ( p_path.size() > this.size() )
             return false;
 
-        for ( int i = 0; i < p_path.m_path.size(); ++i )
-            if ( !m_path.get( i ).equals( p_path.m_path.get( i ) ) )
+        for ( int i = 0; i < p_path.size(); ++i )
+            if ( !this.get( i ).equals( p_path.get( i ) ) )
                 return false;
 
         return true;

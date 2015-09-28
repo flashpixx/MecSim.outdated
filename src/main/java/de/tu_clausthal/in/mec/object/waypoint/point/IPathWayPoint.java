@@ -158,6 +158,19 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         @Override
         public HashMap<T, double[]> put( final T p_key, final HashMap<T, double[]> p_value )
         {
+
+            for( HashMap.Entry<T, double[]> l_entry : p_value.entrySet() ){
+
+                //check if all edges are listed (otherwise list them)
+                if( !this.containsKey( l_entry.getKey() ) )
+                    super.put(l_entry.getKey(), new HashMap<T, double[]>());
+
+                //check if array is positive (otherwise make them positive)
+                for( int i=0; i<l_entry.getValue().length; i++ )
+                    if( l_entry.getValue()[i] < 0 )
+                        l_entry.getValue()[i] = Math.abs(l_entry.getValue()[i]);
+            }
+
             final HashMap<T, double[]> l_result = super.put( p_key, p_value );
             this.updateRelativeWeighting();
             return l_result;
@@ -190,7 +203,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             if( this.containsKey( p_node ) )
                 return;
 
-            this.put( p_node, new HashMap<T, double[]>() );
+            super.put(p_node, new HashMap<T, double[]>());
             this.updateRelativeWeighting();
         }
 
@@ -201,8 +214,11 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          * @param p_end
          * @param p_value
          */
-        public final void addEdge( final T p_start, final T p_end, final double p_value )
+        public final void addEdge( final T p_start, final T p_end, double p_value )
         {
+            if(p_value < 0)
+                p_value = Math.abs(p_value);
+
             //create node if does not exist
             if ( !this.containsKey( p_start ) )
                 this.addNode( p_start );

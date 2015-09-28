@@ -330,7 +330,6 @@ WaypointConnection.prototype.onAddEdge = function(p_edge)
 
 WaypointConnection.prototype.onRemoveEdge = function(p_edge)
 {
-	console.log(p_edge);
 	var self = this;
 	if(p_edge.left)
 		MecSim.ajax({

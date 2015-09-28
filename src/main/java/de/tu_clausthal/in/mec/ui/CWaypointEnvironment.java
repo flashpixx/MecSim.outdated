@@ -54,6 +54,10 @@ import java.util.Map;
 public class CWaypointEnvironment
 {
     /**
+     * waypoint layer reference
+     */
+    private final static CCarWayPointLayer c_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
+    /**
      * map with distribution names
      */
     private final static Map<String, Object> c_distribution = new HashMap<String, Object>()
@@ -72,7 +76,6 @@ public class CWaypointEnvironment
                             }}
                 );
         }};
-
     /**
      * map with factory names
      */
@@ -213,14 +216,14 @@ public class CWaypointEnvironment
         if ( m_currentsettings.isEmpty() )
             throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
 
-        CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped("Car WayPoints").add(
-                (IWayPoint) EWaypoint.valueOf( (String) m_currentsettings.get( "waypoint" ) ).get(
+        c_waypointLayer.add(
+                (IWayPoint) EWaypoint.valueOf((String) m_currentsettings.get("waypoint")).get(
                         p_position,
-                        (IGenerator) m_currentsettings.get( "generator" ),
-                        (IFactory) m_currentsettings.get( "factory" ),
-                        (Double) m_currentsettings.get( "radius" ),
-                        (Color) m_currentsettings.get( "color" ),
-                        (String) m_currentsettings.get( "name" )
+                        (IGenerator) m_currentsettings.get("generator"),
+                        (IFactory) m_currentsettings.get("factory"),
+                        (Double) m_currentsettings.get("radius"),
+                        (Color) m_currentsettings.get("color"),
+                        (String) m_currentsettings.get("name")
                 )
         );
     }
@@ -276,10 +279,9 @@ public class CWaypointEnvironment
      */
     private final Map<String, Map<String, String>> web_static_listpathwaypoints()
     {
-        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
         Map<String, Map<String, String>> result = new HashMap<>();
 
-        for(IWayPoint l_waypoint : l_waypointLayer){
+        for(IWayPoint l_waypoint : c_waypointLayer){
             Map<String, String> l_info = new HashMap<>();
 
             l_info.put("id", String.valueOf(l_waypoint.getID()));
@@ -305,7 +307,7 @@ public class CWaypointEnvironment
      */
     private final IPathWayPoint.CMakrovChain web_static_getmakrovchain(final Map<String, Object> p_data)
     {
-        for( IWayPoint l_waypoint : CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ) )
+        for( IWayPoint l_waypoint : c_waypointLayer )
             if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
                 if( l_waypoint instanceof IPathWayPoint )
                     return ((IPathWayPoint) l_waypoint).getMakrovChain();
@@ -319,12 +321,10 @@ public class CWaypointEnvironment
      */
     private final void web_static_addnode(final Map<String, Object> p_data)
     {
-        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
-
         IPathWayPoint l_makrovWaypoint = null;
         IWayPoint l_newWaypoint = null;
 
-        for( IWayPoint l_waypoint : l_waypointLayer ){
+        for( IWayPoint l_waypoint : c_waypointLayer ){
             if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
                 if( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;
@@ -343,12 +343,10 @@ public class CWaypointEnvironment
      */
     private final void web_static_removenode(final Map<String, Object> p_data)
     {
-        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
-
         IPathWayPoint l_makrovWaypoint = null;
         IWayPoint l_removeWaypoint = null;
 
-        for( IWayPoint l_waypoint : l_waypointLayer ){
+        for( IWayPoint l_waypoint : c_waypointLayer ){
             if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
                 if( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;
@@ -367,13 +365,11 @@ public class CWaypointEnvironment
      */
     private final void web_static_addedge(final Map<String, Object> p_data)
     {
-        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
-
         IPathWayPoint l_makrovWaypoint = null;
         IWayPoint l_source = null;
         IWayPoint l_target = null;
 
-        for( IWayPoint l_waypoint : l_waypointLayer ){
+        for( IWayPoint l_waypoint : c_waypointLayer ){
             if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
                 if( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;

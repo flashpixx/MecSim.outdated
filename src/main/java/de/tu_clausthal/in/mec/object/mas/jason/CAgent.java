@@ -49,6 +49,7 @@ import jason.asSemantics.Message;
 import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Plan;
+import jason.asSyntax.PlanBody;
 
 import java.awt.*;
 import java.io.File;
@@ -64,7 +65,7 @@ import java.util.Set;
  * @tparam T typ of binding objects
  */
 @SuppressWarnings( "serial" )
-public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITask<Agent>
+public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITask<Agent>, IBeliefBaseMask.IGenerator<Literal>
 {
     /**
      * path seperator of agent name
@@ -341,28 +342,61 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
 
 
     @Override
-    public void performtemplate( final Agent p_agent )
+    @SuppressWarnings( "unchecked" )
+    public final void performtemplate( final Agent p_agent )
     {
         // the initial beliefs are stored within the beliefbase, so iterate over all
         // beliefs and create beliefbase tree structure and add all beliefs
         for ( final Literal l_literal : p_agent.getBB() )
-        {
-            final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, l_literal.getFunctor() );
-            if ( l_path.startsWith( c_beliefbaseroot ) )
-                l_path.remove( 0, c_beliefbaseroot.size() );
+            this.setBeliefbaseStructure( l_literal, true );
 
-            if ( l_path.size() > 1 )
-                System.out.println( "build bb" );
-
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), l_literal ) );
-        }
-
-        // the plan belief must be collected, so iterate over all plans (plan context stores the logical condition of the plan)
+        // the plan belief must be collected, so iterate over all plans (plan context stores the logical condition of the plan),
+        // the plan body is defined as a linked list (own programming), so we need to iterate it manually because no iterator exists
         for ( final Plan l_plan : p_agent.getPL() )
-        {
-            //System.out.println( l_plan.getContext() );
-            //System.out.println( "---------\n" + l_plan.getBody() + "\n---------" );
-        }
+            for ( PlanBody l_body = l_plan.getBody(); l_body != null; )
+            {
+                switch ( l_body.getBodyType() )
+                {
+                    case addBel:
+                    case delBel:
+                        if ( l_body.getBodyTerm().isLiteral() )
+                            this.setBeliefbaseStructure( (Literal) l_body.getBodyTerm(), false );
+                        break;
+                }
+
+                l_body = l_body.getBodyNext();
+            }
+    }
+
+    @Override
+    public IBeliefBaseMask<Literal> create( final String p_name )
+    {
+        return new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( p_name );
+    }
+
+
+    /**
+     * adds a literal and its belief structure to the agent beliefbase
+     *
+     * @param p_literal
+     * @param p_addliteral adds the literal to the created structure
+     */
+    private void setBeliefbaseStructure( final Literal p_literal, final boolean p_addliteral )
+    {
+        // split path of the literal functor
+        final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, p_literal.getFunctor() );
+
+        // remove if exists root beliefbase name
+        if ( l_path.startsWith( c_beliefbaseroot ) )
+            l_path.remove( 0, c_beliefbaseroot.size() );
+
+        // build tree definition
+        //if ( l_path.size() > 1 )
+        //    m_beliefbaserootmask.add( l_path, m_beliefbaserootmask, this );
+
+        // add the belief to the structure
+        if ( p_addliteral )
+            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), p_literal ) );
     }
 
 

@@ -378,7 +378,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     /**
      * adds a literal and its belief structure to the agent beliefbase
      *
-     * @param p_literal
+     * @param p_literal literal with prefix
      * @param p_addliteral adds the literal to the created structure
      */
     private void setBeliefbaseStructure( final Literal p_literal, final boolean p_addliteral )

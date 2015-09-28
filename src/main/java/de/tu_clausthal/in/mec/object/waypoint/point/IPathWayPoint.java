@@ -63,7 +63,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     /**
      * default target
      */
-    private static final GeoPosition m_defaultTarget = new GeoPosition( 51.80135377062704, 10.32871163482666 );
+    private static final GeoPosition m_defaultLocation = new GeoPosition( 51.80135377062704, 10.32871163482666 );
 
     /**
      * ctor
@@ -95,48 +95,36 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
         HashSet<Pair<GeoPosition, GeoPosition>> l_path = new HashSet<>();
-        l_path.add( new ImmutablePair<>( this.getPosition(), m_defaultTarget ) );
+        IWayPoint l_current = this;
 
-        /**
-         * @todo will be refactored in a few commits
+        //if entry point is not defined or there are no outgoing edges drive to default location
+        if( !this.getMakrovChain().containsKey(l_current) || this.getMakrovChain().get( l_current ).size() <= 0){
+            //l_path.add( new ImmutablePair<>( l_current.getPosition(), m_defaultLocation ) );
+            return l_path;
+        }
 
-        //inital position
-        Map<IWayPoint, MutablePair<Double, Double>> l_currentNode = m_makrovChain.get( this );
-        GeoPosition l_currentPosition = this.getPosition();
-        GeoPosition l_default = new GeoPosition( 51.80135377062704, 10.32871163482666 );
-        GeoPosition l_newPosition;
+        //calculate path
+        double l_random = 0;
+        int l_pathLength = this.getMakrovChain().size()-1;
+        for( int i=0; i<l_pathLength; i++ ) {
 
-        //check for circles and path length
-        for ( int i = 1; i < m_makrovChain.size(); i++ )
-        {
-            double l_random = m_random.nextDouble();
-
-            // current node has no outgoing edges add a path to default target and return
-            if ( l_currentNode.size() <= 0 )
-            {
-                CLogger.out( l_path.size() );
-                l_path.add( new ImmutablePair<>( l_currentPosition, l_default ) );
+            //if current node has no outgoing edges return
+            if (!this.getMakrovChain().containsKey(l_current) || this.getMakrovChain().get(l_current).size() <= 0){
                 return l_path;
             }
 
-            //calculate new edge
-            for ( final Map.Entry<IWayPoint, MutablePair<Double, Double>> l_node : l_currentNode.entrySet() )
-            {
-                if ( l_random >= l_node.getValue().getRight() )
-                {
-                    l_random = l_random - l_node.getValue().getRight();
-                }
-                else
-                {
-                    l_newPosition = l_node.getKey().getPosition();
-                    l_path.add( new ImmutablePair<>( l_currentPosition, l_newPosition ) );
-                    l_currentNode = m_makrovChain.get( l_node.getKey() );
-                    l_currentPosition = l_newPosition;
+            //otherwise calculate new node
+            l_random = m_random.nextDouble();
+            for( final HashMap.Entry<IWayPoint, double[]> l_edge : this.getMakrovChain().get(l_current).entrySet() ){
+                if(l_random > l_edge.getValue()[1]){
+                    l_random -= l_edge.getValue()[1];
+                }else{
+                    l_path.add(new ImmutablePair<>(l_current.getPosition(), l_edge.getKey().getPosition()));
+                    l_current = l_edge.getKey();
                     break;
                 }
             }
         }
-        **/
 
         return l_path;
     }

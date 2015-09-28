@@ -368,8 +368,9 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
             }
     }
 
+
     @Override
-    public IBeliefBaseMask<Literal> create( final String p_name )
+    public IBeliefBaseMask<Literal> createBeliefbase( final String p_name )
     {
         return new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( p_name );
     }
@@ -390,13 +391,11 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         if ( l_path.startsWith( c_beliefbaseroot ) )
             l_path.remove( 0, c_beliefbaseroot.size() );
 
-        // build tree definition
-        //if ( l_path.size() > 1 )
-        //    m_beliefbaserootmask.add( l_path, m_beliefbaserootmask, this );
-
         // add the belief to the structure
         if ( p_addliteral )
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), p_literal ) );
+            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), p_literal ), this );
+        else
+            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), this );
     }
 
 

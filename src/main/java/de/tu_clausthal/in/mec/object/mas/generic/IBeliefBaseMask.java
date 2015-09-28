@@ -58,12 +58,23 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * adds a mask in the current structure
      *
      * @param p_path path
+     * @param p_generator beliefbase generator if beliefbase not exists
+     * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
+     * @returns returns the added mask
+     */
+    public IBeliefBaseMask<T> add( final CPath p_path, final IGenerator<T> p_generator );
+
+    /**
+     * adds a mask in the current structure
+     *
+     * @param p_path path
      * @param p_mask mask
      * @param p_generator beliefbase generator if beliefbase not exists
      * @note the mask that is put in the method will be cloned, so the returned mask are not equal, the parameter is a template object only
      * @returns returns the added mask
      */
     public IBeliefBaseMask<T> add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IGenerator<T> p_generator );
+
 
     /**
      * adds a literal in the current structure
@@ -72,7 +83,9 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * @param p_literal literal
      * @param p_generator beliefbase generator if beliefbase not exists
      */
-    void add( final CPath p_path, final ILiteral<T> p_literal, final IGenerator<T> p_generator );
+    public void add( final CPath p_path, final ILiteral<T> p_literal, final IGenerator<T> p_generator );
+
+
 
     /**
      * checks if a mask exists
@@ -210,6 +223,6 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      */
     public interface IGenerator<Q>
     {
-        public IBeliefBaseMask<Q> create( final String p_name );
+        public IBeliefBaseMask<Q> createBeliefbase( final String p_name );
     }
 }

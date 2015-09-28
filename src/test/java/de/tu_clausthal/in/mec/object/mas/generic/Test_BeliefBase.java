@@ -68,7 +68,7 @@ public class Test_BeliefBase
     {
 
         @Override
-        public IBeliefBaseMask<Literal> create( final String p_name )
+        public IBeliefBaseMask<Literal> createBeliefbase( final String p_name )
         {
             return new CBeliefBase( new CBeliefStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>() ).createMask( p_name );
         }

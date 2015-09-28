@@ -155,8 +155,9 @@ WaypointConnection.prototype.afterDOMAdded = function()
 				edges : [],
 				lastNodeID : 0,
 				mouseMode : false,
-				onRemoveNode :self.onRemoveNode.bind(self),
-				onAddEdge : self.onAddEdge.bind(self)
+				onRemoveNode : self.onRemoveNode.bind(self),
+				onAddEdge : self.onAddEdge.bind(self),
+				onRemoveEdge : self.onRemoveEdge.bind(self)
 			});
 
 			Widget.prototype.afterDOMAdded.call(self);
@@ -313,8 +314,33 @@ WaypointConnection.prototype.onRemoveNode = function(p_node)
 WaypointConnection.prototype.onAddEdge = function(p_edge)
 {
 	var self = this;
-	MecSim.ajax({
-		url : "cwaypointenvironment/addedge",
-		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.source.waypointname, "target" : p_edge.target.waypointname}
-	});
+	if(p_edge.left)
+		MecSim.ajax({
+			url : "cwaypointenvironment/addedge",
+			data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.target.waypointname, "target" : p_edge.source.waypointname}
+		});
+
+	if(p_edge.right)
+		MecSim.ajax({
+			url : "cwaypointenvironment/addedge",
+			data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.source.waypointname, "target" : p_edge.target.waypointname}
+		});
+}
+
+
+WaypointConnection.prototype.onRemoveEdge = function(p_edge)
+{
+	console.log(p_edge);
+	var self = this;
+	if(p_edge.left)
+		MecSim.ajax({
+			url : "cwaypointenvironment/removeedge",
+			data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.target.waypointname, "target" : p_edge.source.waypointname}
+		});
+
+	if(p_edge.right)
+		MecSim.ajax({
+			url : "cwaypointenvironment/removeedge",
+			data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.source.waypointname, "target" : p_edge.target.waypointname}
+		});
 }

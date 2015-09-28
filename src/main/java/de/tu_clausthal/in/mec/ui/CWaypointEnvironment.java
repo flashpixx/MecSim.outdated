@@ -386,6 +386,32 @@ public class CWaypointEnvironment
     }
 
     /**
+     * method to remove an edge from makrov chain
+     * @param p_data
+     */
+    private final void web_static_removeedge(final Map<String, Object> p_data)
+    {
+        IPathWayPoint l_makrovWaypoint = null;
+        IWayPoint l_source = null;
+        IWayPoint l_target = null;
+
+        for( IWayPoint l_waypoint : c_waypointLayer ){
+            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
+                if( l_waypoint instanceof IPathWayPoint )
+                    l_makrovWaypoint = (IPathWayPoint) l_waypoint;
+
+            if( l_waypoint.toString().equals( p_data.get("source") ) )
+                l_source = l_waypoint;
+
+            if( l_waypoint.toString().equals( p_data.get("target") ) )
+                l_target = l_waypoint;
+        }
+
+        if( l_makrovWaypoint != null && l_source != null && l_target != null )
+            l_makrovWaypoint.getMakrovChain().removeEdge(l_source, l_target);
+    }
+
+    /**
      * list all possible distribution types
      *
      * @return map with names of distribution and IDs

@@ -166,8 +166,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         @Override
         public HashMap<T, double[]> remove( final Object p_key )
         {
-            final HashMap<T, double[]> l_result = super.remove(p_key);
-            this.removeNode( p_key );
+            final HashMap<T, double[]> l_result = super.remove( p_key );
             this.updateRelativeWeighting();
             return l_result;
         }
@@ -176,7 +175,6 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
         public boolean remove( final Object p_key, final Object p_value )
         {
             final boolean l_result = super.remove( p_key, p_value );
-            this.removeNode( p_key );
             this.updateRelativeWeighting();
             return l_result;
         }
@@ -188,7 +186,8 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         public final void addNode( final T p_node )
         {
-            if(this.containsKey( p_node ))
+            //only add node if node does not exist
+            if( this.containsKey( p_node ) )
                 return;
 
             this.put( p_node, new HashMap<T, double[]>() );
@@ -210,7 +209,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
             if ( !this.containsKey( p_end ) )
                 this.addNode( p_end );
 
-            this.get( p_start ).put(p_end, new double[]{ p_value, p_value });
+            this.get( p_start ).put( p_end, new double[]{ p_value, p_value } );
             this.updateRelativeWeighting();
         }
 
@@ -222,9 +221,14 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         public final void removeNode( final Object p_node )
         {
+            //remove connected edges
             for ( final Map<T, double[]> l_edge : this.values() )
                 if ( l_edge.containsKey( p_node ) )
                     l_edge.remove( p_node );
+
+            //remove node
+            if( this.containsKey( p_node ) )
+                super.remove (p_node );
 
             this.updateRelativeWeighting();
         }
@@ -237,7 +241,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
          */
         public final void removeEdge( final T p_start, final T p_end )
         {
-            if ( this.containsKey( p_start ) )
+            if( this.containsKey( p_start ) )
                 this.get( p_start ).remove( p_end );
 
             this.updateRelativeWeighting();

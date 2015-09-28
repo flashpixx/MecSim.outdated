@@ -150,7 +150,14 @@ WaypointConnection.prototype.afterDOMAdded = function()
 			self.refresh();
 
 			//initalize waypoint editor
-			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {nodes : [], edges : [], lastNodeID : 0, mouseMode : false, onAddEdge : self.onAddEdge.bind(self)});
+			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {
+				nodes : [],
+				edges : [],
+				lastNodeID : 0,
+				mouseMode : false,
+				onRemoveNode :self.onRemoveNode.bind(self),
+				onAddEdge : self.onAddEdge.bind(self)
+			});
 
 			Widget.prototype.afterDOMAdded.call(self);
 		}
@@ -216,7 +223,7 @@ WaypointConnection.prototype.add = function(p_event)
 	//add node to makrov chain and reload after success
 	MecSim.ajax({
 		url : "cwaypointenvironment/addnode",
-		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "newwaypoint" : p_event.target.value},
+		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "waypoint" : p_event.target.value},
 		success : function(){
 			self.reload(self.mc_currentMakrovWaypoint);
 		}
@@ -286,6 +293,19 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 	});
 }
 
+
+/**
+ * method to remove a node from makrov chain
+**/
+WaypointConnection.prototype.onRemoveNode = function(p_node)
+{
+	var self = this;
+
+	MecSim.ajax({
+		url : "cwaypointenvironment/removenode",
+		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "waypoint" : p_node.waypointname}
+	});
+}
 
 /**
  * method to add an edge to the makrov chain

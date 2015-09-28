@@ -213,7 +213,7 @@ public class CWaypointEnvironment
         if ( m_currentsettings.isEmpty() )
             throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
 
-        CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" ).add(
+        CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped("Car WayPoints").add(
                 (IWayPoint) EWaypoint.valueOf( (String) m_currentsettings.get( "waypoint" ) ).get(
                         p_position,
                         (IGenerator) m_currentsettings.get( "generator" ),
@@ -329,12 +329,36 @@ public class CWaypointEnvironment
                 if( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;
 
-            if( l_waypoint.toString().equals( p_data.get("newwaypoint") ) )
+            if( l_waypoint.toString().equals( p_data.get("waypoint") ) )
                 l_newWaypoint = l_waypoint;
         }
 
         if( l_makrovWaypoint != null && l_newWaypoint != null )
             l_makrovWaypoint.getMakrovChain().addNode(l_newWaypoint);
+    }
+
+    /**
+     * method to remove a node from makrov chain
+     * @param p_data
+     */
+    private final void web_static_removenode(final Map<String, Object> p_data)
+    {
+        CCarWayPointLayer l_waypointLayer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
+
+        IPathWayPoint l_makrovWaypoint = null;
+        IWayPoint l_removeWaypoint = null;
+
+        for( IWayPoint l_waypoint : l_waypointLayer ){
+            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
+                if( l_waypoint instanceof IPathWayPoint )
+                    l_makrovWaypoint = (IPathWayPoint) l_waypoint;
+
+            if( l_waypoint.toString().equals( p_data.get("waypoint") ) )
+                l_removeWaypoint = l_waypoint;
+        }
+
+        if( l_makrovWaypoint != null && l_removeWaypoint != null )
+            l_makrovWaypoint.getMakrovChain().removeNode(l_removeWaypoint);
     }
 
     /**

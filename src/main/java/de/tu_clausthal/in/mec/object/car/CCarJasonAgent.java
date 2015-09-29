@@ -114,7 +114,7 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
      */
     public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
             final int p_deceleration, final double p_lingerprobability, final String p_objectname, final String p_agent
-    ) throws JasonException
+    ) throws Exception
 
     {
         this(
@@ -139,7 +139,7 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
      */
     public CCarJasonAgent( final ArrayList<Pair<EdgeIteratorState, Integer>> p_route, final int p_speed, final int p_maxspeed, final int p_acceleration,
             final int p_deceleration, final double p_lingerprobability, final String p_objectname, final Set<String> p_agent
-    ) throws JasonException
+    ) throws Exception
     {
         super( p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability );
         m_objectpath = new CPath( "traffic", "car", CSimulation.getInstance().generateObjectName( p_objectname, this ) );
@@ -194,7 +194,7 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
      * @throws JasonException throws on Jason error
      */
     @CMethodFilter.CAgent( bind = false )
-    private void bind( final String p_asl ) throws JasonException
+    private void bind( final String p_asl ) throws Exception
     {
         final de.tu_clausthal.in.mec.object.mas.jason.CAgent l_agent = new de.tu_clausthal.in.mec.object.mas.jason.CAgent(
                 m_objectpath.append( p_asl ), p_asl, this

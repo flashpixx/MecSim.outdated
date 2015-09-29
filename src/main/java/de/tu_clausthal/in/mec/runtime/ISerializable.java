@@ -29,7 +29,7 @@ import java.io.Serializable;
 
 
 /**
- * serialization interface to run actions
+ * serialization interface to performtemplate actions
  */
 public interface ISerializable extends Serializable
 {

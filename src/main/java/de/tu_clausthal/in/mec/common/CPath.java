@@ -29,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -89,31 +90,46 @@ public class CPath implements Iterable<CPath>
     }
 
     /**
+     * ctor
+     *
+     * @param p_collection string collection
+     */
+    public CPath( final Collection<String> p_collection )
+    {
+        if ( ( p_collection != null ) && ( !p_collection.isEmpty() ) )
+            m_path.addAll( p_collection );
+    }
+
+    /**
      * creates a path object from different items
      *
-     * @param p_varargs list of strings (first element is the separator)
+     * @param p_varargs list of strings
      * @return path object
      */
     public static CPath createPath( final String... p_varargs )
     {
-        if ( p_varargs.length < 2 )
+        if ( ( p_varargs == null ) || ( p_varargs.length < 1 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
-        return new CPath( StringUtils.join( p_varargs[0], p_varargs, 1 ) );
+        return new CPath( p_varargs );
     }
 
+    /**
+     * creates a path object by splitting a string
+     *
+     * @param p_varargs list of string (first element is the seperator)
+     * @return path object
+     */
     public static CPath createSplitPath( final String... p_varargs )
     {
-        if ( p_varargs.length < 3 )
+        if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
         final List<String> l_pathlist = new LinkedList<>();
-        l_pathlist.add( p_varargs[1] );
-
-        for ( int i = 2; i < p_varargs.length; ++i )
+        for ( int i = 1; i < p_varargs.length; ++i )
             l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[i], p_varargs[0] ) ) );
 
-        return createPath( (String[]) l_pathlist.toArray() );
+        return new CPath( l_pathlist );
     }
 
     /**
@@ -122,7 +138,7 @@ public class CPath implements Iterable<CPath>
      * @param p_path path
      * @return new path
      */
-    public CPath append( final CPath p_path )
+    public final CPath append( final CPath p_path )
     {
         final CPath l_path = new CPath( this );
         l_path.pushback( p_path );
@@ -135,11 +151,36 @@ public class CPath implements Iterable<CPath>
      * @param p_path string with path
      * @return new path
      */
-    public CPath append( final String p_path )
+    public final CPath append( final String p_path )
     {
         final CPath l_path = new CPath( this );
         l_path.pushback( p_path );
         return l_path;
+    }
+
+    /**
+     * removes an element
+     *
+     * @param p_index index position
+     * @return return the changed object
+     */
+    public final CPath remove( final int p_index )
+    {
+        m_path.remove( p_index );
+        return this;
+    }
+
+    /**
+     * removes all elements from start index until end index (exclusive)
+     *
+     * @param p_start start index
+     * @param p_end end index (exclusive)
+     * @return return the changed object
+     */
+    public final CPath remove( final int p_start, final int p_end )
+    {
+        m_path.subList( p_start, p_end ).clear();
+        return this;
     }
 
     /**
@@ -150,11 +191,11 @@ public class CPath implements Iterable<CPath>
      */
     public final boolean endsWith( final CPath p_path )
     {
-        if ( p_path.size() > m_path.size() )
+        if ( p_path.size() > this.size() )
             return false;
 
-        for ( int i = m_path.size() - p_path.size(); i < m_path.size(); ++i )
-            if ( m_path.get( i ) != p_path.m_path.get( i ) )
+        for ( int i = 0; i < p_path.size(); ++i )
+            if ( !this.get( i - p_path.size() ).equals( p_path.get( i ) ) )
                 return false;
 
         return true;
@@ -163,12 +204,12 @@ public class CPath implements Iterable<CPath>
     /**
      * returns an part of the path
      *
-     * @param p_index index position
+     * @param p_index index position (negativ index is element from the end)
      * @return element
      */
     public final String get( final int p_index )
     {
-        return m_path.get( p_index );
+        return p_index < 0 ? m_path.get( m_path.size() + p_index ) : m_path.get( p_index );
     }
 
     /**
@@ -309,42 +350,50 @@ public class CPath implements Iterable<CPath>
      * adds a path at the end
      *
      * @param p_path path
+     * @return return the changed object
      */
-    public final void pushback( final CPath p_path )
+    public final CPath pushback( final CPath p_path )
     {
         m_path.addAll( p_path.m_path );
+        return this;
     }
 
     /**
      * adds a path at the end
      *
      * @param p_path string path
+     * @return return the changed object
      */
-    public final void pushback( final String p_path )
+    public final CPath pushback( final String p_path )
     {
         this.pushback( new CPath( p_path ) );
+        return this;
     }
 
     /**
      * adds a path at the front
      *
      * @param p_path string path
+     * @return return the changed object
      */
-    public final void pushfront( final String p_path )
+    public final CPath pushfront( final String p_path )
     {
         this.pushfront( new CPath( p_path ) );
+        return this;
     }
 
     /**
      * adds a path to the front of the path
      *
      * @param p_path path
+     * @return return the changed object
      */
-    public final void pushfront( final CPath p_path )
+    public final CPath pushfront( final CPath p_path )
     {
         final ArrayList<String> l_path = new ArrayList<>( p_path.m_path );
         l_path.addAll( m_path );
         m_path = l_path;
+        return this;
     }
 
     /**
@@ -365,10 +414,13 @@ public class CPath implements Iterable<CPath>
 
     /**
      * reverse path
+     *
+     * @return return the changed object
      */
-    public final void reverse()
+    public final CPath reverse()
     {
         Collections.reverse( m_path );
+        return this;
     }
 
     /**
@@ -389,11 +441,11 @@ public class CPath implements Iterable<CPath>
      */
     public final boolean startsWith( final CPath p_path )
     {
-        if ( m_path.size() < p_path.size() )
+        if ( p_path.size() > this.size() )
             return false;
 
-        for ( int i = 0; i < m_path.size(); ++i )
-            if ( m_path.get( i ) != p_path.m_path.get( i ) )
+        for ( int i = 0; i < p_path.size(); ++i )
+            if ( !this.get( i ).equals( p_path.get( i ) ) )
                 return false;
 
         return true;

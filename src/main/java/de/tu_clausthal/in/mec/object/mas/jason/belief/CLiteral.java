@@ -46,7 +46,43 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implemen
     public CLiteral( final Literal p_literal )
     {
         super( p_literal.getFunctor(), p_literal, p_literal.negated() );
+        this.addAdditionals( p_literal );
+    }
 
+    /**
+     * ctor to create a literal with a new functor
+     *
+     * @param p_functor functor name
+     * @param p_literal input literal
+     */
+    public CLiteral( final String p_functor, final Literal p_literal )
+    {
+        super( p_functor, p_literal, p_literal.negated() );
+        this.addAdditionals( p_literal );
+    }
+
+
+    @Override
+    public ILiteral<Literal> clone( final CPath p_prefix )
+    {
+        // don't use setNegated, because setNegated returns the new literal object, so
+        // we generate a literal directly with the correct negation operator (first parameter
+        // is the "positiv" definition of negated, so we need to invert the data)
+        // Literal base class implements setter with log messages and does not declare it with abstract
+        final Literal l_literal = ASSyntax.createLiteral( !m_literal.negated(), p_prefix.append( m_functor.get() ).toString() );
+        l_literal.setAnnots( m_literal.getAnnots() );
+        l_literal.setTerms( m_literal.getTerms() );
+        return new CLiteral( l_literal );
+    }
+
+
+    /**
+     * modifies the interal literal representations
+     *
+     * @param p_literal literal
+     */
+    private void addAdditionals( final Literal p_literal )
+    {
         if ( p_literal.hasTerm() )
             for ( final Term l_term : p_literal.getTerms() )
                 m_values.add( CCommon.convertGeneric( l_term ) );
@@ -54,17 +90,5 @@ public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implemen
         if ( p_literal.hasAnnot() )
             for ( final Term l_term : p_literal.getAnnots() )
                 m_annotations.add( CCommon.convertGeneric( l_term ) );
-    }
-
-
-    @Override
-    public ILiteral<Literal> clone( final CPath p_prefix )
-    {
-        final Literal l_literal = ASSyntax.createLiteral( p_prefix.append( m_functor.get() ).toString() );
-        l_literal.setAnnots( m_literal.getAnnots() );
-        l_literal.setTerms( m_literal.getTerms() );
-        l_literal.setNegated( m_literal.negated() );
-
-        return new CLiteral( l_literal );
     }
 }

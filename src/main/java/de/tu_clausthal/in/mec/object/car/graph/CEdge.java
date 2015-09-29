@@ -107,7 +107,7 @@ public class CEdge<N, T> implements Comparable<CEdge>
         m_cellgeoposition = new GeoPosition[m_cells.length];
 
         // create a spline interpolation for cell sampling of the geoposition
-        // get edge geoposition and convert data in arrays, run spline interpolation
+        // get edge geoposition and convert data in arrays, performtemplate spline interpolation
         // catch number exceptions and calculate for each cell the geoposition
         final PointListArray l_list = this.filterPointList( p_edgestate.fetchWayGeometry( 2 ), c_epsilon );
 

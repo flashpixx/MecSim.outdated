@@ -95,7 +95,7 @@ public class CConfiguration
             // flag for resetting the full configuration - accessible within the UI
             put( "reset", false );
 
-            // extract all MAS files from the Jar to the home path (should be run once) - accessible within the UI
+            // extract all MAS files from the Jar to the home path (should be performtemplate once) - accessible within the UI
             put( "extractmasexamples", true );
 
             // UUID / unique instance name - used by the database structure
@@ -674,7 +674,7 @@ public class CConfiguration
                     continue;
                 }
 
-                // run value checks
+                // performtemplate value checks
                 boolean l_valid = true;
                 if ( m_configurationchecks.containsKey( l_item.getKey().toString() ) )
                     for ( final ICheck l_check : m_configurationchecks.get( l_item.getKey().toString() ) )
@@ -741,7 +741,7 @@ public class CConfiguration
     }
 
     /**
-     * UI method - run startup checks
+     * UI method - performtemplate startup checks
      *
      * @return error / warning messages
      **/

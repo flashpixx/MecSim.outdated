@@ -106,6 +106,12 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
+    public IBeliefBaseMask<T> add( final CPath p_path, final IGenerator<T> p_generator )
+    {
+        return walk( p_path, this, p_generator );
+    }
+
+    @Override
     public IBeliefBaseMask<T> add( final CPath p_path, final IBeliefBaseMask<T> p_mask, final IGenerator<T> p_generator
     )
     {
@@ -460,7 +466,7 @@ public class CMask<T> implements IBeliefBaseMask<T>
 
         // if a generator is exists and the mask is null, a new mask is created and added to the current
         if ( ( l_mask == null ) && ( p_generator != null ) && ( !( "..".equals( p_path.get( 0 ) ) ) ) )
-            l_mask = p_root.add( p_generator.create( p_path.get( 0 ) ) );
+            l_mask = p_root.add( p_generator.createBeliefbase( p_path.get( 0 ) ) );
 
         // if mask null an exception is thrown
         if ( l_mask == null )

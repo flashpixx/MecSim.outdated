@@ -110,7 +110,7 @@
         <dependency>
             <groupId>org.pegdown</groupId>
             <artifactId>pegdown</artifactId>
-            <version>1.5.0</version>
+            <version>1.6.0</version>
             <scope>compile</scope>
         </dependency>
 
@@ -440,7 +440,7 @@
                 </executions>
             </plugin>
 
-            <!-- checkstyle is run at compile / validation phase
+            <!-- checkstyle is performtemplate at compile / validation phase
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>

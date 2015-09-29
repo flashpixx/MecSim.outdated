@@ -65,18 +65,15 @@ import java.util.logging.Level;
 @SuppressWarnings( "serial" )
 public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements ISerializable
 {
+
     /**
-     * agent file suffix *
+     * agent storage for fast instantiation
      */
-    private static final String c_filesuffix = ".asl";
-    /**
-     * browser of the mindinspector - binding to the server port can be done after the first agent is exists
-     */
-    private transient CBrowser m_mindinspector;
+    public static final CAgentTemplateFactory AGENTTEMPLATEFACTORY = new CAgentTemplateFactory();
     /**
      * static list of internal overwrite actions
      */
-    private static final Map<String, InternalAction> c_internalaction = new HashMap<String, InternalAction>()
+    public static final Map<String, InternalAction> INTERNALACTION = new HashMap<String, InternalAction>()
     {{
             // overwrite default internal actions
             final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
@@ -90,17 +87,14 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             put( "mecsim.literal2number", new CLiteral2Number() );
             put( "mecsim.removeBelief", new CBeliefRemove() );
         }};
-
-
     /**
-     * returns the internal action map
-     *
-     * @return map with internal actions
+     * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */
-    public static Map<String, InternalAction> getInternalActions()
-    {
-        return c_internalaction;
-    }
+    private transient CBrowser m_mindinspector;
+    /**
+     * agent file suffix *
+     */
+    private static final String c_filesuffix = ".asl";
 
     /**
      * checks the syntax of an agent
@@ -122,12 +116,12 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             final Agent l_agent = new Agent();
             CReflection.getClassField( Agent.class, "logger" ).getSetter().invokeWithArguments( l_agent, l_logger );
             // create internal actions map - reset the map and overwrite not useable actions with placeholder
-            CReflection.getClassField( l_agent.getClass(), "internalActions" ).getSetter().invoke( l_agent, c_internalaction );
+            CReflection.getClassField( l_agent.getClass(), "internalActions" ).getSetter().invoke( l_agent, INTERNALACTION );
 
             final as2j l_parser = new as2j( FileUtils.openInputStream( getAgentFile( p_agentname ) ) );
             CReflection.getClassField( as2j.class, "logger" ).getSetter().invokeWithArguments( l_logger );
 
-            // run agent initalizing and parsing
+            // performtemplate agent initalizing and parsing
             l_agent.initAg();
             l_parser.agent( l_agent );
 
@@ -196,6 +190,12 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             l_list.add( new File( l_file ).getName().replace( c_filesuffix, "" ) );
 
         return CCommon.convertCollectionToArray( String[].class, l_list );
+    }
+
+    @Override
+    public final void onSimulationReset()
+    {
+        AGENTTEMPLATEFACTORY.clear();
     }
 
     /**

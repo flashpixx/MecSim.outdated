@@ -34,7 +34,7 @@ public abstract class IOneTimeStorage<N, M> extends CImmutableBeliefStorage<N, M
     @Override
     public final void update()
     {
-        // clear is final at the super, so clearing is run manually
+        // clear is final at the super, so clearing is performtemplate manually
         m_multielements.clear();
         m_singleelements.clear();
 

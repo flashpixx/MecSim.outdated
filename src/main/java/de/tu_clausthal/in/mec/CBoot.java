@@ -66,7 +66,7 @@ public class CBoot
                 )
         ) >= 1.8f ) ) )
         {
-            System.err.println( "JRE from Oracle Corporation (http://www.java.com/) version 1.8 or newer must be installed to run the program" );
+            System.err.println( "JRE from Oracle Corporation (http://www.java.com/) version 1.8 or newer must be installed to performtemplate the program" );
             System.exit( -1 );
         }
     }

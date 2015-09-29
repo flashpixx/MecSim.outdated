@@ -24,8 +24,11 @@
 
 package de.tu_clausthal.in.mec.object;
 
+import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
+import de.tu_clausthal.in.mec.ui.CSwingWrapper;
+import de.tu_clausthal.in.mec.ui.CUI;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 import org.jxmapviewer.painter.Painter;
 
@@ -67,6 +70,25 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     }
 
     @Override
+    public void onSimulationStart()
+    {
+    }
+
+    @Override
+    public void onSimulationStop()
+    {
+    }
+
+    @Override
+    public void onSimulationReset()
+    {
+        this.release();
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
+
+    }
+
+    @Override
     public final boolean isVisible()
     {
         return m_visible;
@@ -84,4 +106,8 @@ public abstract class ISingleLayer implements Painter<COSMViewer>, IViewableLaye
     @Override
     public abstract void step( final int p_currentstep, final ILayer p_layer );
 
+    @Override
+    public void release()
+    {
+    }
 }

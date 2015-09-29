@@ -138,19 +138,7 @@ public class CMainLoop implements Runnable
             throw new IllegalStateException( CCommon.getResourceString( this, "pause" ) );
 
         CLogger.info( CCommon.getResourceString( this, "reset" ) );
-
-        try
-        {
-            m_simulationcount = 0;
-            final Collection<Callable<Object>> l_tasks = new LinkedList<>();
-            for ( final ILayer l_layer : CSimulation.getInstance().getWorld().values() )
-                l_tasks.add( new CLayerReset( l_layer ) );
-            m_pool.invokeAll( l_tasks );
-        }
-        catch ( final InterruptedException l_exception )
-        {
-        }
-
+        m_simulationcount = 0;
     }
 
     /**
@@ -164,7 +152,7 @@ public class CMainLoop implements Runnable
     /**
      * resumes thread and shut down thread after
      *
-     * @param p_steps number of steps which are run
+     * @param p_steps number of steps which are performtemplate
      */
     public final void resume( final int p_steps )
     {
@@ -202,7 +190,7 @@ public class CMainLoop implements Runnable
                 if ( m_simulationcount >= m_shutdownstep )
                     break;
 
-                // run simulation objects
+                // performtemplate simulation objects
                 this.processLayer( l_layerorder );
                 this.processObjects( l_layerorder );
 

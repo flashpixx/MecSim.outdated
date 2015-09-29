@@ -193,6 +193,9 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
     private void paintLine( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_edge )
     {
         final CEdge<?, ?> l_edge = m_graph.getEdge( m_graph.getEdgeIterator( p_edge ) );
+        if (l_edge == null)
+            return;
+
         final Point2D l_start = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( 0 ) );
         final Point2D l_end = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( -1 ) );
 

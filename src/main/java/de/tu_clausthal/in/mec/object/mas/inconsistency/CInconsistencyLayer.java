@@ -58,10 +58,6 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
      */
     private static final Algebra c_algebra = new Algebra();
     /**
-     * name of the invoke definition on agent-invoke-call
-     */
-    private static final String c_invokeName = "inconsistency";
-    /**
      * algorithm to calculate stationary probability
      **/
     private final EAlgorithm m_algorithm;

@@ -30,7 +30,6 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.IMultiEvaluateLayer;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -98,6 +97,20 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
         return CConfiguration.getInstance().get().<Boolean>get( "database/active" );
     }
 
+
+    /**
+     * creates the table structure
+     *
+     * @param p_tablename table name
+     * @param p_fields field list
+     * @param p_alter optional table alter command
+     */
+    protected final void createTable( final String p_tablename, final String[] p_fields, final String p_alter )
+    {
+        this.createTable( p_tablename, p_fields, new String[]{p_alter} );
+    }
+
+
     /**
      * creates the table structure
      *
@@ -118,9 +131,7 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
                 l_connect.createStatement().execute(
                         CLogger.info(
                                 MessageFormat.format(
-                                        "create table {0} ({1})", l_tablename, StringUtils.join(
-                                                p_fields, ","
-                                        )
+                                        "create table {0} ({1})", l_tablename, String.join( ", ", p_fields )
                                 )
                         )
                 );

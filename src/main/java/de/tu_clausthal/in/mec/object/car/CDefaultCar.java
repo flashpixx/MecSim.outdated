@@ -191,11 +191,8 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     @CMethodFilter.CAgent( bind = false )
     public final GeoPosition getGeoposition()
     {
-        final EdgeIteratorState l_edgeid = this.getEdge();
-        if ( l_edgeid == null )
-            return null;
-
-        return m_layer.getGraph().getEdge( l_edgeid ).getGeoposition( this );
+        final Pair<EdgeIteratorState, Integer> l_cell = m_route.get( m_routeindex );
+        return m_layer.getGraph().getEdge( l_cell.getLeft() ).getGeoPositions( l_cell.getRight() );
     }
 
     @Override

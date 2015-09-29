@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
+import de.tu_clausthal.in.mec.object.waypoint.point.IPathWayPoint;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import org.jxmapviewer.JXMapViewer;
@@ -82,6 +83,10 @@ class COSMMouseListener extends PanMouseInputListener
                         if ( isinBall( p_event.getPoint(), l_viewer.convertGeoPositionToPoint( l_item.getPosition() ) ) )
                         {
                             l_isfound = true;
+                            for( IWayPoint l_waypoint : l_layer )
+                                if( l_waypoint instanceof IPathWayPoint )
+                                    ((IPathWayPoint) l_waypoint).getMakrovChain().removeNode(l_item);
+
                             l_layer.remove( l_item );
                             break;
                         }

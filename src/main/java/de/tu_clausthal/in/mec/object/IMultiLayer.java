@@ -111,17 +111,12 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public void onSimulationReset()
     {
         this.release();
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
-
+        this.repaint();
     }
 
     @Override
     public final boolean isVisible()
     {
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
-
         return m_visible;
     }
 
@@ -129,9 +124,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final void setVisible( final boolean p_visible )
     {
         m_visible = p_visible;
-
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
+        this.repaint();
     }
 
     @Override
@@ -213,9 +206,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     {
         final boolean l_return = m_data.add( p_value );
 
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
-
+        this.repaint();
         return l_return;
     }
 
@@ -224,9 +215,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     {
         final boolean l_result = m_data.remove( p_object );
 
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
-
+        this.repaint();
         return l_result;
     }
 
@@ -237,9 +226,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
             if ( !m_data.contains( l_item ) )
                 return false;
 
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
-
+        this.repaint();
         return true;
     }
 
@@ -247,10 +234,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final boolean addAll( final Collection<? extends T> p_collection )
     {
         final boolean l_return = m_data.addAll( p_collection );
-
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
-
+        this.repaint();
         return l_return;
     }
 
@@ -265,9 +249,7 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
             return false;
         }
 
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
-
+        this.repaint();
         return true;
     }
 
@@ -281,11 +263,18 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     public final void clear()
     {
         m_data.clear();
-
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
+        this.repaint();
     }
 
     @Override
     public abstract void step( final int p_currentstep, final ILayer p_layer );
+
+    /**
+     * runs the repaint of the layer
+     */
+    protected final void repaint()
+    {
+        if ( CSimulation.getInstance().getStorage().exists() )
+            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
+    }
 }

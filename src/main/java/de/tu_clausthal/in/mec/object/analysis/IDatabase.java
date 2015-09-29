@@ -143,6 +143,7 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
         }
         catch ( final Exception l_exception )
         {
+            m_active = false;
             CLogger.error( l_exception );
         }
     }

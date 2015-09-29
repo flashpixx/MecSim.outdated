@@ -83,7 +83,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
          **/
         public CAgent( final File p_source ) throws JasonException
         {
-            this.setInternalAction();
+            this.setInternals( null );
             this.initAg( p_source.toString() );
         }
 
@@ -103,22 +103,26 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             this.setPL( p_template.getPL().clone() );
             this.setASLSrc( p_template.getASLSrc() );
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setInternalAction();
-
+            this.setInternals( p_template );
             this.initAg();
         }
 
 
         /**
-         * set the internal action of the agent based on the simulation context
+         * set the internal action of the agent based on the simulation context,
+         * internal data structure are private, so set with reflection
+         *
+         * @param p_template agent template, null on initialization
          */
-        private void setInternalAction()
+        private void setInternals( final Agent p_template )
         {
-            // --- internal data structure are private, so set with reflection ---
             try
             {
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 c_internalactionfieldsetter.invoke( this, IEnvironment.INTERNALACTION );
+
+                // clone the internal goal list
+                this.importComponents( p_template );
             }
             catch ( final Throwable l_throwable )
             {

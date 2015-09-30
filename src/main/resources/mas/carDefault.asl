@@ -4,6 +4,9 @@
 // --------------------------------------------------------------------------------------
 
 
+// initial goal
+!drive.
+
 // acceleration
 +!accelerate
    :    root_bind_speed(Speed) &

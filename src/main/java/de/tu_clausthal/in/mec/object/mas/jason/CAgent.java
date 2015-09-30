@@ -351,17 +351,42 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
             this.setBeliefbaseStructure( l_literal, true );
 
         // the plan belief must be collected, so iterate over all plans (plan context stores the logical condition of the plan),
-        // the plan body is defined as a linked list (own programming), so we need to iterate it manually because no iterator exists
+        // the plan body is defined as a stack (own programming), so we need to iterate it manually because no iterator exists
         for ( final Plan l_plan : p_agent.getPL() )
             for ( PlanBody l_body = l_plan.getBody(); l_body != null; )
             {
+                // check first if a correct plan body exists (not-empty and is literal)
+                if ( ( l_body.isEmptyBody() ) || ( !l_body.getBodyTerm().isLiteral() ) )
+                {
+                    l_body = l_body.getBodyNext();
+                    continue;
+                }
+
+                // cast to literal, check if literal is definied as a action
+                // within the environment
+                final Literal l_literal = (Literal) l_body.getBodyTerm();
+                if ( m_action.containsKey( l_literal.getFunctor() ) )
+                {
+                    l_body = l_body.getBodyNext();
+                    continue;
+                }
+
+                // only literals with belief structure are correct
                 switch ( l_body.getBodyType() )
                 {
+                    case action:
+
                     case addBel:
+                    case addBelNewFocus:
+                    case addBelBegin:
+                    case addBelEnd:
+
                     case delBel:
-                        if ( l_body.getBodyTerm().isLiteral() )
-                            this.setBeliefbaseStructure( (Literal) l_body.getBodyTerm(), false );
+                    case delAddBel:
+                        this.setBeliefbaseStructure( l_literal, false );
                         break;
+
+                    default:
                 }
 
                 l_body = l_body.getBodyNext();

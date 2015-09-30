@@ -171,7 +171,7 @@ public class CEvaluationStore extends IDatabase
     {
         final PreparedStatement l_statement = c_datasource.getConnection().prepareStatement(
                 MessageFormat.format(
-                        "insert into {0} values ({1})", CEvaluationStore.this.getTableName( p_tablename ), StringUtils.repeat(
+                        "insert ignore into {0} values ({1})", CEvaluationStore.this.getTableName( p_tablename ), StringUtils.repeat(
                                 "?", ",", p_fieldnumber
                         )
                 )
@@ -232,14 +232,23 @@ public class CEvaluationStore extends IDatabase
             try
             {
                 // get data via reflection and iterate over dataset
-                for ( final Map.Entry<IAgent<?>, Double> l_item : ( (Map<IAgent<?>, Double>) m_access.getGetter().invoke(
+                ( ( (Map<IAgent<?>, Double>) m_access.getGetter().invoke(
                         CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( "Jason Car Inconsistency" )
-                ) ).entrySet() )
-                {
-                    m_statement.setInt( 5, l_item.hashCode() );
-                    m_statement.setDouble( 6, l_item.getValue() );
-                    m_statement.execute();
-                }
+                ) ).entrySet() ).parallelStream().forEach(
+                        ( l_item ) ->
+                        {
+                            try
+                            {
+                                m_statement.setInt( 5, l_item.getKey().hashCode() );
+                                m_statement.setDouble( 6, l_item.getValue() );
+                                m_statement.execute();
+                            }
+                            catch ( final SQLException l_exception )
+                            {
+                                CLogger.error( l_exception );
+                            }
+                        }
+                );
 
             }
             catch ( final Throwable p_throwable )
@@ -274,20 +283,28 @@ public class CEvaluationStore extends IDatabase
         {
             CEvaluationStore.this.updateInsertStatement( m_statement, p_currentstep );
 
-            for ( final IAgent<?> l_agent : CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ) )
-            {
-                m_statement.setInt( 5, l_agent.hashCode() );
+            CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).parallelStream().forEach(
+                    ( l_agent ) ->
+                    {
+                        try
+                        {
+                            m_statement.setInt( 5, l_agent.hashCode() );
 
-                for ( final Iterator<? extends ILiteral<?>> l_iterator = l_agent.getBeliefBase().iteratorLiteral(); l_iterator.hasNext(); )
-                {
-                    final ILiteral<?> l_literal = l_iterator.next();
+                            for ( final Iterator<? extends ILiteral<?>> l_iterator = l_agent.getBeliefBase().iteratorLiteral(); l_iterator.hasNext(); )
+                            {
+                                final ILiteral<?> l_literal = l_iterator.next();
 
-                    m_statement.setInt( 6, l_literal.hashCode() );
-                    m_statement.setString( 7, l_literal.toString() );
-                    m_statement.execute();
-                }
-
-            }
+                                m_statement.setInt( 6, l_literal.hashCode() );
+                                m_statement.setString( 7, l_literal.toString() );
+                                m_statement.execute();
+                            }
+                        }
+                        catch ( final SQLException l_exception )
+                        {
+                            CLogger.error( l_exception );
+                        }
+                    }
+            );
         }
     }
 
@@ -316,14 +333,25 @@ public class CEvaluationStore extends IDatabase
         {
             CEvaluationStore.this.updateInsertStatement( m_statement, p_currentstep );
 
-            for ( final IAgent<?> l_agent : CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ) )
-            {
-                m_statement.setInt( 5, l_agent.hashCode() );
-                m_statement.setString( 6, l_agent.getSource() );
-                m_statement.setString( 7, l_agent.getName() );
-                m_statement.setInt( 8, l_agent.getCycle() );
-                m_statement.execute();
-            }
+            CSimulation.getInstance().getWorld().<CCarJasonAgentLayer>getTyped( "Jason Car Agents" ).parallelStream().forEach(
+                    ( l_agent ) -> {
+                        try
+                        {
+                            m_statement.setInt( 5, l_agent.hashCode() );
+
+                            m_statement.setString( 6, l_agent.getSource() );
+                            m_statement.setString( 7, l_agent.getName() );
+                            m_statement.setInt( 8, l_agent.getCycle() );
+                            m_statement.execute();
+
+                        }
+                        catch ( final SQLException l_exception )
+                        {
+                            CLogger.error( l_exception );
+                        }
+                    }
+            );
+
         }
     }
 }

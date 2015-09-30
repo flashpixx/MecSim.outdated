@@ -48,6 +48,10 @@ import java.util.Iterator;
  */
 public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CMask<Literal> implements BeliefBase
 {
+    /**
+     * prefix remove path
+     */
+    private CPath m_prefixremove = CPath.EMPTY;
 
     /**
      * ctor
@@ -193,6 +197,17 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     }
 
     /**
+     * adds a remove prefix
+     *
+     * @param p_path path
+     * @return mask
+     */
+    public final void setPrefixRemove( final CPath p_path )
+    {
+        m_prefixremove = p_path;
+    }
+
+    /**
      * get literal iterator
      *
      * @return iterator
@@ -236,6 +251,9 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     private Pair<CPath, CLiteral> cloneLiteral( final Literal p_literal )
     {
         final CPath l_path = this.splitPath( p_literal.getFunctor() );
+        if ( ( !m_prefixremove.isEmpty() ) && ( l_path.startsWith( m_prefixremove ) ) )
+            l_path.remove( 0, m_prefixremove.size() );
+
         final Literal l_literal = ASSyntax.createLiteral( p_literal.negated(), l_path.getSuffix() );
         l_literal.addAnnot( p_literal.getAnnots() );
         l_literal.addTerms( p_literal.getTerms() );

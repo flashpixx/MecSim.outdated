@@ -36,6 +36,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CPropertyBind;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CMask;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
@@ -122,7 +123,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     /**
      * root beliefbase
      */
-    private final IBeliefBaseMask<Literal> m_beliefbaserootmask;
+    private final CMask m_beliefbaserootmask;
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
@@ -202,6 +203,8 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
 
         m_participant = new CParticipant( this );
         m_beliefbaserootmask = new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
+        m_beliefbaserootmask.setPrefixRemove( c_beliefbaseroot );
+
         m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture, m_beliefbaserootmask );
 
 

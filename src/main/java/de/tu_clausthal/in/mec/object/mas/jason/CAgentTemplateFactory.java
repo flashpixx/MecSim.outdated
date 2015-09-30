@@ -68,7 +68,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
      * actions are removed from the default behaviour
      * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
      */
-    private static class CAgent extends Agent
+    public static class CAgent extends Agent
     {
         /**
          * handle of the internal actions
@@ -83,8 +83,8 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
          **/
         public CAgent( final File p_source ) throws JasonException
         {
+            this.setInternals();
             this.initAg( p_source.toString() );
-            this.setInternals( null );
         }
 
 
@@ -98,32 +98,28 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
          */
         public CAgent( final Agent p_template, final AgArch p_architecture, final BeliefBase p_beliefbase )
         {
-            // --- initialize the agent, that is used within the simulation context ---
+
+            // --- clones the template agent, that is used within the simulation context ---
+            this.setInternals();
             this.setBB( p_beliefbase );
             this.setPL( p_template.getPL().clone() );
             this.setASLSrc( p_template.getASLSrc() );
-            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
+            this.setTS( new TransitionSystem( this, p_template.getTS().getC().clone(), p_template.getTS().getSettings(), p_architecture ) );
 
             this.initAg();
-            this.setInternals( p_template );
         }
 
 
         /**
          * set the internal action of the agent based on the simulation context,
          * internal data structure are private, so set with reflection
-         *
-         * @param p_template agent template, null on initialization
          */
-        private void setInternals( final Agent p_template )
+        private void setInternals()
         {
             try
             {
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder
                 c_internalactionfieldsetter.invoke( this, IEnvironment.INTERNALACTION );
-
-                // clone the internal goal list
-                this.importComponents( p_template );
             }
             catch ( final Throwable l_throwable )
             {

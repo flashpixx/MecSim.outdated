@@ -83,8 +83,8 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
          **/
         public CAgent( final File p_source ) throws JasonException
         {
-            this.setInternals( null );
             this.initAg( p_source.toString() );
+            this.setInternals( null );
         }
 
 
@@ -103,8 +103,9 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
             this.setPL( p_template.getPL().clone() );
             this.setASLSrc( p_template.getASLSrc() );
             this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setInternals( p_template );
+
             this.initAg();
+            this.setInternals( p_template );
         }
 
 

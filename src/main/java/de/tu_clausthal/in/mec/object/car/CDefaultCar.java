@@ -216,6 +216,9 @@ public class CDefaultCar extends IInspectorDefault implements ICar
         return this.getPredecessor( 1 );
     }
 
+    /**
+     * @bug run with parallel stream and collect
+     */
     @Override
     @CMethodFilter.CAgent( bind = false )
     public final Map<Double, ICar> getPredecessor( final int p_count )

@@ -36,9 +36,11 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 
 /**
@@ -55,21 +57,28 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
 
 
+    /**
+     * @bug change parallel stream with collect
+     */
     @Override
     public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
     {
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
-        final Set<ICar> l_set = new HashSet<>();
+        final Set<ICar> l_set = Collections.synchronizedSet( new HashSet<>() );
 
-        for ( int i = 0; i < p_count; i++ )
-            try
-            {
-                l_set.add( this.getCar( l_cells ) );
-            }
-            catch ( final Exception l_exception )
-            {
-                CLogger.error( l_exception );
-            }
+        IntStream.range( 0, p_count ).parallel().forEach(
+                i -> {
+                    try
+                    {
+                        l_set.add( this.getCar( l_cells ) );
+                    }
+                    catch ( final Exception l_exception )
+                    {
+                        CLogger.error( l_exception );
+                    }
+                }
+        );
+
         return l_set;
     }
 
@@ -98,9 +107,6 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
      * @param p_cells cell list
      * @return car object
      */
-    protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
-    {
-        return null;
-    }
+    protected abstract ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells );
 
 }

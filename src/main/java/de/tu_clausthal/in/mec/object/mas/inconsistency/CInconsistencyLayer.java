@@ -148,6 +148,9 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return 500;
     }
 
+    /**
+     * @bug run it parallel stream
+     */
     @Override
     @IBenchmark
     public final void step( final int p_currentstep, final ILayer p_layer )

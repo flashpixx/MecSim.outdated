@@ -25,19 +25,31 @@
 package de.tu_clausthal.in.mec.object.waypoint.generator;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
+import de.tu_clausthal.in.mec.ui.IInspectorDefault;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
 import java.util.Map;
 
 
 /**
  * profile generator to define a fixed histogram on the time steps
  */
-public class CTimeProfile implements IGenerator
+public class CTimeProfile extends IInspectorDefault implements IGenerator
 {
 
     /**
      * profile histogram *
      */
     final int[] m_histogram;
+    /**
+     * inspect data
+     */
+    private final Map<String, Object> m_inspect = new HashMap<String, Object>()
+    {{
+            putAll( CTimeProfile.super.inspect() );
+        }};
 
     /**
      * ctor
@@ -46,7 +58,9 @@ public class CTimeProfile implements IGenerator
      */
     public CTimeProfile( final int[] p_histogram )
     {
+
         m_histogram = p_histogram;
+        m_inspect.put( CCommon.getResourceString( this, "histogram" ), StringUtils.join( m_histogram, ", " ) );
     }
 
     @Override
@@ -58,6 +72,6 @@ public class CTimeProfile implements IGenerator
     @Override
     public Map<String, Object> inspect()
     {
-        return null;
+        return m_inspect;
     }
 }

@@ -24,58 +24,74 @@
 
 package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
-import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 
 /**
- * generator of a static number of objects with a time-exponential function
+ * generates a fixed number of cars
  */
-public class CTimeDistribution extends IInspectorDefault implements IGenerator
+public class CConstant extends IInspectorDefault implements IGenerator
 {
     /**
-     * number of objects *
+     * start step value
      */
-    private final int m_count;
+    private final int m_startstep;
     /**
-     * distribution *
+     * end step value
      */
-    private final AbstractRealDistribution m_distribution;
+    private final int m_endstep;
+    /**
+     * number of objects at each step
+     */
+    private final int m_stepobjects;
     /**
      * inspect data
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CTimeDistribution.super.inspect() );
+            putAll( CConstant.super.inspect() );
         }};
 
     /**
      * ctor
      *
-     * @param p_distribution distribution object
-     * @param p_count number of objects
+     * @param p_startstep start step
+     * @param p_endstep end step
+     * @param p_maxobjects maximum number of created objects
      */
-    public CTimeDistribution( final AbstractRealDistribution p_distribution, final int p_count )
+    public CConstant( final int p_startstep, final int p_endstep, final int p_maxobjects )
     {
-        m_count = p_count;
-        m_distribution = p_distribution;
+        if ( p_startstep >= p_endstep )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "startbegin " ) );
 
-        m_inspect.put( CCommon.getResourceString( this, "count" ), m_count );
-        m_inspect.put( CCommon.getResourceString( this, "distribution" ), m_distribution );
+        final int l_duration = p_endstep - p_startstep;
+
+        m_startstep = p_startstep;
+        m_endstep = p_endstep;
+        m_stepobjects = p_maxobjects / BigInteger.valueOf( Math.abs( p_maxobjects ) ).gcd( BigInteger.valueOf( l_duration ) ).intValue();
+
+        if ( m_stepobjects * l_duration != p_maxobjects )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notpossible" ) );
+
+        m_inspect.put( CCommon.getResourceString( this, "startstep" ), m_startstep );
+        m_inspect.put( CCommon.getResourceString( this, "endstep" ), m_endstep );
+        m_inspect.put( CCommon.getResourceString( this, "objectstep" ), m_stepobjects );
     }
+
 
     @Override
     public int getCount( final int p_currentStep )
     {
-        if ( m_distribution == null )
-            return 0;
-        return m_distribution.sample() <= m_distribution.getNumericalMean() ? 0 : m_count;
+        if ( ( p_currentStep >= m_startstep ) && ( p_currentStep <= m_endstep ) )
+            return m_stepobjects;
+        return 0;
     }
+
 
     @Override
     public Map<String, Object> inspect()

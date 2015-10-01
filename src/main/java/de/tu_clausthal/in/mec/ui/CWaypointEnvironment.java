@@ -217,13 +217,13 @@ public class CWaypointEnvironment
             throw new IllegalStateException( CCommon.getResourceString( this, "settingsnotexists" ) );
 
         c_waypointLayer.add(
-                (IWayPoint) EWaypoint.valueOf((String) m_currentsettings.get("waypoint")).get(
+                (IWayPoint) EWaypoint.valueOf( (String) m_currentsettings.get( "waypoint" ) ).get(
                         p_position,
-                        (IGenerator) m_currentsettings.get("generator"),
-                        (IFactory) m_currentsettings.get("factory"),
-                        (Double) m_currentsettings.get("radius"),
-                        (Color) m_currentsettings.get("color"),
-                        (String) m_currentsettings.get("name")
+                        (IGenerator) m_currentsettings.get( "generator" ),
+                        (IFactory) m_currentsettings.get( "factory" ),
+                        (Double) m_currentsettings.get( "radius" ),
+                        (Color) m_currentsettings.get( "color" ),
+                        (String) m_currentsettings.get( "name" )
                 )
         );
     }
@@ -281,21 +281,25 @@ public class CWaypointEnvironment
     {
         Map<String, Map<String, String>> result = new HashMap<>();
 
-        for(IWayPoint l_waypoint : c_waypointLayer){
+        for ( IWayPoint l_waypoint : c_waypointLayer )
+        {
             Map<String, String> l_info = new HashMap<>();
 
-            l_info.put("id", String.valueOf(l_waypoint.getID()));
-            l_info.put("name", l_waypoint.getName());
-            l_info.put("latitude", String.valueOf(l_waypoint.getPosition().getLatitude()));
-            l_info.put("longitude", String.valueOf(l_waypoint.getPosition().getLongitude()));
+            l_info.put( "id", String.valueOf( l_waypoint.getID() ) );
+            l_info.put( "name", l_waypoint.getName() );
+            l_info.put( "latitude", String.valueOf( l_waypoint.getPosition().getLatitude() ) );
+            l_info.put( "longitude", String.valueOf( l_waypoint.getPosition().getLongitude() ) );
 
-            if(l_waypoint instanceof IPathWayPoint){
-                l_info.put("type", "path");
-            }else{
-                l_info.put("type", "random");
+            if ( l_waypoint instanceof IPathWayPoint )
+            {
+                l_info.put( "type", "path" );
+            }
+            else
+            {
+                l_info.put( "type", "random" );
             }
 
-            result.put(l_waypoint.toString(), l_info);
+            result.put( l_waypoint.toString(), l_info );
         }
 
         return result;
@@ -303,112 +307,121 @@ public class CWaypointEnvironment
 
     /**
      * method to get the makrov chain
+     *
      * @return
      */
-    private final IPathWayPoint.CMakrovChain web_static_getmakrovchain(final Map<String, Object> p_data)
+    private final IPathWayPoint.CMakrovChain web_static_getmakrovchain( final Map<String, Object> p_data )
     {
-        for( IWayPoint l_waypoint : c_waypointLayer )
-            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
-                if( l_waypoint instanceof IPathWayPoint )
-                    return ((IPathWayPoint) l_waypoint).getMakrovChain();
+        for ( IWayPoint l_waypoint : c_waypointLayer )
+            if ( l_waypoint.toString().equals( p_data.get( "makrovwaypoint" ) ) )
+                if ( l_waypoint instanceof IPathWayPoint )
+                    return ( (IPathWayPoint) l_waypoint ).getMakrovChain();
 
         return null;
     }
 
     /**
      * method to add a node to a makrov chain
+     *
      * @param p_data
      */
-    private final void web_static_addnode(final Map<String, Object> p_data)
+    private final void web_static_addnode( final Map<String, Object> p_data )
     {
         IPathWayPoint l_makrovWaypoint = null;
         IWayPoint l_newWaypoint = null;
 
-        for( IWayPoint l_waypoint : c_waypointLayer ){
-            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
-                if( l_waypoint instanceof IPathWayPoint )
+        for ( IWayPoint l_waypoint : c_waypointLayer )
+        {
+            if ( l_waypoint.toString().equals( p_data.get( "makrovwaypoint" ) ) )
+                if ( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;
 
-            if( l_waypoint.toString().equals( p_data.get("waypoint") ) )
+            if ( l_waypoint.toString().equals( p_data.get( "waypoint" ) ) )
                 l_newWaypoint = l_waypoint;
         }
 
-        if( l_makrovWaypoint != null && l_newWaypoint != null )
-            l_makrovWaypoint.getMakrovChain().addNode(l_newWaypoint);
+        if ( l_makrovWaypoint != null && l_newWaypoint != null )
+            l_makrovWaypoint.getMakrovChain().addNode( l_newWaypoint );
     }
 
     /**
      * method to remove a node from makrov chain
+     *
      * @param p_data
      */
-    private final void web_static_removenode(final Map<String, Object> p_data)
+    private final void web_static_removenode( final Map<String, Object> p_data )
     {
         IPathWayPoint l_makrovWaypoint = null;
         IWayPoint l_removeWaypoint = null;
 
-        for( IWayPoint l_waypoint : c_waypointLayer ){
-            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
-                if( l_waypoint instanceof IPathWayPoint )
+        for ( IWayPoint l_waypoint : c_waypointLayer )
+        {
+            if ( l_waypoint.toString().equals( p_data.get( "makrovwaypoint" ) ) )
+                if ( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;
 
-            if( l_waypoint.toString().equals( p_data.get("waypoint") ) )
+            if ( l_waypoint.toString().equals( p_data.get( "waypoint" ) ) )
                 l_removeWaypoint = l_waypoint;
         }
 
-        if( l_makrovWaypoint != null && l_removeWaypoint != null )
-            l_makrovWaypoint.getMakrovChain().removeNode(l_removeWaypoint);
+        if ( l_makrovWaypoint != null && l_removeWaypoint != null )
+            l_makrovWaypoint.getMakrovChain().removeNode( l_removeWaypoint );
     }
 
     /**
      * method to add an edge to a makrov chain
+     *
      * @param p_data
      */
-    private final void web_static_addedge(final Map<String, Object> p_data)
+    private final void web_static_addedge( final Map<String, Object> p_data )
     {
         IPathWayPoint l_makrovWaypoint = null;
         IWayPoint l_source = null;
         IWayPoint l_target = null;
 
-        for( IWayPoint l_waypoint : c_waypointLayer ){
-            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
-                if( l_waypoint instanceof IPathWayPoint )
+        for ( IWayPoint l_waypoint : c_waypointLayer )
+        {
+            if ( l_waypoint.toString().equals( p_data.get( "makrovwaypoint" ) ) )
+                if ( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;
 
-            if( l_waypoint.toString().equals( p_data.get("source") ) )
+            if ( l_waypoint.toString().equals( p_data.get( "source" ) ) )
                 l_source = l_waypoint;
 
-            if( l_waypoint.toString().equals( p_data.get("target") ) )
+            if ( l_waypoint.toString().equals( p_data.get( "target" ) ) )
                 l_target = l_waypoint;
         }
 
-        if( l_makrovWaypoint != null && l_source != null && l_target != null )
-            l_makrovWaypoint.getMakrovChain().addEdge(l_source, l_target, 1);
+        if ( l_makrovWaypoint != null && l_source != null && l_target != null )
+            l_makrovWaypoint.getMakrovChain().addEdge( l_source, l_target, 1 );
     }
 
     /**
      * method to remove an edge from makrov chain
+     *
      * @param p_data
      */
-    private final void web_static_removeedge(final Map<String, Object> p_data)
+    private final void web_static_removeedge( final Map<String, Object> p_data )
     {
         IPathWayPoint l_makrovWaypoint = null;
         IWayPoint l_source = null;
         IWayPoint l_target = null;
 
-        for( IWayPoint l_waypoint : c_waypointLayer ){
-            if( l_waypoint.toString().equals( p_data.get("makrovwaypoint") ) )
-                if( l_waypoint instanceof IPathWayPoint )
+        for ( IWayPoint l_waypoint : c_waypointLayer )
+        {
+            if ( l_waypoint.toString().equals( p_data.get( "makrovwaypoint" ) ) )
+                if ( l_waypoint instanceof IPathWayPoint )
                     l_makrovWaypoint = (IPathWayPoint) l_waypoint;
 
-            if( l_waypoint.toString().equals( p_data.get("source") ) )
+            if ( l_waypoint.toString().equals( p_data.get( "source" ) ) )
                 l_source = l_waypoint;
 
-            if( l_waypoint.toString().equals( p_data.get("target") ) )
+            if ( l_waypoint.toString().equals( p_data.get( "target" ) ) )
                 l_target = l_waypoint;
         }
 
-        if( l_makrovWaypoint != null && l_source != null && l_target != null )
-            l_makrovWaypoint.getMakrovChain().removeEdge(l_source, l_target);
+        if ( l_makrovWaypoint != null && l_source != null && l_target != null )
+            l_makrovWaypoint.getMakrovChain().removeEdge( l_source, l_target );
     }
 
     /**

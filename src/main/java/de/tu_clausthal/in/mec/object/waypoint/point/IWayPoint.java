@@ -57,6 +57,7 @@ public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, 
 
     /**
      * method to get waypoint id
+     *
      * @return waypoint id
      */
     public int getID();

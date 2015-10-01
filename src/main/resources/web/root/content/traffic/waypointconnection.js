@@ -35,10 +35,10 @@
 **/
 function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
 {
-	Widget.call(this, pc_id, pc_name, pa_panel, po_options );
-	this.mc_currentMakrovWaypoint = null;
-	this.mo_graphEditor = null;
-	this.mo_waypointList = {};
+    Widget.call(this, pc_id, pc_name, pa_panel, po_options );
+    this.mc_currentMakrovWaypoint = null;
+    this.mo_graphEditor = null;
+    this.mo_waypointList = {};
 }
 
 /** inheritance call **/
@@ -51,28 +51,28 @@ WaypointConnection.prototype = Object.create(Widget.prototype);
 WaypointConnection.prototype.getContent = function()
 {
 
-	// add waypoint connection content
-	return Widget.prototype.getContent.call( this,
+    // add waypoint connection content
+    return Widget.prototype.getContent.call( this,
 
-		'<div id="' + this.generateSubID("waypointlist") + '">' +
-		'<table id="' + this.generateSubID("waypointtable") + '">' +
-		'<thead id="' + this.generateSubID("thead") + '">' +
-		'<tr>' +
-		'<td id="' + this.generateSubID("identifier") + '"></td>' +
-		'<td id="' + this.generateSubID("waypointname") + '"></td>' +
-		'<td id="' + this.generateSubID("latitude") + '"></td>' +
-		'<td id="' + this.generateSubID("longitude") + '"></td>' +
-		'<td id="' + this.generateSubID("add") + '"></td>' +
-		'<td id="' + this.generateSubID("edit") + '"></td>' +
-		'</tr>' +
-		'</thead>' +
-		'<tbody id="' + this.generateSubID("tbody") + '">' +
-		'</tbody>' +
-		'</table>' +
-		'</div>' +
-		'<div id="' + this.generateSubID("waypointeditor") + '">' +
-		'</div>'
-	);
+        '<div id="' + this.generateSubID("waypointlist") + '">' +
+        '<table id="' + this.generateSubID("waypointtable") + '">' +
+        '<thead id="' + this.generateSubID("thead") + '">' +
+        '<tr>' +
+        '<td id="' + this.generateSubID("identifier") + '"></td>' +
+        '<td id="' + this.generateSubID("waypointname") + '"></td>' +
+        '<td id="' + this.generateSubID("latitude") + '"></td>' +
+        '<td id="' + this.generateSubID("longitude") + '"></td>' +
+        '<td id="' + this.generateSubID("add") + '"></td>' +
+        '<td id="' + this.generateSubID("edit") + '"></td>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody id="' + this.generateSubID("tbody") + '">' +
+        '</tbody>' +
+        '</table>' +
+        '</div>' +
+        '<div id="' + this.generateSubID("waypointeditor") + '">' +
+        '</div>'
+    );
 }
 
 
@@ -81,53 +81,53 @@ WaypointConnection.prototype.getContent = function()
 **/
 WaypointConnection.prototype.getGlobalCSS = function()
 {
-	return  Widget.prototype.getGlobalCSS.call(this) +
+    return  Widget.prototype.getGlobalCSS.call(this) +
 
-		this.generateSubID("waypointlist", "#") +
-		'{' +
-			'float: left;' +
-			'width: 50%;' +
-		'}' +
+        this.generateSubID("waypointlist", "#") +
+        '{' +
+            'float: left;' +
+            'width: 50%;' +
+        '}' +
 
-		this.generateSubID("waypointtable", "#") +
-		'{' +
-			'width: 100%;' +
-		'}' +
+        this.generateSubID("waypointtable", "#") +
+        '{' +
+            'width: 100%;' +
+        '}' +
 
-		this.generateSubID("thead", "#") +
-		'{' +
-			'margin: 0;' +
-			'color: white;' +
-			'background: #008C4F;' +
-			'border: 1px solid #CACACA;' +
-			'position: relative;' +
-			'text-align: center;' +
-			'margin-bottom: 10px;' +
-		'}' +
+        this.generateSubID("thead", "#") +
+        '{' +
+            'margin: 0;' +
+            'color: white;' +
+            'background: #008C4F;' +
+            'border: 1px solid #CACACA;' +
+            'position: relative;' +
+            'text-align: center;' +
+            'margin-bottom: 10px;' +
+        '}' +
 
-		this.generateSubID("waypointname", "#") +
-		'{' +
-			'width: 15%;' +
-		'}'+
+        this.generateSubID("waypointname", "#") +
+        '{' +
+            'width: 15%;' +
+        '}'+
 
-		this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
-		'{' +
-			'width: 35%;' +
-		'}'+
+        this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
+        '{' +
+            'width: 35%;' +
+        '}'+
 
-		this.generateSubID("id", "#") + "," + this.generateSubID("add", "#") + "," + this.generateSubID("edit", "#") +
-		'{' +
-			'width: 5%;' +
-		'}' +
+        this.generateSubID("id", "#") + "," + this.generateSubID("add", "#") + "," + this.generateSubID("edit", "#") +
+        '{' +
+            'width: 5%;' +
+        '}' +
 
-		this.generateSubID("waypointeditor", "#") +
-		'{' +
-			'float: right;' +
-			'margin-right: 10px;' +
-			'border: 1px solid #008C4F;' +
-			'width: 45%;' +
-			'height : 90%' +
-		'}'
+        this.generateSubID("waypointeditor", "#") +
+        '{' +
+            'float: right;' +
+            'margin-right: 10px;' +
+            'border: 1px solid #008C4F;' +
+            'width: 45%;' +
+            'height : 90%' +
+        '}'
 }
 
 
@@ -136,33 +136,33 @@ WaypointConnection.prototype.getGlobalCSS = function()
 **/
 WaypointConnection.prototype.afterDOMAdded = function()
 {
-	var self = this;
+    var self = this;
 
-	self.ml_cancel = self.generateSubID("waypointeditor", "#");
+    self.ml_cancel = self.generateSubID("waypointeditor", "#");
 
-	MecSim.language({
+    MecSim.language({
 
-		url    : "/cwaypointenvironment/labelwaypointconnection",
-		target : this,
+        url    : "/cwaypointenvironment/labelwaypointconnection",
+        target : this,
 
-		finish : function() {
-			//initalize waypoint list
-			self.refresh();
+        finish : function() {
+            //initalize waypoint list
+            self.refresh();
 
-			//initalize waypoint editor
-			self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {
-				nodes : [],
-				edges : [],
-				lastNodeID : 0,
-				mouseMode : false,
-				onRemoveNode : self.onRemoveNode.bind(self),
-				onAddEdge : self.onAddEdge.bind(self),
-				onRemoveEdge : self.onRemoveEdge.bind(self)
-			});
+            //initalize waypoint editor
+            self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {
+                nodes : [],
+                edges : [],
+                lastNodeID : 0,
+                mouseMode : false,
+                onRemoveNode : self.onRemoveNode.bind(self),
+                onAddEdge : self.onAddEdge.bind(self),
+                onRemoveEdge : self.onRemoveEdge.bind(self)
+            });
 
-			Widget.prototype.afterDOMAdded.call(self);
-		}
-	});
+            Widget.prototype.afterDOMAdded.call(self);
+        }
+    });
 }
 
 
@@ -171,36 +171,36 @@ WaypointConnection.prototype.afterDOMAdded = function()
 **/
 WaypointConnection.prototype.refresh = function()
 {
-	var self = this;
+    var self = this;
 
-	jQuery(self.generateSubID("tbody", "#")).empty();
-	self.mo_waypointList = {};
+    jQuery(self.generateSubID("tbody", "#")).empty();
+    self.mo_waypointList = {};
 
-	MecSim.ajax({
-		url : "/cwaypointenvironment/listpathwaypoints",
-		success : function(po_data){
-			jQuery.each(po_data, function(pc_waypoint, po_info){
-				//create client list
-				self.mo_waypointList[pc_waypoint] = {id : po_info.id, name : po_info.name, type : po_info.type, lat : po_info.latitude, lon : po_info.longitudem};
+    MecSim.ajax({
+        url : "/cwaypointenvironment/listpathwaypoints",
+        success : function(po_data){
+            jQuery.each(po_data, function(pc_waypoint, po_info){
+                //create client list
+                self.mo_waypointList[pc_waypoint] = {id : po_info.id, name : po_info.name, type : po_info.type, lat : po_info.latitude, lon : po_info.longitudem};
 
-				//create table entry
-				var l_data = jQuery("<tr></tr>");
-				jQuery("<td></td>").text(po_info.id).appendTo(l_data);
-				jQuery("<td></td>").text(po_info.name).appendTo(l_data);
-				jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
-				jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
-				jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Add</button>").click(self.add.bind(self)).appendTo(l_data);
+                //create table entry
+                var l_data = jQuery("<tr></tr>");
+                jQuery("<td></td>").text(po_info.id).appendTo(l_data);
+                jQuery("<td></td>").text(po_info.name).appendTo(l_data);
+                jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
+                jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
+                jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Add</button>").click(self.add.bind(self)).appendTo(l_data);
 
-				if(po_info.type === "path"){
-					jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Edit</button>").click(self.edit.bind(self)).appendTo(l_data);
-				}else{
-					jQuery("<td></td>").appendTo(l_data);
-				}
+                if(po_info.type === "path"){
+                    jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Edit</button>").click(self.edit.bind(self)).appendTo(l_data);
+                }else{
+                    jQuery("<td></td>").appendTo(l_data);
+                }
 
-				l_data.appendTo(jQuery(self.generateSubID("tbody", "#")));
-			});
-		}
-	});
+                l_data.appendTo(jQuery(self.generateSubID("tbody", "#")));
+            });
+        }
+    });
 }
 
 
@@ -209,8 +209,8 @@ WaypointConnection.prototype.refresh = function()
 **/
 WaypointConnection.prototype.edit = function(p_event)
 {
-	this.mc_currentMakrovWaypoint = p_event.target.value;
-	this.reload(p_event.target.value);
+    this.mc_currentMakrovWaypoint = p_event.target.value;
+    this.reload(p_event.target.value);
 }
 
 
@@ -219,16 +219,16 @@ WaypointConnection.prototype.edit = function(p_event)
 **/
 WaypointConnection.prototype.add = function(p_event)
 {
-	var self = this;
+    var self = this;
 
-	//add node to makrov chain and reload after success
-	MecSim.ajax({
-		url : "cwaypointenvironment/addnode",
-		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "waypoint" : p_event.target.value},
-		success : function(){
-			self.reload(self.mc_currentMakrovWaypoint);
-		}
-	});
+    //add node to makrov chain and reload after success
+    MecSim.ajax({
+        url : "cwaypointenvironment/addnode",
+        data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "waypoint" : p_event.target.value},
+        success : function(){
+            self.reload(self.mc_currentMakrovWaypoint);
+        }
+    });
 }
 
 
@@ -237,61 +237,61 @@ WaypointConnection.prototype.add = function(p_event)
 **/
 WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 {
-	var self = this;
+    var self = this;
 
-	MecSim.ajax({
-		url : "cwaypointenvironment/getmakrovchain",
-		data : {"makrovwaypoint" : p_makrovwaypoint},
-		success : function(po_data){
+    MecSim.ajax({
+        url : "cwaypointenvironment/getmakrovchain",
+        data : {"makrovwaypoint" : p_makrovwaypoint},
+        success : function(po_data){
 
-			var l_lastID = 0;
-			var l_newNodes = [];
-			var l_newEdges = [];
+            var l_lastID = 0;
+            var l_newNodes = [];
+            var l_newEdges = [];
 
-			//build nodes array
-			jQuery.each(po_data, function(p_key, p_value){
-				var l_waypointID = self.mo_waypointList[p_key].id
-				l_newNodes.push({id : l_waypointID, reflexive : false, waypointname : p_key});
-				if(l_waypointID > l_lastID) l_lastID = ++l_waypointID;
-			});
+            //build nodes array
+            jQuery.each(po_data, function(p_key, p_value){
+                var l_waypointID = self.mo_waypointList[p_key].id
+                l_newNodes.push({id : l_waypointID, reflexive : false, waypointname : p_key});
+                if(l_waypointID > l_lastID) l_lastID = ++l_waypointID;
+            });
 
-			//build edge array
-			jQuery.each(po_data, function(p_key, p_value){
-				jQuery.each(p_value, function(p_key2, p_value2){
+            //build edge array
+            jQuery.each(po_data, function(p_key, p_value){
+                jQuery.each(p_value, function(p_key2, p_value2){
 
-					//check if edge already exist
-					var l_edge;
-					jQuery.each(l_newEdges, function(l_index){
-						if(l_newEdges[l_index].source.waypointname === p_key && l_newEdges[l_index].target.waypointname === p_key2){
-							l_newEdges[l_index].right = true;
-							l_edge = l_newEdges[l_index];
-							return;
-						}
+                    //check if edge already exist
+                    var l_edge;
+                    jQuery.each(l_newEdges, function(l_index){
+                        if(l_newEdges[l_index].source.waypointname === p_key && l_newEdges[l_index].target.waypointname === p_key2){
+                            l_newEdges[l_index].right = true;
+                            l_edge = l_newEdges[l_index];
+                            return;
+                        }
 
-						if(l_newEdges[l_index].target.waypointname === p_key && l_newEdges[l_index].source.waypointname === p_key2){
-							l_newEdges[l_index].left = true;
-							l_edge = l_newEdges[l_index];
-							return;
-						}
-					});
+                        if(l_newEdges[l_index].target.waypointname === p_key && l_newEdges[l_index].source.waypointname === p_key2){
+                            l_newEdges[l_index].left = true;
+                            l_edge = l_newEdges[l_index];
+                            return;
+                        }
+                    });
 
-					if(!l_edge){
-						//find node object
-						var l_source, l_target;
-						jQuery.each(l_newNodes, function(l_index){
-							if( l_newNodes[l_index].waypointname === p_key ) l_source = l_newNodes[l_index]
-							if( l_newNodes[l_index].waypointname === p_key2 ) l_target = l_newNodes[l_index]
-						});
+                    if(!l_edge){
+                        //find node object
+                        var l_source, l_target;
+                        jQuery.each(l_newNodes, function(l_index){
+                            if( l_newNodes[l_index].waypointname === p_key ) l_source = l_newNodes[l_index]
+                            if( l_newNodes[l_index].waypointname === p_key2 ) l_target = l_newNodes[l_index]
+                        });
 
-						l_newEdges.push({source : l_source, target : l_target, left : false, right : true});
-					}
-				});
-			});
+                        l_newEdges.push({source : l_source, target : l_target, left : false, right : true});
+                    }
+                });
+            });
 
-			//actual graph reload
-			self.mo_graphEditor.reload({nodes : l_newNodes, edges : l_newEdges, lastNodeID : --l_lastID})
-		}
-	});
+            //actual graph reload
+            self.mo_graphEditor.reload({nodes : l_newNodes, edges : l_newEdges, lastNodeID : --l_lastID})
+        }
+    });
 }
 
 
@@ -300,12 +300,12 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 **/
 WaypointConnection.prototype.onRemoveNode = function(p_node)
 {
-	var self = this;
+    var self = this;
 
-	MecSim.ajax({
-		url : "cwaypointenvironment/removenode",
-		data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "waypoint" : p_node.waypointname}
-	});
+    MecSim.ajax({
+        url : "cwaypointenvironment/removenode",
+        data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "waypoint" : p_node.waypointname}
+    });
 }
 
 /**
@@ -313,33 +313,33 @@ WaypointConnection.prototype.onRemoveNode = function(p_node)
 **/
 WaypointConnection.prototype.onAddEdge = function(p_edge)
 {
-	var self = this;
-	if(p_edge.left)
-		MecSim.ajax({
-			url : "cwaypointenvironment/addedge",
-			data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.target.waypointname, "target" : p_edge.source.waypointname}
-		});
+    var self = this;
+    if(p_edge.left)
+        MecSim.ajax({
+            url : "cwaypointenvironment/addedge",
+            data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.target.waypointname, "target" : p_edge.source.waypointname}
+        });
 
-	if(p_edge.right)
-		MecSim.ajax({
-			url : "cwaypointenvironment/addedge",
-			data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.source.waypointname, "target" : p_edge.target.waypointname}
-		});
+    if(p_edge.right)
+        MecSim.ajax({
+            url : "cwaypointenvironment/addedge",
+            data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.source.waypointname, "target" : p_edge.target.waypointname}
+        });
 }
 
 
 WaypointConnection.prototype.onRemoveEdge = function(p_edge)
 {
-	var self = this;
-	if(p_edge.left)
-		MecSim.ajax({
-			url : "cwaypointenvironment/removeedge",
-			data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.target.waypointname, "target" : p_edge.source.waypointname}
-		});
+    var self = this;
+    if(p_edge.left)
+        MecSim.ajax({
+            url : "cwaypointenvironment/removeedge",
+            data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.target.waypointname, "target" : p_edge.source.waypointname}
+        });
 
-	if(p_edge.right)
-		MecSim.ajax({
-			url : "cwaypointenvironment/removeedge",
-			data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.source.waypointname, "target" : p_edge.target.waypointname}
-		});
+    if(p_edge.right)
+        MecSim.ajax({
+            url : "cwaypointenvironment/removeedge",
+            data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "source" : p_edge.source.waypointname, "target" : p_edge.target.waypointname}
+        });
 }

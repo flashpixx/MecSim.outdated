@@ -41,6 +41,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -132,7 +133,11 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         if ( p_literal.isVar() )
             return this.iterator();
 
-        return this.getLiteralIterator( this.getLiterals( this.splitPath( p_literal.getFunctor() ) ).values().iterator() );
+        final CPath l_path = this.splitPath( p_literal.getFunctor() );
+        final Map<CPath, ILiteral<Literal>> l_literals = this.getLiterals( l_path.getSubPath( 0, l_path.size() - 1 ) );
+
+
+        return this.getLiteralIterator( l_literals.values().iterator() );
     }
 
     @Override
@@ -239,7 +244,10 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
      */
     private CPath splitPath( final String p_functor )
     {
-        return new CPath( p_functor.split( m_pathseparator ) );
+        final CPath l_path = new CPath( p_functor.split( m_pathseparator ) );
+        if ( ( !m_prefixremove.isEmpty() ) && ( l_path.startsWith( m_prefixremove ) ) )
+            l_path.remove( 0, m_prefixremove.size() );
+        return l_path;
     }
 
     /**
@@ -251,9 +259,6 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     private Pair<CPath, CLiteral> cloneLiteral( final Literal p_literal )
     {
         final CPath l_path = this.splitPath( p_literal.getFunctor() );
-        if ( ( !m_prefixremove.isEmpty() ) && ( l_path.startsWith( m_prefixremove ) ) )
-            l_path.remove( 0, m_prefixremove.size() );
-
         final Literal l_literal = ASSyntax.createLiteral( p_literal.negated(), l_path.getSuffix() );
         l_literal.addAnnot( p_literal.getAnnots() );
         l_literal.addTerms( p_literal.getTerms() );

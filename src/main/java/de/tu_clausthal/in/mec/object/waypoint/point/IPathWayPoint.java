@@ -34,9 +34,9 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
@@ -94,7 +94,7 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
     @Override
     public Collection<Pair<GeoPosition, GeoPosition>> getPath()
     {
-        HashSet<Pair<GeoPosition, GeoPosition>> l_path = new HashSet<>();
+        ConcurrentLinkedQueue<Pair<GeoPosition, GeoPosition>> l_path = new ConcurrentLinkedQueue<>();
         IWayPoint l_current = this;
 
         //if entry point is not defined or there are no outgoing edges drive to default location

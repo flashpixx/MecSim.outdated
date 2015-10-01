@@ -287,7 +287,7 @@ public class CWaypointEnvironment
             l_info.put("id", String.valueOf(l_waypoint.getID()));
             l_info.put("name", l_waypoint.getName());
             l_info.put("latitude", String.valueOf(l_waypoint.getPosition().getLatitude()));
-            l_info.put("longitude", String.valueOf(l_waypoint.getPosition().getLatitude()));
+            l_info.put("longitude", String.valueOf(l_waypoint.getPosition().getLongitude()));
 
             if(l_waypoint instanceof IPathWayPoint){
                 l_info.put("type", "path");

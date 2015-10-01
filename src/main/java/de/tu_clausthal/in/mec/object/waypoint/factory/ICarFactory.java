@@ -25,7 +25,6 @@
 package de.tu_clausthal.in.mec.object.waypoint.factory;
 
 import com.graphhopper.util.EdgeIteratorState;
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -36,10 +35,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -64,22 +63,10 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
     public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
     {
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
-        final Set<ICar> l_set = Collections.synchronizedSet( new HashSet<>() );
-
-        IntStream.range( 0, p_count ).parallel().forEach(
-                i -> {
-                    try
-                    {
-                        l_set.add( this.getCar( l_cells ) );
-                    }
-                    catch ( final Exception l_exception )
-                    {
-                        CLogger.error( l_exception );
-                    }
-                }
-        );
-
-        return l_set;
+        return IntStream.range( 0, p_count )
+                        .parallel()
+                        .mapToObj( i -> this.getCar( l_cells ) )
+                        .collect( Collectors.toCollection( () -> new HashSet<ICar>() ) );
     }
 
     /**

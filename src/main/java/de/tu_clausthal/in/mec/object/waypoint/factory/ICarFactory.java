@@ -72,6 +72,7 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
     /**
      * creates the route cells
      *
+     * @bug run in parallel with stream
      * @param p_waypoints waypoint pair list
      * @return cell list
      */

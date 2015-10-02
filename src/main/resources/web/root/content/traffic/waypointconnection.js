@@ -167,6 +167,7 @@ WaypointConnection.prototype.afterDOMAdded = function()
 
 
 /**
+ * todo multilanguage support for "add" and "edit"
  * method to refresh table data
 **/
 WaypointConnection.prototype.refresh = function()

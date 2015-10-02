@@ -90,7 +90,10 @@ Simulation.prototype.afterDOMAdded = function()
 
         jQuery(self.generateSubID(pc_item, "#")).button().click( function() {
 
-            MecSim.ajax("/csimulation/"+pc_item).fail( function( po_data ) {
+            MecSim.ajax({
+                url : "/csimulation/"+pc_item,
+                method : "GET"
+            }).fail( function( po_data ) {
 
                 jQuery( self.generateSubID("text", "#")   ).text(po_data.responseJSON.error);
                 jQuery(self.generateSubID("dialog", "#")).dialog({

@@ -178,6 +178,7 @@ WaypointConnection.prototype.refresh = function()
 
     MecSim.ajax({
         url : "/cwaypointenvironment/listpathwaypoints",
+        method : "GET",
         success : function(po_data){
             jQuery.each(po_data, function(pc_waypoint, po_info){
                 //create client list

@@ -244,7 +244,18 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
      */
     private CPath splitPath( final String p_functor )
     {
-        final CPath l_path = new CPath( p_functor.split( m_pathseparator ) );
+        return new CPath( p_functor.split( m_pathseparator ) );
+    }
+
+    /**
+     * clears the prefix of a path if exists
+     *
+     * @param p_path input path
+     * @return modified path (new object instance)
+     */
+    private CPath clearPathPrefix( final CPath p_path )
+    {
+        final CPath l_path = new CPath( p_path );
         if ( ( !m_prefixremove.isEmpty() ) && ( l_path.startsWith( m_prefixremove ) ) )
             l_path.remove( 0, m_prefixremove.size() );
         return l_path;
@@ -258,7 +269,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
      */
     private Pair<CPath, CLiteral> cloneLiteral( final Literal p_literal )
     {
-        final CPath l_path = this.splitPath( p_literal.getFunctor() );
+        final CPath l_path = this.clearPathPrefix( this.splitPath( p_literal.getFunctor() ) );
         final Literal l_literal = ASSyntax.createLiteral( p_literal.negated(), l_path.getSuffix() );
         l_literal.addAnnot( p_literal.getAnnots() );
         l_literal.addTerms( p_literal.getTerms() );

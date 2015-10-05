@@ -212,7 +212,7 @@ WaypointConnection.prototype.refresh = function()
                 //initial for the dynamic button
                 var l_button = jQuery("<button></button>")
                     .attr("class", self.generateSubID("dynamicButton"))
-                    .attr("value", i)
+                    .attr("value", pc_waypoint)
                     .click(self.dynamicListener.bind(self));
 
                 if(po_info.type === "path"){
@@ -235,6 +235,7 @@ WaypointConnection.prototype.refresh = function()
     });
 }
 
+
 /**
  * listen to the buttons in the waypoint list
  * will dynamicly modify buttons and rebind listeners
@@ -242,13 +243,13 @@ WaypointConnection.prototype.refresh = function()
 WaypointConnection.prototype.dynamicListener = function(p_event)
 {
     var self = this;
-    var element = jQuery(event.target);
+    var clickedElement = jQuery(event.target);
     var dynamicButtonCollection = jQuery(self.generateSubID("dynamicButton", "."));
     var pathCollection = jQuery(self.generateSubID("pathButton", "."));
     var noPathCollection = jQuery(self.generateSubID("noPathButton", "."));
 
     //if edit was clicked
-    if(element.hasClass(self.generateSubID("editClass"))){
+    if(clickedElement.hasClass(self.generateSubID("editClass"))){
 
         //all buttons to add/remove depending if they are already in the makrov chain
         pathCollection.removeClass(self.generateSubID("editClass"))
@@ -261,7 +262,7 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
             .click(self.addListener.bind(self));
 
         //clicked edit button to finish
-        element.removeClass(self.generateSubID("addClass")) //todo not needed
+        clickedElement.removeClass(self.generateSubID("addClass")) //todo not needed
             .addClass(self.generateSubID("finishClass"))
             .text(self.mo_labels.finish)
             .unbind("click")
@@ -274,9 +275,7 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
     }
 
     //if finish was clicked
-    if(element.hasClass(self.generateSubID("finishClass"))){
-
-        console.log("test");
+    if(clickedElement.hasClass(self.generateSubID("finishClass"))){
 
         //all path buttons to edit
         pathCollection.removeClass(self.generateSubID("finishClass"))
@@ -303,10 +302,10 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
     }
 
     //if add was clicked
-    if(element.hasClass(self.generateSubID("addClass"))){
+    if(clickedElement.hasClass(self.generateSubID("addClass"))){
 
         //switch add and remove
-        element.removeClass(self.generateSubID("addClass"))
+        clickedElement.removeClass(self.generateSubID("addClass"))
             .addClass(self.generateSubID("removeClass"))
             .text(self.mo_labels.remove)
             .unbind("click")
@@ -317,10 +316,10 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
     }
 
     //if remove was clicked
-    if(element.hasClass(self.generateSubID("removeClass"))){
+    if(clickedElement.hasClass(self.generateSubID("removeClass"))){
 
         //switch add and remove
-        element.removeClass(self.generateSubID("removeClass"))
+        clickedElement.removeClass(self.generateSubID("removeClass"))
             .addClass(self.generateSubID("addClass"))
             .text(self.mo_labels.add)
             .unbind("click")
@@ -334,42 +333,9 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
 
 /**
  * fires when a edit button was clicked
+ * this method will load the makrov chain from java into the d3-graphEditor
 **/
-WaypointConnection.prototype.editListener = function(event){
-    console.log("editListener");
-}
-
-
-/**
- * fires when a finish button was clicked
-**/
-WaypointConnection.prototype.finishListener = function(event){
-    console.log("finishListener");
-}
-
-
-/**
- * fires when an add button was clicked
-**/
-WaypointConnection.prototype.addListener = function(event){
-    console.log("addListener");
-}
-
-
-/**
- * fires when a remove button was clicked
-**/
-WaypointConnection.prototype.removeListener = function(event){
-    console.log("removeListener");
-}
-
-
-//the folllowing todo will be refactored
-
-/**
- * method to load makrov chain
-**/
-WaypointConnection.prototype.edit = function(p_event)
+WaypointConnection.prototype.editListener = function(p_event)
 {
     this.mc_currentMakrovWaypoint = p_event.target.value;
     this.reload(p_event.target.value);
@@ -377,9 +343,21 @@ WaypointConnection.prototype.edit = function(p_event)
 
 
 /**
- * method to add a waypoint to another makrov chain
+ * fires when a finish button was clicked
+ * this method will clear the d3-GraphEditor
 **/
-WaypointConnection.prototype.add = function(p_event)
+WaypointConnection.prototype.finishListener = function(p_event)
+{
+    //todo
+    console.log("finishListener");
+}
+
+
+/**
+ * fires when an add button was clicked
+ * this method will add a waypoint to the currently loaded makrov chain
+**/
+WaypointConnection.prototype.addListener = function(p_event)
 {
     var self = this;
 
@@ -391,6 +369,17 @@ WaypointConnection.prototype.add = function(p_event)
             self.reload(self.mc_currentMakrovWaypoint);
         }
     });
+}
+
+
+/**
+ * fires when a remove button was clicked
+ * this method will remove a waypoint from the currently loaded makrov chain
+**/
+WaypointConnection.prototype.removeListener = function(p_event)
+{
+    //todo
+    console.log("removeListener");
 }
 
 
@@ -458,7 +447,8 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 
 
 /**
- * method to remove a node from makrov chain
+ * fires when a node was removed via d3-graphEditor
+ * this method will remove the waypoint out of the java makrov chain
 **/
 WaypointConnection.prototype.onRemoveNode = function(p_node)
 {
@@ -472,7 +462,8 @@ WaypointConnection.prototype.onRemoveNode = function(p_node)
 
 
 /**
- * method to add an edge to the makrov chain
+ * fires when an edge was created via d3-graphEditor
+ * this method will add this edge to the java makrov chain
 **/
 WaypointConnection.prototype.onAddEdge = function(p_edge)
 {
@@ -492,7 +483,8 @@ WaypointConnection.prototype.onAddEdge = function(p_edge)
 
 
 /**
- * method to remove an edge from makrov chain
+ * fires when an edge was removed via d3-graphEditor
+ * this method will remove this edge from the java makrov chain
 **/
 WaypointConnection.prototype.onRemoveEdge = function(p_edge)
 {

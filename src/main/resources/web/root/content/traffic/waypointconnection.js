@@ -39,6 +39,14 @@ function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
     this.mc_currentMakrovWaypoint = null;
     this.mo_graphEditor = null;
     this.mo_waypointList = {};
+
+    //todo make labels multilanguage (maybe set in afterDomAdded-method)
+    this.mo_labels = {
+        edit    : "Edit",
+        finish  : "Finish",
+        add     : "Add",
+        remove  : "Remove"
+    };
 }
 
 /** inheritance call **/
@@ -62,8 +70,7 @@ WaypointConnection.prototype.getContent = function()
         '<td id="' + this.generateSubID("waypointname") + '"></td>' +
         '<td id="' + this.generateSubID("latitude") + '"></td>' +
         '<td id="' + this.generateSubID("longitude") + '"></td>' +
-        '<td id="' + this.generateSubID("add") + '"></td>' +
-        '<td id="' + this.generateSubID("edit") + '"></td>' +
+        '<td id="' + this.generateSubID("buttonCol") + '"></td>' +
         '</tr>' +
         '</thead>' +
         '<tbody id="' + this.generateSubID("tbody") + '">' +
@@ -112,12 +119,22 @@ WaypointConnection.prototype.getGlobalCSS = function()
 
         this.generateSubID("latitude", "#") + "," + this.generateSubID("longitude", "#") +
         '{' +
-            'width: 35%;' +
+            'width: 30%;' +
         '}'+
 
-        this.generateSubID("id", "#") + "," + this.generateSubID("add", "#") + "," + this.generateSubID("edit", "#") +
+        this.generateSubID("id", "#") +
         '{' +
             'width: 5%;' +
+        '}' +
+
+        this.generateSubID("buttonCol", "#") +
+        '{' +
+            'width: 20%;' +
+        '}' +
+
+        this.generateSubID("dynamicButton", ".") +
+        '{' +
+            'width: 20%;' +
         '}' +
 
         this.generateSubID("waypointeditor", "#") +
@@ -167,7 +184,6 @@ WaypointConnection.prototype.afterDOMAdded = function()
 
 
 /**
- * todo multilanguage support for "add" and "edit"
  * method to refresh table data
 **/
 WaypointConnection.prototype.refresh = function()
@@ -182,29 +198,172 @@ WaypointConnection.prototype.refresh = function()
         method : "GET",
         success : function(po_data){
             jQuery.each(po_data, function(pc_waypoint, po_info){
+
                 //create client list
                 self.mo_waypointList[pc_waypoint] = {id : po_info.id, name : po_info.name, type : po_info.type, lat : po_info.latitude, lon : po_info.longitudem};
 
                 //create table entry
-                var l_data = jQuery("<tr></tr>");
-                jQuery("<td></td>").text(po_info.id).appendTo(l_data);
-                jQuery("<td></td>").text(po_info.name).appendTo(l_data);
-                jQuery("<td></td>").text(po_info.latitude).appendTo(l_data);
-                jQuery("<td></td>").text(po_info.longitude).appendTo(l_data);
-                jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Add</button>").click(self.add.bind(self)).appendTo(l_data);
+                var l_row = jQuery("<tr></tr>");
+                jQuery("<td></td>").text(po_info.id).appendTo(l_row);
+                jQuery("<td></td>").text(po_info.name).appendTo(l_row);
+                jQuery("<td></td>").text(po_info.latitude).appendTo(l_row);
+                jQuery("<td></td>").text(po_info.longitude).appendTo(l_row);
+
+                //initial for the dynamic button
+                var l_button = jQuery("<button></button>")
+                    .attr("class", "dynamicButton")
+                    .attr("value", i)
+                    .click(self.dynamicListener.bind(self));
 
                 if(po_info.type === "path"){
-                    jQuery("<td></td>").append("<button value=" + pc_waypoint + ">Edit</button>").click(self.edit.bind(self)).appendTo(l_data);
-                }else{
-                    jQuery("<td></td>").appendTo(l_data);
+                    console.log("test");
+                    l_button.addClass("path")
+                        .addClass("editClass")
+                        .text(self.mo_labels.edit)
+                        .click(self.editListener.bind(self));
+                 }else{
+                    l_button.addClass("noPath")
+                        .addClass("addClass")
+                        .text(self.mo_labels.add)
+                        .click(self.addListener.bind(self))
+                        .prop('disabled', true);
                 }
 
-                l_data.appendTo(jQuery(self.generateSubID("tbody", "#")));
+                jQuery("<td></td>").append(l_button).appendTo(l_row);
+                l_row.appendTo(jQuery(self.generateSubID("tbody", "#")));
             });
         }
     });
 }
 
+/**
+ * listen to the buttons in the waypoint list
+ * will dynamicly modify buttons and rebind listeners
+**/
+WaypointConnection.prototype.dynamicListener = function(p_event)
+{
+    var self = this;
+    var element = jQuery(event.target);
+    var dynamicButtons = jQuery(".dynamicButton");
+    var pathCollection = jQuery(".path");
+    var noPathCollection = jQuery(".noPath");
+
+    //if edit was clicked
+    if(element.hasClass("editClass")){
+
+        //all buttons to add/remove depending if they are already in the makrov chain
+        pathCollection.removeClass("editClass")
+            .removeClass("addClass")
+            .removeClass("removeClass")
+            .addClass("addClass")
+            .text(self.mo_labels.add)
+            .unbind("click")
+            .click(self.dynamicListener.bind(self))
+            .click(self.addListener.bind(self));
+
+        //clicked edit button to finish
+        element.removeClass("addClass") //todo not needed
+            .addClass("finishClass")
+            .text(self.mo_labels.finish)
+            .unbind("click")
+            .click(self.dynamicListener.bind(self))
+            .click(self.finishListener.bind(self));
+
+        //enable noPath buttons
+        jQuery(".noPath").prop('disabled', false);
+        return;
+    }
+
+    //if finish was clicked
+    if(element.hasClass("finishClass")){
+
+        //all path buttons to edit
+        pathCollection.removeClass("finishClass")
+            .removeClass("addClass")
+            .removeClass("removeClass")
+            .addClass("editClass")
+            .text(self.mo_labels.edit)
+            .unbind("click")
+            .click(self.dynamicListener.bind(self))
+            .click(self.editListener.bind(self));
+
+        // todo not needed
+        //all noPath buttons to add
+        noPathCollection.removeClass("removeClass")
+            .addClass("addClass")
+            .text(self.mo_labels.add)
+            .unbind("click")
+            .click(self.dynamicListener.bind(self))
+            .click(self.addListener.bind(self));
+
+        //disable all noPath button
+        jQuery(".noPath").prop('disabled', true);
+        return;
+    }
+
+    //if add was clicked
+    if(element.hasClass("addClass")){
+
+        //switch add and remove
+        element.removeClass("addClass")
+            .addClass("removeClass")
+            .text(self.mo_labels.remove)
+            .unbind("click")
+            .click(self.dynamicListener.bind(self))
+            .click(self.removeListener.bind(self));
+
+        return;
+    }
+
+    //if remove was clicked
+    if(element.hasClass("removeClass")){
+
+        //switch add and remove
+        element.removeClass("removeClass")
+            .addClass("addClass")
+            .text(self.mo_labels.add)
+            .unbind("click")
+            .click(self.dynamicListener.bind(self))
+            .click(self.addListener.bind(self));
+
+        return;
+    }
+}
+
+
+/**
+ * fires when a edit button was clicked
+**/
+WaypointConnection.prototype.editListener = function(event){
+    console.log("editListener");
+}
+
+
+/**
+ * fires when a finish button was clicked
+**/
+WaypointConnection.prototype.finishListener = function(event){
+    console.log("finishListener");
+}
+
+
+/**
+ * fires when an add button was clicked
+**/
+WaypointConnection.prototype.addListener = function(event){
+    console.log("addListener");
+}
+
+
+/**
+ * fires when a remove button was clicked
+**/
+WaypointConnection.prototype.removeListener = function(event){
+    console.log("removeListener");
+}
+
+
+//the folllowing todo will be refactored
 
 /**
  * method to load makrov chain
@@ -310,6 +469,7 @@ WaypointConnection.prototype.onRemoveNode = function(p_node)
     });
 }
 
+
 /**
  * method to add an edge to the makrov chain
 **/
@@ -330,6 +490,9 @@ WaypointConnection.prototype.onAddEdge = function(p_edge)
 }
 
 
+/**
+ * method to remove an edge from makrov chain
+**/
 WaypointConnection.prototype.onRemoveEdge = function(p_edge)
 {
     var self = this;

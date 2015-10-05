@@ -348,8 +348,8 @@ WaypointConnection.prototype.editListener = function(p_event)
 **/
 WaypointConnection.prototype.finishListener = function(p_event)
 {
-    //todo
-    console.log("finishListener");
+    this.mc_currentMakrovWaypoint = null;
+    this.reload(null);
 }
 
 
@@ -378,8 +378,14 @@ WaypointConnection.prototype.addListener = function(p_event)
 **/
 WaypointConnection.prototype.removeListener = function(p_event)
 {
-    //todo
-    console.log("removeListener");
+    var self = this;
+
+    //todo also remove node from d3-grapheditor
+
+    MecSim.ajax({
+        url : "cwaypointenvironment/removenode",
+        data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "waypoint" : p_event.target.value}
+    });
 }
 
 

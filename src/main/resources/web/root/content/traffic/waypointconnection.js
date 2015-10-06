@@ -189,6 +189,7 @@ WaypointConnection.prototype.refresh = function()
 
     jQuery(self.generateSubID("tbody", "#")).empty();
     self.mo_waypointList = {};
+    self.finishListener();
 
     MecSim.ajax({
         url : "/cwaypointenvironment/listpathwaypoints",
@@ -480,6 +481,10 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 WaypointConnection.prototype.onRemoveNode = function(p_node)
 {
     var self = this;
+
+    //do not allow to delte yourself in your makrov chain
+    if(self.mc_currentMakrovWaypoint === p_node.waypointname)
+        return;
 
     MecSim.ajax({
         url : "cwaypointenvironment/removenode",

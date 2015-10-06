@@ -214,19 +214,20 @@ WaypointConnection.prototype.refresh = function()
                 //initial for the dynamic button
                 var l_button = jQuery("<button></button>")
                     .attr("class", self.generateSubID("dynamicButton"))
-                    .attr("value", pc_waypoint)
-                    .click(self.dynamicListener.bind(self));
+                    .attr("value", pc_waypoint);
 
                 if(po_info.type === "path"){
                     l_button.addClass(self.generateSubID("pathButton"))
                         .addClass(self.generateSubID("editClass"))
                         .text(self.mo_labels.edit)
-                        .click(self.editListener.bind(self));
+                        .on("click", self.editListener.bind(self))
+                        .on("click", self.dynamicListener.bind(self));
                  }else{
                     l_button.addClass(self.generateSubID("noPathButton"))
                         .addClass(self.generateSubID("addClass"))
                         .text(self.mo_labels.add)
-                        .click(self.addListener.bind(self))
+                        .on("click", self.addListener.bind(self))
+                        .on("click", self.dynamicListener.bind(self))
                         .prop('disabled', true);
                 }
 
@@ -267,8 +268,8 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
                 button.addClass(self.generateSubID("finishClass"))
                     .text(self.mo_labels.finish)
                     .unbind("click")
-                    .click(self.dynamicListener.bind(self))
-                    .click(self.finishListener.bind(self));
+                    .on("click", self.finishListener.bind(self))
+                    .on("click", self.dynamicListener.bind(self));
                 return;
             }
 
@@ -285,14 +286,14 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
                 button.addClass(self.generateSubID("removeClass"))
                     .text(self.mo_labels.remove)
                     .unbind("click")
-                     .click(self.dynamicListener.bind(self))
-                    .click(self.removeListener.bind(self));
+                    .on("click", self.removeListener.bind(self))
+                    .on("click", self.dynamicListener.bind(self));
             }else{
                 button.addClass(self.generateSubID("addClass"))
                     .text(self.mo_labels.add)
                     .unbind("click")
-                    .click(self.dynamicListener.bind(self))
-                    .click(self.addListener.bind(self));
+                    .on("click", self.addListener.bind(self))
+                    .on("click", self.dynamicListener.bind(self));
             }
         })
 
@@ -311,8 +312,8 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
             .addClass(self.generateSubID("editClass"))
             .text(self.mo_labels.edit)
             .unbind("click")
-            .click(self.dynamicListener.bind(self))
-            .click(self.editListener.bind(self));
+            .on("click", self.editListener.bind(self))
+            .on("click", self.dynamicListener.bind(self));
 
         //disable all noPath button
         jQuery(self.generateSubID("noPathButton", ".")).prop('disabled', true);
@@ -327,8 +328,8 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
             .addClass(self.generateSubID("removeClass"))
             .text(self.mo_labels.remove)
             .unbind("click")
-            .click(self.dynamicListener.bind(self))
-            .click(self.removeListener.bind(self));
+            .on("click", self.removeListener.bind(self))
+            .on("click", self.dynamicListener.bind(self));
 
         return;
     }
@@ -341,8 +342,8 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
             .addClass(self.generateSubID("addClass"))
             .text(self.mo_labels.add)
             .unbind("click")
-            .click(self.dynamicListener.bind(self))
-            .click(self.addListener.bind(self));
+            .on("click", self.addListener.bind(self))
+            .on("click", self.dynamicListener.bind(self));
 
         return;
     }

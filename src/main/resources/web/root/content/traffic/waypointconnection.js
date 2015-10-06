@@ -253,23 +253,48 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
     //if edit was clicked
     if(clickedElement.hasClass(self.generateSubID("editClass"))){
 
-        //all buttons to add/remove depending if they are already in the makrov chain
-        pathCollection.removeClass(self.generateSubID("editClass"))
-            .removeClass(self.generateSubID("addClass"))
-            .removeClass(self.generateSubID("removeClass"))
-            .addClass(self.generateSubID("addClass"))
-            .text(self.mo_labels.add)
-            .unbind("click")
-            .click(self.dynamicListener.bind(self))
-            .click(self.addListener.bind(self));
+        dynamicButtonCollection.each(function(index, element){
+            var button = jQuery(this);
 
-        //clicked edit button to finish
-        clickedElement.removeClass(self.generateSubID("addClass")) //todo not needed
-            .addClass(self.generateSubID("finishClass"))
-            .text(self.mo_labels.finish)
-            .unbind("click")
-            .click(self.dynamicListener.bind(self))
-            .click(self.finishListener.bind(self));
+            //remove classes
+            button.removeClass(self.generateSubID("editClass"))
+                .removeClass(self.generateSubID("finishClass"))
+                .removeClass(self.generateSubID("addClass"))
+                .removeClass(self.generateSubID("removeClass"));
+
+            //clicked element to finish
+            if(element === event.target){
+                button.addClass(self.generateSubID("finishClass"))
+                    .text(self.mo_labels.finish)
+                    .unbind("click")
+                    .click(self.dynamicListener.bind(self))
+                    .click(self.finishListener.bind(self));
+                return;
+            }
+
+            //get node via waypointname
+            var l_node
+            self.mo_currentNodes.forEach(function(p_node){
+                if(p_event.target.value === p_node.waypointname){
+                    l_node = p_node;
+                }
+            })
+
+            //check if node was already added
+            if(jQuery.inArray(l_node, self.mo_currentNodes) !== -1){
+                button.addClass(self.generateSubID("removeClass"))
+                    .text(self.mo_labels.remove)
+                    .unbind("click")
+                     .click(self.dynamicListener.bind(self))
+                    .click(self.removeListener.bind(self));
+            }else{
+                button.addClass(self.generateSubID("addClass"))
+                    .text(self.mo_labels.add)
+                    .unbind("click")
+                    .click(self.dynamicListener.bind(self))
+                    .click(self.addListener.bind(self));
+            }
+        })
 
         //enable noPath buttons
         jQuery(self.generateSubID("noPathButton", ".")).prop('disabled', false);
@@ -288,15 +313,6 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
             .unbind("click")
             .click(self.dynamicListener.bind(self))
             .click(self.editListener.bind(self));
-
-        // todo not needed
-        //all noPath buttons to add
-        noPathCollection.removeClass(self.generateSubID("removeClass"))
-            .addClass(self.generateSubID("addClass"))
-            .text(self.mo_labels.add)
-            .unbind("click")
-            .click(self.dynamicListener.bind(self))
-            .click(self.addListener.bind(self));
 
         //disable all noPath button
         jQuery(self.generateSubID("noPathButton", ".")).prop('disabled', true);

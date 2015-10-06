@@ -39,8 +39,6 @@ function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
     this.mc_currentMakrovWaypoint = null;
     this.mo_graphEditor = null;
     this.mo_waypointList = {};
-    this.mo_currentNodes = [];
-    this.mo_currentEdges = [];
 
     //todo make labels multilanguage (maybe set in afterDomAdded-method)
     this.mo_labels = {
@@ -170,9 +168,6 @@ WaypointConnection.prototype.afterDOMAdded = function()
 
             //initalize waypoint editor
             self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {
-                nodes : [],
-                edges : [],
-                lastNodeID : 0,
                 mouseMode : false,
                 onRemoveNode : self.onRemoveNode.bind(self),
                 onAddEdge : self.onAddEdge.bind(self),
@@ -273,16 +268,16 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
                 return;
             }
 
-            //get node via waypointname
-            var l_node
-            self.mo_currentNodes.forEach(function(p_node){
-                if(p_event.target.value === p_node.waypointname){
-                    l_node = p_node;
+            //check if node was already added
+            var l_found = false;
+            self.mo_graphEditor._nodes.forEach(function(p_node){
+                if(button[0].value === p_node.waypointname){
+                    l_found = true;
                 }
             })
 
-            //check if node was already added
-            if(jQuery.inArray(l_node, self.mo_currentNodes) !== -1){
+            //set the add/remove button depending if it was already added
+            if(l_found){
                 button.addClass(self.generateSubID("removeClass"))
                     .text(self.mo_labels.remove)
                     .unbind("click")
@@ -400,7 +395,7 @@ WaypointConnection.prototype.removeListener = function(p_event)
     var self = this;
 
     var node;
-    self.mo_currentNodes.forEach(function(element, index){
+    self.mo_graphEditor._nodes.forEach(function(element, index){
         if(p_event.target.value === element.waypointname)
             node = element;
     })
@@ -424,6 +419,7 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
     MecSim.ajax({
         url : "cwaypointenvironment/getmakrovchain",
         data : {"makrovwaypoint" : p_makrovwaypoint},
+        async : false,
         success : function(po_data){
 
             var l_lastID = 0;
@@ -472,8 +468,6 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 
             //actual graph reload
             self.mo_graphEditor.reload({nodes : l_newNodes, edges : l_newEdges, lastNodeID : --l_lastID})
-            self.mo_currentNodes = l_newNodes;
-            self.mo_currentEdges = l_newEdges;
         }
     });
 }

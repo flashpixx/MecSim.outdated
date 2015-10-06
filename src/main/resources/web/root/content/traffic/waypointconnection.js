@@ -39,6 +39,8 @@ function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
     this.mc_currentMakrovWaypoint = null;
     this.mo_graphEditor = null;
     this.mo_waypointList = {};
+    this.mo_currentNodes = [];
+    this.mo_currentEdges = [];
 
     //todo make labels multilanguage (maybe set in afterDomAdded-method)
     this.mo_labels = {
@@ -380,7 +382,13 @@ WaypointConnection.prototype.removeListener = function(p_event)
 {
     var self = this;
 
-    //todo also remove node from d3-grapheditor
+    var node;
+    self.mo_currentNodes.forEach(function(element, index){
+        if(p_event.target.value === element.waypointname)
+            node = element;
+    })
+
+    self.mo_graphEditor.removeNode(node);
 
     MecSim.ajax({
         url : "cwaypointenvironment/removenode",
@@ -447,6 +455,8 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 
             //actual graph reload
             self.mo_graphEditor.reload({nodes : l_newNodes, edges : l_newEdges, lastNodeID : --l_lastID})
+            self.mo_currentNodes = l_newNodes;
+            self.mo_currentEdges = l_newEdges;
         }
     });
 }

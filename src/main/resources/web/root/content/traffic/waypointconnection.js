@@ -547,6 +547,8 @@ WaypointConnection.prototype.onRemoveNode = function(p_node)
     if(self.mc_currentMakrovWaypoint === p_node.waypointname)
         return;
 
+    self.dynamicListener(null, true);
+
     MecSim.ajax({
         url : "cwaypointenvironment/removenode",
         data : {"makrovwaypoint" : self.mc_currentMakrovWaypoint, "waypoint" : p_node.waypointname}

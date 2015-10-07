@@ -268,10 +268,10 @@ WaypointConnection.prototype.dynamicListener = function(p_event, p_update)
 
     //update add/remove after callback
     if(p_update){
+
         //select all add and remove buttons
         jQuery(self.generateSubID("addClass", ".") + "," + self.generateSubID("removeClass", ".")).each(function(index, element){
             var button = jQuery(this);
-            console.log(button);
 
             //remove classes
             button.removeClass(self.generateSubID("addClass"))
@@ -423,7 +423,6 @@ WaypointConnection.prototype.editListener = function(p_event)
 WaypointConnection.prototype.finishListener = function(p_event)
 {
     var self = this;
-    console.log(self.mo_labels.empty);
     this.mc_currentMakrovWaypoint = null;
     jQuery(self.generateSubID("makrovwaypoint", "#")).text(self.mo_labels.empty);
     self.reload();

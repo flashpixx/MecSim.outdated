@@ -180,8 +180,7 @@ public class CWaypointEnvironment
             put( "id_waypointname", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_waypointname" ) );
             put( "id_latitude", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_latitude" ) );
             put( "id_longitude", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_longitude" ) );
-            put( "id_add", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_add" ) );
-            put( "id_edit", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_edit" ) );
+            put( "id_editorinfo", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypointconnection_id_editorinfo" ) );
         }};
     /**
      * map with name and ID

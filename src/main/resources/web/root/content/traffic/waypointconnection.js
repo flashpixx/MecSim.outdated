@@ -77,7 +77,11 @@ WaypointConnection.prototype.getContent = function()
         '</tbody>' +
         '</table>' +
         '</div>' +
+        '<div id="' + this.generateSubID("editorcontainer") + '">' +
+        '<span id="' + this.generateSubID("editorinfo") + '">Aktuell geladener Wegpunkt: </span>' +
+        '<span id="' + this.generateSubID("makrovwaypoint") + '"></span>' +
         '<div id="' + this.generateSubID("waypointeditor") + '">' +
+        '</div>' +
         '</div>'
     );
 }
@@ -137,13 +141,26 @@ WaypointConnection.prototype.getGlobalCSS = function()
             'width: 100%;' +
         '}' +
 
-        this.generateSubID("waypointeditor", "#") +
+        this.generateSubID("editorinfo", "#") +
+        '{' +
+            'font-weight: bold;' +
+            'color: #008C4F;' +
+        '}' +
+
+        this.generateSubID("editorcontainer", "#") +
         '{' +
             'float: right;' +
             'margin-right: 10px;' +
-            'border: 1px solid #008C4F;' +
             'width: 45%;' +
-            'height : 90%' +
+            'height : 85%' +
+
+        '}' +
+
+        this.generateSubID("waypointeditor", "#") +
+        '{' +
+            'margin-top: 10px;' +
+            'border: 1px solid #008C4F;' +
+            'height : 100%' +
         '}'
 }
 
@@ -163,9 +180,6 @@ WaypointConnection.prototype.afterDOMAdded = function()
         target : this,
 
         finish : function() {
-            //initalize waypoint list
-            self.refresh();
-
             //initalize waypoint editor
             self.mo_graphEditor = new GraphEditor(self.generateSubID("waypointeditor", "#"),  {
                 mouseMode : false,
@@ -173,6 +187,9 @@ WaypointConnection.prototype.afterDOMAdded = function()
                 onAddEdge : self.onAddEdge.bind(self),
                 onRemoveEdge : self.onRemoveEdge.bind(self)
             });
+
+            //initalize waypoint list
+            self.refresh();
 
             Widget.prototype.afterDOMAdded.call(self);
         }
@@ -189,7 +206,7 @@ WaypointConnection.prototype.refresh = function()
 
     jQuery(self.generateSubID("tbody", "#")).empty();
     self.mo_waypointList = {};
-    self.finishListener();
+    self.mo_graphEditor.reload();
 
     MecSim.ajax({
         url : "/cwaypointenvironment/listpathwaypoints",
@@ -269,28 +286,32 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
                 return;
             }
 
-            //check if node was already added
-            var l_found = false;
-            self.mo_graphEditor._nodes.forEach(function(p_node){
-                if(button[0].value === p_node.waypointname){
-                    l_found = true;
-                }
-            })
+            //todo eliminate set timeout (is required because edit will fire first but the ajax request inside edit will take some time)
+            setTimeout(function(){
 
-            //set the add/remove button depending if it was already added
-            if(l_found){
-                button.addClass(self.generateSubID("removeClass"))
-                    .text(self.mo_labels.remove)
-                    .unbind("click")
-                    .on("click", self.removeListener.bind(self))
-                    .on("click", self.dynamicListener.bind(self));
-            }else{
-                button.addClass(self.generateSubID("addClass"))
-                    .text(self.mo_labels.add)
-                    .unbind("click")
-                    .on("click", self.addListener.bind(self))
-                    .on("click", self.dynamicListener.bind(self));
-            }
+                //check if node was already added
+                var l_found = false;
+                self.mo_graphEditor._nodes.forEach(function(p_node){
+                    if(button[0].value === p_node.waypointname){
+                        l_found = true;
+                    }
+                })
+
+                //set the add/remove button depending if it was already added
+                if(l_found){
+                    button.addClass(self.generateSubID("removeClass"))
+                        .text(self.mo_labels.remove)
+                        .unbind("click")
+                        .on("click", self.removeListener.bind(self))
+                        .on("click", self.dynamicListener.bind(self));
+                }else{
+                    button.addClass(self.generateSubID("addClass"))
+                        .text(self.mo_labels.add)
+                        .unbind("click")
+                        .on("click", self.addListener.bind(self))
+                        .on("click", self.dynamicListener.bind(self));
+                }
+            }, 50)
         })
 
         //enable noPath buttons
@@ -353,6 +374,7 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
 WaypointConnection.prototype.editListener = function(p_event)
 {
     this.mc_currentMakrovWaypoint = p_event.target.value;
+    jQuery(this.generateSubID("makrovwaypoint", "#")).text(this.mo_waypointList[p_event.target.value].name + " #" + this.mo_waypointList[p_event.target.value].id);
     this.reload(p_event.target.value);
 }
 
@@ -364,7 +386,7 @@ WaypointConnection.prototype.editListener = function(p_event)
 WaypointConnection.prototype.finishListener = function(p_event)
 {
     this.mc_currentMakrovWaypoint = null;
-    this.reload(null);
+    this.reload();
 }
 
 
@@ -420,7 +442,6 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
     MecSim.ajax({
         url : "cwaypointenvironment/getmakrovchain",
         data : {"makrovwaypoint" : p_makrovwaypoint},
-        async : false,
         success : function(po_data){
 
             var l_lastID = 0;

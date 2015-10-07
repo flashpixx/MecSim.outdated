@@ -256,13 +256,51 @@ WaypointConnection.prototype.refresh = function()
  * listen to the buttons in the waypoint list
  * will dynamicly modify buttons and rebind listeners
 **/
-WaypointConnection.prototype.dynamicListener = function(p_event)
+WaypointConnection.prototype.dynamicListener = function(p_event, p_update)
 {
     var self = this;
     var clickedElement = jQuery(event.target);
     var dynamicButtonCollection = jQuery(self.generateSubID("dynamicButton", "."));
     var pathCollection = jQuery(self.generateSubID("pathButton", "."));
     var noPathCollection = jQuery(self.generateSubID("noPathButton", "."));
+
+    //update add/remove after callback
+    if(p_update){
+        //select all add and remove buttons
+        jQuery(self.generateSubID("addClass", ".") + "," + self.generateSubID("removeClass", ".")).each(function(index, element){
+            var button = jQuery(this);
+            console.log(button);
+
+            //remove classes
+            button.removeClass(self.generateSubID("addClass"))
+                .removeClass(self.generateSubID("removeClass"));
+
+            //check if node was already added
+            var l_found = false;
+            self.mo_graphEditor._nodes.forEach(function(p_node){
+                if(button[0].value === p_node.waypointname){
+                    l_found = true;
+                }
+            })
+
+            //set the add/remove button depending if it was already added
+            if(l_found){
+                button.addClass(self.generateSubID("removeClass"))
+                    .text(self.mo_labels.remove)
+                    .unbind("click")
+                    .on("click", self.removeListener.bind(self))
+                    .on("click", self.dynamicListener.bind(self));
+            }else{
+                button.addClass(self.generateSubID("addClass"))
+                    .text(self.mo_labels.add)
+                    .unbind("click")
+                    .on("click", self.addListener.bind(self))
+                    .on("click", self.dynamicListener.bind(self));
+            }
+        });
+
+        return
+    }
 
     //if edit was clicked
     if(clickedElement.hasClass(self.generateSubID("editClass"))){
@@ -287,31 +325,28 @@ WaypointConnection.prototype.dynamicListener = function(p_event)
             }
 
             //todo eliminate set timeout (is required because edit will fire first but the ajax request inside edit will take some time)
-            setTimeout(function(){
-
-                //check if node was already added
-                var l_found = false;
-                self.mo_graphEditor._nodes.forEach(function(p_node){
-                    if(button[0].value === p_node.waypointname){
-                        l_found = true;
-                    }
-                })
-
-                //set the add/remove button depending if it was already added
-                if(l_found){
-                    button.addClass(self.generateSubID("removeClass"))
-                        .text(self.mo_labels.remove)
-                        .unbind("click")
-                        .on("click", self.removeListener.bind(self))
-                        .on("click", self.dynamicListener.bind(self));
-                }else{
-                    button.addClass(self.generateSubID("addClass"))
-                        .text(self.mo_labels.add)
-                        .unbind("click")
-                        .on("click", self.addListener.bind(self))
-                        .on("click", self.dynamicListener.bind(self));
+            //check if node was already added
+            var l_found = false;
+            self.mo_graphEditor._nodes.forEach(function(p_node){
+                if(button[0].value === p_node.waypointname){
+                    l_found = true;
                 }
-            }, 50)
+            })
+
+            //set the add/remove button depending if it was already added
+            if(l_found){
+                button.addClass(self.generateSubID("removeClass"))
+                    .text(self.mo_labels.remove)
+                    .unbind("click")
+                    .on("click", self.removeListener.bind(self))
+                    .on("click", self.dynamicListener.bind(self));
+            }else{
+                button.addClass(self.generateSubID("addClass"))
+                    .text(self.mo_labels.add)
+                    .unbind("click")
+                    .on("click", self.addListener.bind(self))
+                    .on("click", self.dynamicListener.bind(self));
+            }
         })
 
         //enable noPath buttons
@@ -490,6 +525,7 @@ WaypointConnection.prototype.reload = function(p_makrovwaypoint)
 
             //actual graph reload
             self.mo_graphEditor.reload({nodes : l_newNodes, edges : l_newEdges, lastNodeID : --l_lastID})
+            self.dynamicListener(null, p_makrovwaypoint);
         }
     });
 }

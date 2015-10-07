@@ -45,7 +45,8 @@ function WaypointConnection( pc_id, pc_name, pa_panel, po_options )
         edit    : "Edit",
         finish  : "Finish",
         add     : "Add",
-        remove  : "Remove"
+        remove  : "Remove",
+        empty   : "Empty"
     };
 }
 
@@ -207,6 +208,7 @@ WaypointConnection.prototype.refresh = function()
     jQuery(self.generateSubID("tbody", "#")).empty();
     self.mo_waypointList = {};
     self.mo_graphEditor.reload();
+    jQuery(this.generateSubID("makrovwaypoint", "#")).text(this.mo_labels.empty);
 
     MecSim.ajax({
         url : "/cwaypointenvironment/listpathwaypoints",
@@ -420,8 +422,11 @@ WaypointConnection.prototype.editListener = function(p_event)
 **/
 WaypointConnection.prototype.finishListener = function(p_event)
 {
+    var self = this;
+    console.log(self.mo_labels.empty);
     this.mc_currentMakrovWaypoint = null;
-    this.reload();
+    jQuery(self.generateSubID("makrovwaypoint", "#")).text(self.mo_labels.empty);
+    self.reload();
 }
 
 

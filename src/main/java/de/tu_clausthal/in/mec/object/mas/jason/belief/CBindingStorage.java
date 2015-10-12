@@ -105,6 +105,8 @@ public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBase
                             )
                     );
                 }
+
+        this.add( CCommon.getLiteral( "speed", -1 ) );
     }
 
     /**

@@ -273,14 +273,14 @@ public class CPath implements Iterable<CPath>
      * creates a path of the indices
      *
      * @param p_fromIndex start index
-     * @param p_toIndex end index (exclusive)
+     * @param p_toIndex end index (exclusive) / negative values from the end
      * @return path
      */
     public final CPath getSubPath( final int p_fromIndex, final int p_toIndex )
     {
         final CPath l_path = new CPath();
         l_path.m_separator = m_separator;
-        l_path.m_path.addAll( m_path.subList( p_fromIndex, p_toIndex ) );
+        l_path.m_path.addAll( m_path.subList( p_fromIndex, p_toIndex >= 0 ? p_toIndex : this.size() + p_toIndex ) );
         return l_path;
     }
 

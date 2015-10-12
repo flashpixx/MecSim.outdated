@@ -32,6 +32,7 @@ import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.generic.IStorage;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -174,16 +175,16 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
-    public Map<CPath, ILiteral<T>> getLiterals( final CPath p_path )
+    public Map<CPath, Set<ILiteral<T>>> getLiterals( final CPath p_path )
     {
         return walk( p_path, this, null ).getLiterals();
     }
 
     @Override
-    public Map<CPath, ILiteral<T>> getLiterals()
+    public Map<CPath, Set<ILiteral<T>>> getLiterals()
     {
         final CPath l_path = this.getFQNPath();
-        return new HashMap<CPath, ILiteral<T>>()
+        return new HashMap<CPath, Set<ILiteral<T>>>()
         {{
                 for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
                     putAll( l_iterator.next().getLiterals() );
@@ -191,7 +192,11 @@ public class CMask<T> implements IBeliefBaseMask<T>
                 for ( final Iterator<ILiteral<T>> l_iterator = m_beliefbase.getStorage().iteratorMultiElement(); l_iterator.hasNext(); )
                 {
                     final ILiteral<T> l_literal = l_iterator.next();
-                    put( l_path.append( l_literal.getFunctor().get() ), l_literal.clone( l_path ) );
+                    final CPath l_literalpath = l_path.append( l_literal.getFunctor().get() );
+
+                    final Set<ILiteral<T>> l_set = getOrDefault( l_literalpath, new HashSet<ILiteral<T>>() );
+                    l_set.add( l_literal.clone( l_path ) );
+                    putIfAbsent( l_literalpath, l_set );
                 }
             }};
     }

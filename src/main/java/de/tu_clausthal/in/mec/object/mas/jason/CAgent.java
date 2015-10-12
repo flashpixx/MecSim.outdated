@@ -498,7 +498,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         {
             m_beliefbaserootmask.update();
 
-            // performtemplate agent reasoning cycle for deducing new beliefs
+            // perform agent reasoning cycle for deducing new beliefs
             // the reasoning cycle must be called within the transition system
             this.setCycleNumber( m_cycle++ );
             this.getTS().reasoningCycle();

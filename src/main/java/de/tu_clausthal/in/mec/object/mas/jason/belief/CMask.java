@@ -42,6 +42,7 @@ import org.w3c.dom.Element;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -124,7 +125,9 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     @Override
     public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator p_predicateIndicator )
     {
-        return this.getLiteralIterator( this.getLiterals( this.splitPath( p_predicateIndicator.getFunctor() ) ).values().iterator() );
+        //return this.getLiteralIterator( this.getLiterals( this.splitPath( p_predicateIndicator.getFunctor() ) ).values().iterator() );
+
+        return null;
     }
 
     @Override
@@ -133,11 +136,12 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         if ( p_literal.isVar() )
             return this.iterator();
 
-        final CPath l_path = this.splitPath( p_literal.getFunctor() );
-        final Map<CPath, ILiteral<Literal>> l_literals = this.getLiterals( l_path.getSubPath( 0, l_path.size() - 1 ) );
+        final Map<CPath, Set<ILiteral<Literal>>> l_literals = this.getLiterals(
+                this.clearPathPrefix( this.splitPath( p_literal.getFunctor() ) ).getSubPath( 0, -1 ) );
 
 
-        return this.getLiteralIterator( l_literals.values().iterator() );
+        //return this.getLiteralIterator( l_literals.values().iterator() );
+        return null;
     }
 
     @Override
@@ -151,8 +155,8 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     public Literal contains( final Literal p_literal )
     {
         final CPath l_path = this.splitPath( p_literal.getFunctor() );
-        if ( this.containsLiteral( l_path ) )
-            return this.getLiterals( l_path ).values().iterator().next().getLiteral();
+        //if ( this.containsLiteral( l_path ) )
+        //    return this.getLiterals( l_path ).values().iterator().next().getLiteral();
 
         return null;
     }

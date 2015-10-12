@@ -297,14 +297,16 @@ public class CPath implements Iterable<CPath>
     @Override
     public final int hashCode()
     {
-        return this.getPath().hashCode();
+        return m_path.stream().mapToInt( i -> i.hashCode() ).sum();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( ( p_object instanceof String ) || ( p_object instanceof CPath ) )
+        if ( p_object instanceof CPath )
             return this.hashCode() == p_object.hashCode();
+        if ( p_object instanceof String )
+            return p_object.hashCode() == this.getPath().hashCode();
 
         return false;
     }

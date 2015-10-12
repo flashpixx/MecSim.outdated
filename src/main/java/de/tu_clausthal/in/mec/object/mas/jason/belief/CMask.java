@@ -41,7 +41,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -126,7 +125,6 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator p_predicateIndicator )
     {
         //return this.getLiteralIterator( this.getLiterals( this.splitPath( p_predicateIndicator.getFunctor() ) ).values().iterator() );
-
         return null;
     }
 
@@ -136,11 +134,11 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         if ( p_literal.isVar() )
             return this.iterator();
 
-        final Map<CPath, Set<ILiteral<Literal>>> l_literals = this.getLiterals(
-                this.clearPathPrefix( this.splitPath( p_literal.getFunctor() ) ).getSubPath( 0, -1 ) );
+        // splits the functor of the literal and walk through the beliefbase tree
+        final CPath l_path = this.splitPath( p_literal.getFunctor() );
+        final Set<ILiteral<Literal>> l_literals = this.getLiterals( this.clearPathPrefix( l_path ).getSubPath( 0, -1 ) ).get( l_path );
+        return l_literals == null ? null : this.getLiteralIterator( l_literals.iterator() );
 
-        //return this.getLiteralIterator( l_literals.values().iterator() );
-        return null;
     }
 
     @Override
@@ -262,6 +260,17 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         if ( ( !m_prefixremove.isEmpty() ) && ( l_path.startsWith( m_prefixremove ) ) )
             l_path.remove( 0, m_prefixremove.size() );
         return l_path;
+    }
+
+    /**
+     * splits the literal functor to a path and clears the path prefix
+     *
+     * @param p_functor literal
+     * @return path
+     */
+    private CPath splitClearPath( final String p_functor )
+    {
+        return this.clearPathPrefix( this.splitPath( p_functor ) );
     }
 
     /**

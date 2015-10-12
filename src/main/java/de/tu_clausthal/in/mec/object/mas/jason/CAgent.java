@@ -421,9 +421,9 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
 
         // add the belief to the structure
         if ( p_addliteral )
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), new CLiteral( l_path.getSuffix(), p_literal ), this );
+            m_beliefbaserootmask.add( l_path.getSubPath( 0, -1 ), new CLiteral( l_path.getSuffix(), p_literal ), this );
         else
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, l_path.size() - 1 ), this );
+            m_beliefbaserootmask.add( l_path.getSubPath( 0, -1 ), this );
     }
 
 

@@ -209,13 +209,13 @@ public class CMask<T> implements IBeliefBaseMask<T>
     @Override
     public Set<ILiteral<T>> getLiteral( final CPath p_path )
     {
-        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).getStorage().getMultiElement( p_path.getSuffix() );
+        return walk( p_path.getSubPath( 0, -1 ), this, null ).getStorage().getMultiElement( p_path.getSuffix() );
     }
 
     @Override
     public IBeliefBaseMask<T> getMask( final CPath p_path )
     {
-        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).getStorage().getSingleElement( p_path.getSuffix() );
+        return walk( p_path.getSubPath( 0, -1 ), this, null ).getStorage().getSingleElement( p_path.getSuffix() );
     }
 
     @Override

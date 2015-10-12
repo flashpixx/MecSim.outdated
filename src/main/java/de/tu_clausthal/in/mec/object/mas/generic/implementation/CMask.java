@@ -187,14 +187,19 @@ public class CMask<T> implements IBeliefBaseMask<T>
         return new HashMap<CPath, Set<ILiteral<T>>>()
         {{
                 for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
-                    putAll( l_iterator.next().getLiterals() );
+                    for ( final Map.Entry<CPath, Set<ILiteral<T>>> l_item : l_iterator.next().getLiterals().entrySet() )
+                    {
+                        final Set<ILiteral<T>> l_set = getOrDefault( l_item.getKey(), new HashSet<>() );
+                        l_set.addAll( l_item.getValue() );
+                        putIfAbsent( l_item.getKey(), l_set );
+                    }
 
                 for ( final Iterator<ILiteral<T>> l_iterator = m_beliefbase.getStorage().iteratorMultiElement(); l_iterator.hasNext(); )
                 {
                     final ILiteral<T> l_literal = l_iterator.next();
                     final CPath l_literalpath = l_path.append( l_literal.getFunctor().get() );
 
-                    final Set<ILiteral<T>> l_set = getOrDefault( l_literalpath, new HashSet<ILiteral<T>>() );
+                    final Set<ILiteral<T>> l_set = getOrDefault( l_literalpath, new HashSet<>() );
                     l_set.add( l_literal.clone( l_path ) );
                     putIfAbsent( l_literalpath, l_set );
                 }

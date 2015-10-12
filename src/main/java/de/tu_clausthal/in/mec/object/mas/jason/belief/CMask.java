@@ -139,7 +139,6 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         final Map<CPath, Set<ILiteral<Literal>>> l_literals = this.getLiterals(
                 this.clearPathPrefix( this.splitPath( p_literal.getFunctor() ) ).getSubPath( 0, -1 ) );
 
-
         //return this.getLiteralIterator( l_literals.values().iterator() );
         return null;
     }

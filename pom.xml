@@ -358,7 +358,10 @@
                             </singleInstance>
                             <jre>
                                 <minVersion>1.8.0</minVersion>
-                                <!-- <opt>-Xmx5g -XX:+UseParallelGC</opt> -->
+                                <opts>
+                                    <opt>-Xmx5g</opt>
+                                    <opt>-XX:+UseParallelGC</opt>
+                                </opts>
                             </jre>
                             <versionInfo>
                                 <fileVersion>${project.version}.0.0</fileVersion>

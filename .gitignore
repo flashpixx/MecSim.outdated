@@ -6,6 +6,7 @@
 !*.md
 !*.java
 
+
 !src/main/documentation/**/*.css
 !src/main/documentation/**/*.htm
 !src/main/documentation/**/*.doxyfile
@@ -22,6 +23,7 @@
 !src/main/resources/**/*.r
 !src/main/resources/**/*.svg
 !src/main/resources/**/*.gif
+!src/main/resources/**/*.icns
 
 !src/main/styleguide/**/*.xml
 !src/main/styleguide/**/.header

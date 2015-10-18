@@ -313,9 +313,14 @@
                 <artifactId>appbundle-maven-plugin</artifactId>
                 <version>1.0.4</version>
                 <configuration>
+                    <jvmOptions>
+                        <jvmOption>-Xmx5g</jvmOption>
+                        <jvmOption>-XX:+UseParallelGC</jvmOption>
+                    </jvmOptions>
                     <generateDiskImageFile>true</generateDiskImageFile>
                     <bundleName>${project.artifactId}-${project.version}</bundleName>
                     <mainClass>de.tu_clausthal.in.mec.CBoot</mainClass>
+                    <iconFile>icon.icns</iconFile>
                 </configuration>
                 <executions>
                     <execution>

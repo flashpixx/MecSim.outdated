@@ -232,6 +232,12 @@
             <version>2.6.3</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.10</version>
+            <scope>compile</scope>
+        </dependency>
 
 
         <!-- agent frameworks -->

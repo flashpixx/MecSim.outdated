@@ -27,6 +27,10 @@
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org)
 * [Bower](http://bower.io/)
 
+#### OS dependent packaging
+
+*  [launch4j (Windows Executable)](http://launch4j.sourceforge.net/) launch4j src/main/executable/windows.xml
+
 #### IDE Support
 
 * [IntelliJ Community Edition](http://www.jetbrains.com/idea/)
@@ -37,9 +41,11 @@
 
 Hourly a [current developer build](https://mecdev.rz-housing.tu-clausthal.de/jenkins/job/MecSim/) can be downloaded.
 
-The Maven package build creates a Jar file in the path ```target/MecSim-<Version>.jar```. The program must use more memory
+The Maven package build creates a Jar and OS dependet package files in the target-path. The Jar must use more memory
 of the Java VM on graph downloading and converting, so the Jar must be started with the suffix ```-Xmx<Memory Size>```
-(a good choice of the memory size can be 3g-5g), also the parallel garbage collector should be used with ```-XX:+UseParallelGC```
+(a good choice of the memory size can be 3g-5g), also the parallel garbage collector should be used with ```-XX:+UseParallelGC```.
+OS dependent packages does not use these parameters.
+
 
 The program can be used in two structures:
 

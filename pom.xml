@@ -313,6 +313,8 @@
                 <artifactId>appbundle-maven-plugin</artifactId>
                 <version>1.0.4</version>
                 <configuration>
+                    <generateDiskImageFile>true</generateDiskImageFile>
+                    <bundleName>${project.artifactId}-${project.version}</bundleName>
                     <mainClass>de.tu_clausthal.in.mec.CBoot</mainClass>
                 </configuration>
                 <executions>

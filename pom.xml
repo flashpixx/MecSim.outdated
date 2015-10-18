@@ -351,6 +351,7 @@
                             <errTitle>Java Download</errTitle>
                             <downloadUrl>http://java.com/download</downloadUrl>
                             <supportUrl>${project.url}</supportUrl>
+                            <icon>src/main/resources/icon.ico</icon>
                             <singleInstance>
                                 <mutexName>${project.artifactId}</mutexName>
                                 <windowTitle>${project.artifactId}</windowTitle>

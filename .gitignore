@@ -6,8 +6,6 @@
 !*.md
 !*.java
 
-!src/main/native/**/*.xml
-
 !src/main/documentation/**/*.css
 !src/main/documentation/**/*.htm
 !src/main/documentation/**/*.doxyfile

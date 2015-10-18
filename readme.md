@@ -27,10 +27,6 @@
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org)
 * [Bower](http://bower.io/)
 
-#### OS dependent packaging
-
-*  [launch4j (Windows Executable)](http://launch4j.sourceforge.net/) launch4j src/main/executable/windows.xml
-
 #### IDE Support
 
 * [IntelliJ Community Edition](http://www.jetbrains.com/idea/)

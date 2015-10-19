@@ -348,8 +348,8 @@
                         <configuration>
                             <headerType>gui</headerType>
                             <outfile>target/${project.artifactId}-${project.version}.exe</outfile>
-                            <errTitle>Java Download</errTitle>
-                            <downloadUrl>http://java.com/download</downloadUrl>
+                            <errTitle>Java Runtime 64 Bit Download</errTitle>
+                            <downloadUrl>http://www.java.com/en/download/manual.jsp</downloadUrl>
                             <supportUrl>${project.url}</supportUrl>
                             <icon>src/main/resources/icon.ico</icon>
                             <singleInstance>

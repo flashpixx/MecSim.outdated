@@ -30,13 +30,9 @@ import de.tu_clausthal.in.mec.object.mas.IAgentTemplateFactory;
 import de.tu_clausthal.in.mec.object.mas.IVoidAgent;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.IWorldAction;
-import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CPropertyBind;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CBeliefBase;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CBindingStorage;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CMask;
 import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
 import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
@@ -66,32 +62,14 @@ import java.util.Set;
  * @tparam T typ of binding objects
  */
 @SuppressWarnings( "serial" )
-public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITask<Agent>, IBeliefBaseMask.IGenerator<Literal>
+public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITask<Agent>
 {
     /**
      * path seperator of agent name
      */
     private static final String c_agentnameseparator = "::";
-    /**
-     * path separator of agent belief
-     */
-    private static final String c_agentbeliefseparator = "_";
-    /**
-     * binding replacing prefix - the prefix will be removed from the binding belief name
-     */
-    private static final String c_beliefbindprefixreplace = "m_";
-    /**
-     * name of the root beliefbase and its mask
-     */
-    private static final CPath c_beliefbaseroot = new CPath( "root" );
-    /**
-     * name of the binding beliefbase and its mask
-     */
-    private static final CPath c_beliefbasebind = new CPath( "bind" );
-    /**
-     * name of the message beliefbase and its mask
-     */
-    private static final CPath c_beliefbasemessage = new CPath( "message" );
+
+
     /**
      * bind name of the initial object
      */
@@ -120,10 +98,6 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
      * Jason interal agent architecture to performtemplate the reasoning cycle
      */
     private final CJasonArchitecture m_architecture;
-    /**
-     * root beliefbase
-     */
-    private final CMask m_beliefbaserootmask;
     /**
      * cycle number of the agent - it need not to be equal to the simulation step (the cycle is the lifetime of the
      * agent)
@@ -202,29 +176,15 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_architecture.insertAgArch( m_architecture );
 
         m_participant = new CParticipant( this );
-        m_beliefbaserootmask = new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
-        m_beliefbaserootmask.setPrefixRemove( c_beliefbaseroot );
 
         m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture, m_beliefbaserootmask );
 
 
-        // --- create beliefbase structure with tree structure
-        m_beliefbaserootmask.add(
-                new CBeliefBase(
-                        new CMessageStorage( m_agent.getTS(), c_agentnameseparator ), c_agentbeliefseparator
-                ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage.getSuffix() )
-        );
-        m_beliefbaserootmask.add(
-                new CBeliefBase(
-                        // not the order of replacing arguments
-                        new CBindingStorage( c_beliefbindprefixreplace, c_agentbeliefseparator ), c_agentbeliefseparator
-                ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind.getSuffix() )
-        );
 
         if ( p_bind != null )
         {
             this.bind( c_bindname, p_bind );
-            m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( c_bindname, p_bind );
+
         }
 
 
@@ -394,13 +354,6 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
 
                 l_body = l_body.getBodyNext();
             }
-    }
-
-
-    @Override
-    public IBeliefBaseMask<Literal> createBeliefbase( final String p_name )
-    {
-        return new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( p_name );
     }
 
 

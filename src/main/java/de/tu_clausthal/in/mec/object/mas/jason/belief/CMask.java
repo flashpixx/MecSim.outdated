@@ -282,7 +282,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     private Pair<CPath, CLiteral> cloneLiteral( final Literal p_literal )
     {
         final CPath l_path = this.splitClearPath( p_literal.getFunctor() );
-        final Literal l_literal = ASSyntax.createLiteral( p_literal.negated(), l_path.getSuffix() );
+        final Literal l_literal = ASSyntax.createLiteral( !p_literal.negated(), l_path.getSuffix() );
         l_literal.addAnnot( p_literal.getAnnots() );
         l_literal.addTerms( p_literal.getTerms() );
 

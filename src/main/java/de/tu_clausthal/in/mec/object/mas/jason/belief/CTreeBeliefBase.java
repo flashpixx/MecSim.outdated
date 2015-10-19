@@ -44,7 +44,7 @@ import java.util.Set;
 /**
  * beliefbase which wraps all Jason structures
  */
-public class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGenerator<Literal>
+public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGenerator<Literal>
 {
 
     /**
@@ -117,6 +117,29 @@ public class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGenerator<L
     public void update()
     {
         m_beliefbaserootmask.update();
+    }
+
+
+    /**
+     * adds a literal and its belief structure to the agent beliefbase
+     *
+     * @param p_literal literal with prefix
+     * @param p_addliteral adds the literal to the created structure
+     */
+    public void setBeliefbaseStructure( final Literal p_literal, final boolean p_addliteral )
+    {
+        // split path of the literal functor
+        final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, p_literal.getFunctor() );
+
+        // remove if exists root beliefbase name
+        if ( l_path.startsWith( c_beliefbaseroot ) )
+            l_path.remove( 0, c_beliefbaseroot.size() );
+
+        // add the belief to the structure
+        if ( p_addliteral )
+            m_beliefbaserootmask.add( l_path.getSubPath( 0, -1 ), new CLiteral( l_path.getSuffix(), p_literal ), this );
+        else
+            m_beliefbaserootmask.add( l_path.getSubPath( 0, -1 ), this );
     }
 
     @Override

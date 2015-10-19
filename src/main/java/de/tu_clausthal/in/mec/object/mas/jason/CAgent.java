@@ -32,8 +32,7 @@ import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
 import de.tu_clausthal.in.mec.object.mas.generic.IWorldAction;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CMethodBind;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CPropertyBind;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CLiteral;
-import de.tu_clausthal.in.mec.object.mas.jason.belief.CMessageStorage;
+import de.tu_clausthal.in.mec.object.mas.jason.belief.CTreeBeliefBase;
 import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 import de.tu_clausthal.in.mec.runtime.message.CParticipant;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
@@ -111,6 +110,10 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
      * participant object
      */
     private final CParticipant m_participant;
+    /**
+     * beliefbase
+     */
+    private final CTreeBeliefBase m_beliefbase;
 
 
     /**
@@ -176,15 +179,14 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_architecture.insertAgArch( m_architecture );
 
         m_participant = new CParticipant( this );
-
         m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture, m_beliefbaserootmask );
-
+        m_beliefbase = new CTreeBeliefBase( m_agent, c_agentnameseparator );
 
 
         if ( p_bind != null )
         {
             this.bind( c_bindname, p_bind );
-
+            m_beliefbase.bind( c_bindname, p_bind );
         }
 
 
@@ -206,7 +208,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     @Override
     public IBeliefBaseMask<Literal> getBeliefBase()
     {
-        return m_beliefbaserootmask;
+        return m_beliefbase.getRoot();
     }
 
 
@@ -285,7 +287,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     @Override
     public final void receiveMessage( final Set<IMessage> p_messages )
     {
-        m_beliefbaserootmask.getMask( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
+        m_beliefbase.setMessages( p_messages );
     }
 
 
@@ -311,7 +313,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         // the initial beliefs are stored within the beliefbase, so iterate over all
         // beliefs and create beliefbase tree structure and add all beliefs
         for ( final Literal l_literal : p_agent.getBB() )
-            this.setBeliefbaseStructure( l_literal, true );
+            m_beliefbase.setBeliefbaseStructure( l_literal, true );
 
         // the plan belief must be collected, so iterate over all plans (plan context stores the logical condition of the plan),
         // the plan body is defined as a stack (own programming), so we need to iterate it manually because no iterator exists
@@ -346,7 +348,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
 
                     case delBel:
                     case delAddBel:
-                        this.setBeliefbaseStructure( l_literal, false );
+                        m_beliefbase.setBeliefbaseStructure( l_literal, false );
                         break;
 
                     default:
@@ -357,27 +359,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     }
 
 
-    /**
-     * adds a literal and its belief structure to the agent beliefbase
-     *
-     * @param p_literal literal with prefix
-     * @param p_addliteral adds the literal to the created structure
-     */
-    private void setBeliefbaseStructure( final Literal p_literal, final boolean p_addliteral )
-    {
-        // split path of the literal functor
-        final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, p_literal.getFunctor() );
 
-        // remove if exists root beliefbase name
-        if ( l_path.startsWith( c_beliefbaseroot ) )
-            l_path.remove( 0, c_beliefbaseroot.size() );
-
-        // add the belief to the structure
-        if ( p_addliteral )
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, -1 ), new CLiteral( l_path.getSuffix(), p_literal ), this );
-        else
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, -1 ), this );
-    }
 
 
     /**
@@ -449,7 +431,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
          */
         public final void cycle( final int p_currentstep )
         {
-            m_beliefbaserootmask.update();
+            m_beliefbase.update();
 
             // perform agent reasoning cycle for deducing new beliefs
             // the reasoning cycle must be called within the transition system

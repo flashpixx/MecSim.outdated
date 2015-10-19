@@ -81,8 +81,7 @@ public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarg
         }
 
         // repaint the OSM viewer (supress flickering)
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().repaint();
+        this.repaint();
     }
 
     @Override

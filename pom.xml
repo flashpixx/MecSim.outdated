@@ -358,6 +358,7 @@
                             </singleInstance>
                             <jre>
                                 <minVersion>1.8.0</minVersion>
+                                <runtimeBits>64</runtimeBits>
                                 <opts>
                                     <opt>-Xmx5g</opt>
                                     <opt>-XX:+UseParallelGC</opt>

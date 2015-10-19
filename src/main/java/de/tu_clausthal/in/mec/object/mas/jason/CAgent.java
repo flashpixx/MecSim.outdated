@@ -208,7 +208,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     @Override
     public IBeliefBaseMask<Literal> getBeliefBase()
     {
-        return m_beliefbase.getRoot();
+        return m_beliefbase.getRootMask();
     }
 
 
@@ -244,7 +244,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     @Override
     public void addBeliefBase( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
     {
-        m_beliefbaserootmask.add( p_mask );
+        m_beliefbase.add( p_path, p_mask );
     }
 
 
@@ -268,7 +268,7 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
     @Override
     public void removeBeliefBase( final CPath p_path )
     {
-        m_beliefbaserootmask.remove( p_path );
+        m_beliefbase.remove( p_path );
     }
 
 

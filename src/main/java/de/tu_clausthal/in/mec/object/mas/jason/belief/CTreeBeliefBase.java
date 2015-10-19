@@ -73,6 +73,12 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     private final CMask m_beliefbaserootmask;
 
 
+    /**
+     * ctor
+     *
+     * @param p_agent agent which will be connected with the beliefbase
+     * @param p_agentnameseparator agent name seperator used by the message beliefbase
+     */
     public CTreeBeliefBase( final Agent p_agent, final String p_agentnameseparator )
     {
         m_beliefbaserootmask = new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
@@ -93,27 +99,72 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
 
     }
 
-
+    /**
+     * bind an object to the binding-beliefbase
+     *
+     * @param p_bindname bind name
+     * @param p_bind bind object
+     */
     public void bind( final String p_bindname, final Object p_bind )
     {
         m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( p_bindname, p_bind );
     }
 
+    /**
+     * unbind an object from the binding-beliefbase
+     *
+     * @param p_bindname bind name
+     */
     public void unbind( final String p_bindname )
     {
         m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().removeBinding( p_bindname );
     }
 
-    public IBeliefBaseMask<Literal> getRoot()
+    /**
+     * returns the root mask
+     *
+     * @return root mask
+     */
+    public IBeliefBaseMask<Literal> getRootMask()
     {
         return m_beliefbaserootmask;
     }
 
+
+    /**
+     * removes an item from the bliefbase
+     *
+     * @param p_path item path
+     */
+    public void remove( final CPath p_path )
+    {
+        m_beliefbaserootmask.remove( p_path );
+    }
+
+    /**
+     * adds a mask to the beliefbase
+     */
+    public void add( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
+    {
+        m_beliefbaserootmask.add( p_mask );
+    }
+
+
+    /**
+     * sets the messages to the message-beliefbase
+     *
+     * @param p_messages set of messages
+     */
     public void setMessages( final Set<IMessage> p_messages )
     {
         m_beliefbaserootmask.getMask( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
     }
 
+
+    /**
+     * updates all internal data structures,
+     * should be called on the agent cycle
+     */
     public void update()
     {
         m_beliefbaserootmask.update();

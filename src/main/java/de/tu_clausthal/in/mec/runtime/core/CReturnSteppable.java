@@ -36,7 +36,7 @@ import java.util.Collection;
 /**
  * wrapper class to process a return-steppable item
  */
-public class CReturnSteppable extends IRunnable<IReturnSteppable>
+public final class CReturnSteppable extends IRunnable<IReturnSteppable>
 {
 
     /**

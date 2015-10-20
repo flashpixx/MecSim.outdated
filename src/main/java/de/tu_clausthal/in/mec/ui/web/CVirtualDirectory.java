@@ -36,7 +36,7 @@ import java.net.URL;
 /**
  * definition of virtual directory locations
  */
-public class CVirtualDirectory implements IVirtualLocation
+public final class CVirtualDirectory implements IVirtualLocation
 {
     /**
      * URI reg expression for filter

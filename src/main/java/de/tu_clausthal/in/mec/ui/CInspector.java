@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * inspector class to create a visual view of an object
  */
-public class CInspector
+public final class CInspector
 {
     /**
      * set with all communicators

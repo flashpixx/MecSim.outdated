@@ -51,7 +51,7 @@ import java.util.Map;
 /**
  * class of the HTTP server *
  */
-public class CServer extends NanoHTTPD implements IWebSocketFactory
+public final class CServer extends NanoHTTPD implements IWebSocketFactory
 {
     /**
      * seperator

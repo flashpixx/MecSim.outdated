@@ -43,7 +43,7 @@ import java.util.Calendar;
 /**
  * main class of the application
  */
-public class CMain
+public final class CMain
 {
     /**
      * private ctor - avoid instantiation

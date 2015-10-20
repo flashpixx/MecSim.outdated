@@ -55,7 +55,7 @@ import org.apache.commons.io.FileUtils;
 /**
  * class to create the bootstrap of the program
  */
-public class CBootstrap
+public final class CBootstrap
 {
 
     /**

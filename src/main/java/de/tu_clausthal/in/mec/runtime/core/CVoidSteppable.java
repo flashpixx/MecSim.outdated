@@ -33,7 +33,7 @@ import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 /**
  * wrapper class to process a void-steppable item
  */
-public class CVoidSteppable extends IRunnable<IVoidSteppable>
+public final class CVoidSteppable extends IRunnable<IVoidSteppable>
 {
 
     /**

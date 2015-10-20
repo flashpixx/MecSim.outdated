@@ -44,7 +44,7 @@ import java.util.Set;
  */
 @SuppressWarnings( "serial" )
 @JsonSerialize( using = CAdjacencyMatrix.CJson.class )
-public class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
+public final class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 {
     /**
      * column name

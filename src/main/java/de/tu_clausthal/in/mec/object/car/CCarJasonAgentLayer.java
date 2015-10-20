@@ -35,7 +35,7 @@ import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 /**
  * layer for car agents
  */
-public class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
+public final class CCarJasonAgentLayer extends IEnvironment<CDefaultCar>
 {
     /**
      * reference to the inconsitency layer

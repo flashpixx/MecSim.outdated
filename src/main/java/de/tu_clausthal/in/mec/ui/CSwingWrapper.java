@@ -36,7 +36,7 @@ import javax.swing.*;
  *
  * @tparam T swing type
  */
-public class CSwingWrapper<T extends JComponent> extends SwingNode
+public final class CSwingWrapper<T extends JComponent> extends SwingNode
 {
     /**
      * swing component *

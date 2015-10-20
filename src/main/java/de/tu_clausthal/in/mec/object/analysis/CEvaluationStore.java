@@ -52,7 +52,7 @@ import java.util.Map;
  *
  * @see http://db.apache.org/ddlutils/
  */
-public class CEvaluationStore extends IDatabase
+public final class CEvaluationStore extends IDatabase
 {
     /**
      * table name of agent table

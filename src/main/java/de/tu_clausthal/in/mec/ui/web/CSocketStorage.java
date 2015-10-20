@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * storage class to store websockets communicator thread-safe
  */
-public class CSocketStorage
+public final class CSocketStorage
 {
     /**
      * thread-safe map with all active sockets *

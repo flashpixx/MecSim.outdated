@@ -55,7 +55,7 @@ import java.util.Map;
  * @see https://arnaudnouard.wordpress.com/2013/02/02/undecorator-add-a-better-look-to-your-javafx-stages-part-i/
  * @see http://docs.oracle.com/javafx/2/layout/style_css.htm#CHDHIGCA
  */
-public class CUI extends Application
+public final class CUI extends Application
 {
     /**
      * map with name and content

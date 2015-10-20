@@ -33,7 +33,7 @@ import de.tu_clausthal.in.mec.runtime.CSimulation;
 /**
  * main workspace of the web-menu structure (browser & server structure)
  */
-public class CWorkspace extends CBrowser
+public final class CWorkspace extends CBrowser
 {
     /**
      * path of the binding host

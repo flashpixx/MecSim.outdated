@@ -27,13 +27,13 @@ package de.tu_clausthal.in.mec.runtime.message;
 
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.mas.jason.CAgent;
+import de.tu_clausthal.in.mec.object.mas.IAgent;
 
 
 /**
  * create a global message name structure
  */
-public class CNames
+public final class CNames
 {
 
     /**
@@ -70,7 +70,7 @@ public class CNames
     protected static CPath getGroup( final Object p_object )
     {
 
-        if ( p_object instanceof CAgent )
+        if ( p_object instanceof IAgent )
             return new CPath( "agent" );
 
         if ( p_object instanceof ICar )

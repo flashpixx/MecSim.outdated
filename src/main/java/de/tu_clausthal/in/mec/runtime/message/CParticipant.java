@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * participant class for event messager
  */
-public class CParticipant implements IParticipant
+public final class CParticipant implements IParticipant
 {
 
     /**

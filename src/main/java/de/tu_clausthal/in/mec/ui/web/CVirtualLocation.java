@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * class for the global name-based location collection
  */
-public class CVirtualLocation
+public final class CVirtualLocation
 {
 
     /**

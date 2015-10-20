@@ -51,7 +51,7 @@ import java.util.List;
 /**
  * defines the layer for cars
  */
-public class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>, ISerializable
+public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>, ISerializable
 {
     /**
      * data structure - not serializable

@@ -27,13 +27,17 @@ package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
+import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefStorage;
 import de.tu_clausthal.in.mec.runtime.message.IMessage;
 import jason.asSemantics.Agent;
 import jason.asSemantics.Unifier;
+import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
 import jason.asSyntax.PredicateIndicator;
 import jason.bb.BeliefBase;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -70,34 +74,38 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     /**
      * root beliefbase
      */
-    private final CMask m_beliefbaserootmask;
+    private final CMask m_beliefbaserootmask = new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
 
 
     /**
      * ctor
-     *
-     * @param p_agent agent which will be connected with the beliefbase
-     * @param p_agentnameseparator agent name seperator used by the message beliefbase
      */
-    public CTreeBeliefBase( final Agent p_agent, final String p_agentnameseparator )
+    public CTreeBeliefBase()
     {
-        m_beliefbaserootmask = new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
-        m_beliefbaserootmask.setPrefixRemove( c_beliefbaseroot );
-
-        // --- create beliefbase structure with tree structure
-        m_beliefbaserootmask.add(
-                new CBeliefBase(
-                        new CMessageStorage( p_agent.getTS(), p_agentnameseparator ), c_agentbeliefseparator
-                ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage.getSuffix() )
-        );
+        // set binding-beliefbase
         m_beliefbaserootmask.add(
                 new CBeliefBase(
                         // not the order of replacing arguments
                         new CBindingStorage( c_beliefbindprefixreplace, c_agentbeliefseparator ), c_agentbeliefseparator
                 ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasebind.getSuffix() )
         );
-
     }
+
+    /**
+     * set agent to the beliefbase for message system
+     *
+     * @param p_agent agent which will be connected with the beliefbase
+     * @param p_agentnameseparator agent name seperator used by the message beliefbase
+     */
+    public void setAgent( final Agent p_agent, final String p_agentnameseparator )
+    {
+        m_beliefbaserootmask.add(
+                new CBeliefBase(
+                        new CMessageStorage( p_agent.getTS(), p_agentnameseparator ), c_agentbeliefseparator
+                ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage.getSuffix() )
+        );
+    }
+
 
     /**
      * bind an object to the binding-beliefbase
@@ -157,6 +165,9 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void setMessages( final Set<IMessage> p_messages )
     {
+        if ( !m_beliefbaserootmask.containsMask( c_beliefbasemessage ) )
+            return;
+
         m_beliefbaserootmask.getMask( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
     }
 
@@ -179,18 +190,13 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void setBeliefbaseStructure( final Literal p_literal, final boolean p_addliteral )
     {
-        // split path of the literal functor
-        final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, p_literal.getFunctor() );
-
-        // remove if exists root beliefbase name
-        if ( l_path.startsWith( c_beliefbaseroot ) )
-            l_path.remove( 0, c_beliefbaseroot.size() );
+        final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
 
         // add the belief to the structure
         if ( p_addliteral )
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, -1 ), new CLiteral( l_path.getSuffix(), p_literal ), this );
+            m_beliefbaserootmask.add( l_pathliteral.getLeft(), l_pathliteral.getRight(), this );
         else
-            m_beliefbaserootmask.add( l_path.getSubPath( 0, -1 ), this );
+            m_beliefbaserootmask.add( l_pathliteral.getLeft(), this );
     }
 
     @Override
@@ -214,61 +220,69 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     @Override
     public void clear()
     {
-
+        m_beliefbaserootmask.clear();
     }
 
     @Override
-    public boolean add( final Literal l )
+    public boolean add( final Literal p_literal )
     {
         return false;
     }
 
     @Override
-    public boolean add( final int index, final Literal l )
+    public boolean add( final int p_index, final Literal p_literal )
     {
-        return false;
+        final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
+        m_beliefbaserootmask.add( l_pathliteral.getLeft(), l_pathliteral.getRight() );
+        return true;
     }
 
     @Override
     public Iterator<Literal> iterator()
     {
-        return null;
+        return this.getLiteralIterator( m_beliefbaserootmask.iteratorLiteral() );
     }
 
     @Override
     public Iterator<Literal> getAll()
     {
-        return null;
+        // deprecated
+        return this.iterator();
     }
 
     @Override
-    public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator pi )
+    public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator p_predict )
     {
         return null;
     }
 
     @Override
-    public Iterator<Literal> getCandidateBeliefs( final Literal l, final Unifier u )
+    public Iterator<Literal> getCandidateBeliefs( final Literal p_literal, final Unifier p_unify )
     {
         return null;
     }
 
     @Override
-    public Iterator<Literal> getRelevant( final Literal l )
+    public Iterator<Literal> getRelevant( final Literal p_literal )
     {
+        // deprecated
         return null;
     }
 
+    /**
+     * @todo need a check of the inner terms
+     */
     @Override
-    public Literal contains( final Literal l )
+    public Literal contains( final Literal p_literal )
     {
-        return null;
+        final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
+        m_beliefbaserootmask.containsLiteral( l_pathliteral.getLeft().append( l_pathliteral.getRight().getFunctor().get() ) );
     }
 
     @Override
     public int size()
     {
-        return 0;
+        return m_beliefbaserootmask.sizeLiteral();
     }
 
     @Override
@@ -278,21 +292,25 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     }
 
     @Override
-    public boolean remove( final Literal l )
+    public boolean remove( final Literal p_literal )
     {
         return false;
     }
 
     @Override
-    public boolean abolish( final PredicateIndicator pi )
+    public boolean abolish( final PredicateIndicator p_predict )
     {
         return false;
     }
 
     @Override
-    public Element getAsDOM( final Document document )
+    public Element getAsDOM( final Document p_document )
     {
-        return null;
+        final Element l_beliefs = (Element) p_document.createElement( "beliefs" );
+        for ( final Literal l_item : this )
+            l_beliefs.appendChild( l_item.getAsDOM( p_document ) );
+
+        return l_beliefs;
     }
 
     @Override
@@ -300,4 +318,51 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     {
         return this;
     }
+
+    /**
+     * creates a generic literal with path
+     *
+     * @param p_literal input literal
+     * @return pair of literal path and generic literal
+     */
+    private Pair<CPath, CLiteral> createPathLiteral( final Literal p_literal )
+    {
+        // split path from functor and remove if exists the root name
+        final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, p_literal.getFunctor() );
+        if ( l_path.startsWith( c_beliefbaseroot ) )
+            l_path.remove( 0, c_beliefbaseroot.size() );
+
+        // build literal
+        final Literal l_literal = ASSyntax.createLiteral( !p_literal.negated(), l_path.getSuffix() );
+        l_literal.addAnnot( p_literal.getAnnots() );
+        l_literal.addTerms( p_literal.getTerms() );
+
+        // create pair of path and literal
+        return new ImmutablePair<>( l_path.getSubPath( 0, -1 ), new CLiteral( l_literal ) );
+    }
+
+    /**
+     * get literal iterator
+     *
+     * @return iterator
+     */
+    private Iterator<Literal> getLiteralIterator( final Iterator<ILiteral<Literal>> p_iterator )
+    {
+        return new Iterator<Literal>()
+        {
+            @Override
+            public boolean hasNext()
+            {
+                return p_iterator.hasNext();
+            }
+
+            @Override
+            public Literal next()
+            {
+                // literal with path
+                return p_iterator.next().getLiteral();
+            }
+        };
+    }
+
 }

@@ -179,9 +179,9 @@ public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITa
         m_architecture.insertAgArch( m_architecture );
 
         m_participant = new CParticipant( this );
-        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture, m_beliefbaserootmask );
-        m_beliefbase = new CTreeBeliefBase( m_agent, c_agentnameseparator );
-
+        m_beliefbase = new CTreeBeliefBase();
+        m_agent = IEnvironment.AGENTTEMPLATEFACTORY.instantiate( IEnvironment.getAgentFile( p_asl ), this, m_architecture, m_beliefbase );
+        m_beliefbase.setAgent( m_agent, c_agentnameseparator );
 
         if ( p_bind != null )
         {

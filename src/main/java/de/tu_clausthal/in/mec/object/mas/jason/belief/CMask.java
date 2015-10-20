@@ -25,35 +25,16 @@
 package de.tu_clausthal.in.mec.object.mas.jason.belief;
 
 
-import de.tu_clausthal.in.mec.common.CPath;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBase;
 import de.tu_clausthal.in.mec.object.mas.generic.IBeliefBaseMask;
-import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
-import jason.asSemantics.Agent;
-import jason.asSemantics.Unifier;
-import jason.asSyntax.ASSyntax;
 import jason.asSyntax.Literal;
-import jason.asSyntax.PredicateIndicator;
-import jason.bb.BeliefBase;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import java.util.Iterator;
-import java.util.Set;
 
 
 /**
  * beliefbase mask that represent the Jason beliefbase
  */
-public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CMask<Literal> implements BeliefBase
+public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CMask<Literal>
 {
-    /**
-     * prefix remove path
-     */
-    private CPath m_prefixremove = CPath.EMPTY;
-
     /**
      * ctor
      *
@@ -81,6 +62,10 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         super( p_name, p_beliefbase, p_parent );
         m_pathseparator = p_separator;
     }
+
+
+
+/*
 
     @Override
     public void init( final Agent p_agent, final String[] p_args )
@@ -136,7 +121,7 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
 
         // splits the functor of the literal and walk through the beliefbase tree
         final CPath l_path = this.splitPath( p_literal.getFunctor() );
-        final Set<ILiteral<Literal>> l_literals = this.getLiterals( this.clearPathPrefix( l_path ).getSubPath( 0, -1 ) ).get( l_path );
+        final Set<ILiteral<Literal>> l_literals = this.getLiterals( this.splitPath( l_path ).getSubPath( 0, -1 ) ).get( l_path );
         return l_literals == null ? null : this.getLiteralIterator( l_literals.iterator() );
 
     }
@@ -202,22 +187,11 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         return new CMask( m_name, m_beliefbase, p_parent, m_pathseparator );
     }
 
-    /**
-     * adds a remove prefix
-     *
-     * @param p_path path
-     * @return mask
-     */
-    public final void setPrefixRemove( final CPath p_path )
-    {
-        m_prefixremove = p_path;
-    }
-
-    /**
+    **
      * get literal iterator
      *
      * @return iterator
-     */
+     *
     private Iterator<Literal> getLiteralIterator( final Iterator<ILiteral<Literal>> p_iterator )
     {
         return new Iterator<Literal>()
@@ -237,56 +211,18 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         };
     }
 
-    /**
+    **
      * splits the literal functor to a path
      *
      * @param p_functor literal
      * @return path
-     */
+     *
     private CPath splitPath( final String p_functor )
     {
         return new CPath( p_functor.split( m_pathseparator ) );
     }
 
-    /**
-     * clears the prefix of a path if exists
-     *
-     * @param p_path input path
-     * @return modified path (new object instance)
-     */
-    private CPath clearPathPrefix( final CPath p_path )
-    {
-        final CPath l_path = new CPath( p_path );
-        if ( ( !m_prefixremove.isEmpty() ) && ( l_path.startsWith( m_prefixremove ) ) )
-            l_path.remove( 0, m_prefixremove.size() );
-        return l_path;
-    }
 
-    /**
-     * splits the literal functor to a path and clears the path prefix
-     *
-     * @param p_functor literal
-     * @return path
-     */
-    private CPath splitClearPath( final String p_functor )
-    {
-        return this.clearPathPrefix( this.splitPath( p_functor ) );
-    }
-
-    /**
-     * clones a literal with path
-     *
-     * @param p_literal input literal
-     * @return pair of literal path and modified literal
-     */
-    private Pair<CPath, CLiteral> cloneLiteral( final Literal p_literal )
-    {
-        final CPath l_path = this.splitClearPath( p_literal.getFunctor() );
-        final Literal l_literal = ASSyntax.createLiteral( !p_literal.negated(), l_path.getSuffix() );
-        l_literal.addAnnot( p_literal.getAnnots() );
-        l_literal.addTerms( p_literal.getTerms() );
-
-        return new ImmutablePair<>( l_path.getSubPath( 0, -1 ), new CLiteral( l_literal ) );
-    }
+*/
 
 }

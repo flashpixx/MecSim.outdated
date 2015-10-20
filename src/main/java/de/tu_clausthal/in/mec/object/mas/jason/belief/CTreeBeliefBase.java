@@ -94,13 +94,16 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     }
 
     /**
-     * set agent to the beliefbase for message system
+     * set agent to the beliefbase for message system, can be set once
      *
      * @param p_agent agent which will be connected with the beliefbase
      * @param p_agentnameseparator agent name seperator used by the message beliefbase
      */
-    public void setAgent( final Agent p_agent, final String p_agentnameseparator )
+    public void setMessageBeliefbase( final Agent p_agent, final String p_agentnameseparator )
     {
+        if ( m_mask.containsMask( c_beliefbasemessage ) )
+            return;
+
         m_mask.add(
                 new CBeliefBase(
                         new CMessageStorage( p_agent.getTS(), p_agentnameseparator ), c_agentbeliefseparator

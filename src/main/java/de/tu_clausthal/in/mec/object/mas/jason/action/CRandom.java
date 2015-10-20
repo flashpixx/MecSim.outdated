@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * internal action to use a complex random generator
  */
-public class CRandom extends DefaultInternalAction
+public final class CRandom extends DefaultInternalAction
 {
     /**
      * map containing distributions which can be accessed by keys

@@ -47,7 +47,7 @@ import java.util.List;
  *
  * @warning methods does not use any primitive datatypes - primitive datatypes must be used with its boxed-type
  */
-public class CMethodBind extends IMethodBind<Agent, Structure>
+public final class CMethodBind extends IMethodBind<Agent, Structure>
 {
     /**
      * name of the source literal on returning argument

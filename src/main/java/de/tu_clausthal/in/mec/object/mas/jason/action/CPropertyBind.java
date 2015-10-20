@@ -43,7 +43,7 @@ import java.util.Set;
 /**
  * action to synchronize bind-object with agent value
  */
-public class CPropertyBind extends IPropertyBind<Agent, Structure>
+public final class CPropertyBind extends IPropertyBind<Agent, Structure>
 {
 
     /**

@@ -279,7 +279,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     {
         final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
 
-        // Jason does not implement conatins correct, so contains returns the literals if it is found or null if it is not found
+        // Jason does not implement contains correct, so contains returns the literals if it is found or null if it is not found
         if ( m_mask.containsLiteral( l_pathliteral.getLeft().append( l_pathliteral.getRight().getFunctor().get() ) ) )
             return p_literal;
         return null;
@@ -300,7 +300,8 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     @Override
     public boolean remove( final Literal p_literal )
     {
-        return false;
+        final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
+        return m_mask.remove( l_pathliteral.getLeft(), l_pathliteral.getValue() );
     }
 
     @Override

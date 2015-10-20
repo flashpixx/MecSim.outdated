@@ -151,21 +151,21 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
-    public void remove( final CPath p_path, final ILiteral<T> p_literal )
+    public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
-        walk( p_path, this, null ).remove( p_literal );
+        return walk( p_path, this, null ).remove( p_literal );
     }
 
     @Override
-    public void remove( final CPath p_path, final IBeliefBaseMask<T> p_mask )
+    public boolean remove( final CPath p_path, final IBeliefBaseMask<T> p_mask )
     {
-        walk( p_path, this, null ).remove( p_mask );
+        return walk( p_path, this, null ).remove( p_mask );
     }
 
     @Override
-    public void remove( final CPath p_path )
+    public boolean remove( final CPath p_path )
     {
-        walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).remove( p_path.getSuffix() );
+        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).remove( p_path.getSuffix() );
     }
 
     @Override
@@ -328,21 +328,21 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
-    public void remove( final IBeliefBaseMask<T> p_mask )
+    public boolean remove( final IBeliefBaseMask<T> p_mask )
     {
-        m_beliefbase.remove( p_mask );
+        return m_beliefbase.remove( p_mask );
     }
 
     @Override
-    public void remove( final ILiteral<T> p_literal )
+    public boolean remove( final ILiteral<T> p_literal )
     {
-        m_beliefbase.remove( p_literal );
+        return m_beliefbase.remove( p_literal );
     }
 
     @Override
-    public void remove( final String p_name )
+    public boolean remove( final String p_name )
     {
-        m_beliefbase.remove( p_name );
+        return m_beliefbase.remove( p_name );
     }
 
     @Override

@@ -107,23 +107,26 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      *
      * @param p_path path
      * @param p_literal literal
+     * @return is found and removed
      */
-    void remove( final CPath p_path, final ILiteral<T> p_literal );
+    boolean remove( final CPath p_path, final ILiteral<T> p_literal );
 
     /**
      * removes a mask
      *
      * @param p_path path
      * @param p_mask mask
+     * @return is found and removed
      */
-    void remove( final CPath p_path, final IBeliefBaseMask<T> p_mask );
+    boolean remove( final CPath p_path, final IBeliefBaseMask<T> p_mask );
 
     /**
      * removes literal and mask
      *
      * @param p_path path
+     * @return is found and removed
      */
-    void remove( final CPath p_path );
+    boolean remove( final CPath p_path );
 
     /**
      * clones the current mask

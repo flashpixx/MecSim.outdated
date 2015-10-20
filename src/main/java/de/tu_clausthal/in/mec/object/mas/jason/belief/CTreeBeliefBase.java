@@ -74,7 +74,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     /**
      * root beliefbase
      */
-    private final CMask m_beliefbaserootmask = new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
+    private final CMask m_mask = new CBeliefBase( new CBeliefStorage<>(), c_agentbeliefseparator ).createMask( c_beliefbaseroot.getSuffix() );
 
 
     /**
@@ -82,8 +82,10 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public CTreeBeliefBase()
     {
+        m_mask.setPathSeparator( c_agentbeliefseparator );
+
         // set binding-beliefbase
-        m_beliefbaserootmask.add(
+        m_mask.add(
                 new CBeliefBase(
                         // not the order of replacing arguments
                         new CBindingStorage( c_beliefbindprefixreplace, c_agentbeliefseparator ), c_agentbeliefseparator
@@ -99,7 +101,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void setAgent( final Agent p_agent, final String p_agentnameseparator )
     {
-        m_beliefbaserootmask.add(
+        m_mask.add(
                 new CBeliefBase(
                         new CMessageStorage( p_agent.getTS(), p_agentnameseparator ), c_agentbeliefseparator
                 ).<IBeliefBaseMask<Literal>>createMask( c_beliefbasemessage.getSuffix() )
@@ -115,7 +117,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void bind( final String p_bindname, final Object p_bind )
     {
-        m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( p_bindname, p_bind );
+        m_mask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().push( p_bindname, p_bind );
     }
 
     /**
@@ -125,7 +127,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void unbind( final String p_bindname )
     {
-        m_beliefbaserootmask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().removeBinding( p_bindname );
+        m_mask.getMask( c_beliefbasebind ).<CBindingStorage>getStorage().removeBinding( p_bindname );
     }
 
     /**
@@ -135,7 +137,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public IBeliefBaseMask<Literal> getRootMask()
     {
-        return m_beliefbaserootmask;
+        return m_mask;
     }
 
 
@@ -146,7 +148,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void remove( final CPath p_path )
     {
-        m_beliefbaserootmask.remove( p_path );
+        m_mask.remove( p_path );
     }
 
     /**
@@ -154,7 +156,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void add( final CPath p_path, final IBeliefBaseMask<Literal> p_mask )
     {
-        m_beliefbaserootmask.add( p_mask );
+        m_mask.add( p_mask );
     }
 
 
@@ -165,10 +167,10 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void setMessages( final Set<IMessage> p_messages )
     {
-        if ( !m_beliefbaserootmask.containsMask( c_beliefbasemessage ) )
+        if ( !m_mask.containsMask( c_beliefbasemessage ) )
             return;
 
-        m_beliefbaserootmask.getMask( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
+        m_mask.getMask( c_beliefbasemessage ).<CMessageStorage>getStorage().receiveMessage( p_messages );
     }
 
 
@@ -178,7 +180,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     public void update()
     {
-        m_beliefbaserootmask.update();
+        m_mask.update();
     }
 
 
@@ -194,9 +196,9 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
 
         // add the belief to the structure
         if ( p_addliteral )
-            m_beliefbaserootmask.add( l_pathliteral.getLeft(), l_pathliteral.getRight(), this );
+            m_mask.add( l_pathliteral.getLeft(), l_pathliteral.getRight(), this );
         else
-            m_beliefbaserootmask.add( l_pathliteral.getLeft(), this );
+            m_mask.add( l_pathliteral.getLeft(), this );
     }
 
     @Override
@@ -220,7 +222,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     @Override
     public void clear()
     {
-        m_beliefbaserootmask.clear();
+        m_mask.clear();
     }
 
     @Override
@@ -233,14 +235,14 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     public boolean add( final int p_index, final Literal p_literal )
     {
         final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
-        m_beliefbaserootmask.add( l_pathliteral.getLeft(), l_pathliteral.getRight() );
+        m_mask.add( l_pathliteral.getLeft(), l_pathliteral.getRight() );
         return true;
     }
 
     @Override
     public Iterator<Literal> iterator()
     {
-        return this.getLiteralIterator( m_beliefbaserootmask.iteratorLiteral() );
+        return this.getLiteralIterator( m_mask.iteratorLiteral() );
     }
 
     @Override
@@ -275,7 +277,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
         final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
 
         // Jason does not implement conatins correct, so contains returns the literals if it is found or null if it is not found
-        if ( m_beliefbaserootmask.containsLiteral( l_pathliteral.getLeft().append( l_pathliteral.getRight().getFunctor().get() ) ) )
+        if ( m_mask.containsLiteral( l_pathliteral.getLeft().append( l_pathliteral.getRight().getFunctor().get() ) ) )
             return p_literal;
         return null;
     }
@@ -283,7 +285,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     @Override
     public int size()
     {
-        return m_beliefbaserootmask.sizeLiteral();
+        return m_mask.sizeLiteral();
     }
 
     @Override

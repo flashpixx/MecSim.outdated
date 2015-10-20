@@ -40,7 +40,7 @@ import java.lang.invoke.MethodHandle;
 /**
  * Jason agent template factory
  */
-public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
+public final class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
 {
 
     @Override

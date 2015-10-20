@@ -37,7 +37,7 @@ import java.lang.reflect.Modifier;
 /**
  * class to filter object fields *
  */
-public class CFieldFilter implements CReflection.IFieldFilter
+public final class CFieldFilter implements CReflection.IFieldFilter
 {
 
     @Override

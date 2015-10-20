@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * generator of a static number of objects with a time-exponential function
  */
-public class CTimeDistribution extends IInspectorDefault implements IGenerator
+public final class CTimeDistribution extends IInspectorDefault implements IGenerator
 {
     /**
      * number of objects *

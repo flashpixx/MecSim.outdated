@@ -43,7 +43,7 @@ import java.util.HashSet;
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
 @SuppressWarnings( "serial" )
-public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
+public final class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
 {
     /**
      * stroke definition

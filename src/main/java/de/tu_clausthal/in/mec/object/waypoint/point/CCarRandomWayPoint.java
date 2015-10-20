@@ -42,7 +42,7 @@ import java.util.HashSet;
  *
  * @todo symbol painter should be moved to an own structure
  */
-public class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
+public final class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory, IGenerator>
 {
     /**
      * map with targets

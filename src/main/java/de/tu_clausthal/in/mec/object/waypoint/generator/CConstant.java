@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * generates a fixed number of cars
  */
-public class CConstant extends IInspectorDefault implements IGenerator
+public final class CConstant extends IInspectorDefault implements IGenerator
 {
     /**
      * start step value

@@ -46,7 +46,7 @@ import java.util.Map;
 /**
  * class to generate Jason cars with a distribution of the attributes
  */
-public class CAgentCarFactory extends CDefaultCarFactory
+public final class CAgentCarFactory extends CDefaultCarFactory
 {
     /**
      * name of the agent

@@ -61,7 +61,7 @@ import java.util.Set;
  * @tparam T typ of binding objects
  */
 @SuppressWarnings( "serial" )
-public class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITask<Agent>
+public final class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFactory.ITask<Agent>
 {
     /**
      * path seperator of agent name

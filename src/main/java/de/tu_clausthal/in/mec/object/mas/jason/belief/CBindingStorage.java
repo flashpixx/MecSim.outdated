@@ -43,7 +43,7 @@ import java.util.Set;
 /**
  * beliefbase structure to bind object properties
  */
-public class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
+public final class CBindingStorage extends IBindStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
     /**
      * string that is removed from a literal name

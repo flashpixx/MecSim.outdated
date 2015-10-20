@@ -32,7 +32,7 @@ import com.graphhopper.util.EdgeIteratorState;
 /**
  * wrapper class to encapsulate a GraphHopper weighting object with the IWeighting interface
  */
-public class CWeightingWrapper<T extends Weighting> implements IWeighting
+public final class CWeightingWrapper<T extends Weighting> implements IWeighting
 {
 
     /**

@@ -51,7 +51,7 @@ import java.util.Map;
  *
  * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
-public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
+public final class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
 {
     /**
      * algebra object

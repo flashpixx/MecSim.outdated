@@ -34,7 +34,7 @@ import java.util.HashMap;
  * combination weight, to use different weights in combination
  */
 @SuppressWarnings( "serial" )
-public class CCombine<T extends Enum> extends HashMap<T, IWeighting> implements Weighting
+public final class CCombine<T extends Enum> extends HashMap<T, IWeighting> implements Weighting
 {
 
     @Override

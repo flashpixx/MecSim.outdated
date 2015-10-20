@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * profile generator to define a fixed histogram on the time steps
  */
-public class CTimeProfile extends IInspectorDefault implements IGenerator
+public final class CTimeProfile extends IInspectorDefault implements IGenerator
 {
 
     /**

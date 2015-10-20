@@ -33,7 +33,7 @@ import jason.asSyntax.Literal;
 /**
  * beliefbase mask that represent the Jason beliefbase
  */
-public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CMask<Literal>
+public final class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CMask<Literal>
 {
     private final String m_separator;
 

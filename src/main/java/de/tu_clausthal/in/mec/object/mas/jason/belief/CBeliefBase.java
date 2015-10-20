@@ -33,7 +33,7 @@ import jason.asSyntax.Literal;
 /**
  * Jason specfic beliefbase
  */
-public class CBeliefBase extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefBase<Literal>
+public final class CBeliefBase extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CBeliefBase<Literal>
 {
     /**
      * separator

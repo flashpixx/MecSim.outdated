@@ -226,7 +226,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     @Override
     public boolean add( final Literal p_literal )
     {
-        return false;
+        return this.add( 0, p_literal );
     }
 
     @Override
@@ -266,17 +266,18 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     public Iterator<Literal> getRelevant( final Literal p_literal )
     {
         // deprecated
-        return null;
+        return this.getCandidateBeliefs( p_literal, null );
     }
 
-    /**
-     * @todo need a check of the inner terms
-     */
     @Override
     public Literal contains( final Literal p_literal )
     {
         final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
-        m_beliefbaserootmask.containsLiteral( l_pathliteral.getLeft().append( l_pathliteral.getRight().getFunctor().get() ) );
+
+        // Jason does not implement conatins correct, so contains returns the literals if it is found or null if it is not found
+        if ( m_beliefbaserootmask.containsLiteral( l_pathliteral.getLeft().append( l_pathliteral.getRight().getFunctor().get() ) ) )
+            return p_literal;
+        return null;
     }
 
     @Override
@@ -288,7 +289,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     @Override
     public Iterator<Literal> getPercepts()
     {
-        return null;
+        return this.iterator();
     }
 
     @Override
@@ -313,6 +314,9 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
         return l_beliefs;
     }
 
+    /**
+     * @todo define a full deep-copy
+     */
     @Override
     public BeliefBase clone()
     {

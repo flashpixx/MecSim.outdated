@@ -35,77 +35,37 @@ import jason.asSyntax.Literal;
  */
 public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CMask<Literal>
 {
+    private final String m_separator;
+
+
     /**
      * ctor
      *
      * @param p_name name of the mask
-     * @param p_beliefbase reference to the beliefbase context
-     * @param p_separator path separator
+     * @param p_beliefbase beliefbase
      */
     public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase, final String p_separator )
     {
         super( p_name, p_beliefbase );
-        m_pathseparator = p_separator;
+        m_separator = p_separator;
     }
 
-    /**
+    /*
      * ctor
      *
      * @param p_name name of the mask
-     * @param p_beliefbase reference to the beliefbase context
-     * @param p_parent reference to the parent mask
-     * @param p_separator path separator
+     * @param p_beliefbase beliefbase
+     * @param p_parent parent mask
      */
-    public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase, final IBeliefBaseMask<Literal> p_parent, final String p_separator
+    public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase,
+            final IBeliefBaseMask<Literal> p_parent, final String p_separator
     )
     {
         super( p_name, p_beliefbase, p_parent );
-        m_pathseparator = p_separator;
+        m_separator = p_separator;
     }
-
-
 
 /*
-
-    @Override
-    public void init( final Agent p_agent, final String[] p_args )
-    {
-
-    }
-
-    @Override
-    public void stop()
-    {
-
-    }
-
-    @Override
-    public boolean add( final Literal p_literal )
-    {
-        return this.add( 0, p_literal );
-    }
-
-    @Override
-    public boolean add( final int p_index, final Literal p_literal )
-    {
-        final Pair<CPath, CLiteral> l_split = this.cloneLiteral( p_literal );
-        this.add( l_split.getLeft(), l_split.getRight() );
-        return true;
-    }
-
-    @Override
-    public Iterator<Literal> iterator()
-    {
-        return this.getLiteralIterator( this.iteratorLiteral() );
-    }
-
-    @Override
-    public Iterator<Literal> getAll()
-    {
-        // deprecated
-        return this.iterator();
-    }
-
     @Override
     public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator p_predicateIndicator )
     {
@@ -134,22 +94,6 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
     }
 
     @Override
-    public Literal contains( final Literal p_literal )
-    {
-        final CPath l_path = this.splitPath( p_literal.getFunctor() );
-        //if ( this.containsLiteral( l_path ) )
-        //    return this.getLiterals( l_path ).values().iterator().next().getLiteral();
-
-        return null;
-    }
-
-    @Override
-    public Iterator<Literal> getPercepts()
-    {
-        return this.getLiteralIterator( this.iteratorLiteral() );
-    }
-
-    @Override
     public boolean remove( final Literal p_literal )
     {
         final Pair<CPath, CLiteral> l_split = this.cloneLiteral( p_literal );
@@ -165,64 +109,13 @@ public class CMask extends de.tu_clausthal.in.mec.object.mas.generic.implementat
         return true;
     }
 
-    @Override
-    public Element getAsDOM( final Document p_document )
-    {
-        final Element l_beliefs = (Element) p_document.createElement( "beliefs" );
-        for ( final Literal l_item : this )
-            l_beliefs.appendChild( l_item.getAsDOM( p_document ) );
+*/
 
-        return l_beliefs;
-    }
-
-    @Override
-    public BeliefBase clone()
-    {
-        return this;
-    }
 
     @Override
     public IBeliefBaseMask<Literal> clone( final IBeliefBaseMask<Literal> p_parent )
     {
-        return new CMask( m_name, m_beliefbase, p_parent, m_pathseparator );
+        return new CMask( m_name, m_beliefbase, p_parent, m_separator );
     }
-
-    **
-     * get literal iterator
-     *
-     * @return iterator
-     *
-    private Iterator<Literal> getLiteralIterator( final Iterator<ILiteral<Literal>> p_iterator )
-    {
-        return new Iterator<Literal>()
-        {
-            @Override
-            public boolean hasNext()
-            {
-                return p_iterator.hasNext();
-            }
-
-            @Override
-            public Literal next()
-            {
-                // literal with path
-                return p_iterator.next().getLiteral();
-            }
-        };
-    }
-
-    **
-     * splits the literal functor to a path
-     *
-     * @param p_functor literal
-     * @return path
-     *
-    private CPath splitPath( final String p_functor )
-    {
-        return new CPath( p_functor.split( m_pathseparator ) );
-    }
-
-
-*/
 
 }

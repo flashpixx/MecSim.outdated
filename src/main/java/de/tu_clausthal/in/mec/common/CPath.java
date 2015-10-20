@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * class to create a path structure
  */
-public class CPath implements Iterable<CPath>
+public final class CPath implements Iterable<CPath>
 {
     public static final String DEFAULTSEPERATOR = "/";
     /**

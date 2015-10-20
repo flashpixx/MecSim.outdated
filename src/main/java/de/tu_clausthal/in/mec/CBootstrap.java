@@ -38,6 +38,7 @@ import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.benchmark.CSummary;
 import de.tu_clausthal.in.mec.ui.CAgentEnvironment;
+import de.tu_clausthal.in.mec.ui.CConsole;
 import de.tu_clausthal.in.mec.ui.CInconsistencyEnvironment;
 import de.tu_clausthal.in.mec.ui.CInspector;
 import de.tu_clausthal.in.mec.ui.CLanguageEnvironment;
@@ -100,8 +101,8 @@ public final class CBootstrap
 
 
         // register objects
-        //p_server.registerObject( CConsole.getError( "error" ) );
-        //p_server.registerObject( CConsole.getOutput( "output" ) );
+        p_server.registerObject( CConsole.getError( "error" ) );
+        p_server.registerObject( CConsole.getOutput( "output" ) );
         p_server.registerObject( CSimulation.getInstance() );
         p_server.registerObject( CSimulation.getInstance().getMessageSystem() );
         p_server.registerObject( CConfiguration.getInstance() );

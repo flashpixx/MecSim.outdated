@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * class to create a path structure
  */
-public class CPath implements Iterable<CPath>
+public final class CPath implements Iterable<CPath>
 {
     public static final String DEFAULTSEPERATOR = "/";
     /**
@@ -273,14 +273,14 @@ public class CPath implements Iterable<CPath>
      * creates a path of the indices
      *
      * @param p_fromIndex start index
-     * @param p_toIndex end index (exclusive)
+     * @param p_toIndex end index (exclusive) / negative values from the end
      * @return path
      */
     public final CPath getSubPath( final int p_fromIndex, final int p_toIndex )
     {
         final CPath l_path = new CPath();
         l_path.m_separator = m_separator;
-        l_path.m_path.addAll( m_path.subList( p_fromIndex, p_toIndex ) );
+        l_path.m_path.addAll( m_path.subList( p_fromIndex, p_toIndex >= 0 ? p_toIndex : this.size() + p_toIndex ) );
         return l_path;
     }
 
@@ -297,14 +297,16 @@ public class CPath implements Iterable<CPath>
     @Override
     public final int hashCode()
     {
-        return this.getPath().hashCode();
+        return m_path.stream().mapToInt( i -> i.hashCode() ).sum();
     }
 
     @Override
     public final boolean equals( final Object p_object )
     {
-        if ( ( p_object instanceof String ) || ( p_object instanceof CPath ) )
+        if ( p_object instanceof CPath )
             return this.hashCode() == p_object.hashCode();
+        if ( p_object instanceof String )
+            return p_object.hashCode() == this.getPath().hashCode();
 
         return false;
     }

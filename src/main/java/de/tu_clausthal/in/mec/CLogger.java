@@ -39,7 +39,7 @@ import java.util.Map;
 /**
  * Logger class with additional Log4j support
  */
-public class CLogger
+public final class CLogger
 {
     /** initialization **/
     static

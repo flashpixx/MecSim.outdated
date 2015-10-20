@@ -34,7 +34,7 @@ import jason.asSyntax.Term;
 /**
  * empty action to overwrite default behaviour
  */
-public class CInternalEmpty extends DefaultInternalAction
+public final class CInternalEmpty extends DefaultInternalAction
 {
 
     /**

@@ -172,7 +172,7 @@ public class CLiteral<T> implements ILiteral<T>
     @Override
     public String toString()
     {
-        return (m_negated ? "~" : "") + m_functor.toString() + m_values.toString() + m_annotations.toString();
+        return ( m_negated ? "~" : "" ) + m_functor.toString() + m_values.toString() + m_annotations.toString();
     }
 
     @Override

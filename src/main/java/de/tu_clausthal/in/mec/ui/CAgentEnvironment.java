@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * encapsulating class for multi-agent UI components
  */
-public class CAgentEnvironment
+public final class CAgentEnvironment
 {
 
     /**

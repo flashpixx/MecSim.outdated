@@ -62,7 +62,7 @@ import java.util.jar.Manifest;
  * singleton class for configuration with a Json file
  */
 @SuppressWarnings( "serial" )
-public class CConfiguration
+public final class CConfiguration
 {
     /**
      * name of the configuration file

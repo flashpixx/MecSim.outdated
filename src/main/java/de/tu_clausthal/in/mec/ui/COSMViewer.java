@@ -57,7 +57,7 @@ import java.util.Map;
  * @see https://today.java.net/pub/a/today/2007/10/30/building-maps-into-swing-app-with-jxmapviewer.html
  */
 @SuppressWarnings( "serial" )
-public class COSMViewer extends JXMapViewer
+public final class COSMViewer extends JXMapViewer
 {
     /**
      * clickable layer

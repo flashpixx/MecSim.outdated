@@ -37,7 +37,7 @@ import java.util.Iterator;
  * internal action for deleting beliefs directly,
  * based on their functor without event generation
  */
-public class CBeliefRemove extends DefaultInternalAction
+public final class CBeliefRemove extends DefaultInternalAction
 {
 
     @Override

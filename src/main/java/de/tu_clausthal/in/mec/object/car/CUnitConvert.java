@@ -32,7 +32,7 @@ import de.tu_clausthal.in.mec.CConfiguration;
  *
  * @note [speed in meter/sec] * [timesampling in second] = [moved length in m] / ]cellsampling in meter] = moved cells ( km/h = 1000 / 3600 m/s )
  */
-public class CUnitConvert
+public final class CUnitConvert
 {
 
     /**

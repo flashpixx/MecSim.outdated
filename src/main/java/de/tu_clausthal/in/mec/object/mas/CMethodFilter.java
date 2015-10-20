@@ -38,7 +38,7 @@ import java.lang.reflect.Modifier;
 /**
  * class to filter methods *
  */
-public class CMethodFilter implements CReflection.IMethodFilter
+public final class CMethodFilter implements CReflection.IMethodFilter
 {
     @Override
     public boolean filter( final Method p_method )

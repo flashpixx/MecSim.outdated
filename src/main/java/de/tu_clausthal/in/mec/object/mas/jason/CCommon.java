@@ -57,7 +57,7 @@ import java.util.Set;
 /**
  * common method for Jason
  */
-public class CCommon
+public final class CCommon
 {
     /**
      * default source annotation "source(self)"

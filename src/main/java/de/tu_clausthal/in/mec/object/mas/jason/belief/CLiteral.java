@@ -35,7 +35,7 @@ import jason.asSyntax.Term;
 /**
  * class for literals
  */
-public class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CLiteral<Literal>
+public final class CLiteral extends de.tu_clausthal.in.mec.object.mas.generic.implementation.CLiteral<Literal>
 {
 
     /**

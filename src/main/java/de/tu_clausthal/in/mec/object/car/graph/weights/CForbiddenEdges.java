@@ -43,7 +43,7 @@ import java.util.HashSet;
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
 @SuppressWarnings( "serial" )
-public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
+public final class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
 {
     /**
      * stroke definition
@@ -193,6 +193,9 @@ public class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Pai
     private void paintLine( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_edge )
     {
         final CEdge<?, ?> l_edge = m_graph.getEdge( m_graph.getEdgeIterator( p_edge ) );
+        if ( l_edge == null )
+            return;
+
         final Point2D l_start = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( 0 ) );
         final Point2D l_end = p_viewer.convertGeoPositionToPoint( l_edge.getGeoPositions( -1 ) );
 

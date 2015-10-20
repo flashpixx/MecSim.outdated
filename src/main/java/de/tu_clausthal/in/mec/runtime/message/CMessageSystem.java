@@ -43,7 +43,7 @@ import java.util.Set;
 /**
  * message handler class
  */
-public class CMessageSystem implements IVoidSteppable
+public final class CMessageSystem implements IVoidSteppable
 {
     /**
      * set with all communicators

@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * encapsulating class for traffic UI components
  */
-public class CTrafficEnvironment
+public final class CTrafficEnvironment
 {
     /**
      * map with drivingmodels

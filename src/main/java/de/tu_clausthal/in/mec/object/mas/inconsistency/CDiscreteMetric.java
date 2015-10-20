@@ -34,7 +34,7 @@ import java.util.Collection;
  *
  * @see http://mathworld.wolfram.com/DiscreteMetric.html
  */
-public class CDiscreteMetric<T> extends IDefaultMetric<T>
+public final class CDiscreteMetric<T> extends IDefaultMetric<T>
 {
 
     /**

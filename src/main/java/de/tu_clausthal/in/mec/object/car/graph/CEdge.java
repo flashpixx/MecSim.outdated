@@ -49,7 +49,7 @@ import java.util.Set;
  * @tparam N type of the cell-object
  * @tparam T type of additional type
  */
-public class CEdge<N, T> implements Comparable<CEdge>
+public final class CEdge<N, T> implements Comparable<CEdge>
 {
     /**
      * epsilon value for sampling quality of datapoints

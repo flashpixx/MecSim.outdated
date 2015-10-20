@@ -25,6 +25,7 @@
 package de.tu_clausthal.in.mec.object.waypoint.generator;
 
 
+import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
@@ -35,7 +36,7 @@ import java.util.Map;
 /**
  * generator of a static number of objects with a time-exponential function
  */
-public class CTimeDistribution extends IInspectorDefault implements IGenerator
+public final class CTimeDistribution extends IInspectorDefault implements IGenerator
 {
     /**
      * number of objects *
@@ -63,6 +64,9 @@ public class CTimeDistribution extends IInspectorDefault implements IGenerator
     {
         m_count = p_count;
         m_distribution = p_distribution;
+
+        m_inspect.put( CCommon.getResourceString( this, "count" ), m_count );
+        m_inspect.put( CCommon.getResourceString( this, "distribution" ), m_distribution );
     }
 
     @Override

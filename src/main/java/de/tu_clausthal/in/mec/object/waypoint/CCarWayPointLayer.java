@@ -35,7 +35,7 @@ import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
  * layer with all sources
  */
 @SuppressWarnings( "serial" )
-public class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
+public final class CCarWayPointLayer extends IMultiLayer<IWayPoint<ICar>>
 {
 
     @Override

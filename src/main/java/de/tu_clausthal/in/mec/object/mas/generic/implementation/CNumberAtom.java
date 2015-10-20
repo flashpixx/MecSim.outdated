@@ -28,7 +28,7 @@ package de.tu_clausthal.in.mec.object.mas.generic.implementation;
 /**
  * numeric atom class for agent literals
  */
-public class CNumberAtom extends IDefaultAtom<Number>
+public final class CNumberAtom extends IDefaultAtom<Number>
 {
     /**
      * ctor

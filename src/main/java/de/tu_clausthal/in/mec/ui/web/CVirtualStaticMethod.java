@@ -39,7 +39,7 @@ import java.util.Map;
 /**
  * class to call object methods with an URL access
  */
-public class CVirtualStaticMethod implements IVirtualLocation
+public final class CVirtualStaticMethod implements IVirtualLocation
 {
     /**
      * mime type

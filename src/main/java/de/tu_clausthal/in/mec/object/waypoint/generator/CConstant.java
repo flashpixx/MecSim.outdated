@@ -24,50 +24,74 @@
 
 package de.tu_clausthal.in.mec.object.waypoint.generator;
 
-
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.ui.IInspectorDefault;
-import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 
 /**
- * profile generator to define a fixed histogram on the time steps
+ * generates a fixed number of cars
  */
-public final class CTimeProfile extends IInspectorDefault implements IGenerator
+public final class CConstant extends IInspectorDefault implements IGenerator
 {
-
     /**
-     * profile histogram *
+     * start step value
      */
-    final int[] m_histogram;
+    private final int m_startstep;
+    /**
+     * end step value
+     */
+    private final int m_endstep;
+    /**
+     * number of objects at each step
+     */
+    private final int m_stepobjects;
     /**
      * inspect data
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CTimeProfile.super.inspect() );
+            putAll( CConstant.super.inspect() );
         }};
 
     /**
      * ctor
      *
-     * @param p_histogram array with histogram
+     * @param p_startstep start step
+     * @param p_endstep end step
+     * @param p_maxobjects maximum number of created objects
      */
-    public CTimeProfile( final int[] p_histogram )
+    public CConstant( final int p_startstep, final int p_endstep, final int p_maxobjects )
     {
+        if ( p_startstep >= p_endstep )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "startbegin " ) );
 
-        m_histogram = p_histogram;
-        m_inspect.put( CCommon.getResourceString( this, "histogram" ), StringUtils.join( m_histogram, ", " ) );
+        final int l_duration = p_endstep - p_startstep;
+
+        m_startstep = p_startstep;
+        m_endstep = p_endstep;
+        m_stepobjects = p_maxobjects / BigInteger.valueOf( Math.abs( p_maxobjects ) ).gcd( BigInteger.valueOf( l_duration ) ).intValue();
+
+        if ( m_stepobjects * l_duration != p_maxobjects )
+            throw new IllegalArgumentException( CCommon.getResourceString( this, "notpossible" ) );
+
+        m_inspect.put( CCommon.getResourceString( this, "startstep" ), m_startstep );
+        m_inspect.put( CCommon.getResourceString( this, "endstep" ), m_endstep );
+        m_inspect.put( CCommon.getResourceString( this, "objectstep" ), m_stepobjects );
     }
+
 
     @Override
     public int getCount( final int p_currentStep )
     {
-        return m_histogram[p_currentStep % m_histogram.length];
+        if ( ( p_currentStep >= m_startstep ) && ( p_currentStep <= m_endstep ) )
+            return m_stepobjects;
+        return 0;
     }
+
 
     @Override
     public Map<String, Object> inspect()

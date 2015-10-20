@@ -47,7 +47,7 @@ import java.util.Set;
 /**
  * beliefbase structure for message beliefs
  */
-public class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
+public final class CMessageStorage extends IOneTimeStorage<ILiteral<Literal>, IBeliefBaseMask<Literal>>
 {
     /**
      * set with received messages

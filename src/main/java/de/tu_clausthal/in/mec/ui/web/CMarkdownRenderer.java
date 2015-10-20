@@ -44,7 +44,7 @@ import java.net.URLEncoder;
 /**
  * class of the link and layout markdown renderer
  */
-public class CMarkdownRenderer extends LinkRenderer
+public final class CMarkdownRenderer extends LinkRenderer
 {
     /**
      * string with base URI

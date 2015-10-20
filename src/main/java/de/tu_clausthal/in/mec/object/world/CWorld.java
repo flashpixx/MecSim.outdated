@@ -44,7 +44,7 @@ import java.util.Set;
  * world layer collection
  */
 @SuppressWarnings( "serial" )
-public class CWorld implements Map<String, ILayer>, Serializable
+public final class CWorld implements Map<String, ILayer>, Serializable
 {
     /**
      * map with layer

@@ -33,6 +33,7 @@ import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
+import de.tu_clausthal.in.mec.object.mas.jason.action.CRandom;
 import de.tu_clausthal.in.mec.runtime.ISerializable;
 import de.tu_clausthal.in.mec.ui.web.CBrowser;
 import jason.asSemantics.Agent;
@@ -86,6 +87,7 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
             // add own function
             put( "mecsim.literal2number", new CLiteral2Number() );
             put( "mecsim.removeBelief", new CBeliefRemove() );
+            put( "mecsim.getRandom", new CRandom() );
         }};
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists

@@ -35,7 +35,7 @@ import jason.asSyntax.Term;
  * converts a Jason term into a Jason number term
  */
 @SuppressWarnings( "serial" )
-public class CLiteral2Number extends DefaultInternalAction
+public final class CLiteral2Number extends DefaultInternalAction
 {
 
     @Override

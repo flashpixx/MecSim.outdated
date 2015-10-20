@@ -33,7 +33,7 @@ import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public class CTrafficJam implements IWeighting
+public final class CTrafficJam implements IWeighting
 {
     /**
      * active flag *

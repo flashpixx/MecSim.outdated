@@ -35,7 +35,7 @@ import de.tu_clausthal.in.mec.object.car.ICar;
  *
  * @see http://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model
  */
-public class CAgentNagelSchreckenberg extends CNagelSchreckenberg
+public final class CAgentNagelSchreckenberg extends CNagelSchreckenberg
 {
 
     @Override

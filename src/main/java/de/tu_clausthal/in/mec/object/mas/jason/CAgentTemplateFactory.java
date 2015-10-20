@@ -40,7 +40,7 @@ import java.lang.invoke.MethodHandle;
 /**
  * Jason agent template factory
  */
-public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
+public final class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
 {
 
     @Override
@@ -68,7 +68,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
      * actions are removed from the default behaviour
      * @see http://jason.sourceforge.net/api/jason/asSemantics/TransitionSystem.html
      */
-    private static class CAgent extends Agent
+    public static class CAgent extends Agent
     {
         /**
          * handle of the internal actions
@@ -83,7 +83,7 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
          **/
         public CAgent( final File p_source ) throws JasonException
         {
-            this.setInternalAction();
+            this.setInternals();
             this.initAg( p_source.toString() );
         }
 
@@ -98,23 +98,24 @@ public class CAgentTemplateFactory extends IAgentTemplateFactory<Agent, Object>
          */
         public CAgent( final Agent p_template, final AgArch p_architecture, final BeliefBase p_beliefbase )
         {
-            // --- initialize the agent, that is used within the simulation context ---
+
+            // --- clones the template agent, that is used within the simulation context ---
+            this.setInternals();
             this.setBB( p_beliefbase );
             this.setPL( p_template.getPL().clone() );
             this.setASLSrc( p_template.getASLSrc() );
-            this.setTS( new TransitionSystem( this, null, null, p_architecture ) );
-            this.setInternalAction();
+            this.setTS( new TransitionSystem( this, p_template.getTS().getC().clone(), p_template.getTS().getSettings(), p_architecture ) );
 
             this.initAg();
         }
 
 
         /**
-         * set the internal action of the agent based on the simulation context
+         * set the internal action of the agent based on the simulation context,
+         * internal data structure are private, so set with reflection
          */
-        private void setInternalAction()
+        private void setInternals()
         {
-            // --- internal data structure are private, so set with reflection ---
             try
             {
                 // create internal actions map - reset the map and overwrite not useable actions with placeholder

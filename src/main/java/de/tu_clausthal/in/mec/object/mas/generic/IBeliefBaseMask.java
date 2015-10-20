@@ -86,7 +86,6 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
     public void add( final CPath p_path, final ILiteral<T> p_literal, final IGenerator<T> p_generator );
 
 
-
     /**
      * checks if a mask exists
      *
@@ -141,14 +140,14 @@ public interface IBeliefBaseMask<T> extends IBeliefBaseAction<T>
      * @param p_path path
      * @return map with literal
      */
-    public Map<CPath, ILiteral<T>> getLiterals( final CPath p_path );
+    public Map<CPath, Set<ILiteral<T>>> getLiterals( final CPath p_path );
 
     /**
      * gets a list of all literals
      *
      * @return set with literals
      */
-    public Map<CPath, ILiteral<T>> getLiterals();
+    public Map<CPath, Set<ILiteral<T>>> getLiterals();
 
     /**
      * returns a literal

@@ -33,7 +33,7 @@ import jason.asSemantics.Message;
 /**
  * class to encapsulate a Jason message for the event manager
  */
-public class CMessage implements IMessage<Message>
+public final class CMessage implements IMessage<Message>
 {
     /**
      * message data

@@ -39,7 +39,7 @@ import java.lang.invoke.MethodHandle;
  * @see https://github.com/NanoHttpd/nanohttpd/issues/74
  * @see https://github.com/NanoHttpd/nanohttpd/blob/master/websocket/src/main/java/fi/iki/elonen/NanoWebSocketServer.java
  */
-public class CVirtualDynamicMethod implements IVirtualLocation
+public final class CVirtualDynamicMethod implements IVirtualLocation
 {
     /**
      * seperator

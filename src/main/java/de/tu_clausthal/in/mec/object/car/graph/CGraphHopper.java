@@ -68,7 +68,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @see http://graphhopper.com/
  */
-public class CGraphHopper extends GraphHopper
+public final class CGraphHopper extends GraphHopper
 {
     /**
      * cell size for sampling

@@ -37,7 +37,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 
-public class CCarPathWayPoint extends IPathWayPoint<ICar, ICarFactory, IGenerator>
+public final class CCarPathWayPoint extends IPathWayPoint<ICar, ICarFactory, IGenerator>
 {
     /**
      * map with targets

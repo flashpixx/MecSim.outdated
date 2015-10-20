@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <!-- project meta information -->
-    <name>Clausthal University of Technology - Mobile and Enterprise Computing - MecSim</name>
+    <name>Clausthal University of Technology - Mobile and Enterprise Computing - ${project.artifactId}</name>
     <url>http://tu-c.de/mecsim</url>
 
     <organization>
@@ -68,6 +68,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <!-- fixed variables -->
+        <file.description>micro agent-based traffic simulation</file.description>
+
         <!-- will be set outside (build parameter) -->
         <build.number></build.number>
         <build.commit></build.commit>
@@ -83,6 +86,18 @@
             <url>https://oss.sonatype.org/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
             </releases>
             <snapshots>
                 <enabled>true</enabled>
@@ -223,13 +238,19 @@
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.6.2</version>
+            <version>2.6.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.10</version>
             <scope>compile</scope>
         </dependency>
 
@@ -285,6 +306,80 @@
 
 
         <plugins>
+
+            <!-- build OSX executable -->
+            <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.0.4</version>
+                <configuration>
+                    <jvmOptions>
+                        <jvmOption>-Xmx5g</jvmOption>
+                        <jvmOption>-XX:+UseParallelGC</jvmOption>
+                    </jvmOptions>
+                    <generateDiskImageFile>true</generateDiskImageFile>
+                    <bundleName>${project.artifactId}-${project.version}</bundleName>
+                    <mainClass>de.tu_clausthal.in.mec.CBoot</mainClass>
+                    <iconFile>icon.icns</iconFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>native-darwin</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- build windows executable -->
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.7.8</version>
+                <executions>
+                    <execution>
+                        <id>native-windows</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <outfile>target/${project.artifactId}-${project.version}.exe</outfile>
+                            <errTitle>Java Runtime 64 Bit Download</errTitle>
+                            <downloadUrl>http://www.java.com/en/download/manual.jsp</downloadUrl>
+                            <supportUrl>${project.url}</supportUrl>
+                            <icon>src/main/resources/icon.ico</icon>
+                            <singleInstance>
+                                <mutexName>${project.artifactId}</mutexName>
+                                <windowTitle>${project.artifactId}</windowTitle>
+                            </singleInstance>
+                            <jre>
+                                <minVersion>1.8.0</minVersion>
+                                <runtimeBits>64</runtimeBits>
+                                <opts>
+                                    <opt>-Xmx5g</opt>
+                                    <opt>-XX:+UseParallelGC</opt>
+                                </opts>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>${project.version}.0.0</fileVersion>
+                                <txtFileVersion>${project.version}.0.0</txtFileVersion>
+                                <fileDescription>${file.description}</fileDescription>
+                                <copyright>${project.organization.name}</copyright>
+                                <productVersion>${project.version}.0.0</productVersion>
+                                <txtProductVersion>${project.version}.0.0</txtProductVersion>
+                                <productName>${project.artifactId}</productName>
+                                <companyName>${project.organization.name}</companyName>
+                                <internalName>${project.artifactId}-${project.version}.jar</internalName>
+                                <originalFilename>${project.artifactId}-${project.version}.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- compiler configuration - for JRE bootstrap check we need two different compiling calls -->
             <plugin>
@@ -402,7 +497,7 @@
                 <version>2.5.3</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <attach>false</attach>
+                    <attach>true</attach>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -439,6 +534,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+
 
             <!-- checkstyle is performtemplate at compile / validation phase
             <plugin>

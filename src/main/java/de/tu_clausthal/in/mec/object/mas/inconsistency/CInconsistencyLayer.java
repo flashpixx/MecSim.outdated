@@ -51,16 +51,12 @@ import java.util.Map;
  *
  * @see https://dst.lbl.gov/ACSSoftware/colt/
  */
-public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
+public final class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
 {
     /**
      * algebra object
      */
     private static final Algebra c_algebra = new Algebra();
-    /**
-     * name of the invoke definition on agent-invoke-call
-     */
-    private static final String c_invokeName = "inconsistency";
     /**
      * algorithm to calculate stationary probability
      **/
@@ -152,6 +148,9 @@ public class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluateLayer
         return 500;
     }
 
+    /**
+     * @bug run it parallel stream
+     */
     @Override
     @IBenchmark
     public final void step( final int p_currentstep, final ILayer p_layer )

@@ -39,7 +39,7 @@ on Windows with [mklink](https://technet.microsoft.com/de-de/library/cc753194(v=
 * don't store any project management files in the repository
 * ```master``` is the current developing branch (should be compilable every time)
 * ```dev-<description>``` are current developing branches in parallel to the master branch, the dev-branches must be merged until the next release
-* ```hotfix-<tag name>``` are hotfix branches to a released tag
+* ```hotfix-<description>``` are hotfix branches to a released tag
 
 ### Source Files & Formating
 

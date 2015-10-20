@@ -48,7 +48,7 @@ import java.util.concurrent.Executors;
 /**
  * main simulation thread
  */
-public class CMainLoop implements Runnable
+public final class CMainLoop implements Runnable
 {
     /**
      * boolean to pause/resume the thread

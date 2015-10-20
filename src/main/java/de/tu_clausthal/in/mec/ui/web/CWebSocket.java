@@ -39,7 +39,7 @@ import java.util.TimerTask;
  * encapsulating class for websocket
  * the object represents one connection
  */
-public class CWebSocket extends WebSocket
+public final class CWebSocket extends WebSocket
 {
     /**
      * millisecond multiplier

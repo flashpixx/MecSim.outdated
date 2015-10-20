@@ -35,7 +35,7 @@ import java.net.URL;
 /**
  * virtual file with full path
  */
-public class CVirtualFile implements IVirtualLocation
+public final class CVirtualFile implements IVirtualLocation
 {
     /**
      * URI reg expression for filter

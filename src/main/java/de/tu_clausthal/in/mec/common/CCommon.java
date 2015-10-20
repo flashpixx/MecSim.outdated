@@ -57,7 +57,7 @@ import java.util.MissingResourceException;
 /**
  * class for any helper calls
  */
-public class CCommon
+public final class CCommon
 {
     /**
      * gigabyte multiplier

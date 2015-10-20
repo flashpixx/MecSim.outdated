@@ -32,6 +32,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +51,8 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -55,7 +63,7 @@ import java.util.jar.JarFile;
  * boilerplate code of the reflection API
  */
 @SuppressWarnings( "serial" )
-public class CReflection
+public final class CReflection
 {
     /**
      * class index *
@@ -76,24 +84,7 @@ public class CReflection
                     // defines Java defaults
                     "java.lang", "java.util"
             );
-
-            for ( final String l_path : new HashSet<String>()
-            {{
-                    addAll( Arrays.asList( System.getProperty( "java.class.path" ).split( File.pathSeparator ) ) );
-                    addAll( Arrays.asList( System.getProperty( "java.ext.dirs" ).split( File.pathSeparator ) ) );
-                    addAll( Arrays.asList( System.getProperty( "java.library.path" ).split( File.pathSeparator ) ) );
-                }} )
-            {
-                final File l_file = new File( l_path );
-                if ( !l_file.exists() )
-                    continue;
-
-                if ( l_path.toLowerCase().endsWith( ".jar" ) )
-                    scanJar( l_file );
-                else
-                    scanDirectory( l_file );
-            }
-
+        scan();
         }};
 
 
@@ -363,6 +354,34 @@ public class CReflection
         public Collection<Class<?>> getAll( final String p_class )
         {
             return m_classname.getCollection( p_class );
+        }
+
+        /**
+         * scans the defined packages
+         */
+        public void scan()
+        {
+            if ( m_filterdefinition.equals( EFilter.BlackList ) )
+                throw new IllegalStateException( CCommon.getResourceString( this, "blacklist" ) );
+
+            final List<ClassLoader> l_classloader = new LinkedList<ClassLoader>()
+            {{
+                add( ClasspathHelper.contextClassLoader() );
+                add( ClasspathHelper.staticClassLoader() );
+            }};
+
+            for ( final String l_item : m_filter )
+            {
+                final Reflections l_reflection = new Reflections( new ConfigurationBuilder()
+                                                                          .setScanners( new SubTypesScanner( false ), new ResourcesScanner() )
+                                                                          .setUrls( ClasspathHelper
+                                                                                            .forClassLoader( l_classloader.toArray( new ClassLoader[0] ) ) )
+                                                                          .filterInputsBy( new FilterBuilder().include( FilterBuilder.prefix( l_item ) ) ) );
+
+                for ( final Class<?> l_class : l_reflection.getSubTypesOf( Object.class ) )
+                    if ( !l_class.getSimpleName().isEmpty() )
+                        m_classname.put( l_class.getSimpleName(), l_class );
+            }
         }
 
         /**

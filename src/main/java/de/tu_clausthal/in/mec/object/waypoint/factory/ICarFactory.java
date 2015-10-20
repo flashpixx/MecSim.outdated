@@ -25,7 +25,6 @@
 package de.tu_clausthal.in.mec.object.waypoint.factory;
 
 import com.graphhopper.util.EdgeIteratorState;
-import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -39,6 +38,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -55,27 +56,23 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
 
 
+    /**
+     * @bug change parallel stream with collect
+     */
     @Override
     public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
     {
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = this.generateRouteCells( p_waypoints );
-        final Set<ICar> l_set = new HashSet<>();
-
-        for ( int i = 0; i < p_count; i++ )
-            try
-            {
-                l_set.add( this.getCar( l_cells ) );
-            }
-            catch ( final Exception l_exception )
-            {
-                CLogger.error( l_exception );
-            }
-        return l_set;
+        return IntStream.range( 0, p_count )
+                        .parallel()
+                        .mapToObj( i -> this.getCar( l_cells ) )
+                        .collect( Collectors.toCollection( () -> new HashSet<ICar>() ) );
     }
 
     /**
      * creates the route cells
      *
+     * @bug run in parallel with stream
      * @param p_waypoints waypoint pair list
      * @return cell list
      */
@@ -98,9 +95,6 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
      * @param p_cells cell list
      * @return car object
      */
-    protected ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells )
-    {
-        return null;
-    }
+    protected abstract ICar getCar( final ArrayList<Pair<EdgeIteratorState, Integer>> p_cells );
 
 }

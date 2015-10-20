@@ -38,7 +38,7 @@ import java.util.Set;
  * to size of union and intersection of beliefbases.
  */
 @SuppressWarnings( "serial" )
-public class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultMetric<T>
+public final class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultMetric<T>
 {
     /**
      * ctor

@@ -44,7 +44,7 @@ import java.util.Set;
  * environment for inconsistency layer and metric
  */
 @SuppressWarnings( "serial" )
-public class CInconsistencyEnvironment
+public final class CInconsistencyEnvironment
 {
     /**
      * map for default labels

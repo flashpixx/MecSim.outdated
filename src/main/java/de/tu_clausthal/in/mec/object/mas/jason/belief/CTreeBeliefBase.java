@@ -310,13 +310,13 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     @Override
     public boolean abolish( final PredicateIndicator p_predict )
     {
-        return false;
+        return m_mask.remove( this.splitLiteralPath( p_predict.getFunctor() ) );
     }
 
     @Override
     public Element getAsDOM( final Document p_document )
     {
-        final Element l_beliefs = (Element) p_document.createElement( "beliefs" );
+        final Element l_beliefs = p_document.createElement( "beliefs" );
         for ( final Literal l_item : this )
             l_beliefs.appendChild( l_item.getAsDOM( p_document ) );
 

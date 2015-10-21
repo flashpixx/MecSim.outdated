@@ -243,18 +243,15 @@ public final class CGraphHopper extends GraphHopper
      * @return linkage object
      *
      * @note listener object will be set at the edge instantiation process
-     * @todo check generic
      */
-    public final synchronized CEdge<ICar, ?> getEdge( final EdgeIteratorState p_edgestate )
+    public final CEdge<ICar, ?> getEdge( final EdgeIteratorState p_edgestate )
     {
-        CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
-        if ( l_edge == null )
-        {
-            l_edge = new CEdge<>( p_edgestate, m_cellsize );
-            l_edge.addListener( m_edgelister );
-            m_edgecell.put( l_edge.getEdgeID(), l_edge );
-        }
+        CEdge<ICar, ?> l_edge = m_edgecell.get( p_edgestate.getEdge() );
+        if ( l_edge != null )
+            return l_edge;
 
+        l_edge = new CEdge( p_edgestate, m_cellsize ).addListener( m_edgelister );
+        m_edgecell.putIfAbsent( l_edge.getEdgeID(), l_edge );
         return l_edge;
     }
 

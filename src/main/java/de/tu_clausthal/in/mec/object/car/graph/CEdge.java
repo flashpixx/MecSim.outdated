@@ -135,20 +135,24 @@ public final class CEdge<N, T> implements Comparable<CEdge>
      * adds a set of edge listener
      *
      * @param p_listener listener collection
+     * @return object
      */
-    public final void addListener( final Collection<IAction<N, T>> p_listener )
+    public final CEdge<N, T> addListener( final Collection<IAction<N, T>> p_listener )
     {
         m_listener.addAll( p_listener );
+        return this;
     }
 
     /**
      * adds an edge listener
      *
      * @param p_listener listener
+     * @return object
      */
-    public final void addListener( final IAction<N, T> p_listener )
+    public final CEdge<N, T> addListener( final IAction<N, T> p_listener )
     {
         m_listener.add( p_listener );
+        return this;
     }
 
     /**

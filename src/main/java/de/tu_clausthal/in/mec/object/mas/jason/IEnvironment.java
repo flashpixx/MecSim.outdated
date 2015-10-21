@@ -85,9 +85,9 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 
         // add own function
-        put( "mecsim.literal2number", new CLiteral2Number() );
-        put( "mecsim.removeBelief", new CBeliefRemove() );
-        put( "mecsim.getRandom", new CRandom() );
+        put( "mecsim_literal2number", new CLiteral2Number() );
+        put( "mecsim_removeBelief", new CBeliefRemove() );
+        put( "mecsim_getRandom", new CRandom() );
     }};
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists

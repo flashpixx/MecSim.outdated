@@ -18,7 +18,7 @@ gravity(9.81).                                            // the gravity constan
     :   root_distribution(Distr) &                         // specified distribution
         root_parameter1(Par1) &                            // first distribution parameter
         root_parameter2(Par2)                              // second distribution parameter
-    <-     mecsim_getSample(Distr, Par1, Par2, R);         // get scramble value of given distribution
+    <-     mecsim_getRandom(Distr, Par1, Par2, R);         // get scramble value of given distribution
         mecsim_getExpectation(Distr, Par1, Par2, E);       // get expectation of given distribution
         +scramble(R);                                      // set scramble value into beliefbase
         +expectation(E);                                   // set expectation into beliefbase

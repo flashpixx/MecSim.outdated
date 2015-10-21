@@ -86,9 +86,9 @@ public final class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFacto
      */
     private final Map<String, IWorldAction> m_action = new HashMap<String, IWorldAction>()
     {{
-            put( m_propertybind.getName(), m_propertybind );
-            put( m_methodbind.getName(), m_methodbind );
-        }};
+        put( m_propertybind.getName(), m_propertybind );
+        put( m_methodbind.getName(), m_methodbind );
+    }};
     /**
      * agent object
      */
@@ -313,7 +313,7 @@ public final class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFacto
         // the initial beliefs are stored within the beliefbase, so iterate over all
         // beliefs and create beliefbase tree structure and add all beliefs
         for ( final Literal l_literal : p_agent.getBB() )
-            m_beliefbase.setBeliefbaseStructure( l_literal, true );
+            m_beliefbase.generateTreeStructure( l_literal, true );
 
         // the plan belief must be collected, so iterate over all plans (plan context stores the logical condition of the plan),
         // the plan body is defined as a stack (own programming), so we need to iterate it manually because no iterator exists
@@ -348,7 +348,7 @@ public final class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFacto
 
                     case delBel:
                     case delAddBel:
-                        m_beliefbase.setBeliefbaseStructure( l_literal, false );
+                        m_beliefbase.generateTreeStructure( l_literal, false );
                         break;
 
                     default:
@@ -357,9 +357,6 @@ public final class CAgent<T> implements IVoidAgent<Literal>, IAgentTemplateFacto
                 l_body = l_body.getBodyNext();
             }
     }
-
-
-
 
 
     /**

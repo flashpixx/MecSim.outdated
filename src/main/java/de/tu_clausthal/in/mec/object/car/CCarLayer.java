@@ -110,9 +110,9 @@ public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppab
     {
         if ( CSimulation.getInstance().getStorage().exists() )
             CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter()
-                       .removePainter(
-                               (Painter) this
-                       );
+                                                                                                           .removePainter(
+                                                                                                                   (Painter) this
+                                                                                                           );
     }
 
     @Override

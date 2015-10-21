@@ -73,19 +73,19 @@ public final class CReflection
     private static final CClassIndex c_classindex = new CClassIndex( CClassIndex.EFilter.WhiteList )
     {{
 
-            filter(
-                    CConfiguration.getPackage(),
-                    // defines GeoPosition
-                    "org.jxmapviewer",
-                    // defines EdgeIteratorState
-                    "com.graphhopper",
-                    // defines triple & pair
-                    "org.apache.commons.lang3.tuple",
-                    // defines Java defaults
-                    "java.lang", "java.util"
-            );
+        filter(
+                CConfiguration.getPackage(),
+                // defines GeoPosition
+                "org.jxmapviewer",
+                // defines EdgeIteratorState
+                "com.graphhopper",
+                // defines triple & pair
+                "org.apache.commons.lang3.tuple",
+                // defines Java defaults
+                "java.lang", "java.util"
+        );
         scan();
-        }};
+    }};
 
 
     /**
@@ -208,7 +208,7 @@ public final class CReflection
      * @return method
      */
     public static CMethod getClassMethod( final Class<?> p_class, final String p_method, final Class<?>[] p_parameter )
-            throws IllegalArgumentException, IllegalAccessException
+    throws IllegalArgumentException, IllegalAccessException
     {
         Method l_method = null;
         for ( Class<?> l_class = p_class; ( l_method == null ) && ( l_class != null ); l_class = l_class.getSuperclass() )

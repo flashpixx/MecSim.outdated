@@ -55,8 +55,8 @@ public abstract class IPathWayPoint<T, P extends IFactory<T>, N extends IGenerat
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( IPathWayPoint.super.inspect() );
-        }};
+        putAll( IPathWayPoint.super.inspect() );
+    }};
     /**
      * makrov chain to calculate route
      */

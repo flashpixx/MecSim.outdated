@@ -72,9 +72,10 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
     /**
      * creates the route cells
      *
-     * @bug run in parallel with stream
      * @param p_waypoints waypoint pair list
      * @return cell list
+     *
+     * @bug run in parallel with stream
      */
     protected final ArrayList<Pair<EdgeIteratorState, Integer>> generateRouteCells( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints )
     {

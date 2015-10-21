@@ -123,9 +123,9 @@ public abstract class IMethodBind<N, M> implements IWorldAction<N, M>
                     p_object.get( p_methodname, l_argumenttypes ).getHandle().invokeWithArguments(
                             new LinkedList<Object>()
                             {{
-                                    add( p_object.getObject() );
-                                    addAll( p_argumentdata );
-                                }}
+                                add( p_object.getObject() );
+                                addAll( p_argumentdata );
+                            }}
                     )
             );
         }

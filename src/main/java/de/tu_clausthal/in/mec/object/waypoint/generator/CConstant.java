@@ -54,8 +54,8 @@ public final class CConstant extends IInspectorDefault implements IGenerator
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CConstant.super.inspect() );
-        }};
+        putAll( CConstant.super.inspect() );
+    }};
 
     /**
      * ctor

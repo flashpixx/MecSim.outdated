@@ -61,8 +61,8 @@ public final class CAgentCarFactory extends CDefaultCarFactory
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CAgentCarFactory.super.inspect() );
-        }};
+        putAll( CAgentCarFactory.super.inspect() );
+    }};
 
     /**
      * ctor

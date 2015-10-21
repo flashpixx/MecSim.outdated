@@ -66,8 +66,8 @@ public class CDefaultCarFactory extends ICarFactory
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CDefaultCarFactory.super.inspect() );
-        }};
+        putAll( CDefaultCarFactory.super.inspect() );
+    }};
 
     /**
      * ctor

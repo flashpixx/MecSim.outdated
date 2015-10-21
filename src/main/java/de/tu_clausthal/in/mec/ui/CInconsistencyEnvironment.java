@@ -51,8 +51,8 @@ public final class CInconsistencyEnvironment
      */
     private final Map<String, String> m_label = new HashMap<String, String>()
     {{
-            put( "title_dialog", CCommon.getResourceString( CInconsistencyEnvironment.class, "dialogtitle" ) );
-        }};
+        put( "title_dialog", CCommon.getResourceString( CInconsistencyEnvironment.class, "dialogtitle" ) );
+    }};
     /**
      * layer name
      */
@@ -85,17 +85,17 @@ public final class CInconsistencyEnvironment
     {
         return new HashMap<String, Object>()
         {{
-                final IMetric<?, CPath> l_current = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).getMetric();
-                for ( final EMetric l_metric : EMetric.values() )
-                    put(
-                            l_metric.toString(), new HashMap()
-                            {{
-                                    put( "active", l_metric.equals( EMetric.isa( l_current ) ) );
-                                    put( "id", l_metric.name() );
-                                    put( "selector", l_current.getSelector() );
-                                }}
-                    );
-            }};
+            final IMetric<?, CPath> l_current = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).getMetric();
+            for ( final EMetric l_metric : EMetric.values() )
+                put(
+                        l_metric.toString(), new HashMap()
+                        {{
+                            put( "active", l_metric.equals( EMetric.isa( l_current ) ) );
+                            put( "id", l_metric.name() );
+                            put( "selector", l_current.getSelector() );
+                        }}
+                );
+        }};
     }
 
     /**

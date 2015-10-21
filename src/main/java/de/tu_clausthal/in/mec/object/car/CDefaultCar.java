@@ -105,8 +105,8 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     @CFieldFilter.CAgent( bind = false )
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CDefaultCar.super.inspect() );
-        }};
+        putAll( CDefaultCar.super.inspect() );
+    }};
     /**
      * linger probability value
      */

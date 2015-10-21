@@ -115,9 +115,9 @@ public final class CCommon
     {
         return new HashSet<ILiteral<Literal>>()
         {{
-                for ( final Literal l_literal : p_literals )
-                    add( new CLiteral( l_literal ) );
-            }};
+            for ( final Literal l_literal : p_literals )
+                add( new CLiteral( l_literal ) );
+        }};
     }
 
 
@@ -388,15 +388,15 @@ public final class CCommon
             return ASSyntax.createList(
                     new LinkedList<Term>()
                     {{
-                            for ( final Object l_item : ( (Map) p_data ).entrySet() )
-                                add(
-                                        ASSyntax.createLiteral(
-                                                ( (Map.Entry<?, ?>) l_item ).getKey().toString(), getTerm(
-                                                        ( (Map.Entry<?, ?>) l_item ).getValue()
-                                                )
-                                        )
-                                );
-                        }}
+                        for ( final Object l_item : ( (Map) p_data ).entrySet() )
+                            add(
+                                    ASSyntax.createLiteral(
+                                            ( (Map.Entry<?, ?>) l_item ).getKey().toString(), getTerm(
+                                                    ( (Map.Entry<?, ?>) l_item ).getValue()
+                                            )
+                                    )
+                            );
+                    }}
             );
 
         // collection into term list

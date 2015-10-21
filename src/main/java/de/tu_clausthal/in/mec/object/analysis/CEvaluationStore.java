@@ -146,13 +146,13 @@ public final class CEvaluationStore extends IDatabase
                 "add primary key ({0})", String.join(
                         ", ", new LinkedList()
                         {{
-                                add( "instance" );
-                                add( "process" );
-                                add( "run" );
-                                add( "step" );
-                                add( "agenthash" );
-                                addAll( Arrays.asList( p_fields ) );
-                            }}
+                            add( "instance" );
+                            add( "process" );
+                            add( "run" );
+                            add( "step" );
+                            add( "agenthash" );
+                            addAll( Arrays.asList( p_fields ) );
+                        }}
                 )
         );
     }

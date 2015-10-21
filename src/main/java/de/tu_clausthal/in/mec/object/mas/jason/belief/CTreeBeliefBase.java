@@ -193,7 +193,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      * @param p_literal literal with prefix
      * @param p_addliteral adds the literal to the created structure
      */
-    public void setBeliefbaseStructure( final Literal p_literal, final boolean p_addliteral )
+    public void generateTreeStructure( final Literal p_literal, final boolean p_addliteral )
     {
         final Pair<CPath, CLiteral> l_pathliteral = this.createPathLiteral( p_literal );
 

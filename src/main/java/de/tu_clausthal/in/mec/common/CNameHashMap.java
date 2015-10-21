@@ -139,8 +139,8 @@ public class CNameHashMap extends HashMap<String, Object> implements Iterable<Ma
              */
             private Stack<Iterator<Entry<String, Object>>> m_stackiterator = new Stack<Iterator<Entry<String, Object>>>()
             {{
-                    push( CNameHashMap.super.entrySet().iterator() );
-                }};
+                push( CNameHashMap.super.entrySet().iterator() );
+            }};
 
             @Override
             public boolean hasNext()

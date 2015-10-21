@@ -48,8 +48,8 @@ public final class CTimeProfile extends IInspectorDefault implements IGenerator
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CTimeProfile.super.inspect() );
-        }};
+        putAll( CTimeProfile.super.inspect() );
+    }};
 
     /**
      * ctor

@@ -254,7 +254,7 @@ public final class CUI extends Application
                         Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Number>get( "ui/windowwidth" ).doubleValue()
                 ), Math.min(
                         Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Number>get( "ui/windowheight" )
-                                                                                               .doubleValue()
+                                .doubleValue()
                 )
                 )
         );

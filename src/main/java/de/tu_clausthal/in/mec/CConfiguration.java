@@ -89,304 +89,304 @@ public final class CConfiguration
      */
     private final CNameHashMap.CImmutable m_configuration = new CNameHashMap.CImmutable()
     {{
-            // on shutdown delete full configuration folder
-            put( "deleteonshutdown", false );
+        // on shutdown delete full configuration folder
+        put( "deleteonshutdown", false );
 
-            // flag for resetting the full configuration - accessible within the UI
-            put( "reset", false );
+        // flag for resetting the full configuration - accessible within the UI
+        put( "reset", false );
 
-            // extract all MAS files from the Jar to the home path (should be performtemplate once) - accessible within the UI
-            put( "extractmasexamples", true );
+        // extract all MAS files from the Jar to the home path (should be performtemplate once) - accessible within the UI
+        put( "extractmasexamples", true );
 
-            // UUID / unique instance name - used by the database structure
-            put( "uuid", UUID.randomUUID().toString() );
-
-
-            // language data - accessible within the UI
-            put(
-                    "language", new CNameHashMap.CImmutable()
-                    {{
-                            // current language
-                            put( "current", "en" );
-                            put(
-                                    // allowed language strings
-                                    "allow", new ArrayList<String>()
-                                    {{
-                                            add( "en" );
-                                            add( "de" );
-                                        }}
-                            );
-                        }}
-            );
+        // UUID / unique instance name - used by the database structure
+        put( "uuid", UUID.randomUUID().toString() );
 
 
-            // UI data
-            put(
-                    "ui", new CNameHashMap.CImmutable()
-                    {{
-                            // initial geoposition of the map
-                            put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
-                            // window height
-                            put( "windowheight", 1024.0 );
-                            // window width
-                            put( "windowwidth", 1280.0 );
-                            // zoom value
-                            put( "zoom", 4 );
-                            // route painter opacity delay - accessible within the UI
-                            put( "routepainterdelay", 60 );
-                            put(
-                                    // server bind information - accessible within the UI
-                                    "server", new CNameHashMap.CImmutable()
-                                    {{
-                                            // address / hostname bind name
-                                            put( "host", "localhost" );
-                                            // bind port
-                                            put( "port", 9876 );
-                                            // heartbeat of the websocket to avoid disconnecting
-                                            put( "websocketheartbeat", 5 );
-                                        }}
-                            );
-                        }}
-            );
+        // language data - accessible within the UI
+        put(
+                "language", new CNameHashMap.CImmutable()
+                {{
+                    // current language
+                    put( "current", "en" );
+                    put(
+                            // allowed language strings
+                            "allow", new ArrayList<String>()
+                            {{
+                                add( "en" );
+                                add( "de" );
+                            }}
+                    );
+                }}
+        );
 
 
-            // main simulation data
-            put(
-                    "simulation", new CNameHashMap.CImmutable()
-                    {{
-                            // sleep time of the thread
-                            put( "threadsleeptime", 25 );
+        // UI data
+        put(
+                "ui", new CNameHashMap.CImmutable()
+                {{
+                    // initial geoposition of the map
+                    put( "geoposition", new GeoPosition( 51.8089, 10.3412 ) );
+                    // window height
+                    put( "windowheight", 1024.0 );
+                    // window width
+                    put( "windowwidth", 1280.0 );
+                    // zoom value
+                    put( "zoom", 4 );
+                    // route painter opacity delay - accessible within the UI
+                    put( "routepainterdelay", 60 );
+                    put(
+                            // server bind information - accessible within the UI
+                            "server", new CNameHashMap.CImmutable()
+                            {{
+                                // address / hostname bind name
+                                put( "host", "localhost" );
+                                // bind port
+                                put( "port", 9876 );
+                                // heartbeat of the websocket to avoid disconnecting
+                                put( "websocketheartbeat", 5 );
+                            }}
+                    );
+                }}
+        );
 
-                            put(
-                                    // traffic simulation components - accessible within the UI
-                                    "traffic", new CNameHashMap.CImmutable()
-                                    {{
-                                            // cell sampling of the graph data in meter
-                                            put( "cellsampling", 2 );
-                                            // time sampling in seconds - each simulation step is equal to this time
-                                            put( "timesampling", 10 );
+
+        // main simulation data
+        put(
+                "simulation", new CNameHashMap.CImmutable()
+                {{
+                    // sleep time of the thread
+                    put( "threadsleeptime", 25 );
+
+                    put(
+                            // traffic simulation components - accessible within the UI
+                            "traffic", new CNameHashMap.CImmutable()
+                            {{
+                                // cell sampling of the graph data in meter
+                                put( "cellsampling", 2 );
+                                // time sampling in seconds - each simulation step is equal to this time
+                                put( "timesampling", 10 );
+                                put(
+                                        "routing", new CNameHashMap.CImmutable()
+                                        {{
+                                            // current routing algorithms
+                                            put( "algorithm", "astarbi" );
                                             put(
-                                                    "routing", new CNameHashMap.CImmutable()
+                                                    // allowed strings of the routing algoritm
+                                                    "allow", new ArrayList<String>()
                                                     {{
-                                                            // current routing algorithms
-                                                            put( "algorithm", "astarbi" );
-                                                            put(
-                                                                    // allowed strings of the routing algoritm
-                                                                    "allow", new ArrayList<String>()
-                                                                    {{
-                                                                            add( "astar" );
-                                                                            add( "astarbi" );
-                                                                            add( "dijkstra" );
-                                                                            add( "dijkstrabi" );
-                                                                            add( "dijkstraOneToMany" );
-                                                                        }}
-                                                            );
-                                                        }}
-                                            );
-                                            put(
-                                                    // map information - accessible within the UI
-                                                    "map", new CNameHashMap.CImmutable()
-                                                    {{
-                                                            // graph should be reimported
-                                                            put( "reimport", false );
-                                                            // active element on the graph map
-                                                            put( "current", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
-                                                            // list with download URL
-                                                            put(
-                                                                    "graphs", new ArrayList<String>()
-                                                                    {{
-                                                                            add( "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
-                                                                            add( "http://download.geofabrik.de/north-america/us/south-dakota-latest.osm.pbf" );
-                                                                        }}
-                                                            );
-                                                        }}
+                                                        add( "astar" );
+                                                        add( "astarbi" );
+                                                        add( "dijkstra" );
+                                                        add( "dijkstrabi" );
+                                                        add( "dijkstraOneToMany" );
+                                                    }}
                                             );
                                         }}
-                            );
-                        }}
-            );
+                                );
+                                put(
+                                        // map information - accessible within the UI
+                                        "map", new CNameHashMap.CImmutable()
+                                        {{
+                                            // graph should be reimported
+                                            put( "reimport", false );
+                                            // active element on the graph map
+                                            put( "current", "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                                            // list with download URL
+                                            put(
+                                                    "graphs", new ArrayList<String>()
+                                                    {{
+                                                        add( "http://download.geofabrik.de/europe/germany/niedersachsen-latest.osm.pbf" );
+                                                        add( "http://download.geofabrik.de/north-america/us/south-dakota-latest.osm.pbf" );
+                                                    }}
+                                            );
+                                        }}
+                                );
+                            }}
+                    );
+                }}
+        );
 
 
-            // database data - accessible within the UI
-            put(
-                    "database", new CNameHashMap.CImmutable()
-                    {{
-                            // enables / disables the database connection - JDBC driver is needed
-                            put( "active", false );
-                            // driver name
-                            put( "driver", null );
-                            // connection URL
-                            put( "url", null );
-                            // table prefix - different simulation-types can be stored within the same database
-                            put( "tableprefix", null );
-                            // connection username
-                            put( "username", null );
-                            // connection password (decrypted)
-                            put( "password", null );
-                        }}
-            );
+        // database data - accessible within the UI
+        put(
+                "database", new CNameHashMap.CImmutable()
+                {{
+                    // enables / disables the database connection - JDBC driver is needed
+                    put( "active", false );
+                    // driver name
+                    put( "driver", null );
+                    // connection URL
+                    put( "url", null );
+                    // table prefix - different simulation-types can be stored within the same database
+                    put( "tableprefix", null );
+                    // connection username
+                    put( "username", null );
+                    // connection password (decrypted)
+                    put( "password", null );
+                }}
+        );
 
-            // manifest data
-            put( "manifest", new CNameHashMap.CImmutable() );
+        // manifest data
+        put( "manifest", new CNameHashMap.CImmutable() );
 
-        }};
+    }};
     /**
      * map with path and check-item for the value
      */
     private Map<String, List<ICheck>> m_configurationchecks = new HashMap<String, List<ICheck>>()
     {{
-            put(
-                    "uuid", new LinkedList<ICheck>()
-                    {{
-                            add( new CStringNotEmpty() );
-                        }}
-            );
-            put(
-                    "language/current", new LinkedList<ICheck>()
-                    {{
-                            add( new CContains<String>( m_configuration.<List<String>>get( "language/allow" ) ) );
-                        }}
-            );
+        put(
+                "uuid", new LinkedList<ICheck>()
+                {{
+                    add( new CStringNotEmpty() );
+                }}
+        );
+        put(
+                "language/current", new LinkedList<ICheck>()
+                {{
+                    add( new CContains<String>( m_configuration.<List<String>>get( "language/allow" ) ) );
+                }}
+        );
 
-            put(
-                    "ui/windowheight", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CGreater( 150 ) );
-                        }}
-            );
-            put(
-                    "ui/windowwidth", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CGreater( 150 ) );
-                        }}
-            );
-            put(
-                    "ui/zoom", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CGreater( 0 ) );
-                        }}
-            );
-            put(
-                    "ui/routepainterdelay", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CInRange( 1, 200 ) );
-                        }}
-            );
-            put(
-                    "ui/server/host", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                            add( new CStringNotEmpty() );
-                        }}
-            );
-            put(
-                    "ui/server/port", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CGreater( 1024 ) );
-                        }}
-            );
-            put(
-                    "ui/server/websocketheartbeat", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CGreater( 0 ) );
-                        }}
-            );
+        put(
+                "ui/windowheight", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CGreater( 150 ) );
+                }}
+        );
+        put(
+                "ui/windowwidth", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CGreater( 150 ) );
+                }}
+        );
+        put(
+                "ui/zoom", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CGreater( 0 ) );
+                }}
+        );
+        put(
+                "ui/routepainterdelay", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CInRange( 1, 200 ) );
+                }}
+        );
+        put(
+                "ui/server/host", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( String.class ) );
+                    add( new CStringNotEmpty() );
+                }}
+        );
+        put(
+                "ui/server/port", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CGreater( 1024 ) );
+                }}
+        );
+        put(
+                "ui/server/websocketheartbeat", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CGreater( 0 ) );
+                }}
+        );
 
-            put(
-                    "simulation/threadsleeptime", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CInRange( 1, 150 ) );
-                        }}
-            );
+        put(
+                "simulation/threadsleeptime", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CInRange( 1, 150 ) );
+                }}
+        );
 
-            put(
-                    "simulation/traffic/cellsampling", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CInRange( 1, 25 ) );
-                        }}
-            );
-            put(
-                    "simulation/traffic/timesampling", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Number.class ) );
-                            add( new CInRange( 1, 360 ) );
-                        }}
-            );
+        put(
+                "simulation/traffic/cellsampling", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CInRange( 1, 25 ) );
+                }}
+        );
+        put(
+                "simulation/traffic/timesampling", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Number.class ) );
+                    add( new CInRange( 1, 360 ) );
+                }}
+        );
 
-            put(
-                    "simulation/traffic/routing/algorithm", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                            add( new CContains<String>( m_configuration.<List<String>>get( "simulation/traffic/routing/allow" ) ) );
-                        }}
-            );
+        put(
+                "simulation/traffic/routing/algorithm", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( String.class ) );
+                    add( new CContains<String>( m_configuration.<List<String>>get( "simulation/traffic/routing/allow" ) ) );
+                }}
+        );
 
-            put(
-                    "simulation/traffic/map/reimport", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Boolean.class ) );
-                        }}
-            );
-            put(
-                    "simulation/traffic/map/current", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                            add( new CContains<String>( m_configuration.<List<String>>get( "simulation/traffic/map/graphs" ) ) );
-                        }}
-            );
+        put(
+                "simulation/traffic/map/reimport", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Boolean.class ) );
+                }}
+        );
+        put(
+                "simulation/traffic/map/current", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( String.class ) );
+                    add( new CContains<String>( m_configuration.<List<String>>get( "simulation/traffic/map/graphs" ) ) );
+                }}
+        );
 
-            put(
-                    "database/active", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( Boolean.class ) );
-                        }}
-            );
-            put(
-                    "database/driver", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                        }}
-            );
-            put(
-                    "database/url", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                        }}
-            );
-            put(
-                    "database/tableprefix", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                        }}
-            );
-            put(
-                    "database/username", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                        }}
-            );
-            put(
-                    "database/password", new LinkedList<ICheck>()
-                    {{
-                            add( new CClassType( String.class ) );
-                        }}
-            );
-        }};
+        put(
+                "database/active", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( Boolean.class ) );
+                }}
+        );
+        put(
+                "database/driver", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( String.class ) );
+                }}
+        );
+        put(
+                "database/url", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( String.class ) );
+                }}
+        );
+        put(
+                "database/tableprefix", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( String.class ) );
+                }}
+        );
+        put(
+                "database/username", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( String.class ) );
+                }}
+        );
+        put(
+                "database/password", new LinkedList<ICheck>()
+                {{
+                    add( new CClassType( String.class ) );
+                }}
+        );
+    }};
     /**
      * location map
      */
     private final Map<String, File> m_location = new HashMap<String, File>()
     {{
-            put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
-        }};
+        put( "root", new File( System.getProperty( "user.home" ) + File.separator + ".mecsim" ) );
+    }};
     /**
      * UTF-8 property reader
      */

@@ -81,8 +81,8 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
     @CFieldFilter.CAgent( bind = false )
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CCarJasonAgent.super.inspect() );
-        }};
+        putAll( CCarJasonAgent.super.inspect() );
+    }};
     /**
      * internal receiver path
      */
@@ -121,8 +121,8 @@ public class CCarJasonAgent extends CDefaultCar implements IReceiver
                 p_route, p_speed, p_maxspeed, p_acceleration, p_deceleration, p_lingerprobability,
                 p_objectname, new HashSet<String>()
                 {{
-                        add( p_agent );
-                    }}
+                    add( p_agent );
+                }}
         );
     }
 

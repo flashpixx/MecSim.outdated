@@ -172,6 +172,7 @@ public final class CUI extends Application
         l_popover.setHideOnEscape( true );
         l_popover.setAutoFix( true );
         l_popover.setOnHidden( m_popuphiddenevent );
+        l_popover.setHeaderAlwaysVisible( true );
 
         return l_popover;
     }

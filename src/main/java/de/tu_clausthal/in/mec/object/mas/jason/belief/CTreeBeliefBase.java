@@ -258,13 +258,16 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
     @Override
     public Iterator<Literal> getCandidateBeliefs( final PredicateIndicator p_predict )
     {
-        return null;
+        final Set<ILiteral<Literal>> l_literals = m_mask.getLiteral( this.splitLiteralPath( p_predict.getFunctor() ) );
+        return ( ( l_literals == null ) || ( l_literals.isEmpty() ) ) ? null : this.getLiteralIterator( l_literals.iterator() );
+
     }
 
     @Override
     public Iterator<Literal> getCandidateBeliefs( final Literal p_literal, final Unifier p_unify )
     {
-        return null;
+        final Set<ILiteral<Literal>> l_literals = m_mask.getLiteral( this.splitLiteralPath( p_literal.getFunctor() ) );
+        return ( ( l_literals == null ) || ( l_literals.isEmpty() ) ) ? null : this.getLiteralIterator( l_literals.iterator() );
     }
 
     @Override
@@ -337,10 +340,7 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
      */
     private Pair<CPath, CLiteral> createPathLiteral( final Literal p_literal )
     {
-        // split path from functor and remove if exists the root name
-        final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, p_literal.getFunctor() );
-        if ( l_path.startsWith( c_beliefbaseroot ) )
-            l_path.remove( 0, c_beliefbaseroot.size() );
+        final CPath l_path = this.splitLiteralPath( p_literal.getFunctor() );
 
         // build literal
         final Literal l_literal = ASSyntax.createLiteral( !p_literal.negated(), l_path.getSuffix() );
@@ -350,6 +350,23 @@ public final class CTreeBeliefBase implements BeliefBase, IBeliefBaseMask.IGener
         // create pair of path and literal
         return new ImmutablePair<>( l_path.getSubPath( 0, -1 ), new CLiteral( l_literal ) );
     }
+
+    /**
+     * splits the literal path
+     *
+     * @param p_functor input literal functor
+     * @return path
+     */
+    private CPath splitLiteralPath( final String p_functor )
+    {
+        // split path from functor and remove if exists the root name
+        final CPath l_path = CPath.createSplitPath( c_agentbeliefseparator, p_functor );
+        if ( l_path.startsWith( c_beliefbaseroot ) )
+            l_path.remove( 0, c_beliefbaseroot.size() );
+
+        return l_path;
+    }
+
 
     /**
      * get literal iterator

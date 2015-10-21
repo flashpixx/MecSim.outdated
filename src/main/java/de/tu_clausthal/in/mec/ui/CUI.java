@@ -168,7 +168,7 @@ public final class CUI extends Application
         final PopOver l_popover = new PopOver( p_node );
 
         l_popover.setDetached( true );
-        l_popover.setDetachedTitle( p_title );
+        l_popover.setTitle( p_title );
         l_popover.setHideOnEscape( true );
         l_popover.setAutoFix( true );
         l_popover.setOnHidden( m_popuphiddenevent );

@@ -30,24 +30,26 @@ public final class CRandom extends DefaultInternalAction
     @Override
     public int getMinArgs()
     {
-        return 2;
+        return 3;
     }
 
     @Override
     public int getMaxArgs()
     {
-        return 3;
+        return 4;
     }
 
     @Override
     public Object execute( final TransitionSystem p_transitionsystem, final Unifier p_unifier, final Term[] p_args ) throws Exception
     {
-        if ( ( !p_args[0].isString() ) || ( !p_args[1].isNumeric() ) )
+        if ( ( !p_args[0].isString() ) || ( !p_args[1].isString() ) || ( !p_args[2].isNumeric() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "arguments" ) );
 
-        return new NumberTermImpl(
-                this.getDistribution(
-                        p_args[0].toString(),
+        return p_unifier.unifies(
+                p_args[p_args.length - 1],
+                EOption.valueOf( p_args[0].toString() ).get(
+                        this,
+                        p_args[1].toString(),
                         ( (NumberTerm) p_args[1] ).solve(),
                         ( p_args.length > 2 ) && ( p_args[2].isNumeric() ) ? ( (NumberTerm) p_args[2] ).solve() : 0
                 )
@@ -74,5 +76,50 @@ public final class CRandom extends DefaultInternalAction
                 l_key,
                 m_distributions.getOrDefault( l_key, l_key.getLeft().get( l_key.getMiddle(), l_key.getRight() ) )
         ).sample();
+    }
+
+
+    /**
+     * enum to define the option of action
+     */
+    private enum EOption
+    {
+        Value,
+        Expection;
+
+        /**
+         * returns the value of the option
+         *
+         * @param p_object random object
+         * @param p_distribution distribution name
+         * @param p_args number arguments
+         * @return value term
+         */
+        public NumberTermImpl get( final CRandom p_object, final String p_distribution, final double... p_args )
+        {
+            switch ( this )
+            {
+                case Value:
+                    return new NumberTermImpl(
+                            p_object.getDistribution(
+                                    p_distribution,
+                                    p_args[0],
+                                    p_args.length > 1 ? p_args[1] : 0
+                            )
+                    );
+
+                case Expection:
+                    return new NumberTermImpl(
+                            EDistribution.valueOf( p_distribution ).getExpectation(
+                                    p_args[0],
+                                    p_args.length > 1 ? p_args[1] : 0
+                            )
+                    );
+
+                default:
+                    throw new IllegalStateException( CCommon.getResourceString( EOption.class, "unknownoption" ) );
+
+            }
+        }
     }
 }

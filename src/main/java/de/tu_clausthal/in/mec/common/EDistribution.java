@@ -175,6 +175,34 @@ public enum EDistribution
         return m_secondmomentum != null;
     }
 
+    /**
+     * returns the expection on a given distribution
+     *
+     * @param p_args numerical arguments
+     * @return expectation
+     */
+    public final double getExpectation( final double... p_args )
+    {
+        switch ( this )
+        {
+            case Uniform:
+                return ( p_args[0] + p_args[1] ) / 2;
+
+            case Normal:
+                return p_args[0];
+
+            case Exponential:
+                return 0;
+
+            case Beta:
+                return p_args[0] / ( p_args[0] + p_args[1] );
+
+            default:
+                throw new IllegalStateException( CCommon.getResourceString( EDistribution.class, "unknowndistribution" ) );
+
+        }
+    }
+
     @Override
     public String toString()
     {

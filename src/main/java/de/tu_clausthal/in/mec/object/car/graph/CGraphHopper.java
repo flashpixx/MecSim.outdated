@@ -107,7 +107,6 @@ public final class CGraphHopper extends GraphHopper
     {
         // set the default settings
         m_cellsize = p_cellsize;
-        //@bug this.setCHShortcuts( "default" );
 
         // define graph location (use configuration)
         final String l_currentgraphurl = getCurrentGraph();
@@ -122,6 +121,8 @@ public final class CGraphHopper extends GraphHopper
         CConfiguration.getInstance().get().set( "simulation/traffic/map/reimport", false );
 
 
+        //@bug this.setCHShortcuts( "default" );
+        this.setCHEnable( true );
         this.setStoreOnFlush( true );
         this.setEncodingManager( new EncodingManager( p_encoding ) );
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )

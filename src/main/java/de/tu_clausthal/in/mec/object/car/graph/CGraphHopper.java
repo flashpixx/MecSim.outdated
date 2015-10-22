@@ -40,10 +40,6 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CCombine;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUp;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CWeightingWrapper;
 import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -126,8 +122,7 @@ public final class CGraphHopper extends GraphHopper
         CConfiguration.getInstance().get().set( "simulation/traffic/map/reimport", false );
 
 
-
-
+        this.setStoreOnFlush( true );
         this.setEncodingManager( new EncodingManager( p_encoding ) );
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {

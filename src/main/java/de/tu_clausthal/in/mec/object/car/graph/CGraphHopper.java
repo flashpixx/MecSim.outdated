@@ -32,6 +32,7 @@ import com.graphhopper.routing.util.EdgeFilter;
 import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
+import com.graphhopper.routing.util.WeightingMap;
 import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CConfiguration;
@@ -108,7 +109,7 @@ public final class CGraphHopper extends GraphHopper
     {
         // set the default settings
         m_cellsize = p_cellsize;
-        this.setCHShortcuts( "default" );
+        //@bug this.setCHShortcuts( "default" );
 
         // define graph location (use configuration)
         final String l_currentgraphurl = getCurrentGraph();
@@ -157,6 +158,15 @@ public final class CGraphHopper extends GraphHopper
     }
 
     @Override
+    public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
+    {
+        return super.createWeighting( p_map, p_encoder );
+    }
+
+    /*
+    @bug
+
+    @Override
     public final Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
     {
         // method creates on the first call all weights and store it within the
@@ -173,6 +183,8 @@ public final class CGraphHopper extends GraphHopper
 
         return m_weight;
     }
+    */
+
 
     /**
      * disable all weights *
@@ -264,7 +276,8 @@ public final class CGraphHopper extends GraphHopper
      */
     public final EdgeIteratorState getEdgeIterator( final int p_edgeid )
     {
-        return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
+        // @bug return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
+        return this.getGraphHopperStorage().getEdgeIteratorState( p_edgeid, Integer.MIN_VALUE );
     }
 
     /**
@@ -278,7 +291,8 @@ public final class CGraphHopper extends GraphHopper
         if ( p_edge == null )
             return Double.POSITIVE_INFINITY;
 
-        return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
+        // @bug return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
+        return this.getGraphHopperStorage().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
     }
 
     /**
@@ -425,7 +439,7 @@ public final class CGraphHopper extends GraphHopper
     private static File getGraphLocation( final String p_url )
     {
         return CConfiguration.getInstance().getLocation(
-                "root", "graphs", CCommon.getHash( p_url, "MD5" )
+                "root", "graphs", CCommon.getHash( p_url, "MD5" ) + "_new"
         );
     }
 

@@ -24,6 +24,7 @@
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
+import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 
@@ -52,6 +53,20 @@ public final class CCombine<T extends Enum> extends HashMap<T, IWeighting> imple
     }
 
     @Override
+    public double calcWeight( final EdgeIteratorState p_edgeIteratorState, final boolean p_b, final int p_i )
+    {
+        return 0;
+    }
+
+    @Override
+    public FlagEncoder getFlagEncoder()
+    {
+        return null;
+    }
+
+    /*
+    @bug
+    @Override
     public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         if ( this.isEmpty() )
@@ -64,5 +79,5 @@ public final class CCombine<T extends Enum> extends HashMap<T, IWeighting> imple
 
         return l_max;
     }
-
+    */
 }

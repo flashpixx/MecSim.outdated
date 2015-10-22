@@ -24,6 +24,7 @@
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
+import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
@@ -60,12 +61,26 @@ public final class CTrafficJam implements IWeighting
         return 0;
     }
 
+    @Override
+    public double calcWeight( final EdgeIteratorState p_edgeIteratorState, final boolean p_b, final int p_i )
+    {
+        return 0;
+    }
 
+    @Override
+    public FlagEncoder getFlagEncoder()
+    {
+        return null;
+    }
+
+    /*
+    @bug
     @Override
     public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
     {
         return m_graph.getEdge( p_edge ).getNumberOfObjects();
     }
+    */
 
     @Override
     public final boolean isActive()

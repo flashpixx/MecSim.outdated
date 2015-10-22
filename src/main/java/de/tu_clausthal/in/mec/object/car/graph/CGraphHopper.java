@@ -250,9 +250,10 @@ public final class CGraphHopper extends GraphHopper
         if ( l_edge != null )
             return l_edge;
 
+        // create a new edge and add it to the edge list, if one exists return the existing object
         l_edge = new CEdge( p_edgestate, m_cellsize ).addListener( m_edgelister );
-        m_edgecell.putIfAbsent( l_edge.getEdgeID(), l_edge );
-        return l_edge;
+        final CEdge<ICar, ?> l_return = m_edgecell.putIfAbsent( l_edge.getEdgeID(), l_edge );
+        return l_return == null ? l_edge : l_return;
     }
 
     /**

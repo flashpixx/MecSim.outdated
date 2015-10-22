@@ -36,11 +36,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -82,7 +81,7 @@ public final class CEdge<N, T> implements Comparable<CEdge>
     /**
      * map with object-2-position in forward direction
      */
-    private final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
+    private final Map<N, Integer> m_objects = new ConcurrentHashMap<>();
 
     /**
      * ctor create the samples

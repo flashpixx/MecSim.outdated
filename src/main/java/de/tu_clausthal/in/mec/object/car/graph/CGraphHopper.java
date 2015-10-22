@@ -71,6 +71,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class CGraphHopper extends GraphHopper
 {
+    private static final String c_defaultflagencoding = "CAR";
+
     /**
      * cell size for sampling
      */
@@ -95,7 +97,7 @@ public final class CGraphHopper extends GraphHopper
      */
     public CGraphHopper( final int p_cellsize )
     {
-        this( "CAR", p_cellsize );
+        this( c_defaultflagencoding, p_cellsize );
     }
 
     /**
@@ -122,18 +124,20 @@ public final class CGraphHopper extends GraphHopper
 
         // convert OSM or load the graph
         CConfiguration.getInstance().get().set( "simulation/traffic/map/reimport", false );
+
+
+
+
+        this.setEncodingManager( new EncodingManager( p_encoding ) );
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
         {
             CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
-            final File l_osm = this.downloadOSMData( l_currentgraphurl );
 
             this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
-            this.setOSMFile( l_osm.getAbsolutePath() );
-            this.setEncodingManager( new EncodingManager( p_encoding ) );
+            this.setOSMFile( this.downloadOSMData( l_currentgraphurl ).getAbsolutePath() );
             this.importOrLoad();
-
-            l_osm.delete();
         }
+
 
         CLogger.out( CCommon.getResourceString( this, "loaded" ) );
     }
@@ -291,8 +295,8 @@ public final class CGraphHopper extends GraphHopper
         if ( p_edge == null )
             return Double.POSITIVE_INFINITY;
 
-        // @bug return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
-        return this.getGraphHopperStorage().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
+        // @bug return this.getGraph().getEncodingManager().getEncoder( c_defaultflagencoding ).getSpeed( p_edge.getFlags() );
+        return this.getGraphHopperStorage().getEncodingManager().getEncoder( c_defaultflagencoding ).getSpeed( p_edge.getFlags() );
     }
 
     /**
@@ -438,6 +442,9 @@ public final class CGraphHopper extends GraphHopper
      */
     private static File getGraphLocation( final String p_url )
     {
+        /**
+         * @bug
+         */
         return CConfiguration.getInstance().getLocation(
                 "root", "graphs", CCommon.getHash( p_url, "MD5" ) + "_new"
         );

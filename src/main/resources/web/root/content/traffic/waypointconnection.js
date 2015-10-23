@@ -261,6 +261,11 @@ WaypointConnection.prototype.refresh = function()
 WaypointConnection.prototype.dynamicListener = function(p_event, p_update)
 {
     var self = this;
+    var clickedEvent = p_event || {};
+    var clickedElement = jQuery(clickedEvent.target);
+    var dynamicButtonCollection = jQuery(self.generateSubID("dynamicButton", "."));
+    var pathCollection = jQuery(self.generateSubID("pathButton", "."));
+    var noPathCollection = jQuery(self.generateSubID("noPathButton", "."));
 
     //update add or remove buttons
     if(p_update){
@@ -298,11 +303,6 @@ WaypointConnection.prototype.dynamicListener = function(p_event, p_update)
 
         return
     }
-
-    var clickedElement = jQuery(p_event.target);
-    var dynamicButtonCollection = jQuery(self.generateSubID("dynamicButton", "."));
-    var pathCollection = jQuery(self.generateSubID("pathButton", "."));
-    var noPathCollection = jQuery(self.generateSubID("noPathButton", "."));
 
     //if edit was clicked
     if(clickedElement.hasClass(self.generateSubID("editClass"))){

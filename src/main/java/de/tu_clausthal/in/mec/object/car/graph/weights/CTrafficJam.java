@@ -25,6 +25,7 @@
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
 import com.graphhopper.routing.util.FlagEncoder;
+import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
@@ -34,7 +35,7 @@ import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public final class CTrafficJam implements IWeighting
+public final class CTrafficJam implements Weighting
 {
     /**
      * active flag *
@@ -84,15 +85,4 @@ public final class CTrafficJam implements IWeighting
         return m_encoder;
     }
 
-    @Override
-    public final boolean isActive()
-    {
-        return m_active;
-    }
-
-    @Override
-    public final void setActive( final boolean p_value )
-    {
-        m_active = p_value;
-    }
 }

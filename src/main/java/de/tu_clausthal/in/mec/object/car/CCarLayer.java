@@ -31,7 +31,6 @@ import de.tu_clausthal.in.mec.object.car.drivemodel.CAgentNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
-import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
 import de.tu_clausthal.in.mec.runtime.ISerializable;
@@ -129,16 +128,6 @@ public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppab
     }
 
     /**
-     * enable / disable weight
-     *
-     * @param p_weight weight name
-     */
-    public final void enableDisableGraphWeight( final CGraphHopper.EWeight p_weight )
-    {
-        m_graph.enableDisableWeight( p_weight );
-    }
-
-    /**
      * returns the name of the driving model
      *
      * @return name
@@ -158,16 +147,6 @@ public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppab
         return m_graph;
     }
 
-    /**
-     * returns a graph weight
-     *
-     * @param p_weight weight name
-     * @return weight object or null
-     */
-    public final <T extends IWeighting> T getGraphWeight( final CGraphHopper.EWeight p_weight )
-    {
-        return m_graph.<T>getWeight( p_weight );
-    }
 
     /**
      * returns the unit converting object
@@ -179,16 +158,6 @@ public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppab
         return m_unit;
     }
 
-    /**
-     * checks if a weight is active
-     *
-     * @param p_weight weight name
-     * @return bool active flag
-     */
-    public final boolean isActiveWeight( final CGraphHopper.EWeight p_weight )
-    {
-        return m_graph.isActiveWeight( p_weight );
-    }
 
     @Override
     public final void push( final Collection<ICar> p_data )
@@ -238,9 +207,6 @@ public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppab
     private void writeObject( final ObjectOutputStream p_stream ) throws IOException
     {
         p_stream.defaultWriteObject();
-
-        // write active graph weights
-        p_stream.writeObject( m_graph.getActiveWeights() );
     }
 
     /**

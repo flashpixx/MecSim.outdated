@@ -25,10 +25,7 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CLogger;
-import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdge;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -96,12 +93,12 @@ class COSMMouseListener extends PanMouseInputListener
 
 
                 case ForbiddenEdges:
-
+/*
                     // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
                     CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph().<CForbiddenEdge>getWeight(
                             CGraphHopper.EWeight.ForbiddenEdges
                     ).swap();
-
+*/
                     l_viewer.repaint();
                     break;
             }
@@ -116,6 +113,7 @@ class COSMMouseListener extends PanMouseInputListener
     @Override
     public void mouseMoved( final MouseEvent p_event )
     {
+        /*
         final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
 
         // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
@@ -134,6 +132,7 @@ class COSMMouseListener extends PanMouseInputListener
             );
 
         l_viewer.repaint();
+        */
     }
 
     /**

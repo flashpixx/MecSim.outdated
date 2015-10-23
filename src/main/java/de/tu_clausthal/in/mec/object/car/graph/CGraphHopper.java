@@ -39,10 +39,8 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CCombine;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdge;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
-import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -55,7 +53,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,9 +81,9 @@ public final class CGraphHopper extends GraphHopper
      */
     private final Set<IAction<ICar, ?>> m_edgelister = new HashSet<>();
     /**
-     * default weight
+     * map with weights
      */
-    private CCombine<EWeight> m_weight;
+
 
     /**
      * ctor
@@ -173,46 +170,6 @@ public final class CGraphHopper extends GraphHopper
             default:
                 return super.createWeighting( p_map, p_encoder );
         }
-    }
-
-
-    /**
-     * disable all weights *
-     */
-    public final void disableWeights()
-    {
-        for ( final IWeighting l_item : m_weight.values() )
-            l_item.setActive( false );
-    }
-
-    /**
-     * enable / disable a weighing
-     *
-     * @param p_weight weightning name
-     * @see https://github.com/graphhopper/graphhopper/issues/111
-     */
-    public final void enableDisableWeight( final EWeight p_weight )
-    {
-        if ( !m_weight.containsKey( p_weight ) )
-            return;
-
-        m_weight.get( p_weight ).setActive( !m_weight.get( p_weight ).isActive() );
-    }
-
-    /**
-     * returns a list of the active weights
-     *
-     * @return String list
-     * @deprecated
-     */
-    public final EWeight[] getActiveWeights()
-    {
-        final List<EWeight> l_active = new LinkedList<>();
-        for ( final Map.Entry<EWeight, IWeighting> l_item : m_weight.entrySet() )
-            if ( l_item.getValue().isActive() )
-                l_active.add( l_item.getKey() );
-
-        return CCommon.convertCollectionToArray( EWeight[].class, l_active );
     }
 
     /**
@@ -407,30 +364,6 @@ public final class CGraphHopper extends GraphHopper
     }
 
     /**
-     * returns the weight object
-     *
-     * @return weight object or null
-     * @deprecated
-     */
-    @SuppressWarnings( "unchecked" )
-    public final <T extends IWeighting> T getWeight( final EWeight p_weight )
-    {
-        return (T) m_weight.get( p_weight );
-    }
-
-    /**
-     * checks if a weight is active
-     *
-     * @param p_weight weight name
-     * @return bool flag if weight is active
-     * @deprecated
-     */
-    public final boolean isActiveWeight( final EWeight p_weight )
-    {
-        return m_weight.containsKey( p_weight ) && ( m_weight.get( p_weight ).isActive() );
-    }
-
-    /**
      * deletes a graph by URL
      *
      * @param p_url URL
@@ -494,52 +427,6 @@ public final class CGraphHopper extends GraphHopper
         }
         return null;
 
-    }
-
-    /**
-     * weight names
-     * @deprecated
-     */
-    public enum EWeight
-    {
-        /**
-         * default weight *
-         */
-        Default( CCommon.getResourceString( EWeight.class, "default" ) ),
-        /**
-         * traffic jam weight *
-         */
-        TrafficJam( CCommon.getResourceString( EWeight.class, "trafficjam" ) ),
-        /**
-         * speed-up weight *
-         */
-        SpeedUp( CCommon.getResourceString( EWeight.class, "speedup" ) ),
-        /**
-         * forbidden edges weight *
-         */
-        ForbiddenEdges( CCommon.getResourceString( EWeight.class, "forbiddenedges" ) );
-
-
-        /**
-         * string representation *
-         */
-        private final String m_text;
-
-        /**
-         * ctor
-         *
-         * @param p_text text representation
-         */
-        EWeight( final String p_text )
-        {
-            m_text = p_text;
-        }
-
-        @Override
-        public String toString()
-        {
-            return m_text;
-        }
     }
 
 }

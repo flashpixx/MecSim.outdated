@@ -26,7 +26,6 @@ package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 
 import java.util.HashMap;
@@ -55,18 +54,6 @@ public final class CTrafficEnvironment
      */
     private final void web_static_enabledisablegraphweight( final Map<String, Object> p_data )
     {
-        if ( CSimulation.getInstance().isRunning() )
-            throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
-        if ( !p_data.containsKey( "id" ) )
-            throw new IllegalArgumentException( CCommon.getResourceString( this, "noweightname" ) );
-
-        CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).enableDisableGraphWeight(
-                CGraphHopper.EWeight.valueOf(
-                        (String) p_data.get(
-                                "id"
-                        )
-                )
-        );
     }
 
     /**
@@ -90,11 +77,7 @@ public final class CTrafficEnvironment
      */
     private final Map<String, Object> web_static_listgraphweight()
     {
-        final CCarLayer l_layer = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
-        for ( final CGraphHopper.EWeight l_item : CGraphHopper.EWeight.values() )
-            m_weight.put( l_item.toString(), CCommon.getMap( "active", l_layer.isActiveWeight( l_item ), "id", l_item.name() ) );
-
-        return m_weight;
+        return null;
     }
 
     /**

@@ -26,6 +26,7 @@ package de.tu_clausthal.in.mec.object.car.graph.weights;
 
 
 import com.graphhopper.routing.util.FlagEncoder;
+import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -44,16 +45,12 @@ import java.util.HashSet;
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
 @SuppressWarnings( "serial" )
-public final class CForbiddenEdge extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
+public final class CForbiddenEdge extends HashSet<Integer> implements Weighting, Painter<JXMapViewer>
 {
     /**
      * stroke definition
      */
     private static final Stroke s_stroke = new BasicStroke( 5 );
-    /**
-     * active flag *
-     */
-    private boolean m_active = false;
     /**
      * graph reference
      */
@@ -127,21 +124,9 @@ public final class CForbiddenEdge extends HashSet<Integer> implements IWeighting
     }
 
     @Override
-    public final boolean isActive()
-    {
-        return m_active;
-    }
-
-    @Override
-    public final void setActive( final boolean p_value )
-    {
-        m_active = p_value;
-    }
-
-    @Override
     public void paint( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( !m_active )
+        if ( this.isEmpty() )
             return;
 
         p_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );

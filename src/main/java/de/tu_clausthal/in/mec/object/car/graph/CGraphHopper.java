@@ -80,9 +80,6 @@ public final class CGraphHopper extends GraphHopper
      * set with listerner of the edges
      */
     private final Set<IAction<ICar, ?>> m_edgelister = new HashSet<>();
-    /**
-     * map with weights
-     */
 
 
     /**
@@ -162,7 +159,7 @@ public final class CGraphHopper extends GraphHopper
         switch ( p_map.getWeighting().toLowerCase() )
         {
             case "trafficjam":
-                return new CTrafficJam( p_encoder, this );
+                return new CTrafficJam( p_encoder );
 
             case "forbiddenedge":
                 return new CForbiddenEdge( p_encoder, this );

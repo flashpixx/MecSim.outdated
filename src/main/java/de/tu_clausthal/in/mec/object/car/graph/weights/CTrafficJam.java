@@ -27,7 +27,6 @@ package de.tu_clausthal.in.mec.object.car.graph.weights;
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
-import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
 
 /**
@@ -42,10 +41,6 @@ public final class CTrafficJam implements Weighting
      */
     private boolean m_active = false;
     /**
-     * graph instance
-     */
-    private final CGraphHopper m_graph;
-    /**
      * flag encoder for edge data
      */
     private final FlagEncoder m_encoder;
@@ -57,11 +52,10 @@ public final class CTrafficJam implements Weighting
     /**
      * ctor
      *
-     * @param p_graph graph object
+     * @param p_encoder flag encoder
      */
-    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph )
+    public CTrafficJam( final FlagEncoder p_encoder )
     {
-        m_graph = p_graph;
         m_encoder = p_encoder;
         m_maxspeed = p_encoder.getMaxSpeed();
     }

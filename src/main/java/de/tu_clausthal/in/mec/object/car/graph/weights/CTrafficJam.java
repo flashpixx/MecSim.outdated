@@ -52,6 +52,7 @@ public final class CTrafficJam implements Weighting
      * ctor
      *
      * @param p_encoder flag encoder
+     * @param p_graph graph
      */
     public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {

@@ -43,6 +43,7 @@ public final class CMask extends de.tu_clausthal.in.mec.object.mas.generic.imple
      *
      * @param p_name name of the mask
      * @param p_beliefbase beliefbase
+     * @param p_separator belief separator
      */
     public CMask( final String p_name, final IBeliefBase<Literal> p_beliefbase, final String p_separator )
     {

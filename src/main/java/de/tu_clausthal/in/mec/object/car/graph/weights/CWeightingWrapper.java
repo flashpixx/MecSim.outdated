@@ -36,7 +36,6 @@ import com.graphhopper.util.EdgeIteratorState;
  */
 public final class CWeightingWrapper<T extends Weighting> implements IWeighting
 {
-
     /**
      * active flag *
      */
@@ -75,25 +74,16 @@ public final class CWeightingWrapper<T extends Weighting> implements IWeighting
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edgeIteratorState, final boolean p_b, final int p_i )
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
-        return 0;
+        return m_weight.calcWeight( p_edge, p_reverse, p_nextprevedgeid );
     }
 
     @Override
     public FlagEncoder getFlagEncoder()
     {
-        return null;
+        return m_weight.getFlagEncoder();
     }
-
-    /*
-    @bug
-    @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
-    {
-        return m_weight.calcWeight( p_edge, p_reverse );
-    }
-    */
 
     @Override
     public final boolean isActive()

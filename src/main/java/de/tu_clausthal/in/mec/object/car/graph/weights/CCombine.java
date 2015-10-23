@@ -38,6 +38,20 @@ import java.util.HashMap;
 @SuppressWarnings( "serial" )
 public final class CCombine<T extends Enum> extends HashMap<T, IWeighting> implements Weighting
 {
+    /**
+     * encoder
+     */
+    private final FlagEncoder m_encoder;
+
+    /**
+     * ctor
+     *
+     * @param p_encoder flag encoder
+     */
+    public CCombine( final FlagEncoder p_encoder )
+    {
+        m_encoder = p_encoder;
+    }
 
     @Override
     public final double getMinWeight( final double p_weight )
@@ -54,21 +68,7 @@ public final class CCombine<T extends Enum> extends HashMap<T, IWeighting> imple
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edgeIteratorState, final boolean p_b, final int p_i )
-    {
-        return 0;
-    }
-
-    @Override
-    public FlagEncoder getFlagEncoder()
-    {
-        return null;
-    }
-
-    /*
-    @bug
-    @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
         if ( this.isEmpty() )
             return 0;
@@ -76,9 +76,15 @@ public final class CCombine<T extends Enum> extends HashMap<T, IWeighting> imple
         double l_max = 0;
         for ( final IWeighting l_item : this.values() )
             if ( l_item.isActive() )
-                l_max += l_item.calcWeight( p_edge, p_reverse );
+                l_max += l_item.calcWeight( p_edge, p_reverse, p_nextprevedgeid );
 
         return l_max;
     }
-    */
+
+    @Override
+    public FlagEncoder getFlagEncoder()
+    {
+        return m_encoder;
+    }
+
 }

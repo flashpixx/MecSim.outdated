@@ -161,7 +161,6 @@ public final class CGraphHopper extends GraphHopper
     @Override
     public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
     {
-
         return super.createWeighting( p_map, p_encoder );
     }
 

@@ -123,9 +123,8 @@ public final class CGraphHopper extends GraphHopper
         CConfiguration.getInstance().get().set( "simulation/traffic/map/reimport", false );
 
 
-        // initialize graph
-        this.setCHEnable( true );
-        //this.setCHWeighting( "default" );
+        // initialize graph (CH must be disable on dynamic routing)
+        this.setCHEnable( false );
         this.setStoreOnFlush( true );
         this.setEncodingManager( new EncodingManager( p_encoding ) );
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )

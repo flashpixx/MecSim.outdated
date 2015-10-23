@@ -84,15 +84,6 @@ public final class CTrafficJam implements IWeighting
         return m_encoder;
     }
 
-    /*
-    @bug
-    @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
-    {
-        return m_graph.getEdge( p_edge ).getNumberOfObjects();
-    }
-    */
-
     @Override
     public final boolean isActive()
     {

@@ -55,8 +55,8 @@ public class CSpeedUp implements IWeighting
      */
     public CSpeedUp( final FlagEncoder p_encoder )
     {
-        this.m_encoder = p_encoder;
-        this.m_maxSpeed = p_encoder.getMaxSpeed();
+        m_encoder = p_encoder;
+        m_maxSpeed = p_encoder.getMaxSpeed();
     }
 
     @Override
@@ -66,28 +66,16 @@ public class CSpeedUp implements IWeighting
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edgeIteratorState, final boolean p_b, final int p_i )
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
-        return 0;
+        final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
+        return l_speed == 0 ? Double.POSITIVE_INFINITY : p_edge.getDistance() / l_speed;
     }
-
     @Override
     public FlagEncoder getFlagEncoder()
     {
-        return null;
+        return m_encoder;
     }
-
-    /*
-    @bug
-    @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
-    {
-        final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
-        if ( l_speed == 0 )
-            return Double.POSITIVE_INFINITY;
-        return p_edge.getDistance() / l_speed;
-    }
-    */
 
     @Override
     public final boolean isActive()

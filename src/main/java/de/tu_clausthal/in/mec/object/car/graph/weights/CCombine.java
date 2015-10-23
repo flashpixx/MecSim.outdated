@@ -33,6 +33,7 @@ import java.util.HashMap;
 
 /**
  * combination weight, to use different weights in combination
+ * @deprecated
  */
 @SuppressWarnings( "serial" )
 public final class CCombine<T extends Enum> extends HashMap<T, IWeighting> implements Weighting

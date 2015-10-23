@@ -59,18 +59,29 @@ public final class CForbiddenEdges extends HashSet<Integer> implements IWeightin
      */
     private final CGraphHopper m_graph;
     /**
+     * encoder
+     */
+    private final FlagEncoder m_encoder;
+    /**
      * marked edge to allow mouse-interaction
      */
     private Integer m_reserveedge;
+    /**
+     * max speed value *
+     */
+    private final double m_maxspeed;
 
     /**
      * ctor
      *
+     * @param p_encoder encoder
      * @param p_graph reference to graph
      */
-    public CForbiddenEdges( final CGraphHopper p_graph )
+    public CForbiddenEdges( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {
         m_graph = p_graph;
+        m_encoder = p_encoder;
+        m_maxspeed = p_encoder.getMaxSpeed();
     }
 
     /**
@@ -96,29 +107,24 @@ public final class CForbiddenEdges extends HashSet<Integer> implements IWeightin
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        return 0;
+        return p_weight / m_maxspeed;
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edgeIteratorState, final boolean p_b, final int p_i )
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
-        return 0;
+        if ( this.contains( p_edge.getEdge() ) )
+            return Double.POSITIVE_INFINITY;
+
+        final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
+        return l_speed == 0 ? Double.POSITIVE_INFINITY : p_edge.getDistance() / l_speed;
     }
 
     @Override
     public FlagEncoder getFlagEncoder()
     {
-        return null;
+        return m_encoder;
     }
-
-    /*
-    @bug
-    @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
-    {
-        return this.contains( p_edge.getEdge() ) ? Double.POSITIVE_INFINITY : 0;
-    }
-    */
 
     @Override
     public final boolean isActive()

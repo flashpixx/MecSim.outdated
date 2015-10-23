@@ -62,7 +62,7 @@ public final class CTrafficJam implements IWeighting
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edgeIteratorState, final boolean p_b, final int p_i )
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_b, final int p_i )
     {
         return 0;
     }

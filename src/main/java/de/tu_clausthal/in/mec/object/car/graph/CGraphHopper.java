@@ -121,8 +121,9 @@ public final class CGraphHopper extends GraphHopper
         CConfiguration.getInstance().get().set( "simulation/traffic/map/reimport", false );
 
 
-        //@bug this.setCHShortcuts( "default" );
+        // initialize graph
         this.setCHEnable( true );
+        //this.setCHWeighting( "default" );
         this.setStoreOnFlush( true );
         this.setEncodingManager( new EncodingManager( p_encoding ) );
         if ( !this.load( l_graphlocation.getAbsolutePath() ) )
@@ -160,6 +161,7 @@ public final class CGraphHopper extends GraphHopper
     @Override
     public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
     {
+
         return super.createWeighting( p_map, p_encoder );
     }
 
@@ -276,7 +278,6 @@ public final class CGraphHopper extends GraphHopper
      */
     public final EdgeIteratorState getEdgeIterator( final int p_edgeid )
     {
-        // @bug return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
         return this.getGraphHopperStorage().getEdgeIteratorState( p_edgeid, Integer.MIN_VALUE );
     }
 
@@ -289,9 +290,8 @@ public final class CGraphHopper extends GraphHopper
     public final double getEdgeSpeed( final EdgeIteratorState p_edge )
     {
         if ( p_edge == null )
-            return Double.POSITIVE_INFINITY;
+            return 0;
 
-        // @bug return this.getGraph().getEncodingManager().getEncoder( c_defaultflagencoding ).getSpeed( p_edge.getFlags() );
         return this.getGraphHopperStorage().getEncodingManager().getEncoder( c_defaultflagencoding ).getSpeed( p_edge.getFlags() );
     }
 

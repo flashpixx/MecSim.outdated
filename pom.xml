@@ -77,36 +77,6 @@
     </properties>
 
 
-    <!-- non-default repositories -->
-    <repositories>
-
-        <repository>
-            <id>sonatype-oss</id>
-            <name>Sonatype OSS Maven Repository for Snapshots</name>
-            <url>https://oss.sonatype.org/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-    </repositories>
-
-
     <dependencies>
 
         <!-- UI components -->

@@ -32,6 +32,7 @@ import com.graphhopper.util.EdgeIteratorState;
  * class to create edge weights of the speed information on an edge
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
+ * @deprecated
  */
 public class CSpeedUp implements IWeighting
 {
@@ -46,7 +47,7 @@ public class CSpeedUp implements IWeighting
     /**
      * max speed value *
      */
-    private final double m_maxSpeed;
+    private final double m_maxspeed;
 
     /**
      * ctor
@@ -56,13 +57,13 @@ public class CSpeedUp implements IWeighting
     public CSpeedUp( final FlagEncoder p_encoder )
     {
         m_encoder = p_encoder;
-        m_maxSpeed = p_encoder.getMaxSpeed();
+        m_maxspeed = p_encoder.getMaxSpeed();
     }
 
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        return p_weight / m_maxSpeed;
+        return p_weight / m_maxspeed;
     }
 
     @Override

@@ -40,6 +40,8 @@ import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CCombine;
+import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdge;
+import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
 import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -161,7 +163,17 @@ public final class CGraphHopper extends GraphHopper
     @Override
     public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
     {
-        return super.createWeighting( p_map, p_encoder );
+        switch ( p_map.getWeighting().toLowerCase() )
+        {
+            case "trafficjam":
+                return new CTrafficJam( p_encoder, this );
+
+            case "forbiddenedge":
+                return new CForbiddenEdge( p_encoder, this );
+
+            default:
+                return super.createWeighting( p_map, p_encoder );
+        }
     }
 
     /*
@@ -476,6 +488,7 @@ public final class CGraphHopper extends GraphHopper
 
     /**
      * weight names
+     * @deprecated
      */
     public enum EWeight
     {

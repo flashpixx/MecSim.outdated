@@ -44,7 +44,7 @@ import java.util.HashSet;
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
 @SuppressWarnings( "serial" )
-public final class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
+public final class CForbiddenEdge extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
 {
     /**
      * stroke definition
@@ -77,7 +77,7 @@ public final class CForbiddenEdges extends HashSet<Integer> implements IWeightin
      * @param p_encoder encoder
      * @param p_graph reference to graph
      */
-    public CForbiddenEdges( final FlagEncoder p_encoder, final CGraphHopper p_graph )
+    public CForbiddenEdge( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {
         m_graph = p_graph;
         m_encoder = p_encoder;

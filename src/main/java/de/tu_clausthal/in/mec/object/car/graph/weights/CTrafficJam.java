@@ -44,33 +44,44 @@ public final class CTrafficJam implements IWeighting
      * graph instance
      */
     private final CGraphHopper m_graph;
+    /**
+     * flag encoder for edge data
+     */
+    private final FlagEncoder m_encoder;
+    /**
+     * max speed value *
+     */
+    private final double m_maxspeed;
 
     /**
      * ctor
      *
      * @param p_graph graph object
      */
-    public CTrafficJam( final CGraphHopper p_graph )
+    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {
         m_graph = p_graph;
+        m_encoder = p_encoder;
+        m_maxspeed = p_encoder.getMaxSpeed();
     }
 
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        return 0;
+        return p_weight / m_maxspeed;
     }
 
     @Override
-    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_b, final int p_i )
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
-        return 0;
+        final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
+        return l_speed == 0 ? Double.POSITIVE_INFINITY : p_edge.getDistance() / l_speed;
     }
 
     @Override
     public FlagEncoder getFlagEncoder()
     {
-        return null;
+        return m_encoder;
     }
 
     /*

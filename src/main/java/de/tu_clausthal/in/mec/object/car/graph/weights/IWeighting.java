@@ -30,6 +30,7 @@ import com.graphhopper.routing.util.Weighting;
 
 /**
  * weighting interface to encapsulate GraphHopper weights with additional information
+ * @deprecated
  */
 public interface IWeighting extends Weighting
 {

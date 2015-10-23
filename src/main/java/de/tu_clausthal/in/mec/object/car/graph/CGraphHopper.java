@@ -176,28 +176,6 @@ public final class CGraphHopper extends GraphHopper
         }
     }
 
-    /*
-    @bug
-
-    @Override
-    public final Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
-    {
-        // method creates on the first call all weights and store it within the
-        // combined-weight object and returns it like a singleton
-        if ( m_weight == null )
-        {
-            m_weight = new CCombine();
-
-            m_weight.put( EWeight.Default, new CWeightingWrapper<Weighting>( super.createWeighting( p_weighting, p_encoder ), true ) );
-            m_weight.put( EWeight.TrafficJam, new CTrafficJam( this ) );
-            m_weight.put( EWeight.SpeedUp, new CSpeedUp( p_encoder ) );
-            m_weight.put( EWeight.ForbiddenEdges, new CForbiddenEdges( this ) );
-        }
-
-        return m_weight;
-    }
-    */
-
 
     /**
      * disable all weights *
@@ -226,6 +204,7 @@ public final class CGraphHopper extends GraphHopper
      * returns a list of the active weights
      *
      * @return String list
+     * @deprecated
      */
     public final EWeight[] getActiveWeights()
     {
@@ -347,7 +326,7 @@ public final class CGraphHopper extends GraphHopper
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end )
     {
-        return this.getRoutes( p_start, p_end, Integer.MAX_VALUE );
+        return this.getRoutes( p_start, p_end, null, Integer.MAX_VALUE );
     }
 
     /**
@@ -360,9 +339,40 @@ public final class CGraphHopper extends GraphHopper
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final int p_maxroutes )
     {
+        return this.getRoutes( p_start, p_end, null, p_maxroutes );
+    }
+
+    /**
+     * creates a list of list of edge between two geopositions
+     *
+     * @param p_start start geoposition
+     * @param p_end end geoposition
+     * @param p_weighting weigtning name
+     * @return list of list of edges
+     */
+    public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final String p_weighting )
+    {
+        return this.getRoutes( p_start, p_end, p_weighting, Integer.MAX_VALUE );
+    }
+
+
+    /**
+     * creates a list of list of edge between two geopositions
+     *
+     * @param p_start start geoposition
+     * @param p_end end geoposition
+     * @param p_weighting weigtning name
+     * @param p_maxroutes max. number of paths
+     * @return list of list of edges
+     */
+    public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final String p_weighting, final int p_maxroutes )
+    {
         // calculate routes
         final GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
         l_request.setAlgorithm( CConfiguration.getInstance().get().<String>get( "simulation/traffic/routing/algorithm" ) );
+
+        if ( ( p_weighting != null ) && ( !p_weighting.isEmpty() ) )
+            l_request.setWeighting( p_weighting );
 
         final GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
@@ -371,7 +381,6 @@ public final class CGraphHopper extends GraphHopper
                 CLogger.error( l_msg.getMessage() );
             throw new IllegalArgumentException( CCommon.getResourceString( this, "grapherror" ) );
         }
-
 
         // get all paths and create routes
         final List<List<EdgeIteratorState>> l_paths = new ArrayList<>();
@@ -402,6 +411,7 @@ public final class CGraphHopper extends GraphHopper
      * returns the weight object
      *
      * @return weight object or null
+     * @deprecated
      */
     @SuppressWarnings( "unchecked" )
     public final <T extends IWeighting> T getWeight( final EWeight p_weight )
@@ -414,6 +424,7 @@ public final class CGraphHopper extends GraphHopper
      *
      * @param p_weight weight name
      * @return bool flag if weight is active
+     * @deprecated
      */
     public final boolean isActiveWeight( final EWeight p_weight )
     {

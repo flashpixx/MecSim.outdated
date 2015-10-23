@@ -27,6 +27,9 @@ package de.tu_clausthal.in.mec.object.car.graph.weights;
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.car.graph.CEdge;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
 
 /**
@@ -37,40 +40,36 @@ import com.graphhopper.util.EdgeIteratorState;
 public final class CTrafficJam implements Weighting
 {
     /**
-     * active flag *
+     * graph reference
      */
-    private boolean m_active = false;
+    private final CGraphHopper m_graph;
     /**
-     * flag encoder for edge data
+     * encoder
      */
     private final FlagEncoder m_encoder;
-    /**
-     * max speed value *
-     */
-    private final double m_maxspeed;
 
     /**
      * ctor
      *
      * @param p_encoder flag encoder
      */
-    public CTrafficJam( final FlagEncoder p_encoder )
+    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {
+        m_graph = p_graph;
         m_encoder = p_encoder;
-        m_maxspeed = p_encoder.getMaxSpeed();
     }
 
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        return p_weight / m_maxspeed;
+        return 0;
     }
 
     @Override
     public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
-        final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
-        return l_speed == 0 ? Double.POSITIVE_INFINITY : p_edge.getDistance() / l_speed;
+        final CEdge<ICar, ?> l_edge = m_graph.getEdge( p_edge );
+        return Double.MAX_VALUE * (double) l_edge.getNumberOfObjects() / l_edge.getEdgeCells();
     }
 
     @Override

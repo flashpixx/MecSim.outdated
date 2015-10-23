@@ -159,7 +159,7 @@ public final class CGraphHopper extends GraphHopper
         switch ( p_map.getWeighting().toLowerCase() )
         {
             case "trafficjam":
-                return new CTrafficJam( p_encoder );
+                return new CTrafficJam( p_encoder, this );
 
             case "forbiddenedge":
                 return new CForbiddenEdge( p_encoder, this );

@@ -52,6 +52,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,12 @@ public final class CGraphHopper extends GraphHopper
      * set with listerner of the edges
      */
     private final Set<IAction<ICar, ?>> m_edgelister = new HashSet<>();
+    /**
+     * map with additional weights
+     *
+     * @note alle names must be in lower-case
+     */
+    private final Map<String, Weighting> m_weights = new HashMap<>();
 
 
     /**
@@ -131,6 +138,11 @@ public final class CGraphHopper extends GraphHopper
         }
 
 
+        // define weights
+        m_weights.put( "trafficjam", new CTrafficJam( this.getEncodingManager().getEncoder( p_encoding ), this ) );
+        m_weights.put( "forbiddenedge", new CForbiddenEdge( this.getEncodingManager().getEncoder( p_encoding ), this ) );
+
+
         CLogger.out( CCommon.getResourceString( this, "loaded" ) );
     }
 
@@ -156,18 +168,38 @@ public final class CGraphHopper extends GraphHopper
     @Override
     public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
     {
-        switch ( p_map.getWeighting().toLowerCase() )
-        {
-            case "trafficjam":
-                return new CTrafficJam( p_encoder, this );
+        final Weighting l_weight = m_weights.get( p_map.getWeighting().toLowerCase() );
+        if ( l_weight != null )
+            return l_weight;
 
-            case "forbiddenedge":
-                return new CForbiddenEdge( p_encoder, this );
-
-            default:
-                return super.createWeighting( p_map, p_encoder );
-        }
+        return super.createWeighting( p_map, p_encoder );
     }
+
+
+    /**
+     * returns a weight object by name
+     *
+     * @param p_name name
+     * @param <T></T> type of the weight object
+     * @return weight object
+     */
+    @SuppressWarnings( "unchecked" )
+    public final <T extends Weighting> T getWeight( final String p_name )
+    {
+        return (T) m_weights.get( p_name.toLowerCase() );
+    }
+
+    /**
+     * checks if a weight object exists
+     *
+     * @param p_name name of the weight object
+     * @return existance
+     */
+    public final boolean existWeight( final String p_name )
+    {
+        return m_weights.containsKey( p_name.toLowerCase() );
+    }
+
 
     /**
      * returns the closest edge(s) of a geo position

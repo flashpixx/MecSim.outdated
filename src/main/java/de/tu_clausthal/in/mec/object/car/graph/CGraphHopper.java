@@ -86,7 +86,7 @@ public final class CGraphHopper extends GraphHopper
      *
      * @note alle names must be in lower-case
      */
-    private final Map<String, Weighting> m_weights = new HashMap<>();
+    private final Map<EWeight, Weighting> m_weights = new HashMap<>();
 
 
     /**
@@ -139,8 +139,9 @@ public final class CGraphHopper extends GraphHopper
 
 
         // define weights
-        m_weights.put( "trafficjam", new CTrafficJam( this.getEncodingManager().getEncoder( p_encoding ), this ) );
-        m_weights.put( "forbiddenedge", new CForbiddenEdge( this.getEncodingManager().getEncoder( p_encoding ), this ) );
+        for ( final EWeight l_item : EWeight.values() )
+            if ( !l_item.equals( EWeight.Default ) )
+                m_weights.put( l_item, l_item.get( this, this.getEncodingManager().getEncoder( p_encoding ) ) );
 
 
         CLogger.out( CCommon.getResourceString( this, "loaded" ) );
@@ -168,9 +169,16 @@ public final class CGraphHopper extends GraphHopper
     @Override
     public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
     {
-        final Weighting l_weight = m_weights.get( p_map.getWeighting().toLowerCase() );
-        if ( l_weight != null )
-            return l_weight;
+        // catch unknown enum type and use the default
+        try
+        {
+            final Weighting l_weight = m_weights.get( EWeight.valueOf( p_map.getWeighting() ) );
+            if ( l_weight != null )
+                return l_weight;
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+        }
 
         return super.createWeighting( p_map, p_encoder );
     }
@@ -179,25 +187,25 @@ public final class CGraphHopper extends GraphHopper
     /**
      * returns a weight object by name
      *
-     * @param p_name name
-     * @param <T></T> type of the weight object
+     * @param p_weight weight
+     * @param <T> type of the weight object
      * @return weight object
      */
     @SuppressWarnings( "unchecked" )
-    public final <T extends Weighting> T getWeight( final String p_name )
+    public final <T extends Weighting> T getWeight( final EWeight p_weight )
     {
-        return (T) m_weights.get( p_name.toLowerCase() );
+        return (T) m_weights.get( p_weight );
     }
 
     /**
      * checks if a weight object exists
      *
-     * @param p_name name of the weight object
+     * @param p_weight weight
      * @return existance
      */
-    public final boolean existWeight( final String p_name )
+    public final boolean existWeight( final EWeight p_weight )
     {
-        return m_weights.containsKey( p_name.toLowerCase() );
+        return m_weights.containsKey( p_weight );
     }
 
 
@@ -311,7 +319,7 @@ public final class CGraphHopper extends GraphHopper
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end )
     {
-        return this.getRoutes( p_start, p_end, null, Integer.MAX_VALUE );
+        return this.getRoutes( p_start, p_end, EWeight.Default, Integer.MAX_VALUE );
     }
 
     /**
@@ -324,7 +332,7 @@ public final class CGraphHopper extends GraphHopper
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final int p_maxroutes )
     {
-        return this.getRoutes( p_start, p_end, null, p_maxroutes );
+        return this.getRoutes( p_start, p_end, EWeight.Default, p_maxroutes );
     }
 
     /**
@@ -337,7 +345,7 @@ public final class CGraphHopper extends GraphHopper
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final String p_weighting )
     {
-        return this.getRoutes( p_start, p_end, p_weighting, Integer.MAX_VALUE );
+        return this.getRoutes( p_start, p_end, EWeight.Default, Integer.MAX_VALUE );
     }
 
 
@@ -346,18 +354,18 @@ public final class CGraphHopper extends GraphHopper
      *
      * @param p_start start geoposition
      * @param p_end end geoposition
-     * @param p_weighting weigtning name
+     * @param p_weighting weigting name
      * @param p_maxroutes max. number of paths
      * @return list of list of edges
      */
-    public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final String p_weighting, final int p_maxroutes )
+    public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final EWeight p_weighting, final int p_maxroutes )
     {
         // calculate routes
         final GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
         l_request.setAlgorithm( CConfiguration.getInstance().get().<String>get( "simulation/traffic/routing/algorithm" ) );
 
-        if ( ( p_weighting != null ) && ( !p_weighting.isEmpty() ) )
-            l_request.setWeighting( p_weighting );
+        if ( ( p_weighting != null ) && ( !p_weighting.equals( EWeight.Default ) ) )
+            l_request.setWeighting( p_weighting.name() );
 
         final GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
@@ -455,6 +463,40 @@ public final class CGraphHopper extends GraphHopper
             CLogger.error( l_exception.getMessage() );
         }
         return null;
+
+    }
+
+
+    /**
+     * enum with weighting
+     */
+    public enum EWeight
+    {
+        Default,
+        TrafficJam,
+        ForbiddenEdge;
+
+        /**
+         * returns a weighting object
+         *
+         * @param p_graph graph
+         * @param p_encoder encoder
+         * @return weighting object
+         */
+        public final Weighting get( final CGraphHopper p_graph, final FlagEncoder p_encoder )
+        {
+            switch ( this )
+            {
+                case TrafficJam:
+                    return new CTrafficJam( p_encoder, p_graph );
+
+                case ForbiddenEdge:
+                    return new CForbiddenEdge( p_encoder, p_graph );
+
+                default:
+                    return null;
+            }
+        }
 
     }
 

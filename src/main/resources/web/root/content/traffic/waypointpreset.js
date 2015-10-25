@@ -80,6 +80,7 @@ WaypointPreset.prototype.getContent = function()
         '<div>' +
         '<p>' + Layout.select(  { id: this.generateSubID("factory"),  label: "",   list: this.mo_elements.selects }) + '</p>' +
         '<p>' + Layout.select(  { id: this.generateSubID("agent"),    label: "",   list: this.mo_elements.selects }) + '</p>' +
+        '<p>' + Layout.select(  { id: this.generateSubID("weight"),   label: "",   list: this.mo_elements.selects }) + '</p>' +
         '</div>' +
 
         '<h4 id="' + this.generateSubID("waypointsettingshead") + '" />' +

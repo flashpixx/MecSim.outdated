@@ -94,6 +94,7 @@ public class CDefaultCarFactory extends ICarFactory
         m_deceleration = p_deceleration;
         m_lingerdistribution = p_lingerdistribution;
 
+
         m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "speed" ), m_speedfactor );
         m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "maxspeed" ), m_maxspeed );
         m_inspect.put( CCommon.getResourceString( CDefaultCarFactory.class, "acceleration" ), m_acceleration );

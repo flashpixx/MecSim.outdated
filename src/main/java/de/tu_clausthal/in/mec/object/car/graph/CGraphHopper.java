@@ -188,8 +188,9 @@ public final class CGraphHopper extends GraphHopper
      * returns a weight object by name
      *
      * @param p_weight weight
-     * @param T type of the weight object
      * @return weight object
+     *
+     * @tparam T type of the weight object
      */
     @SuppressWarnings( "unchecked" )
     public final <T extends Weighting> T getWeight( final EWeight p_weight )

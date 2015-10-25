@@ -41,20 +41,7 @@ public final class CTrafficEnvironment
      * map with drivingmodels
      */
     private final Map<String, Object> m_drivingmodel = new HashMap<>();
-    /**
-     * map with weights
-     */
-    private final Map<String, Object> m_weight = new HashMap<>();
 
-
-    /**
-     * UI method - enable graph weight
-     *
-     * @param p_data input data
-     */
-    private final void web_static_enabledisablegraphweight( final Map<String, Object> p_data )
-    {
-    }
 
     /**
      * UI method - lists all driving model
@@ -70,15 +57,6 @@ public final class CTrafficEnvironment
         return m_drivingmodel;
     }
 
-    /**
-     * UI method - list all graph weights
-     *
-     * @return graphweight list
-     */
-    private final Map<String, Object> web_static_listgraphweight()
-    {
-        return null;
-    }
 
     /**
      * UI method - sets the driving model

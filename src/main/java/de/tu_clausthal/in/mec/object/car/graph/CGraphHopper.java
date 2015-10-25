@@ -463,7 +463,6 @@ public final class CGraphHopper extends GraphHopper
             CLogger.error( l_exception.getMessage() );
         }
         return null;
-
     }
 
 

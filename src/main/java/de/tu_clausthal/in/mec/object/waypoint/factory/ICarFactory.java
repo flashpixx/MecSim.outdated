@@ -47,6 +47,10 @@ import java.util.stream.IntStream;
  */
 public abstract class ICarFactory extends IInspectorDefault implements IFactory<ICar>
 {
+    /**
+     * routing weight
+     */
+    protected final CGraphHopper.EWeight m_weight;
 
     /**
      * reference to the graph
@@ -55,10 +59,24 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
      */
     private final CGraphHopper m_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
 
+    /**
+     * ctor
+     */
+    protected ICarFactory()
+    {
+        m_weight = CGraphHopper.EWeight.Default;
+    }
 
     /**
-     * @bug change parallel stream with collect
+     * ctor
+     *
+     * @param p_weight routing weight
      */
+    protected ICarFactory( final CGraphHopper.EWeight p_weight )
+    {
+        m_weight = p_weight;
+    }
+
     @Override
     public Set<ICar> generate( final Collection<Pair<GeoPosition, GeoPosition>> p_waypoints, final int p_count )
     {
@@ -82,7 +100,7 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
         final ArrayList<Pair<EdgeIteratorState, Integer>> l_cells = new ArrayList<>();
         for ( final Pair<GeoPosition, GeoPosition> l_point : p_waypoints )
         {
-            final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( l_point.getLeft(), l_point.getRight(), 1 );
+            final List<List<EdgeIteratorState>> l_route = m_graph.getRoutes( l_point.getLeft(), l_point.getRight(), m_weight, 1 );
             if ( l_route.size() > 0 )
                 l_cells.addAll( m_graph.getRouteCells( l_route.get( 0 ) ) );
         }

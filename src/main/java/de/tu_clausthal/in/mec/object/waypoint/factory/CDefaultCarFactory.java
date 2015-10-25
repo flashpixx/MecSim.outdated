@@ -61,6 +61,7 @@ public class CDefaultCarFactory extends ICarFactory
      * speed distribution
      */
     protected final Double m_speedfactor;
+
     /**
      * inspector map
      */

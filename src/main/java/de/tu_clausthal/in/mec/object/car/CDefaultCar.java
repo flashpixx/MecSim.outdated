@@ -28,6 +28,7 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.graph.CEdge;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.CFieldFilter;
 import de.tu_clausthal.in.mec.object.mas.CMethodFilter;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -110,7 +111,7 @@ public class CDefaultCar extends IInspectorDefault implements ICar
     /**
      * linger probability value
      */
-    private final double m_lingerprobability;
+    private double m_lingerprobability;
 
     /**
      * ctor to create the initial values
@@ -465,18 +466,28 @@ public class CDefaultCar extends IInspectorDefault implements ICar
      * reroute to a new target position
      *
      * @param p_position new end position
+     * @param p_weight weight for routing
      */
-    private void reroute( final GeoPosition p_position )
+    private void reroute( final GeoPosition p_position, final CGraphHopper.EWeight p_weight )
     {
         if ( m_routeindex >= m_route.size() - 1 )
             return;
 
-        final List<List<EdgeIteratorState>> l_route = m_layer.getGraph().getRoutes( this.getGeoposition(), p_position, 1 );
-        if ( l_route.size() > 0 )
-        {
-            m_route.subList( m_routeindex + 1, m_route.size() );
-            m_route.addAll( m_layer.getGraph().getRouteCells( l_route.get( 0 ) ) );
-        }
+        final List<List<EdgeIteratorState>> l_route = m_layer.getGraph().getRoutes( this.getGeoposition(), p_position, p_weight, 1 );
+        if ( l_route.size() == 0 )
+            return;
+
+        m_route.subList( m_routeindex + 1, m_route.size() );
+        m_route.addAll( m_layer.getGraph().getRouteCells( l_route.get( 0 ) ) );
     }
 
+    /**
+     * reroute to a new target position
+     *
+     * @param p_position new end position
+     */
+    private void reroute( final GeoPosition p_position )
+    {
+        this.reroute( p_position, CGraphHopper.EWeight.Default );
+    }
 }

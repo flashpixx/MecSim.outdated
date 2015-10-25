@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.common.EDistribution;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CAgentCarFactory;
@@ -92,6 +93,14 @@ public class CWaypointEnvironment
     {{
         for ( final EGenerator l_generator : EGenerator.values() )
             put( l_generator.toString(), l_generator.name() );
+    }};
+    /**
+     * map with name and ID
+     */
+    private final static Map<String, String> c_weights = new HashMap<String, String>()
+    {{
+        for ( final CGraphHopper.EWeight l_weight : CGraphHopper.EWeight.values() )
+            put( l_weight.toString(), l_weight.name() );
     }};
     /**
      * static label for main menu UI
@@ -269,6 +278,16 @@ public class CWaypointEnvironment
     private final Map<String, String> web_static_listgenerator()
     {
         return c_generator;
+    }
+
+    /**
+     * list all possible routing weights
+     *
+     * @return map with language name and ID
+     */
+    private final Map<String, String> web_static_listweight()
+    {
+        return c_weights;
     }
 
     /**

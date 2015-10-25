@@ -188,7 +188,7 @@ public final class CGraphHopper extends GraphHopper
      * returns a weight object by name
      *
      * @param p_weight weight
-     * @param <T> type of the weight object
+     * @param T type of the weight object
      * @return weight object
      */
     @SuppressWarnings( "unchecked" )
@@ -471,9 +471,35 @@ public final class CGraphHopper extends GraphHopper
      */
     public enum EWeight
     {
-        Default,
-        TrafficJam,
-        ForbiddenEdge;
+        /**
+         * default behaviour
+         */
+        Default( CCommon.getResourceString( EWeight.class, "default" ) ),
+        /**
+         * avoid traffic jam
+         */
+        TrafficJam( CCommon.getResourceString( EWeight.class, "trafficjam" ) ),
+        /**
+         * avoid forbidden edges
+         */
+        ForbiddenEdge( CCommon.getResourceString( EWeight.class, "forbiddenedge" ) );
+
+        /**
+         * name of this distribution type
+         */
+        private final String m_text;
+
+
+        /**
+         * ctor
+         *
+         * @param p_text language depend name
+         */
+        private EWeight( final String p_text )
+        {
+            m_text = p_text;
+        }
+
 
         /**
          * returns a weighting object
@@ -495,6 +521,12 @@ public final class CGraphHopper extends GraphHopper
                 default:
                     return null;
             }
+        }
+
+        @Override
+        public String toString()
+        {
+            return m_text;
         }
 
     }

@@ -52,7 +52,8 @@ public abstract class ICarFactory extends IInspectorDefault implements IFactory<
      */
     protected final CGraphHopper.EWeight m_weight;
 
-    /**j
+    /**
+     * j
      * reference to the graph
      *
      * @bug reset on simulation loading

@@ -25,7 +25,10 @@
 package de.tu_clausthal.in.mec.ui;
 
 import de.tu_clausthal.in.mec.CLogger;
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
+import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdge;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.point.IWayPoint;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
@@ -71,7 +74,7 @@ class COSMMouseListener extends PanMouseInputListener
         {
             switch ( l_viewer.getCurrentClickableLayer() )
             {
-                case Sources:
+                case Source:
                     final CCarWayPointLayer l_layer = CSimulation.getInstance().getWorld().<CCarWayPointLayer>getTyped( "Car WayPoints" );
                     boolean l_isfound = false;
 
@@ -92,13 +95,12 @@ class COSMMouseListener extends PanMouseInputListener
                     break;
 
 
-                case ForbiddenEdges:
-/*
+                case ForbiddenEdge:
                     // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
                     CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph().<CForbiddenEdge>getWeight(
-                            CGraphHopper.EWeight.ForbiddenEdges
+                            CGraphHopper.EWeight.ForbiddenEdge
                     ).swap();
-*/
+
                     l_viewer.repaint();
                     break;
             }
@@ -113,14 +115,13 @@ class COSMMouseListener extends PanMouseInputListener
     @Override
     public void mouseMoved( final MouseEvent p_event )
     {
-        /*
         final COSMViewer l_viewer = (COSMViewer) p_event.getSource();
 
         // read graph & weight data on-fly, because on loading simulation data the graph instance can be changed
         final CGraphHopper l_graph = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ).getGraph();
-        final CForbiddenEdge l_weight = l_graph.<CForbiddenEdge>getWeight( CGraphHopper.EWeight.ForbiddenEdges );
+        final CForbiddenEdge l_weight = l_graph.<CForbiddenEdge>getWeight( CGraphHopper.EWeight.ForbiddenEdge );
 
-        if ( !l_viewer.getCurrentClickableLayer().equals( COSMViewer.EClickableLayer.ForbiddenEdges ) )
+        if ( !l_viewer.getCurrentClickableLayer().equals( COSMViewer.EClickableLayer.ForbiddenEdge ) )
             l_weight.clearReserve();
         else
             l_weight.reserve(
@@ -132,7 +133,6 @@ class COSMMouseListener extends PanMouseInputListener
             );
 
         l_viewer.repaint();
-        */
     }
 
     /**

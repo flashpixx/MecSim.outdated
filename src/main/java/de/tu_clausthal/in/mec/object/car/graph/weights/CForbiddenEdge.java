@@ -126,9 +126,6 @@ public final class CForbiddenEdge extends HashSet<Integer> implements Weighting,
     @Override
     public void paint( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( this.isEmpty() )
-            return;
-
         p_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
         p_graphic.setStroke( s_stroke );
 

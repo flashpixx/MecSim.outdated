@@ -69,8 +69,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * class for create a graph structure of OSM data, the class downloads the data and creates edges and verticies
  *
- * @see http://graphhopper.com/
  * @todo remove hardcoded ICar interface
+ * @see http://graphhopper.com/
  */
 public final class CGraphHopper extends GraphHopper
 {
@@ -145,13 +145,18 @@ public final class CGraphHopper extends GraphHopper
         this.setCHEnable( false );
         this.setStoreOnFlush( true );
         this.setEncodingManager( new EncodingManager( p_encoding ) );
-        if ( !this.load( l_graphlocation.getAbsolutePath() ) )
-        {
-            CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
 
-            this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
-            this.setOSMFile( this.downloadOSMData( l_currentgraphurl ).getAbsolutePath() );
-            this.importOrLoad();
+        try
+        {
+            if ( !this.load( l_graphlocation.getAbsolutePath() ) )
+                this.downloadGraphAndLoad( l_currentgraphurl, l_graphlocation );
+        }
+        catch ( final IllegalStateException l_exception )
+        {
+            CLogger.error( CCommon.getResourceString( this, "initializeerror", l_exception ) );
+
+            FileUtils.deleteQuietly( l_graphlocation );
+            this.downloadGraphAndLoad( l_currentgraphurl, l_graphlocation );
         }
 
 
@@ -183,6 +188,7 @@ public final class CGraphHopper extends GraphHopper
             l_item.getValue().clear();
     }
 
+
     /**
      * returns a weight object by name
      *
@@ -208,6 +214,7 @@ public final class CGraphHopper extends GraphHopper
         return m_weights.containsKey( p_weight );
     }
 
+
     /**
      * returns OSM edge ID
      *
@@ -229,6 +236,7 @@ public final class CGraphHopper extends GraphHopper
     {
         return this.getOSMEdgeID( p_edge.getEdgeID() );
     }
+
 
     /**
      * returns the closest edge(s) of a geo position
@@ -506,6 +514,21 @@ public final class CGraphHopper extends GraphHopper
     }
 
     /**
+     * download graph and run converting
+     *
+     * @param p_url download URL
+     * @param p_directory directory in which the graph data is stored
+     */
+    private void downloadGraphAndLoad( final String p_url, final File p_directory )
+    {
+        CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
+
+        this.setGraphHopperLocation( p_directory.getAbsolutePath() );
+        this.setOSMFile( this.downloadOSMData( p_url ).getAbsolutePath() );
+        this.importOrLoad();
+    }
+
+    /**
      * gets the current graph with its download URL from
      * the configuration
      *
@@ -528,7 +551,7 @@ public final class CGraphHopper extends GraphHopper
          * @bug
          */
         return CConfiguration.getInstance().getLocation(
-                "root", "graphs", CCommon.getHash( p_url, "MD5" ) + "_new"
+                "root", "graphs", CCommon.getHash( p_url, "MD5" )
         );
     }
 

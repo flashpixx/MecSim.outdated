@@ -440,11 +440,11 @@ public final class CSimulation
             l_return.put(
                     l_item.getValue().toString(), new HashMap<String, Object>()
                     {{
-                            put( "id", l_item.getKey() );
-                            put( "active", l_item.getValue().isActive() );
-                            put( "isviewable", l_item.getValue() instanceof IViewableLayer );
-                            put( "visible", l_item.getValue() instanceof IViewableLayer ? ( (IViewableLayer) l_item.getValue() ).isVisible() : false );
-                        }}
+                        put( "id", l_item.getKey() );
+                        put( "active", l_item.getValue().isActive() );
+                        put( "isviewable", l_item.getValue() instanceof IViewableLayer );
+                        put( "visible", l_item.getValue() instanceof IViewableLayer ? ( (IViewableLayer) l_item.getValue() ).isVisible() : false );
+                    }}
             );
 
 

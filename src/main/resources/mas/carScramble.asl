@@ -18,8 +18,8 @@ gravity(9.81).                                            // the gravity constan
     :   root_distribution(Distr) &                         // specified distribution
         root_parameter1(Par1) &                            // first distribution parameter
         root_parameter2(Par2)                              // second distribution parameter
-    <-     mecsim.getSample(Distr, Par1, Par2, R);         // get scramble value of given distribution
-        mecsim.getExpectation(Distr, Par1, Par2, E);       // get expectation of given distribution
+    <-     mecsim_getRandom(Distr, Par1, Par2, R);         // get scramble value of given distribution
+        mecsim_getExpectation(Distr, Par1, Par2, E);       // get expectation of given distribution
         +scramble(R);                                      // set scramble value into beliefbase
         +expectation(E);                                   // set expectation into beliefbase
         +scramblingRatio( 1 / (1 - R + E) );               // calculate scrambling ratio to determine driving behaviour
@@ -59,7 +59,7 @@ gravity(9.81).                                            // the gravity constan
         if ( not ( .empty([Predecessor]) ) )                // check if there is a preceding car
         {
             Predecessor =.. [X|_];                          // get distance to predecessor
-            mecsim.literal2number(X,Distance);              // convert distance literal to number term
+            mecsim_literal2number(X,Distance);              // convert distance literal to number term
             +distanceToPredecessor(Distance)                // add belief with current distance
         }
         else

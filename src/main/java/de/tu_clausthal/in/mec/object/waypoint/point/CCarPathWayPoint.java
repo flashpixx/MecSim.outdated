@@ -44,8 +44,8 @@ public final class CCarPathWayPoint extends IPathWayPoint<ICar, ICarFactory, IGe
      */
     private transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
-            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
-        }};
+        add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
+    }};
 
     /**
      * ctor

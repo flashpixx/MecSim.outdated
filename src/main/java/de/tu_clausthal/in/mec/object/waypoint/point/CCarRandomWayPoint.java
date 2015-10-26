@@ -49,8 +49,8 @@ public final class CCarRandomWayPoint extends IRandomWayPoint<ICar, ICarFactory,
      */
     private transient Collection<IReturnSteppableTarget<ICar>> m_target = new HashSet()
     {{
-            add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
-        }};
+        add( CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" ) );
+    }};
 
     /**
      * ctor

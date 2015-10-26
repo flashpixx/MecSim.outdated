@@ -25,6 +25,8 @@
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
 
+import com.graphhopper.routing.util.FlagEncoder;
+import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
@@ -43,33 +45,40 @@ import java.util.HashSet;
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
 @SuppressWarnings( "serial" )
-public final class CForbiddenEdges extends HashSet<Integer> implements IWeighting, Painter<JXMapViewer>
+public final class CForbiddenEdge extends HashSet<Integer> implements Weighting, Painter<JXMapViewer>
 {
     /**
      * stroke definition
      */
     private static final Stroke s_stroke = new BasicStroke( 5 );
     /**
-     * active flag *
-     */
-    private boolean m_active = false;
-    /**
      * graph reference
      */
     private final CGraphHopper m_graph;
     /**
+     * encoder
+     */
+    private final FlagEncoder m_encoder;
+    /**
      * marked edge to allow mouse-interaction
      */
     private Integer m_reserveedge;
+    /**
+     * max speed value *
+     */
+    private final double m_maxspeed;
 
     /**
      * ctor
      *
+     * @param p_encoder encoder
      * @param p_graph reference to graph
      */
-    public CForbiddenEdges( final CGraphHopper p_graph )
+    public CForbiddenEdge( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {
         m_graph = p_graph;
+        m_encoder = p_encoder;
+        m_maxspeed = p_encoder.getMaxSpeed();
     }
 
     /**
@@ -95,33 +104,28 @@ public final class CForbiddenEdges extends HashSet<Integer> implements IWeightin
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        return 0;
+        return p_weight / m_maxspeed;
     }
 
     @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
-        return this.contains( p_edge.getEdge() ) ? Double.POSITIVE_INFINITY : 0;
+        if ( this.contains( p_edge.getEdge() ) )
+            return Double.POSITIVE_INFINITY;
+
+        final double l_speed = p_reverse ? m_encoder.getReverseSpeed( p_edge.getFlags() ) : m_encoder.getSpeed( p_edge.getFlags() );
+        return l_speed == 0 ? Double.POSITIVE_INFINITY : p_edge.getDistance() / l_speed;
     }
 
     @Override
-    public final boolean isActive()
+    public FlagEncoder getFlagEncoder()
     {
-        return m_active;
-    }
-
-    @Override
-    public final void setActive( final boolean p_value )
-    {
-        m_active = p_value;
+        return m_encoder;
     }
 
     @Override
     public void paint( final Graphics2D p_graphic, final JXMapViewer p_viewer, final int p_width, final int p_height )
     {
-        if ( !m_active )
-            return;
-
         p_graphic.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
         p_graphic.setStroke( s_stroke );
 

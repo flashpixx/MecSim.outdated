@@ -151,21 +151,21 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
-    public void remove( final CPath p_path, final ILiteral<T> p_literal )
+    public boolean remove( final CPath p_path, final ILiteral<T> p_literal )
     {
-        walk( p_path, this, null ).remove( p_literal );
+        return walk( p_path, this, null ).remove( p_literal );
     }
 
     @Override
-    public void remove( final CPath p_path, final IBeliefBaseMask<T> p_mask )
+    public boolean remove( final CPath p_path, final IBeliefBaseMask<T> p_mask )
     {
-        walk( p_path, this, null ).remove( p_mask );
+        return walk( p_path, this, null ).remove( p_mask );
     }
 
     @Override
-    public void remove( final CPath p_path )
+    public boolean remove( final CPath p_path )
     {
-        walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).remove( p_path.getSuffix() );
+        return walk( p_path.getSubPath( 0, p_path.size() - 1 ), this, null ).remove( p_path.getSuffix() );
     }
 
     @Override
@@ -186,24 +186,24 @@ public class CMask<T> implements IBeliefBaseMask<T>
         final CPath l_path = this.getFQNPath();
         return new HashMap<CPath, Set<ILiteral<T>>>()
         {{
-                for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
-                    for ( final Map.Entry<CPath, Set<ILiteral<T>>> l_item : l_iterator.next().getLiterals().entrySet() )
-                    {
-                        final Set<ILiteral<T>> l_set = getOrDefault( l_item.getKey(), new HashSet<>() );
-                        l_set.addAll( l_item.getValue() );
-                        putIfAbsent( l_item.getKey(), l_set );
-                    }
-
-                for ( final Iterator<ILiteral<T>> l_iterator = m_beliefbase.getStorage().iteratorMultiElement(); l_iterator.hasNext(); )
+            for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
+                for ( final Map.Entry<CPath, Set<ILiteral<T>>> l_item : l_iterator.next().getLiterals().entrySet() )
                 {
-                    final ILiteral<T> l_literal = l_iterator.next();
-                    final CPath l_literalpath = l_path.append( l_literal.getFunctor().get() );
-
-                    final Set<ILiteral<T>> l_set = getOrDefault( l_literalpath, new HashSet<>() );
-                    l_set.add( l_literal.clone( l_path ) );
-                    putIfAbsent( l_literalpath, l_set );
+                    final Set<ILiteral<T>> l_set = getOrDefault( l_item.getKey(), new HashSet<>() );
+                    l_set.addAll( l_item.getValue() );
+                    putIfAbsent( l_item.getKey(), l_set );
                 }
-            }};
+
+            for ( final Iterator<ILiteral<T>> l_iterator = m_beliefbase.getStorage().iteratorMultiElement(); l_iterator.hasNext(); )
+            {
+                final ILiteral<T> l_literal = l_iterator.next();
+                final CPath l_literalpath = l_path.append( l_literal.getFunctor().get() );
+
+                final Set<ILiteral<T>> l_set = getOrDefault( l_literalpath, new HashSet<>() );
+                l_set.add( l_literal.clone( l_path ) );
+                putIfAbsent( l_literalpath, l_set );
+            }
+        }};
     }
 
     @Override
@@ -229,12 +229,12 @@ public class CMask<T> implements IBeliefBaseMask<T>
     {
         return new HashMap<CPath, IBeliefBaseMask<T>>()
         {{
-                for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
-                {
-                    final IBeliefBaseMask<T> l_mask = l_iterator.next();
-                    put( l_mask.getFQNPath(), l_mask );
-                }
-            }};
+            for ( final Iterator<IBeliefBaseMask<T>> l_iterator = m_beliefbase.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
+            {
+                final IBeliefBaseMask<T> l_mask = l_iterator.next();
+                put( l_mask.getFQNPath(), l_mask );
+            }
+        }};
     }
 
     @Override
@@ -328,21 +328,21 @@ public class CMask<T> implements IBeliefBaseMask<T>
     }
 
     @Override
-    public void remove( final IBeliefBaseMask<T> p_mask )
+    public boolean remove( final IBeliefBaseMask<T> p_mask )
     {
-        m_beliefbase.remove( p_mask );
+        return m_beliefbase.remove( p_mask );
     }
 
     @Override
-    public void remove( final ILiteral<T> p_literal )
+    public boolean remove( final ILiteral<T> p_literal )
     {
-        m_beliefbase.remove( p_literal );
+        return m_beliefbase.remove( p_literal );
     }
 
     @Override
-    public void remove( final String p_name )
+    public boolean remove( final String p_name )
     {
-        m_beliefbase.remove( p_name );
+        return m_beliefbase.remove( p_name );
     }
 
     @Override
@@ -381,10 +381,10 @@ public class CMask<T> implements IBeliefBaseMask<T>
              **/
             final Stack<Iterator<ILiteral<T>>> m_stack = new Stack<Iterator<ILiteral<T>>>()
             {{
-                    add( CMask.this.getStorage().iteratorMultiElement() );
-                    for ( final Iterator<IBeliefBaseMask<T>> l_iterator = CMask.this.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
-                        add( l_iterator.next().iteratorLiteral() );
-                }};
+                add( CMask.this.getStorage().iteratorMultiElement() );
+                for ( final Iterator<IBeliefBaseMask<T>> l_iterator = CMask.this.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
+                    add( l_iterator.next().iteratorLiteral() );
+            }};
 
             @Override
             public boolean hasNext()
@@ -415,10 +415,10 @@ public class CMask<T> implements IBeliefBaseMask<T>
             /** stack with iterator **/
             final Stack<Iterator<IBeliefBaseMask<T>>> m_stack = new Stack<Iterator<IBeliefBaseMask<T>>>()
             {{
-                    add( CMask.this.getStorage().iteratorSingleElement() );
-                    for ( final Iterator<IBeliefBaseMask<T>> l_iterator = CMask.this.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
-                        add( l_iterator.next().iteratorBeliefBaseMask() );
-                }};
+                add( CMask.this.getStorage().iteratorSingleElement() );
+                for ( final Iterator<IBeliefBaseMask<T>> l_iterator = CMask.this.getStorage().iteratorSingleElement(); l_iterator.hasNext(); )
+                    add( l_iterator.next().iteratorBeliefBaseMask() );
+            }};
 
             @Override
             public boolean hasNext()

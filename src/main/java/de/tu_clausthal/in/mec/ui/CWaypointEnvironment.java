@@ -27,6 +27,7 @@ package de.tu_clausthal.in.mec.ui;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CNameHashMap;
 import de.tu_clausthal.in.mec.common.EDistribution;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.waypoint.CCarWayPointLayer;
 import de.tu_clausthal.in.mec.object.waypoint.factory.CAgentCarFactory;
@@ -56,120 +57,129 @@ public class CWaypointEnvironment
      */
     private final static Map<String, Object> c_distribution = new HashMap<String, Object>()
     {{
-            for ( final EDistribution l_distribution : EDistribution.values() )
-                put(
-                        l_distribution.toString(), new HashMap()
-                        {{
-                                put( "firstmomentum", CCommon.getMap( "label", l_distribution.getFirstMomentum(), "used", l_distribution.hasFirstMomentum() ) );
-                                put(
-                                        "secondmomentum", CCommon.getMap(
-                                                "label", l_distribution.getSecondMomentum(), "used", l_distribution.hasSecondMomentum()
-                                        )
-                                );
-                                put( "id", l_distribution.name() );
-                            }}
-                );
-        }};
+        for ( final EDistribution l_distribution : EDistribution.values() )
+            put(
+                    l_distribution.toString(), new HashMap()
+                    {{
+                        put( "firstmomentum", CCommon.getMap( "label", l_distribution.getFirstMomentum(), "used", l_distribution.hasFirstMomentum() ) );
+                        put(
+                                "secondmomentum", CCommon.getMap(
+                                        "label", l_distribution.getSecondMomentum(), "used", l_distribution.hasSecondMomentum()
+                                )
+                        );
+                        put( "id", l_distribution.name() );
+                    }}
+            );
+    }};
 
     /**
      * map with factory names
      */
     private final static Map<String, Map<String, Object>> c_factory = new HashMap<String, Map<String, Object>>()
     {{
-            for ( final EFactory l_factory : EFactory.values() )
-                put(
-                        l_factory.toString(), new HashMap()
-                        {{
-                                put( "requireagent", l_factory.getRequireAgent() );
-                                put( "id", l_factory.name() );
-                            }}
-                );
-        }};
+        for ( final EFactory l_factory : EFactory.values() )
+            put(
+                    l_factory.toString(), new HashMap()
+                    {{
+                        put( "requireagent", l_factory.getRequireAgent() );
+                        put( "id", l_factory.name() );
+                    }}
+            );
+    }};
     /**
      * map with name and ID
      */
     private final static Map<String, String> c_generator = new HashMap<String, String>()
     {{
-            for ( final EGenerator l_generator : EGenerator.values() )
-                put( l_generator.toString(), l_generator.name() );
-        }};
+        for ( final EGenerator l_generator : EGenerator.values() )
+            put( l_generator.toString(), l_generator.name() );
+    }};
+    /**
+     * map with name and ID
+     */
+    private final static Map<String, String> c_weights = new HashMap<String, String>()
+    {{
+        for ( final CGraphHopper.EWeight l_weight : CGraphHopper.EWeight.values() )
+            put( l_weight.toString(), l_weight.name() );
+    }};
     /**
      * static label for main menu UI
      */
     private static final Map<String, String> c_labelmainmenu = new HashMap<String, String>()
     {{
-            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypoint_name" ) );
-            put( "id_newpreset", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_newpreset" ) );
-            put( "id_listpreset", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_listpreset" ) );
-        }};
+        put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_waypoint_name" ) );
+        put( "id_newpreset", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_newpreset" ) );
+        put( "id_listpreset", CCommon.getResourceString( CWaypointEnvironment.class, "ui_mainmenu_id_listpreset" ) );
+    }};
     /**
      * static label for preset wizard UI
      */
     private static final Map<String, String> c_labelpresetwizard = new HashMap<String, String>()
     {{
-            // window title
-            put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_name" ) );
+        // window title
+        put( "name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_name" ) );
 
 
-            // wizard step header
-            put( "id_factoryhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_id_factoryhead" ) );
-            put( "id_carhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_id_carhead" ) );
-            put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_id_customhead" ) );
+        // wizard step header
+        put( "id_factoryhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_id_factoryhead" ) );
+        put( "id_carhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_id_carhead" ) );
+        put( "id_customhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_id_customhead" ) );
 
 
-            // wizard first step
-            put( "id_factorysettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_factorysettingshead" ) );
-            put( "label_factory", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_label_factory" ) );
-            put( "label_agent", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_agent" ) );
+        // wizard first step
+        put( "id_factorysettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_factorysettingshead" ) );
+        put( "label_factory", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_label_factory" ) );
+        put( "label_agent", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_agent" ) );
+        put( "label_weight", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_weight" ) );
 
-            put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_waypointsettingshead" ) );
-            put( "label_waypoint", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_waypoint" ) );
-            put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_radius" ) );
+        put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_waypointsettingshead" ) );
+        put( "label_waypoint", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_waypoint" ) );
+        put( "label_radius", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_radius" ) );
 
-            put( "id_generatorsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_generatorsettingshead" ) );
-            put( "label_generatortyp", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_generatortyp" ) );
-            put( "label_carcount", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_carcount" ) );
-            put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_generatordistribution" ) );
-
-
-            // wizard third step
-            put( "id_speedhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_speedhead" ) );
-            put( "label_speedfactor", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_label_speedfactor" ) );
-
-            put( "id_maxspeedhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_maxspeedhead" ) );
-            put( "label_maxspeeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_label_maxspeeddistribution" ) );
-
-            put( "id_accelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_acceleration" ) );
-            put(
-                    "label_accelerationdistribution", CCommon.getResourceString(
-                            CWaypointEnvironment.class, "ui_wizard_secondstep_label_accelerationdistribution"
-                    )
-            );
-
-            put( "id_decelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_deceleration" ) );
-            put(
-                    "label_decelerationdistribution", CCommon.getResourceString(
-                            CWaypointEnvironment.class, "ui_wizard_secondstep_label_decelerationdistribution"
-                    )
-            );
-
-            put( "id_lingerhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_linger" ) );
-            put( "label_lingerdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_label_lingerdistribution" ) );
+        put( "id_generatorsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_generatorsettingshead" ) );
+        put( "label_generatortyp", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_generatortyp" ) );
+        put( "label_carcount", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_carcount" ) );
+        put( "label_generatordistribution", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_generatordistribution" ) );
 
 
-            // wizard fourth step
-            put( "label_name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_thirdstep_label_name" ) );
-            put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_thirdstep_label_color" ) );
+        // wizard third step
+        put( "id_speedhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_speedhead" ) );
+        put( "label_speedfactor", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_label_speedfactor" ) );
 
-        }};
+        put( "id_maxspeedhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_maxspeedhead" ) );
+        put( "label_maxspeeddistribution", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_label_maxspeeddistribution" ) );
+
+        put( "id_accelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_acceleration" ) );
+        put(
+                "label_accelerationdistribution", CCommon.getResourceString(
+                        CWaypointEnvironment.class, "ui_wizard_secondstep_label_accelerationdistribution"
+                )
+        );
+
+        put( "id_decelerationhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_deceleration" ) );
+        put(
+                "label_decelerationdistribution", CCommon.getResourceString(
+                        CWaypointEnvironment.class, "ui_wizard_secondstep_label_decelerationdistribution"
+                )
+        );
+
+        put( "id_lingerhead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_id_linger" ) );
+        put( "label_lingerdistribution", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_secondstep_label_lingerdistribution" ) );
+
+
+        // wizard fourth step
+        put( "label_name", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_thirdstep_label_name" ) );
+        put( "label_color", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_thirdstep_label_color" ) );
+
+    }};
     /**
      * map with name and ID
      */
     private final static Map<String, String> c_waypoint = new HashMap<String, String>()
     {{
-            for ( final EWaypoint l_waypoint : EWaypoint.values() )
-                put( l_waypoint.toString(), l_waypoint.name() );
-        }};
+        for ( final EWaypoint l_waypoint : EWaypoint.values() )
+            put( l_waypoint.toString(), l_waypoint.name() );
+    }};
     /**
      * map with objects, which are created by the UI call
      **/
@@ -272,6 +282,16 @@ public class CWaypointEnvironment
     }
 
     /**
+     * list all possible routing weights
+     *
+     * @return map with language name and ID
+     */
+    private final Map<String, String> web_static_listweight()
+    {
+        return c_weights;
+    }
+
+    /**
      * list all possible waypoint types
      *
      * @return map with language name and ID
@@ -312,6 +332,7 @@ public class CWaypointEnvironment
                         this.createDistribution( l_data.get( "distribution/acceleration" ) ),
                         this.createDistribution( l_data.get( "distribution/deceleration" ) ),
                         this.createDistribution( l_data.get( "distribution/linger" ) ),
+                        CGraphHopper.EWeight.valueOf( l_data.<String>get( "weight" ) ),
                         l_data.<String>get( "agent/agent" ),
                         EAgentLanguages.valueOf( l_data.<String>get( "agent/type" ) )
                 )
@@ -386,7 +407,9 @@ public class CWaypointEnvironment
                             // deceleration distribution
                             (AbstractRealDistribution) p_data[3],
                             // linger distribution
-                            (AbstractRealDistribution) p_data[4]
+                            (AbstractRealDistribution) p_data[4],
+                            // routing weight
+                            (CGraphHopper.EWeight) p_data[5]
                     );
 
                 case DefaultAgentCarFactory:
@@ -401,10 +424,12 @@ public class CWaypointEnvironment
                             (AbstractRealDistribution) p_data[3],
                             // linger distribution
                             (AbstractRealDistribution) p_data[4],
+                            // routing weight
+                            (CGraphHopper.EWeight) p_data[5],
                             // agent name
-                            (String) p_data[5],
+                            (String) p_data[6],
                             // agent type
-                            (EAgentLanguages) p_data[6]
+                            (EAgentLanguages) p_data[7]
                     );
 
                 default:

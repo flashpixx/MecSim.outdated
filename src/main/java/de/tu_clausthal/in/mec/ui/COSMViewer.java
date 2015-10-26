@@ -62,7 +62,7 @@ public final class COSMViewer extends JXMapViewer
     /**
      * clickable layer
      */
-    private EClickableLayer m_clickablelayer = EClickableLayer.Sources;
+    private EClickableLayer m_clickablelayer = EClickableLayer.Source;
     /**
      * route painter
      */
@@ -197,11 +197,11 @@ public final class COSMViewer extends JXMapViewer
         /**
          * source layer *
          */
-        Sources( CCommon.getResourceString( EClickableLayer.class, "source" ) ),
+        Source( CCommon.getResourceString( EClickableLayer.class, "source" ) ),
         /**
          * forbidden edges layer *
          */
-        ForbiddenEdges( CCommon.getResourceString( EClickableLayer.class, "forbiddenedges" ) );
+        ForbiddenEdge( CCommon.getResourceString( EClickableLayer.class, "forbiddenedge" ) );
 
 
         /**

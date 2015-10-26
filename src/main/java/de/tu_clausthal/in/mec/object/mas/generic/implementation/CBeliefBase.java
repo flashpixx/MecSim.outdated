@@ -121,21 +121,21 @@ public class CBeliefBase<T> implements IBeliefBase<T>
     }
 
     @Override
-    public final void remove( final IBeliefBaseMask<T> p_mask )
+    public final boolean remove( final IBeliefBaseMask<T> p_mask )
     {
-        m_storage.removeSingleElement( p_mask.getName() );
+        return m_storage.removeSingleElement( p_mask.getName() );
     }
 
     @Override
-    public final void remove( final ILiteral<T> p_literal )
+    public final boolean remove( final ILiteral<T> p_literal )
     {
-        m_storage.removeMultiElement( p_literal.getFunctor().get(), p_literal );
+        return m_storage.removeMultiElement( p_literal.getFunctor().get(), p_literal );
     }
 
     @Override
-    public void remove( final String p_name )
+    public boolean remove( final String p_name )
     {
-        m_storage.remove( p_name );
+        return m_storage.remove( p_name );
     }
 
     @Override

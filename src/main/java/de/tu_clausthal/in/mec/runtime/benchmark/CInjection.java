@@ -94,7 +94,7 @@ public final class CInjection implements ClassFileTransformer
      * @throws IllegalArgumentException not usable class
      */
     private byte[] inject( final String p_classname )
-            throws NotFoundException, ClassNotFoundException, CannotCompileException, IOException, IllegalArgumentException
+    throws NotFoundException, ClassNotFoundException, CannotCompileException, IOException, IllegalArgumentException
     {
         // filtering only package classes - other classes are ignored (throw an exception)
         final String l_classname = p_classname.replace( "/", ClassUtils.PACKAGE_SEPARATOR ).replace( "$", ClassUtils.INNER_CLASS_SEPARATOR );

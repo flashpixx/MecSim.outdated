@@ -50,15 +50,15 @@ public abstract class IDatabase extends IMultiEvaluateLayer<IDatabase.CWorker>
      */
     protected final static BasicDataSource c_datasource = new BasicDataSource()
     {{
-            if ( isConnectable() )
-            {
-                setDriverClassName( CConfiguration.getInstance().get().<String>get( "database/driver" ) );
-                setUrl( CConfiguration.getInstance().get().<String>get( "database/url" ) );
-                setUsername( CConfiguration.getInstance().get().<String>get( "database/username" ) );
-                setPassword( CConfiguration.getInstance().get().<String>get( "database/password" ) );
-                setPoolPreparedStatements( true );
-            }
-        }};
+        if ( isConnectable() )
+        {
+            setDriverClassName( CConfiguration.getInstance().get().<String>get( "database/driver" ) );
+            setUrl( CConfiguration.getInstance().get().<String>get( "database/url" ) );
+            setUsername( CConfiguration.getInstance().get().<String>get( "database/username" ) );
+            setPassword( CConfiguration.getInstance().get().<String>get( "database/password" ) );
+            setPoolPreparedStatements( true );
+        }
+    }};
     /**
      * flag to set connectivity
      */

@@ -62,6 +62,7 @@ Layer.prototype.getGlobalContent = function()
 Layer.prototype.getContent = function()
 {
     return '<div id="'  + this.generateSubID("switches")  + '" />' +
+           '<ul id = "' + this.generateSubID("drivingmodel") + '" />' +
            '<ul id = "' + this.generateSubID("clickable") + '" />' +
            Pane.prototype.getContent.call(this);
 }
@@ -184,6 +185,44 @@ Layer.prototype.afterDOMAdded = function()
             // add list items to the DOM
             jQuery.each( la_sorted, function(pn_key, px_value){
                 jQuery( self.generateSubID("clickable", "#") ).append( '<li class="ui-state-default" id="'+ self.generateSubID("clickable_"+px_value.id) + '" name="' + px_value.id + '">' + px_value.name + '</li>' );
+            });
+
+        }
+    });
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --- create sortable list of driving models, bind actions and fill the data ------------------------------------------------------------------------------
+    jQuery( this.generateSubID("drivingmodel", "#") ).sortable({
+
+        placeholder: "ui-state-highlight",
+        stop: function(px_event, po_ui) {
+
+            MecSim.ajax({
+                url   : "/ctrafficenvironment/setdrivemodel",
+                data  : {"id": jQuery( self.generateSubID("drivingmodel", "#") ).children("li:first").attr("name")}
+            }).fail( lx_failclosure(px_event) );
+
+        }
+
+    });
+
+    MecSim.ajax({
+
+        url     : "/ctrafficenvironment/listdrivemodel",
+        success : function(px_data) {
+
+            // sort JSON objects depend on "click" property and store the ordered list in an array
+            var la_sorted = [];
+            Object.keys(px_data).sort(function(i,j){ return px_data[i].active ? -1 : 1 }).forEach( function(pc_key) {
+                var lo  = px_data[pc_key];
+                lo.name = pc_key;
+                la_sorted.push(lo);
+            });
+
+            // add list items to the DOM
+            jQuery.each( la_sorted, function(pn_key, px_value){
+                jQuery( self.generateSubID("drivingmodel", "#") ).append( '<li class="ui-state-default" id="'+ self.generateSubID("drivingmodel_"+px_value.id) + '" name="' + px_value.id + '">' + px_value.name + '</li>' );
             });
 
         }

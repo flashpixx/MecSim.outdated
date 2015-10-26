@@ -182,9 +182,9 @@ public class CBeliefStorage<N, M> implements IStorage<N, M>
              **/
             private final Stack<Iterator<N>> m_stack = new Stack<Iterator<N>>()
             {{
-                    for ( final Set<N> l_item : m_multielements.values() )
-                        add( l_item.iterator() );
-                }};
+                for ( final Set<N> l_item : m_multielements.values() )
+                    add( l_item.iterator() );
+            }};
 
             @Override
             public boolean hasNext()

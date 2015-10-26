@@ -76,19 +76,19 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
      */
     public static final Map<String, InternalAction> INTERNALACTION = new HashMap<String, InternalAction>()
     {{
-            // overwrite default internal actions
-            final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
-            put( "jason.stdlib.clone", new CInternalEmpty() );
-            put( "jason.stdlib.wait", l_empty13 );
-            put( "jason.stdlib.create_agent", l_empty13 );
-            put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
-            put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
+        // overwrite default internal actions
+        final CInternalEmpty l_empty13 = new CInternalEmpty( 1, 3 );
+        put( "jason.stdlib.clone", new CInternalEmpty() );
+        put( "jason.stdlib.wait", l_empty13 );
+        put( "jason.stdlib.create_agent", l_empty13 );
+        put( "jason.stdlib.kill_agent", new CInternalEmpty( 1, 1 ) );
+        put( "jason.stdlib.stopMAS", new CInternalEmpty( 0, 0 ) );
 
-            // add own function
-            put( "mecsim.literal2number", new CLiteral2Number() );
-            put( "mecsim.removeBelief", new CBeliefRemove() );
-            put( "mecsim.getRandom", new CRandom() );
-        }};
+        // add own function
+        put( "mecsim_literal2number", new CLiteral2Number() );
+        put( "mecsim_removeBelief", new CBeliefRemove() );
+        put( "mecsim_getRandom", new CRandom() );
+    }};
     /**
      * browser of the mindinspector - binding to the server port can be done after the first agent is exists
      */

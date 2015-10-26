@@ -141,9 +141,9 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     {
         if ( CSimulation.getInstance().getStorage().exists() )
             CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter()
-                       .removePainter(
-                               (Painter) this
-                       );
+                                                                                                           .removePainter(
+                                                                                                                   (Painter) this
+                                                                                                           );
     }
 
     @Override

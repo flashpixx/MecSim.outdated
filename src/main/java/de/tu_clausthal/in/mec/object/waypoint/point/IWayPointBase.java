@@ -79,8 +79,8 @@ public abstract class IWayPointBase<T, P extends IFactory<T>, N extends IGenerat
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( IWayPointBase.super.inspect() );
-        }};
+        putAll( IWayPointBase.super.inspect() );
+    }};
     /**
      * last zoom (if the zoom changed the image need to be resized)
      */

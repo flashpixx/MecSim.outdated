@@ -28,6 +28,7 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
 import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
@@ -61,8 +62,8 @@ public final class CAgentCarFactory extends CDefaultCarFactory
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CAgentCarFactory.super.inspect() );
-        }};
+        putAll( CAgentCarFactory.super.inspect() );
+    }};
 
     /**
      * ctor
@@ -72,15 +73,17 @@ public final class CAgentCarFactory extends CDefaultCarFactory
      * @param p_acceleration distribution of acceleration
      * @param p_deceleration distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
+     * @param p_weight routing weight
      * @param p_agent agent name
      * @param p_agenttype agent type definition
      */
     public CAgentCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
             final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
+            final CGraphHopper.EWeight p_weight,
             final String p_agent, final EAgentLanguages p_agenttype
     )
     {
-        super( p_speedfactor, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution );
+        super( p_speedfactor, p_maxspeed, p_acceleration, p_deceleration, p_lingerdistribution, p_weight );
 
         if ( ( p_agent == null ) || ( p_agent.isEmpty() ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "agentnotnull" ) );

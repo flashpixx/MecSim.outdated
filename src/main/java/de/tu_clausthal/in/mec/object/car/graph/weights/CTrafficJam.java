@@ -24,7 +24,11 @@
 
 package de.tu_clausthal.in.mec.object.car.graph.weights;
 
+import com.graphhopper.routing.util.FlagEncoder;
+import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.util.EdgeIteratorState;
+import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.car.graph.CEdge;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 
 
@@ -33,49 +37,87 @@ import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
  *
  * @see https://github.com/graphhopper/graphhopper/blob/master/docs/core/weighting.md
  */
-public final class CTrafficJam implements IWeighting
+public final class CTrafficJam implements Weighting
 {
     /**
-     * active flag *
-     */
-    private boolean m_active = false;
-    /**
-     * graph instance
+     * graph reference
      */
     private final CGraphHopper m_graph;
+    /**
+     * encoder
+     */
+    private final FlagEncoder m_encoder;
+    /**
+     * max speed value *
+     */
+    private final double m_maxspeed;
+    /**
+     * slope of the sigmoid function
+     */
+    private final double m_slope;
+    /**
+     * saddle point of the sigmoid function
+     *
+     * @note saddle / slope defines the saddle point
+     */
+    private final double m_saddle;
+    /**
+     * maximum jam cost
+     */
+    private final double m_jamcost;
+
 
     /**
      * ctor
      *
-     * @param p_graph graph object
+     * @param p_encoder flag encoder
+     * @param p_graph graph
      */
-    public CTrafficJam( final CGraphHopper p_graph )
+    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {
-        m_graph = p_graph;
+        this( p_encoder, p_graph, 8, 6, Integer.MAX_VALUE );
     }
+
+    /**
+     * ctor
+     *
+     * @param p_encoder flag encoder
+     * @param p_graph graph
+     */
+    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph, final double p_slope, final double p_saddle, final double p_jamcost )
+    {
+        m_saddle = p_saddle;
+        m_slope = p_slope;
+        m_jamcost = p_jamcost;
+
+        m_graph = p_graph;
+        m_encoder = p_encoder;
+        m_maxspeed = p_encoder.getMaxSpeed();
+    }
+
 
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        return 0;
-    }
-
-
-    @Override
-    public final double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse )
-    {
-        return m_graph.getEdge( p_edge ).getNumberOfObjects();
+        return p_weight / m_maxspeed;
     }
 
     @Override
-    public final boolean isActive()
+    public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
-        return m_active;
+        final CEdge<ICar, ?> l_edge = m_graph.getEdge( p_edge );
+
+        // get normalized density and scale range in [0, cost] with sigmoid function
+        return ( p_edge.getDistance() / m_maxspeed ) +
+               ( m_jamcost *
+                 1 / ( 1 + Math.exp( -( m_slope * l_edge.getNumberOfObjects() / l_edge.getEdgeCells() - m_saddle ) ) )
+               );
     }
 
     @Override
-    public final void setActive( final boolean p_value )
+    public FlagEncoder getFlagEncoder()
     {
-        m_active = p_value;
+        return m_encoder;
     }
+
 }

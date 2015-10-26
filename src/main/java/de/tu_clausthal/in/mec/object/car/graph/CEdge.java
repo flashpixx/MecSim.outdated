@@ -36,11 +36,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -82,7 +81,7 @@ public final class CEdge<N, T> implements Comparable<CEdge>
     /**
      * map with object-2-position in forward direction
      */
-    private final Map<N, Integer> m_objects = Collections.synchronizedMap( new HashMap<>() );
+    private final Map<N, Integer> m_objects = new ConcurrentHashMap<>();
 
     /**
      * ctor create the samples
@@ -135,20 +134,24 @@ public final class CEdge<N, T> implements Comparable<CEdge>
      * adds a set of edge listener
      *
      * @param p_listener listener collection
+     * @return object
      */
-    public final void addListener( final Collection<IAction<N, T>> p_listener )
+    public final CEdge<N, T> addListener( final Collection<IAction<N, T>> p_listener )
     {
         m_listener.addAll( p_listener );
+        return this;
     }
 
     /**
      * adds an edge listener
      *
      * @param p_listener listener
+     * @return object
      */
-    public final void addListener( final IAction<N, T> p_listener )
+    public final CEdge<N, T> addListener( final IAction<N, T> p_listener )
     {
         m_listener.add( p_listener );
+        return this;
     }
 
     /**

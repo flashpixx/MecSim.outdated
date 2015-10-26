@@ -51,8 +51,8 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( IRandomWayPoint.super.inspect() );
-        }};
+        putAll( IRandomWayPoint.super.inspect() );
+    }};
     /**
      * radius around the waypoint *
      */
@@ -86,15 +86,15 @@ public abstract class IRandomWayPoint<T, P extends IFactory<T>, N extends IGener
     {
         return new HashSet<Pair<GeoPosition, GeoPosition>>()
         {{
-                add(
-                        new ImmutablePair<GeoPosition, GeoPosition>(
-                                getPosition(), new GeoPosition(
-                                getPosition().getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
-                                getPosition().getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
-                        )
-                        )
-                );
-            }};
+            add(
+                    new ImmutablePair<GeoPosition, GeoPosition>(
+                            getPosition(), new GeoPosition(
+                            getPosition().getLatitude() + m_radius * m_random.nextDouble() - m_radius / 2,
+                            getPosition().getLongitude() + m_radius * m_random.nextDouble() - m_radius / 2
+                    )
+                    )
+            );
+        }};
     }
 
     @Override

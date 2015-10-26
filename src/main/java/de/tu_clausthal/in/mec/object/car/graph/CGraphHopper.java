@@ -32,18 +32,15 @@ import com.graphhopper.routing.util.EdgeFilter;
 import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
+import com.graphhopper.routing.util.WeightingMap;
 import com.graphhopper.storage.index.QueryResult;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CCombine;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdges;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CSpeedUp;
+import de.tu_clausthal.in.mec.object.car.graph.weights.CForbiddenEdge;
 import de.tu_clausthal.in.mec.object.car.graph.weights.CTrafficJam;
-import de.tu_clausthal.in.mec.object.car.graph.weights.CWeightingWrapper;
-import de.tu_clausthal.in.mec.object.car.graph.weights.IWeighting;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -55,8 +52,8 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,6 +67,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class CGraphHopper extends GraphHopper
 {
+    private static final String c_defaultflagencoding = "CAR";
+
     /**
      * cell size for sampling
      */
@@ -83,9 +82,12 @@ public final class CGraphHopper extends GraphHopper
      */
     private final Set<IAction<ICar, ?>> m_edgelister = new HashSet<>();
     /**
-     * default weight
+     * map with additional weights
+     *
+     * @note alle names must be in lower-case
      */
-    private CCombine<EWeight> m_weight;
+    private final Map<EWeight, Weighting> m_weights = new HashMap<>();
+
 
     /**
      * ctor
@@ -94,7 +96,7 @@ public final class CGraphHopper extends GraphHopper
      */
     public CGraphHopper( final int p_cellsize )
     {
-        this( "CAR", p_cellsize );
+        this( c_defaultflagencoding, p_cellsize );
     }
 
     /**
@@ -108,7 +110,6 @@ public final class CGraphHopper extends GraphHopper
     {
         // set the default settings
         m_cellsize = p_cellsize;
-        this.setCHShortcuts( "default" );
 
         // define graph location (use configuration)
         final String l_currentgraphurl = getCurrentGraph();
@@ -121,18 +122,32 @@ public final class CGraphHopper extends GraphHopper
 
         // convert OSM or load the graph
         CConfiguration.getInstance().get().set( "simulation/traffic/map/reimport", false );
-        if ( !this.load( l_graphlocation.getAbsolutePath() ) )
+
+
+        // initialize graph (CH must be disable on dynamic routing)
+        this.setCHEnable( false );
+        this.setStoreOnFlush( true );
+        this.setEncodingManager( new EncodingManager( p_encoding ) );
+
+        try
         {
-            CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
-            final File l_osm = this.downloadOSMData( l_currentgraphurl );
-
-            this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
-            this.setOSMFile( l_osm.getAbsolutePath() );
-            this.setEncodingManager( new EncodingManager( p_encoding ) );
-            this.importOrLoad();
-
-            l_osm.delete();
+            if ( !this.load( l_graphlocation.getAbsolutePath() ) )
+                this.downloadGraphAndLoad( l_currentgraphurl, l_graphlocation );
         }
+        catch ( final IllegalStateException l_exception )
+        {
+            CLogger.error( CCommon.getResourceString( this, "initializeerror", l_exception ) );
+
+            FileUtils.deleteQuietly( l_graphlocation );
+            this.downloadGraphAndLoad( l_currentgraphurl, l_graphlocation );
+        }
+
+
+        // define weights
+        for ( final EWeight l_item : EWeight.values() )
+            if ( !l_item.equals( EWeight.Default ) )
+                m_weights.put( l_item, l_item.get( this, this.getEncodingManager().getEncoder( p_encoding ) ) );
+
 
         CLogger.out( CCommon.getResourceString( this, "loaded" ) );
     }
@@ -157,59 +172,45 @@ public final class CGraphHopper extends GraphHopper
     }
 
     @Override
-    public final Weighting createWeighting( final String p_weighting, final FlagEncoder p_encoder )
+    public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
     {
-        // method creates on the first call all weights and store it within the
-        // combined-weight object and returns it like a singleton
-        if ( m_weight == null )
+        // catch unknown enum type and use the default
+        try
         {
-            m_weight = new CCombine();
-
-            m_weight.put( EWeight.Default, new CWeightingWrapper<Weighting>( super.createWeighting( p_weighting, p_encoder ), true ) );
-            m_weight.put( EWeight.TrafficJam, new CTrafficJam( this ) );
-            m_weight.put( EWeight.SpeedUp, new CSpeedUp( p_encoder ) );
-            m_weight.put( EWeight.ForbiddenEdges, new CForbiddenEdges( this ) );
+            final Weighting l_weight = m_weights.get( EWeight.valueOf( p_map.getWeighting() ) );
+            if ( l_weight != null )
+                return l_weight;
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
         }
 
-        return m_weight;
+        return super.createWeighting( p_map, p_encoder );
     }
 
     /**
-     * disable all weights *
-     */
-    public final void disableWeights()
-    {
-        for ( final IWeighting l_item : m_weight.values() )
-            l_item.setActive( false );
-    }
-
-    /**
-     * enable / disable a weighing
+     * returns a weight object by name
      *
-     * @param p_weight weightning name
-     * @see https://github.com/graphhopper/graphhopper/issues/111
+     * @param p_weight weight
+     * @return weight object
+     *
+     * @tparam T type of the weight object
      */
-    public final void enableDisableWeight( final EWeight p_weight )
+    @SuppressWarnings( "unchecked" )
+    public final <T extends Weighting> T getWeight( final EWeight p_weight )
     {
-        if ( !m_weight.containsKey( p_weight ) )
-            return;
-
-        m_weight.get( p_weight ).setActive( !m_weight.get( p_weight ).isActive() );
+        return (T) m_weights.get( p_weight );
     }
 
     /**
-     * returns a list of the active weights
+     * checks if a weight object exists
      *
-     * @return String list
+     * @param p_weight weight
+     * @return existance
      */
-    public final EWeight[] getActiveWeights()
+    public final boolean existWeight( final EWeight p_weight )
     {
-        final List<EWeight> l_active = new LinkedList<>();
-        for ( final Map.Entry<EWeight, IWeighting> l_item : m_weight.entrySet() )
-            if ( l_item.getValue().isActive() )
-                l_active.add( l_item.getKey() );
-
-        return CCommon.convertCollectionToArray( EWeight[].class, l_active );
+        return m_weights.containsKey( p_weight );
     }
 
     /**
@@ -243,19 +244,17 @@ public final class CGraphHopper extends GraphHopper
      * @return linkage object
      *
      * @note listener object will be set at the edge instantiation process
-     * @todo check generic
      */
-    public final synchronized CEdge<ICar, ?> getEdge( final EdgeIteratorState p_edgestate )
+    public final CEdge<ICar, ?> getEdge( final EdgeIteratorState p_edgestate )
     {
-        CEdge l_edge = m_edgecell.get( p_edgestate.getEdge() );
-        if ( l_edge == null )
-        {
-            l_edge = new CEdge<>( p_edgestate, m_cellsize );
-            l_edge.addListener( m_edgelister );
-            m_edgecell.put( l_edge.getEdgeID(), l_edge );
-        }
+        CEdge<ICar, ?> l_edge = m_edgecell.get( p_edgestate.getEdge() );
+        if ( l_edge != null )
+            return l_edge;
 
-        return l_edge;
+        // create a new edge and add it to the edge list, if one exists return the existing object
+        l_edge = new CEdge( p_edgestate, m_cellsize ).addListener( m_edgelister );
+        final CEdge<ICar, ?> l_return = m_edgecell.putIfAbsent( l_edge.getEdgeID(), l_edge );
+        return l_return == null ? l_edge : l_return;
     }
 
     /**
@@ -266,7 +265,7 @@ public final class CGraphHopper extends GraphHopper
      */
     public final EdgeIteratorState getEdgeIterator( final int p_edgeid )
     {
-        return this.getGraph().getEdgeProps( p_edgeid, Integer.MIN_VALUE );
+        return this.getGraphHopperStorage().getEdgeIteratorState( p_edgeid, Integer.MIN_VALUE );
     }
 
     /**
@@ -278,9 +277,9 @@ public final class CGraphHopper extends GraphHopper
     public final double getEdgeSpeed( final EdgeIteratorState p_edge )
     {
         if ( p_edge == null )
-            return Double.POSITIVE_INFINITY;
+            return 0;
 
-        return this.getGraph().getEncodingManager().getEncoder( "CAR" ).getSpeed( p_edge.getFlags() );
+        return this.getGraphHopperStorage().getEncodingManager().getEncoder( c_defaultflagencoding ).getSpeed( p_edge.getFlags() );
     }
 
     /**
@@ -324,7 +323,7 @@ public final class CGraphHopper extends GraphHopper
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end )
     {
-        return this.getRoutes( p_start, p_end, Integer.MAX_VALUE );
+        return this.getRoutes( p_start, p_end, EWeight.Default, Integer.MAX_VALUE );
     }
 
     /**
@@ -337,9 +336,39 @@ public final class CGraphHopper extends GraphHopper
      */
     public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final int p_maxroutes )
     {
+        return this.getRoutes( p_start, p_end, EWeight.Default, p_maxroutes );
+    }
+
+    /**
+     * creates a list of list of edge between two geopositions
+     *
+     * @param p_start start geoposition
+     * @param p_end end geoposition
+     * @param p_weighting weigtning name
+     * @return list of list of edges
+     */
+    public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final String p_weighting )
+    {
+        return this.getRoutes( p_start, p_end, EWeight.Default, Integer.MAX_VALUE );
+    }
+
+    /**
+     * creates a list of list of edge between two geopositions
+     *
+     * @param p_start start geoposition
+     * @param p_end end geoposition
+     * @param p_weighting weigting name
+     * @param p_maxroutes max. number of paths
+     * @return list of list of edges
+     */
+    public final List<List<EdgeIteratorState>> getRoutes( final GeoPosition p_start, final GeoPosition p_end, final EWeight p_weighting, final int p_maxroutes )
+    {
         // calculate routes
         final GHRequest l_request = new GHRequest( p_start.getLatitude(), p_start.getLongitude(), p_end.getLatitude(), p_end.getLongitude() );
         l_request.setAlgorithm( CConfiguration.getInstance().get().<String>get( "simulation/traffic/routing/algorithm" ) );
+
+        if ( ( p_weighting != null ) && ( !p_weighting.equals( EWeight.Default ) ) )
+            l_request.setWeighting( p_weighting.name() );
 
         final GHResponse l_result = this.route( l_request );
         if ( !l_result.getErrors().isEmpty() )
@@ -348,7 +377,6 @@ public final class CGraphHopper extends GraphHopper
                 CLogger.error( l_msg.getMessage() );
             throw new IllegalArgumentException( CCommon.getResourceString( this, "grapherror" ) );
         }
-
 
         // get all paths and create routes
         final List<List<EdgeIteratorState>> l_paths = new ArrayList<>();
@@ -376,28 +404,6 @@ public final class CGraphHopper extends GraphHopper
     }
 
     /**
-     * returns the weight object
-     *
-     * @return weight object or null
-     */
-    @SuppressWarnings( "unchecked" )
-    public final <T extends IWeighting> T getWeight( final EWeight p_weight )
-    {
-        return (T) m_weight.get( p_weight );
-    }
-
-    /**
-     * checks if a weight is active
-     *
-     * @param p_weight weight name
-     * @return bool flag if weight is active
-     */
-    public final boolean isActiveWeight( final EWeight p_weight )
-    {
-        return m_weight.containsKey( p_weight ) && ( m_weight.get( p_weight ).isActive() );
-    }
-
-    /**
      * deletes a graph by URL
      *
      * @param p_url URL
@@ -405,6 +411,21 @@ public final class CGraphHopper extends GraphHopper
     public static void deleteGraph( final String p_url )
     {
         FileUtils.deleteQuietly( getGraphLocation( p_url ) );
+    }
+
+    /**
+     * download graph and run converting
+     *
+     * @param p_url download URL
+     * @param p_directory directory in which the graph data is stored
+     */
+    private void downloadGraphAndLoad( final String p_url, final File p_directory )
+    {
+        CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
+
+        this.setGraphHopperLocation( p_directory.getAbsolutePath() );
+        this.setOSMFile( this.downloadOSMData( p_url ).getAbsolutePath() );
+        this.importOrLoad();
     }
 
     /**
@@ -426,6 +447,9 @@ public final class CGraphHopper extends GraphHopper
      */
     private static File getGraphLocation( final String p_url )
     {
+        /**
+         * @bug
+         */
         return CConfiguration.getInstance().getLocation(
                 "root", "graphs", CCommon.getHash( p_url, "MD5" )
         );
@@ -457,45 +481,64 @@ public final class CGraphHopper extends GraphHopper
             CLogger.error( l_exception.getMessage() );
         }
         return null;
-
     }
 
+
     /**
-     * weight names
+     * enum with weighting
      */
     public enum EWeight
     {
         /**
-         * default weight *
+         * default behaviour
          */
         Default( CCommon.getResourceString( EWeight.class, "default" ) ),
         /**
-         * traffic jam weight *
+         * avoid traffic jam
          */
         TrafficJam( CCommon.getResourceString( EWeight.class, "trafficjam" ) ),
         /**
-         * speed-up weight *
+         * avoid forbidden edges
          */
-        SpeedUp( CCommon.getResourceString( EWeight.class, "speedup" ) ),
-        /**
-         * forbidden edges weight *
-         */
-        ForbiddenEdges( CCommon.getResourceString( EWeight.class, "forbiddenedges" ) );
-
+        ForbiddenEdge( CCommon.getResourceString( EWeight.class, "forbiddenedge" ) );
 
         /**
-         * string representation *
+         * name of this distribution type
          */
         private final String m_text;
+
 
         /**
          * ctor
          *
-         * @param p_text text representation
+         * @param p_text language depend name
          */
-        EWeight( final String p_text )
+        private EWeight( final String p_text )
         {
             m_text = p_text;
+        }
+
+
+        /**
+         * returns a weighting object
+         *
+         * @param p_graph graph
+         * @param p_encoder encoder
+         * @return weighting object
+         */
+        public final Weighting get( final CGraphHopper p_graph, final FlagEncoder p_encoder )
+        {
+            switch ( this )
+            {
+                case TrafficJam:
+                    return new CTrafficJam( p_encoder, p_graph );
+
+                case ForbiddenEdge:
+                    return new CForbiddenEdge( p_encoder, p_graph );
+
+                default:
+                    return null;
+            }
         }
 
         @Override
@@ -503,6 +546,7 @@ public final class CGraphHopper extends GraphHopper
         {
             return m_text;
         }
+
     }
 
 }

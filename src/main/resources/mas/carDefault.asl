@@ -41,7 +41,7 @@
     <-
          // get distance to predecessing car
          Predecessor =.. [X|_];
-         mecsim.literal2number(X,Distance);
+         mecsim_literal2number(X,Distance);
 
          // add the speed range
          for ( .range(I, 1, math.ceil( Speed / 10 ) ) )
@@ -68,5 +68,5 @@
 // default behaviour - accelerate
 +!drive
    :    true
-   <- 
+   <-
         !accelerate.

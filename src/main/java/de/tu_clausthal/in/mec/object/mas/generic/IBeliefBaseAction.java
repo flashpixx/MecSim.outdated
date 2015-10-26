@@ -84,21 +84,21 @@ public interface IBeliefBaseAction<T>
      *
      * @param p_mask mask
      */
-    public void remove( final IBeliefBaseMask<T> p_mask );
+    public boolean remove( final IBeliefBaseMask<T> p_mask );
 
     /**
      * removes a literal in the current structure
      *
      * @param p_literal literal
      */
-    public void remove( final ILiteral<T> p_literal );
+    public boolean remove( final ILiteral<T> p_literal );
 
     /**
      * removes mask and literal at the current structure
      *
      * @param p_name name
      */
-    void remove( final String p_name );
+    boolean remove( final String p_name );
 
     /**
      * updates all items

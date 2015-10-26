@@ -168,10 +168,11 @@ public final class CUI extends Application
         final PopOver l_popover = new PopOver( p_node );
 
         l_popover.setDetached( true );
-        l_popover.setDetachedTitle( p_title );
+        l_popover.setTitle( p_title );
         l_popover.setHideOnEscape( true );
         l_popover.setAutoFix( true );
         l_popover.setOnHidden( m_popuphiddenevent );
+        l_popover.setHeaderAlwaysVisible( true );
 
         return l_popover;
     }
@@ -253,7 +254,7 @@ public final class CUI extends Application
                         Screen.getPrimary().getVisualBounds().getWidth() * 0.9, CConfiguration.getInstance().get().<Number>get( "ui/windowwidth" ).doubleValue()
                 ), Math.min(
                         Screen.getPrimary().getVisualBounds().getHeight() * 0.9, CConfiguration.getInstance().get().<Number>get( "ui/windowheight" )
-                                                                                               .doubleValue()
+                                .doubleValue()
                 )
                 )
         );

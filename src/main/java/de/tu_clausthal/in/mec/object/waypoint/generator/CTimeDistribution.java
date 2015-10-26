@@ -51,8 +51,8 @@ public final class CTimeDistribution extends IInspectorDefault implements IGener
      */
     private final Map<String, Object> m_inspect = new HashMap<String, Object>()
     {{
-            putAll( CTimeDistribution.super.inspect() );
-        }};
+        putAll( CTimeDistribution.super.inspect() );
+    }};
 
     /**
      * ctor

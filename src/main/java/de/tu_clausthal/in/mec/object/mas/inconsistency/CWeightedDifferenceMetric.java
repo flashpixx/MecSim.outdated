@@ -98,9 +98,9 @@ public final class CWeightedDifferenceMetric<T extends IAgent> extends IDefaultM
         // get size of union
         final Set<ILiteral<?>> l_set = new HashSet<ILiteral<?>>()
         {{
-                addAll( l_firstLiterals );
-                addAll( l_secondLiterals );
-            }};
+            addAll( l_firstLiterals );
+            addAll( l_secondLiterals );
+        }};
         final int l_unionSize = l_set.size();
 
         // get size of intersection

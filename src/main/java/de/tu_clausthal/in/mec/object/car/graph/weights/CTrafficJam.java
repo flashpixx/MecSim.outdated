@@ -51,6 +51,21 @@ public final class CTrafficJam implements Weighting
      * max speed value *
      */
     private final double m_maxspeed;
+    /**
+     * slope of the sigmoid function
+     */
+    private final double m_slope;
+    /**
+     * saddle point of the sigmoid function
+     *
+     * @note saddle / slope defines the saddle point
+     */
+    private final double m_saddle;
+    /**
+     * maximum jam cost
+     */
+    private final double m_jamcost;
+
 
     /**
      * ctor
@@ -60,10 +75,26 @@ public final class CTrafficJam implements Weighting
      */
     public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {
+        this( p_encoder, p_graph, 8, 6, Integer.MAX_VALUE );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_encoder flag encoder
+     * @param p_graph graph
+     */
+    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph, final double p_slope, final double p_saddle, final double p_jamcost )
+    {
+        m_saddle = p_saddle;
+        m_slope = p_slope;
+        m_jamcost = p_jamcost;
+
         m_graph = p_graph;
         m_encoder = p_encoder;
         m_maxspeed = p_encoder.getMaxSpeed();
     }
+
 
     @Override
     public final double getMinWeight( final double p_weight )
@@ -76,8 +107,11 @@ public final class CTrafficJam implements Weighting
     {
         final CEdge<ICar, ?> l_edge = m_graph.getEdge( p_edge );
 
-        // get normalized density and scale double range in [0, max] with sigmoid function and scale the distance speed ratio
-        return ( p_edge.getDistance() / m_maxspeed ) * ( Double.MAX_VALUE * l_edge.getNumberOfObjects() / l_edge.getEdgeCells() );
+        // get normalized density and scale range in [0, cost] with sigmoid function
+        return ( p_edge.getDistance() / m_maxspeed ) +
+               ( m_jamcost *
+                 1 / ( 1 + Math.exp( -( m_slope * l_edge.getNumberOfObjects() / l_edge.getEdgeCells() - m_saddle ) ) )
+               );
     }
 
     @Override

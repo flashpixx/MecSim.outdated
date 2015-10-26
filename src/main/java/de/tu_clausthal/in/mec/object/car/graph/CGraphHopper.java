@@ -447,9 +447,6 @@ public final class CGraphHopper extends GraphHopper
      */
     private static File getGraphLocation( final String p_url )
     {
-        /**
-         * @bug
-         */
         return CConfiguration.getInstance().getLocation(
                 "root", "graphs", CCommon.getHash( p_url, "MD5" )
         );

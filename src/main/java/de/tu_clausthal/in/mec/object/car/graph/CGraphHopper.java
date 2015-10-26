@@ -27,13 +27,19 @@ package de.tu_clausthal.in.mec.object.car.graph;
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
+import com.graphhopper.reader.DataReader;
+import com.graphhopper.reader.OSMReader;
 import com.graphhopper.routing.Path;
 import com.graphhopper.routing.util.EdgeFilter;
 import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.Weighting;
 import com.graphhopper.routing.util.WeightingMap;
+import com.graphhopper.storage.DataAccess;
+import com.graphhopper.storage.Directory;
+import com.graphhopper.storage.GraphHopperStorage;
 import com.graphhopper.storage.index.QueryResult;
+import com.graphhopper.util.BitUtil;
 import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
@@ -64,11 +70,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * class for create a graph structure of OSM data, the class downloads the data and creates edges and verticies
  *
  * @see http://graphhopper.com/
+ * @todo remove hardcoded ICar interface
  */
 public final class CGraphHopper extends GraphHopper
 {
+    /**
+     * default flag encoder
+     */
     private static final String c_defaultflagencoding = "CAR";
-
+    /**
+     * access of OSM GraphHopper edge mapping
+     */
+    private DataAccess m_edgemapping;
+    /**
+     * bitutil access to calculate OSM edge ID
+     */
+    private BitUtil m_bitutil;
     /**
      * cell size for sampling
      */
@@ -166,24 +183,6 @@ public final class CGraphHopper extends GraphHopper
             l_item.getValue().clear();
     }
 
-    @Override
-    public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
-    {
-        // catch unknown enum type and use the default
-        try
-        {
-            final Weighting l_weight = m_weights.get( EWeight.valueOf( p_map.getWeighting() ) );
-            if ( l_weight != null )
-                return l_weight;
-        }
-        catch ( final IllegalArgumentException l_exception )
-        {
-        }
-
-        return super.createWeighting( p_map, p_encoder );
-    }
-
-
     /**
      * returns a weight object by name
      *
@@ -209,6 +208,27 @@ public final class CGraphHopper extends GraphHopper
         return m_weights.containsKey( p_weight );
     }
 
+    /**
+     * returns OSM edge ID
+     *
+     * @param p_edge edge iterator state
+     * @return ID
+     */
+    public final long getOSMEdgeID( final EdgeIteratorState p_edge )
+    {
+        return this.getOSMEdgeID( p_edge.getEdge() );
+    }
+
+    /**
+     * returns OSM edge ID
+     *
+     * @param p_edge edge object
+     * @return ID
+     */
+    public final long getOSMEdgeID( final CEdge<ICar, ?> p_edge )
+    {
+        return this.getOSMEdgeID( p_edge.getEdgeID() );
+    }
 
     /**
      * returns the closest edge(s) of a geo position
@@ -349,7 +369,6 @@ public final class CGraphHopper extends GraphHopper
         return this.getRoutes( p_start, p_end, EWeight.Default, Integer.MAX_VALUE );
     }
 
-
     /**
      * creates a list of list of edge between two geopositions
      *
@@ -409,6 +428,81 @@ public final class CGraphHopper extends GraphHopper
     public static void deleteGraph( final String p_url )
     {
         FileUtils.deleteQuietly( getGraphLocation( p_url ) );
+    }
+
+    @Override
+    protected DataReader createReader( final GraphHopperStorage p_ghStorage )
+    {
+        return this.initOSMReader( new OSMReader( p_ghStorage )
+        {
+            {
+                m_edgemapping.create( 1000 );
+            }
+
+            @Override
+            protected void storeOsmWayID( final int p_edgeid, final long p_osmid )
+            {
+                super.storeOsmWayID( p_edgeid, p_osmid );
+
+                final long l_pointer = 8L * p_edgeid;
+                m_edgemapping.ensureCapacity( l_pointer + 8L );
+
+                m_edgemapping.setInt( l_pointer, m_bitutil.getIntLow( p_osmid ) );
+                m_edgemapping.setInt( l_pointer + 4, m_bitutil.getIntHigh( p_osmid ) );
+            }
+
+            @Override
+            protected void finishedReading()
+            {
+                super.finishedReading();
+                m_edgemapping.flush();
+            }
+        } );
+    }
+
+    @Override
+    public boolean load( final String p_graphHopperFolder )
+    {
+        final boolean l_loaded = super.load( p_graphHopperFolder );
+
+        // read edge mapping
+        final Directory l_storagedirectory = this.getGraphHopperStorage().getDirectory();
+        m_bitutil = BitUtil.get( l_storagedirectory.getByteOrder() );
+        m_edgemapping = l_storagedirectory.find( "edge_mapping" );
+
+        if ( l_loaded )
+            m_edgemapping.loadExisting();
+
+        return l_loaded;
+    }
+
+    @Override
+    public Weighting createWeighting( final WeightingMap p_map, final FlagEncoder p_encoder )
+    {
+        // catch unknown enum type and use the default
+        try
+        {
+            final Weighting l_weight = m_weights.get( EWeight.valueOf( p_map.getWeighting() ) );
+            if ( l_weight != null )
+                return l_weight;
+        }
+        catch ( final IllegalArgumentException l_exception )
+        {
+        }
+
+        return super.createWeighting( p_map, p_encoder );
+    }
+
+    /**
+     * calculates the OSM ID
+     *
+     * @param p_edgeid integer GraphHopper edge id
+     * @return OSM ID
+     */
+    private final long getOSMEdgeID( final int p_edgeid )
+    {
+        long pointer = 8L * p_edgeid;
+        return m_bitutil.combineIntsToLong( m_edgemapping.getInt( pointer ), m_edgemapping.getInt( pointer + 4L ) );
     }
 
     /**

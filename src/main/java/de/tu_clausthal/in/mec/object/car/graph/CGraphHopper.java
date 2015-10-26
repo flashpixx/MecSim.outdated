@@ -128,13 +128,18 @@ public final class CGraphHopper extends GraphHopper
         this.setCHEnable( false );
         this.setStoreOnFlush( true );
         this.setEncodingManager( new EncodingManager( p_encoding ) );
-        if ( !this.load( l_graphlocation.getAbsolutePath() ) )
-        {
-            CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
 
-            this.setGraphHopperLocation( l_graphlocation.getAbsolutePath() );
-            this.setOSMFile( this.downloadOSMData( l_currentgraphurl ).getAbsolutePath() );
-            this.importOrLoad();
+        try
+        {
+            if ( !this.load( l_graphlocation.getAbsolutePath() ) )
+                this.downloadGraphAndLoad( l_currentgraphurl, l_graphlocation );
+        }
+        catch ( final IllegalStateException l_exception )
+        {
+            CLogger.error( CCommon.getResourceString( this, "initializeerror", l_exception ) );
+
+            FileUtils.deleteQuietly( l_graphlocation );
+            this.downloadGraphAndLoad( l_currentgraphurl, l_graphlocation );
         }
 
 
@@ -183,7 +188,6 @@ public final class CGraphHopper extends GraphHopper
         return super.createWeighting( p_map, p_encoder );
     }
 
-
     /**
      * returns a weight object by name
      *
@@ -208,7 +212,6 @@ public final class CGraphHopper extends GraphHopper
     {
         return m_weights.containsKey( p_weight );
     }
-
 
     /**
      * returns the closest edge(s) of a geo position
@@ -349,7 +352,6 @@ public final class CGraphHopper extends GraphHopper
         return this.getRoutes( p_start, p_end, EWeight.Default, Integer.MAX_VALUE );
     }
 
-
     /**
      * creates a list of list of edge between two geopositions
      *
@@ -412,6 +414,21 @@ public final class CGraphHopper extends GraphHopper
     }
 
     /**
+     * download graph and run converting
+     *
+     * @param p_url download URL
+     * @param p_directory directory in which the graph data is stored
+     */
+    private void downloadGraphAndLoad( final String p_url, final File p_directory )
+    {
+        CLogger.info( CCommon.getResourceString( this, "notloaded" ) );
+
+        this.setGraphHopperLocation( p_directory.getAbsolutePath() );
+        this.setOSMFile( this.downloadOSMData( p_url ).getAbsolutePath() );
+        this.importOrLoad();
+    }
+
+    /**
      * gets the current graph with its download URL from
      * the configuration
      *
@@ -434,7 +451,7 @@ public final class CGraphHopper extends GraphHopper
          * @bug
          */
         return CConfiguration.getInstance().getLocation(
-                "root", "graphs", CCommon.getHash( p_url, "MD5" ) + "_new"
+                "root", "graphs", CCommon.getHash( p_url, "MD5" )
         );
     }
 

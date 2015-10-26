@@ -47,7 +47,7 @@ function Widget( pc_id, pc_name, pa_panel, po_options )
     this.mn_animationTime     = lo_options.animatetime               || 400;
     this.mc_background        = lo_options.background                || "white";
     this.mc_sizeunit          = lo_options.mc_sizeunit               || "px";
-    this.mn_width             = lo_options.width                     || 550;
+    this.mn_width             = lo_options.width                     || 600;
     this.mn_height            = lo_options.height                    || 600;
     this.mn_minWidth          = lo_options.minWidth                  || this.mn_width;
     this.mn_minHeight         = lo_options.minHeight                 || this.mn_height;

@@ -155,7 +155,7 @@ public final class CBootstrap
     /**
      * is called at UI shutdown
      *
-     * @param p_ui
+     * @param p_ui UI object
      */
     public static void beforeStageShutdown( final CUI p_ui )
     {

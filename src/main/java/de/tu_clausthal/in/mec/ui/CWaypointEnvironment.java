@@ -130,6 +130,7 @@ public class CWaypointEnvironment
         put( "id_factorysettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_factorysettingshead" ) );
         put( "label_factory", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_label_factory" ) );
         put( "label_agent", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_agent" ) );
+        put( "label_weight", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_weight" ) );
 
         put( "id_waypointsettingshead", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_id_waypointsettingshead" ) );
         put( "label_waypoint", CCommon.getResourceString( CWaypointEnvironment.class, "ui_wizard_firststep_label_waypoint" ) );

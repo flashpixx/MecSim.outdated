@@ -28,6 +28,7 @@ import com.graphhopper.util.EdgeIteratorState;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
+import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
@@ -78,12 +79,14 @@ public class CDefaultCarFactory extends ICarFactory
      * @param p_acceleration distribution of acceleration
      * @param p_deceleration distribution of deceleration
      * @param p_lingerdistribution distribution of linger-probability
+     * @param p_weight routing weight
      */
     public CDefaultCarFactory( final Double p_speedfactor, final AbstractRealDistribution p_maxspeed,
-            final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution
+            final AbstractRealDistribution p_acceleration, final AbstractRealDistribution p_deceleration, final AbstractRealDistribution p_lingerdistribution,
+            final CGraphHopper.EWeight p_weight
     )
     {
-        super();
+        super( p_weight );
 
         if ( ( p_speedfactor <= 0 ) || ( p_speedfactor > 1 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "speedfactorrange", p_speedfactor ) );

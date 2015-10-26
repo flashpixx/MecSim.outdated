@@ -332,6 +332,7 @@ public class CWaypointEnvironment
                         this.createDistribution( l_data.get( "distribution/acceleration" ) ),
                         this.createDistribution( l_data.get( "distribution/deceleration" ) ),
                         this.createDistribution( l_data.get( "distribution/linger" ) ),
+                        CGraphHopper.EWeight.valueOf( l_data.<String>get( "weight" ) ),
                         l_data.<String>get( "agent/agent" ),
                         EAgentLanguages.valueOf( l_data.<String>get( "agent/type" ) )
                 )
@@ -406,7 +407,9 @@ public class CWaypointEnvironment
                             // deceleration distribution
                             (AbstractRealDistribution) p_data[3],
                             // linger distribution
-                            (AbstractRealDistribution) p_data[4]
+                            (AbstractRealDistribution) p_data[4],
+                            // routing weight
+                            (CGraphHopper.EWeight) p_data[5]
                     );
 
                 case DefaultAgentCarFactory:
@@ -421,10 +424,12 @@ public class CWaypointEnvironment
                             (AbstractRealDistribution) p_data[3],
                             // linger distribution
                             (AbstractRealDistribution) p_data[4],
+                            // routing weight
+                            (CGraphHopper.EWeight) p_data[5],
                             // agent name
-                            (String) p_data[5],
+                            (String) p_data[6],
                             // agent type
-                            (EAgentLanguages) p_data[6]
+                            (EAgentLanguages) p_data[7]
                     );
 
                 default:

@@ -221,7 +221,8 @@ WaypointPreset.prototype.finish = function()
       { id: "radius",       isnumber : true},
       { id: "factory",      isnumber : false},
       { id: "agent",        isnumber : false},
-      { id: "waypoint",     isnumber : false}
+      { id: "waypoint",     isnumber : false},
+      { id: "weight",       isnumber : false}
     ].forEach( function( po_object ) {
         lo[po_object.id] = po_object.isnumber ? parseFloat(jQuery(self.generateSubID(po_object.id, "#")).val()) : jQuery(self.generateSubID(po_object.id, "#")).val();
     });
@@ -256,6 +257,7 @@ WaypointPreset.prototype.finish = function()
         success : function()
         {
             // store configuration persistent
+            // @todo persistent store must be added
             var lo_store = {ui : {web : {waypointpreset : {} } } };
             lo_store.ui.web.waypointpreset[lo.name] = lo;
             self.getElements().mecsim_waypoint.addPreset( lo );

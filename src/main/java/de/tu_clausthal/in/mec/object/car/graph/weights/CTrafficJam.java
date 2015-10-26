@@ -47,6 +47,10 @@ public final class CTrafficJam implements Weighting
      * encoder
      */
     private final FlagEncoder m_encoder;
+    /**
+     * max speed value *
+     */
+    private final double m_maxspeed;
 
     /**
      * ctor
@@ -58,19 +62,22 @@ public final class CTrafficJam implements Weighting
     {
         m_graph = p_graph;
         m_encoder = p_encoder;
+        m_maxspeed = p_encoder.getMaxSpeed();
     }
 
     @Override
     public final double getMinWeight( final double p_weight )
     {
-        return 0;
+        return p_weight / m_maxspeed;
     }
 
     @Override
     public double calcWeight( final EdgeIteratorState p_edge, final boolean p_reverse, final int p_nextprevedgeid )
     {
         final CEdge<ICar, ?> l_edge = m_graph.getEdge( p_edge );
-        return Double.MAX_VALUE * (double) l_edge.getNumberOfObjects() / l_edge.getEdgeCells();
+
+        // get normalized density and scale double range in [0, max] with sigmoid function and scale the distance speed ratio
+        return ( p_edge.getDistance() / m_maxspeed ) * ( Double.MAX_VALUE * l_edge.getNumberOfObjects() / l_edge.getEdgeCells() );
     }
 
     @Override

@@ -52,6 +52,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,11 +65,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * class for create a graph structure of OSM data, the class downloads the data and creates edges and verticies
  *
  * @see http://graphhopper.com/
+ * @todo remove ICar interface
  */
 public final class CGraphHopper extends GraphHopper
 {
     private static final String c_defaultflagencoding = "CAR";
-
     /**
      * cell size for sampling
      */
@@ -287,12 +288,9 @@ public final class CGraphHopper extends GraphHopper
      *
      * @return number of cars on the graph
      */
-    public final synchronized int getNumberOfObjects()
+    public final int getNumberOfObjects()
     {
-        int l_count = 0;
-        for ( final CEdge<ICar, ?> l_item : m_edgecell.values() )
-            l_count += l_item.getNumberOfObjects();
-        return l_count;
+        return m_edgecell.values().parallelStream().mapToInt( i -> i.getNumberOfObjects() ).sum();
     }
 
     /**
@@ -411,6 +409,16 @@ public final class CGraphHopper extends GraphHopper
     public static void deleteGraph( final String p_url )
     {
         FileUtils.deleteQuietly( getGraphLocation( p_url ) );
+    }
+
+    /**
+     * returns the edge collection
+     *
+     * @return collection
+     */
+    public final Collection<CEdge<ICar, ?>> getEdgeCollection()
+    {
+        return m_edgecell.values();
     }
 
     /**

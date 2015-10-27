@@ -396,7 +396,7 @@ public final class CSimulation
 
         m_mainloopthread = new Thread( m_mainloop );
         m_mainloopthread.setDaemon( true );
-        m_mainloopthread.setName( "simulation" );
+        m_mainloopthread.setName( "Simulation Loop" );
         m_mainloopthread.start();
     }
 

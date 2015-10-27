@@ -46,6 +46,8 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -111,6 +113,9 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
         } )
             m_mimetype.registerMimeDetector( l_detector );
 
+
+        // create own thread-pool and start server
+        this.setAsyncRunner( new CWorkerPool() );
         try
         {
             this.start();
@@ -485,4 +490,23 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
         return p_response;
     }
 
+
+    /**
+     * runner with performance optimizing,
+     * this runner uses a thread-stealing pool
+     * to handle request
+     */
+    private static final class CWorkerPool implements AsyncRunner
+    {
+        /**
+         * thread-pool for handling webserver request
+         */
+        private final ExecutorService m_pool = Executors.newCachedThreadPool();
+
+        @Override
+        public void exec( final Runnable p_runnable )
+        {
+            m_pool.submit( p_runnable );
+        }
+    }
 }

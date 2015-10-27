@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 
 /**
@@ -225,10 +226,11 @@ public final class CMainLoop implements Runnable
      */
     protected final void invokeTasks( final ILayer p_layer, final Collection<ISteppable> p_tasksource ) throws InterruptedException
     {
-        final Collection<Callable<Object>> l_tasklist = new LinkedList<>();
-        for ( final ISteppable l_object : p_tasksource )
-            l_tasklist.add( createTask( m_simulationcount, l_object, p_layer ) );
-        m_pool.invokeAll( l_tasklist );
+        m_pool.invokeAll(
+                p_tasksource.parallelStream().map(
+                        i -> createTask( m_simulationcount, i, p_layer )
+                ).collect( Collectors.toCollection( () -> new LinkedList<>() ) )
+        );
     }
 
     /**
@@ -239,6 +241,7 @@ public final class CMainLoop implements Runnable
      * @param p_layer layer
      * @return runnable object
      */
+    @SuppressWarnings( "unchecked" )
     private static Callable<Object> createTask( final int p_iteration, final ISteppable p_object, final ILayer p_layer )
     {
         if ( p_object instanceof IVoidSteppable )
@@ -263,9 +266,7 @@ public final class CMainLoop implements Runnable
         final Collection<Callable<Object>> l_tasks = new LinkedList<>();
 
         l_tasks.add( new CVoidSteppable( m_simulationcount, CSimulation.getInstance().getMessageSystem(), null ) );
-        for ( final ILayer l_layer : p_layer )
-            if ( l_layer.isActive() )
-                l_tasks.add( createTask( m_simulationcount, l_layer, null ) );
+        p_layer.stream().filter( i -> i.isActive() ).map( i -> createTask( m_simulationcount, i, null ) ).forEachOrdered( l_tasks::add );
 
         m_pool.invokeAll( l_tasks );
     }
@@ -274,29 +275,27 @@ public final class CMainLoop implements Runnable
      * process layer object
      *
      * @param p_layer ordered layer list
-     * @throws InterruptedException thrown on thread error
      * @note only multi-, evaluate- & network layer can store other objects
      */
     @IBenchmark
-    private void processObjects( final List<ILayer> p_layer ) throws InterruptedException
+    @SuppressWarnings( "unchecked" )
+    private void processObjects( final List<ILayer> p_layer )
     {
-        for ( final ILayer l_layer : p_layer )
-        {
-            if ( ( !l_layer.isActive() ) || ( l_layer instanceof ISingleLayer ) || ( l_layer instanceof ISingleEvaluateLayer ) )
-                continue;
+        p_layer.stream().filter( i -> i.isActive() && ( !( i instanceof ISingleLayer ) ) && ( !( i instanceof ISingleEvaluateLayer ) ) ).forEachOrdered( i -> {
 
-            if ( l_layer instanceof IMultiLayer )
+            try
             {
-                this.invokeTasks( l_layer, (IMultiLayer) l_layer );
-                continue;
-            }
+                if ( i instanceof IMultiLayer<?> )
+                    this.invokeTasks( i, (IMultiLayer) i );
 
-            if ( l_layer instanceof IMultiEvaluateLayer )
-            {
-                this.invokeTasks( l_layer, (IMultiEvaluateLayer) l_layer );
-                continue;
+                if ( i instanceof IMultiEvaluateLayer<?> )
+                    this.invokeTasks( i, (IMultiEvaluateLayer) i );
             }
-        }
+            catch ( final InterruptedException l_exception )
+            {
+                CLogger.error( l_exception );
+            }
+        } );
     }
 
 }

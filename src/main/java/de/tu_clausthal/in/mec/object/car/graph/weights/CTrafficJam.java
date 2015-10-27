@@ -75,7 +75,7 @@ public final class CTrafficJam implements Weighting
      */
     public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph )
     {
-        this( p_encoder, p_graph, 8, 6, Integer.MAX_VALUE );
+        this( p_encoder, p_graph, Integer.MAX_VALUE, 8, 6 );
     }
 
     /**
@@ -83,8 +83,23 @@ public final class CTrafficJam implements Weighting
      *
      * @param p_encoder flag encoder
      * @param p_graph graph
+     * @param p_jamcost maximal cost if traffic jam exists
      */
-    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph, final double p_slope, final double p_saddle, final double p_jamcost )
+    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph, final double p_jamcost )
+    {
+        this( p_encoder, p_graph, p_jamcost, 8, 6 );
+    }
+
+    /**
+     * ctor
+     *
+     * @param p_encoder flag encoder
+     * @param p_graph graph
+     * @param p_jamcost maximal cost if traffic jam exists
+     * @param p_slope slope of the sigmoid function
+     * @param p_saddle saddle point of the sigmoid function
+     */
+    public CTrafficJam( final FlagEncoder p_encoder, final CGraphHopper p_graph, final double p_jamcost, final double p_slope, final double p_saddle )
     {
         m_saddle = p_saddle;
         m_slope = p_slope;

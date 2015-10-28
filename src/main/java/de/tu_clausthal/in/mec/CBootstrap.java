@@ -186,7 +186,11 @@ public final class CBootstrap
      */
     public static void onApplicationClose()
     {
+        // graceful shutdown thread components
         CSummary.getInstance().store();
+        CSimulation.getInstance().shutdown();
+        if ( CSimulation.getInstance().getStorage().exists( "server" ) )
+            CSimulation.getInstance().getStorage().<CServer>get( "server" ).stop();
 
         // delete configuration directory
         if ( CConfiguration.getInstance().get().<Boolean>get( "deleteonshutdown" ) )

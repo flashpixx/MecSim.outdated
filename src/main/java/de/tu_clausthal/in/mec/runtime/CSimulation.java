@@ -212,6 +212,7 @@ public final class CSimulation
         this.callLayerStart();
         m_mainloop.resume( p_steps );
         m_mainloopthread.join();
+        m_mainloop.stop();
 
         m_mainloopthread = null;
         m_runs++;
@@ -231,6 +232,16 @@ public final class CSimulation
         this.callLayerStart();
         m_mainloop.resume();
         m_runs++;
+    }
+
+    /**
+     * shutdown the main loop
+     */
+    public final void shutdown()
+    {
+        if ( m_mainloop != null )
+            m_mainloop.stop();
+        ;
     }
 
     /**

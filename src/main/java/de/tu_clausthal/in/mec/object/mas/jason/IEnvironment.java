@@ -34,7 +34,6 @@ import de.tu_clausthal.in.mec.object.mas.jason.action.CBeliefRemove;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CInternalEmpty;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CLiteral2Number;
 import de.tu_clausthal.in.mec.object.mas.jason.action.CRandom;
-import de.tu_clausthal.in.mec.runtime.ISerializable;
 import de.tu_clausthal.in.mec.ui.web.CBrowser;
 import jason.asSemantics.Agent;
 import jason.asSemantics.InternalAction;
@@ -45,7 +44,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,8 +61,7 @@ import java.util.logging.Level;
  * binding https://sourceforge.net/p/jason/svn/1817/tree/trunk/src/jason/architecture/MindInspectorWeb.java
  * @see http://jason.sourceforge.net/
  */
-@SuppressWarnings( "serial" )
-public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements ISerializable
+public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>>
 {
 
     /**
@@ -200,25 +197,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         AGENTTEMPLATEFACTORY.clear();
     }
 
-    /**
-     * @bug UI frame
-     */
-    @Override
-    public final void onDeserializationComplete()
-    {
-        //this.setFrame( CSimulation.getInstance().getUIServer() );
-    }
-
-    /**
-     * @bug UI frame
-     */
-    @Override
-    public final void onDeserializationInitialization()
-    {
-        //if ( CSimulation.getInstance().hasUI() )
-        //    CSimulation.getInstance().getUIServer().removeWidget( "Jason Mindinspector" );
-    }
-
     @Override
     public final void release()
     {
@@ -233,21 +211,6 @@ public abstract class IEnvironment<T> extends IMultiLayer<CAgent<T>> implements 
         // mindinspector needs to load if there exists agents
         if ( ( m_mindinspector != null ) && ( m_data.size() > 0 ) )
             m_mindinspector.load( "http://localhost:3272" );
-    }
-
-    /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws exception on loading the data
-     * @throws ClassNotFoundException throws exception on deserialization error
-     * @bug UI frame
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
-    {
-        p_stream.defaultReadObject();
-
-        //this.setFrame( CSimulation.getInstance().getUIServer() );
     }
 
 

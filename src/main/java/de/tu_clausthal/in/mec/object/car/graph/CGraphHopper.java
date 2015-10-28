@@ -64,8 +64,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * class for create a graph structure of OSM data, the class downloads the data and creates edges and verticies
  *
- * @see http://graphhopper.com/
  * @todo remove ICar interface
+ * @see http://graphhopper.com/
  */
 public final class CGraphHopper extends GraphHopper
 {

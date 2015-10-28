@@ -25,7 +25,6 @@
 package de.tu_clausthal.in.mec.object;
 
 import de.tu_clausthal.in.mec.runtime.CSimulation;
-import de.tu_clausthal.in.mec.runtime.ISerializable;
 import de.tu_clausthal.in.mec.runtime.ISteppable;
 import de.tu_clausthal.in.mec.runtime.IVoidSteppable;
 import de.tu_clausthal.in.mec.ui.COSMViewer;
@@ -46,8 +45,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  *
  * @tparam T object type of the layer
  */
-@SuppressWarnings( "serial" )
-public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer, ISerializable
+public abstract class IMultiLayer<T extends ISteppable & Painter> implements Painter<COSMViewer>, Collection<T>, IViewableLayer, IVoidSteppable, ILayer
 {
     /**
      * flag for activity
@@ -125,25 +123,6 @@ public abstract class IMultiLayer<T extends ISteppable & Painter> implements Pai
     {
         m_visible = p_visible;
         this.repaint();
-    }
-
-    @Override
-    public void onDeserializationComplete()
-    {
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter().addPainter(
-                    (Painter) this
-            );
-    }
-
-    @Override
-    public void onDeserializationInitialization()
-    {
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter()
-                                                                                                           .removePainter(
-                                                                                                                   (Painter) this
-                                                                                                           );
     }
 
     @Override

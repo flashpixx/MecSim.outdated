@@ -30,7 +30,6 @@ import de.tu_clausthal.in.mec.object.ILayer;
 import org.apache.commons.collections4.MultiMap;
 import org.apache.commons.collections4.map.MultiValueMap;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,8 +42,7 @@ import java.util.Set;
 /**
  * world layer collection
  */
-@SuppressWarnings( "serial" )
-public final class CWorld implements Map<String, ILayer>, Serializable
+public final class CWorld implements Map<String, ILayer>
 {
     /**
      * map with layer

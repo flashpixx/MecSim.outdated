@@ -27,14 +27,11 @@ package de.tu_clausthal.in.mec.object.car.drivemodel;
 import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.car.ICar;
 
-import java.io.Serializable;
-
 
 /**
  * drive interface for driving models
  */
-@SuppressWarnings( "serial" )
-public interface IDriveModel extends Serializable
+public interface IDriveModel
 {
 
     /**

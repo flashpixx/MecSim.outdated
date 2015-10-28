@@ -28,7 +28,6 @@ import de.tu_clausthal.in.mec.ui.IInspector;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -38,8 +37,7 @@ import java.util.Set;
  *
  * @tparam T any object type
  */
-@SuppressWarnings( "serial" )
-public interface IFactory<T> extends IInspector, Serializable
+public interface IFactory<T> extends IInspector
 {
 
     /**

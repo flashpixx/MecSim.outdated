@@ -30,15 +30,9 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.car.ICar;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
 import de.tu_clausthal.in.mec.object.mas.EAgentLanguages;
-import de.tu_clausthal.in.mec.object.mas.jason.IEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.distribution.AbstractRealDistribution;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,57 +125,4 @@ public final class CAgentCarFactory extends CDefaultCarFactory
         return null;
     }
 
-    /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws java.io.IOException throws exception on reading
-     * @throws ClassNotFoundException throws on deserialization
-     * @bug not working
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
-    {
-        /*
-        p_stream.defaultReadObject();
-
-        // read the ASL file from the stream
-        final String l_aslname = m_agent;
-        final String l_asldata = (String) p_stream.readObject();
-        File l_output = IEnvironment.getAgentFile( l_aslname );
-
-        try
-        {
-            if ( !l_output.exists() )
-                FileUtils.write( l_output, l_asldata );
-            else if ( !CCommon.getHash( l_output, "MD5" ).equals( CCommon.getHash( l_asldata, "MD5" ) ) )
-            {
-                l_output = IEnvironment.getAgentFile( FilenameUtils.getBaseName( l_aslname ) + "_0" );
-                for ( int i = 1; l_output.exists(); i++ )
-                {
-                    m_agent = FilenameUtils.getBaseName( l_aslname ) + "_" + i;
-                    l_output = IEnvironment.getAgentFile( m_agent );
-                }
-                FileUtils.write( l_output, l_asldata );
-            }
-        }
-        catch ( final Exception l_exception )
-        {
-        }
-        */
-    }
-
-    /**
-     * write call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws the exception on loading data
-     * @bug incomplete
-     */
-    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
-    {
-        p_stream.defaultWriteObject();
-
-        // write the ASL file to the stream
-        p_stream.writeObject( new String( Files.readAllBytes( Paths.get( IEnvironment.getAgentFile( m_agent ).toString() ) ) ) );
-    }
 }

@@ -10,6 +10,7 @@
     "jquery-steps" : "~1.1.0",
     "spectrum" : "~1.7.1",
     "jqwidgets" : "*",
-    "webui-popover" : "~1.1.6"
+    "webui-popover" : "~1.1.6",
+    "reconnecting-websocket" : "https://github.com/joewalnes/reconnecting-websocket.git#283894e4e08ce886c8997ac639ce6f5dc77e2e26"
   }
 }

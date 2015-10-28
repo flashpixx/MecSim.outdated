@@ -26,14 +26,11 @@ package de.tu_clausthal.in.mec.object;
 
 import de.tu_clausthal.in.mec.runtime.ISteppable;
 
-import java.io.Serializable;
-
 
 /**
  * interface of the layer
  */
-@SuppressWarnings( "serial" )
-public interface ILayer extends ISteppable, Serializable
+public interface ILayer extends ISteppable
 {
 
     /**

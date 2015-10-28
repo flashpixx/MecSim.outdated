@@ -26,15 +26,13 @@ package de.tu_clausthal.in.mec.runtime.message;
 
 import de.tu_clausthal.in.mec.common.CPath;
 
-import java.io.Serializable;
-
 
 /**
  * message interface to define a event message
  *
  * @tparam T type of the message data
  */
-public interface IMessage<T> extends Serializable
+public interface IMessage<T>
 {
 
     /**

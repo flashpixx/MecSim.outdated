@@ -753,7 +753,7 @@ public final class CConfiguration
     /**
      * class type check
      */
-    protected class CClassType extends ICheck<Object>
+    private static final class CClassType extends ICheck<Object>
     {
         /**
          * class type *
@@ -789,7 +789,7 @@ public final class CConfiguration
     /**
      * collection empty check
      */
-    protected class CCollectionNotEmpty extends ICheck<Collection>
+    private static final class CCollectionNotEmpty extends ICheck<Collection>
     {
         @Override
         public boolean isCorrect( final Collection p_value )
@@ -809,7 +809,7 @@ public final class CConfiguration
      *
      * @tparam T type of the collection values
      */
-    protected class CContains<T> extends ICheck<T>
+    private static final class CContains<T> extends ICheck<T>
     {
         /**
          * collection *
@@ -842,7 +842,7 @@ public final class CConfiguration
     /**
      * numeric greater check
      */
-    protected class CGreater extends ICheck<Number>
+    private static final class CGreater extends ICheck<Number>
     {
         /**
          * bound
@@ -875,7 +875,7 @@ public final class CConfiguration
     /**
      * numeric in range check
      */
-    protected class CInRange extends ICheck<Number>
+    private static final class CInRange extends ICheck<Number>
     {
         /**
          * lower bound *
@@ -914,7 +914,7 @@ public final class CConfiguration
     /**
      * string not-allowed char check
      */
-    protected class CStringNotContains extends ICheck<String>
+    private static final class CStringNotContains extends ICheck<String>
     {
         /**
          * string with non-allowed chars
@@ -951,7 +951,7 @@ public final class CConfiguration
     /**
      * string empty check
      */
-    protected class CStringNotEmpty extends ICheck<String>
+    private static final class CStringNotEmpty extends ICheck<String>
     {
         @Override
         public boolean isCorrect( final String p_value )
@@ -971,7 +971,7 @@ public final class CConfiguration
      *
      * @tparam T parameter of the check
      */
-    protected abstract class ICheck<T>
+    private static abstract class ICheck<T>
     {
         /**
          * check of a correct value
@@ -1001,7 +1001,7 @@ public final class CConfiguration
      *
      * @note Java default encoding for property files is ISO-Latin-1
      */
-    protected class UTF8Control extends ResourceBundle.Control
+    private static final class UTF8Control extends ResourceBundle.Control
     {
 
         public final ResourceBundle newBundle( final String p_basename, final Locale p_locale, final String p_format, final ClassLoader p_loader,

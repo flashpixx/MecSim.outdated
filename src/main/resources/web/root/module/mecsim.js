@@ -43,13 +43,14 @@ var MecSim = (function (px_modul) {
      **/
     px_modul.websocket = function( pc_wspath, po_options )
     {
-        var lo_options   = po_options || {};
+        var lo_options = po_options || {};
+        var lc_wspath  = pc_wspath;
         var lo_socket;
 
         if ((pc_wspath.startsWith("ws://")) || (pc_wspath.startsWith("wss://")))
-            lo_socket = new WebSocket(pc_wspath);
+            lo_socket = new ReconnectingWebSocket(pc_wspath);
         else
-            lo_socket = new WebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (pc_wspath.startsWith("/") ? pc_wspath : location.pathname + pc_wspath ) );
+            lo_socket = new ReconnectingWebSocket( ((location.protocol === "https:") ? "wss://" : "ws://") + location.hostname + (((location.port != 80) && (location.port != 443)) ? ":" + location.port : "") + (pc_wspath.startsWith("/") ? pc_wspath : location.pathname + pc_wspath ) );
 
         if (lo_socket !== undefined)
         {

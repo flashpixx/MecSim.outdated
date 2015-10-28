@@ -29,20 +29,13 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import de.tu_clausthal.in.mec.CLogger;
 import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.object.ILayer;
-import de.tu_clausthal.in.mec.object.IMultiEvaluateLayer;
-import de.tu_clausthal.in.mec.object.IMultiLayer;
 import de.tu_clausthal.in.mec.object.world.CWorld;
 import de.tu_clausthal.in.mec.runtime.core.CMainLoop;
 import de.tu_clausthal.in.mec.runtime.message.CMessageSystem;
 import de.tu_clausthal.in.mec.ui.IViewableLayer;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -52,7 +45,6 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * singleton object to performtemplate the simulation
  */
-@SuppressWarnings( "serial" )
 public final class CSimulation
 {
 
@@ -181,49 +173,10 @@ public final class CSimulation
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
-        try (
-                FileInputStream l_stream = new FileInputStream( p_input );
-                ObjectInputStream l_input = new ObjectInputStream( l_stream );
-        )
-        {
+        // reset all layer
+        this.reset();
 
-            for ( final ILayer l_layer : m_world.values() )
-            {
-                if ( l_layer instanceof ISerializable )
-                    ( (ISerializable) l_layer ).onDeserializationInitialization();
-
-                if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IMultiEvaluateLayer ) )
-                    for ( final ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
-                        if ( l_item instanceof ISerializable )
-                            ( (ISerializable) l_item ).onDeserializationInitialization();
-            }
-
-            //CConfiguration.getInstance().get().RoutingMap = (CConfiguration.Data.RoutingMap) l_input.readObject();
-            m_world.clear();
-            m_world = (CWorld) l_input.readObject();
-
-            for ( final ILayer l_layer : m_world.values() )
-            {
-                if ( l_layer instanceof ISerializable )
-                    ( (ISerializable) l_layer ).onDeserializationComplete();
-
-                if ( ( l_layer instanceof IMultiLayer ) || ( l_layer instanceof IMultiEvaluateLayer ) )
-                    for ( final ISteppable l_item : ( (Collection<ISteppable>) l_layer ) )
-                        if ( l_item instanceof ISerializable )
-                            ( (ISerializable) l_item ).onDeserializationComplete();
-            }
-
-            // reset all layer
-            this.reset();
-
-            CLogger.info( CCommon.getResourceString( this, "load", p_input ) );
-
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-            throw new IOException( l_exception.getMessage() );
-        }
+        CLogger.info( CCommon.getResourceString( this, "load", p_input ) );
     }
 
     /**
@@ -315,22 +268,7 @@ public final class CSimulation
         if ( this.isRunning() )
             throw new IllegalStateException( CCommon.getResourceString( this, "running" ) );
 
-
-        try (
-                FileOutputStream l_stream = new FileOutputStream( p_output );
-                ObjectOutputStream l_output = new ObjectOutputStream( l_stream );
-        )
-        {
-            //l_output.writeObject( CConfiguration.getInstance().get().RoutingMap );
-            l_output.writeObject( m_world );
-
-            CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
-        }
-        catch ( final Exception l_exception )
-        {
-            CLogger.error( l_exception.getMessage() );
-            throw new IOException( l_exception.getMessage() );
-        }
+        CLogger.info( CCommon.getResourceString( this, "store", p_output ) );
     }
 
     /**
@@ -395,6 +333,8 @@ public final class CSimulation
             return;
 
         m_mainloopthread = new Thread( m_mainloop );
+        m_mainloopthread.setDaemon( true );
+        m_mainloopthread.setName( "Simulation Loop" );
         m_mainloopthread.start();
     }
 

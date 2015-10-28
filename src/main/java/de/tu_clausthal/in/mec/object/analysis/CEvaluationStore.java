@@ -30,6 +30,7 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import de.tu_clausthal.in.mec.object.ILayer;
 import de.tu_clausthal.in.mec.object.car.CCarJasonAgentLayer;
+import de.tu_clausthal.in.mec.object.car.CCarLayer;
 import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.object.mas.generic.ILiteral;
 import de.tu_clausthal.in.mec.object.mas.inconsistency.CInconsistencyLayer;
@@ -66,6 +67,10 @@ public final class CEvaluationStore extends IDatabase
      * table name of beliefbase table
      */
     private static String c_tablebeliefbase = "beliefbase";
+    /**
+     * table name of fundamental diagram
+     */
+    private static String c_fundamentaldata = "fundamentaldata";
 
 
     /**
@@ -81,6 +86,7 @@ public final class CEvaluationStore extends IDatabase
             m_data.add( new CCollectorInconsistency() );
             m_data.add( new CCollectorBelief() );
             m_data.add( new CCollectorAgent() );
+            m_data.add( new CCollectorFundamentalDiagram() );
         }
         catch ( final SQLException l_exception )
         {
@@ -92,20 +98,31 @@ public final class CEvaluationStore extends IDatabase
 
         this.createTable(
                 c_tableagent,
-                this.createTableFieldList( "agentsource varchar(256) not null", "agentname varchar(256) not null", "agentcycle bigint not null" ),
-                this.createPrimaryKey()
+                this.createTableFieldList(
+                        "agenthash int not null", "agentsource varchar(256) not null", "agentname varchar(256) not null", "agentcycle bigint not null" ),
+                this.createPrimaryKey( "agenthash" )
         );
 
         this.createTable(
                 c_tableinconsistency,
-                this.createTableFieldList( "value double not null" ),
-                this.createPrimaryKey()
+                this.createTableFieldList( "agenthash int not null", "value double not null" ),
+                this.createPrimaryKey( "agenthash" )
         );
 
         this.createTable(
                 c_tablebeliefbase,
-                this.createTableFieldList( "beliefhash int not null", "belief longtext not null" ),
-                this.createPrimaryKey( "beliefhash" )
+                this.createTableFieldList( "agenthash int not null", "beliefhash int not null", "belief longtext not null" ),
+                this.createPrimaryKey( "agenthash", "beliefhash" )
+        );
+
+        this.createTable(
+                c_fundamentaldata,
+                this.createTableFieldList(
+                        "edgeid bigint unsigned not null", "traffic_power double unsigned not null", "traffic_density double unsigned not null",
+                        "harmonic_mean_speed double unsigned not null", "average_speed double unsigned not null"
+                ),
+                this.createPrimaryKey( "edgeid" )
+
         );
     }
 
@@ -129,7 +146,6 @@ public final class CEvaluationStore extends IDatabase
                         "process bigint not null",
                         "run int unsigned not null",
                         "step int unsigned not null",
-                        "agenthash int not null"
                 }, p_fields
         );
     }
@@ -150,7 +166,6 @@ public final class CEvaluationStore extends IDatabase
                             add( "process" );
                             add( "run" );
                             add( "step" );
-                            add( "agenthash" );
                             addAll( Arrays.asList( p_fields ) );
                         }}
                 )
@@ -354,4 +369,69 @@ public final class CEvaluationStore extends IDatabase
 
         }
     }
+
+
+    /**
+     * worker to get data for fundamental diagram
+     */
+    protected class CCollectorFundamentalDiagram extends IDatabase.CWorker
+    {
+        /**
+         * prepare statement
+         **/
+        private final PreparedStatement m_statement = CEvaluationStore.this.createInsertStatement( c_fundamentaldata, 9 );
+
+
+        /**
+         * ctor
+         *
+         * @throws SQLException preparing throws exceptions
+         */
+        public CCollectorFundamentalDiagram() throws SQLException
+        {
+        }
+
+        @Override
+        public void step( final int p_currentstep, final ILayer p_layer ) throws Exception
+        {
+            CEvaluationStore.this.updateInsertStatement( m_statement, p_currentstep );
+            final CCarLayer l_cars = CSimulation.getInstance().getWorld().<CCarLayer>getTyped( "Cars" );
+
+            l_cars.getGraph().getEdgeCollection().parallelStream().filter( i -> i.getNumberOfObjects() > 0 ).forEach(
+                    ( l_edge ) ->
+                    {
+                        final double l_carcount = l_edge.getNumberOfObjects();
+
+                        // calculate sum over all speeds for averages
+                        final double l_speedsum = l_edge.getCellList().stream().filter( i -> i != null ).mapToDouble( i -> i.getCurrentSpeed() ).sum();
+                        final double l_speedsuminvert = l_edge.getCellList().stream().filter( i -> i != null ).mapToDouble( i -> 1.0 / i.getCurrentSpeed() )
+                                                              .sum();
+
+                        try
+                        {
+                            m_statement.setObject( 5, l_edge.getEdgeID(), Types.BIGINT );
+
+                            // traffic power = cars / time (in seconds)
+                            m_statement.setDouble( 6, l_carcount / l_cars.getUnitConvert().getTime() );
+                            // traffic density = cars / distance (in meter)
+                            m_statement.setDouble( 7, l_carcount / l_edge.getDistance() );
+
+                            // harmonic mean speed = sum car speed / sum ( 1 / car speed )
+                            m_statement.setDouble( 8, l_speedsum / l_speedsuminvert );
+                            // average speed
+                            m_statement.setDouble( 9, l_speedsum / l_carcount );
+
+                            m_statement.execute();
+
+                        }
+                        catch ( final SQLException l_exception )
+                        {
+                            CLogger.error( l_exception );
+                        }
+
+                    }
+            );
+        }
+    }
+
 }

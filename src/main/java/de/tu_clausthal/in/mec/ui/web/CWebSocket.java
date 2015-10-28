@@ -92,14 +92,16 @@ public final class CWebSocket extends WebSocket
                         {
                             try
                             {
-                                CWebSocket.this.ping( "".getBytes() );
+                                CWebSocket.this.ping( "ping".getBytes() );
                             }
                             catch ( final IOException l_exception )
                             {
                                 CLogger.error( l_exception );
+                                m_heartbeat.cancel();
+                                m_heartbeat.purge();
                             }
                         }
-                    }, p_heartbeat * c_millisecond
+                    }, p_heartbeat * c_millisecond, p_heartbeat * c_millisecond
             );
         }
 

@@ -58,7 +58,7 @@ public final class CMainLoop implements Runnable
     /**
      * thread-pool for handling all objects
      */
-    private ExecutorService m_pool = Executors.newWorkStealingPool();
+    private final ExecutorService m_pool = Executors.newWorkStealingPool();
     /**
      * number of threads for running *
      */

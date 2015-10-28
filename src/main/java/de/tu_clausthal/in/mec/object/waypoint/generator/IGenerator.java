@@ -26,14 +26,11 @@ package de.tu_clausthal.in.mec.object.waypoint.generator;
 
 import de.tu_clausthal.in.mec.ui.IInspector;
 
-import java.io.Serializable;
-
 
 /**
  * distribution interface to define the amount of objects that should be generated
  */
-@SuppressWarnings( "serial" )
-public interface IGenerator extends IInspector, Serializable
+public interface IGenerator extends IInspector
 {
 
     /**

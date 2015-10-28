@@ -35,8 +35,10 @@ import org.apache.commons.math3.exception.NonMonotonicSequenceException;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,7 +75,7 @@ public final class CEdge<N, T> implements Comparable<CEdge>
     /**
      * length of the edge (distance)
      */
-    private final double m_edgelength;
+    private final double m_edgedistance;
     /**
      * set with listener
      */
@@ -92,12 +94,12 @@ public final class CEdge<N, T> implements Comparable<CEdge>
     public CEdge( final EdgeIteratorState p_edgestate, final int p_cellsize )
     {
         m_edgeid = p_edgestate.getEdge();
-        m_edgelength = p_edgestate.getDistance();
+        m_edgedistance = p_edgestate.getDistance();
 
 
         final ArrayList<N> l_initlist = new ArrayList<>();
         for ( int i = 0; i < (int) Math.ceil(
-                m_edgelength / p_cellsize
+                m_edgedistance / p_cellsize
         ); i++
                 )
             l_initlist.add( null );
@@ -140,6 +142,16 @@ public final class CEdge<N, T> implements Comparable<CEdge>
     {
         m_listener.addAll( p_listener );
         return this;
+    }
+
+    /**
+     * returns the edge distance
+     *
+     * @return distance in meter
+     */
+    public final double getDistance()
+    {
+        return m_edgedistance;
     }
 
     /**
@@ -396,6 +408,16 @@ public final class CEdge<N, T> implements Comparable<CEdge>
         // call listener
         for ( final IAction l_action : m_listener )
             l_action.actionPerformed( this, p_position, p_object );
+    }
+
+    /**
+     * returns cell elements as list
+     *
+     * @return list
+     */
+    public final List<N> getCellList()
+    {
+        return Arrays.asList( m_cells );
     }
 
     /**

@@ -31,17 +31,8 @@ import de.tu_clausthal.in.mec.object.car.drivemodel.CAgentNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.CNagelSchreckenberg;
 import de.tu_clausthal.in.mec.object.car.drivemodel.IDriveModel;
 import de.tu_clausthal.in.mec.object.car.graph.CGraphHopper;
-import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.IReturnSteppableTarget;
-import de.tu_clausthal.in.mec.runtime.ISerializable;
-import de.tu_clausthal.in.mec.ui.COSMViewer;
-import de.tu_clausthal.in.mec.ui.CSwingWrapper;
-import de.tu_clausthal.in.mec.ui.CUI;
-import org.jxmapviewer.painter.Painter;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,10 +41,10 @@ import java.util.List;
 /**
  * defines the layer for cars
  */
-public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>, ISerializable
+public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppableTarget<ICar>
 {
     /**
-     * data structure - not serializable
+     * data structure
      */
     private final transient List<ICar> m_data = new LinkedList<>();
     /**
@@ -93,25 +84,6 @@ public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppab
     public final int getCalculationIndex()
     {
         return 200;
-    }
-
-    @Override
-    public final void onDeserializationComplete()
-    {
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter().addPainter(
-                    (Painter) this
-            );
-    }
-
-    @Override
-    public final void onDeserializationInitialization()
-    {
-        if ( CSimulation.getInstance().getStorage().exists() )
-            CSimulation.getInstance().getStorage().<CUI>get( "ui" ).<CSwingWrapper<COSMViewer>>get( "OSM" ).getComponent().getCompoundPainter()
-                                                                                                           .removePainter(
-                                                                                                                   (Painter) this
-                                                                                                           );
     }
 
     @Override
@@ -181,33 +153,6 @@ public final class CCarLayer extends IMultiLayer<ICar> implements IReturnSteppab
         return CCommon.getResourceString( this, "name" );
     }
 
-    /**
-     * read call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws exception on loading the data
-     * @throws ClassNotFoundException throws exception on deserialization error
-     * @bug incomplete
-     */
-    private void readObject( final ObjectInputStream p_stream ) throws IOException, ClassNotFoundException
-    {
-        p_stream.defaultReadObject();
-
-        m_graph = new CGraphHopper( m_unit.getCellSize() );
-        //m_graph.disableWeight();
-    }
-
-    /**
-     * write call of serialize interface
-     *
-     * @param p_stream stream
-     * @throws IOException throws the exception on loading data
-     * @bug incomplete
-     */
-    private void writeObject( final ObjectOutputStream p_stream ) throws IOException
-    {
-        p_stream.defaultWriteObject();
-    }
 
     /**
      * enum for representating a driving model

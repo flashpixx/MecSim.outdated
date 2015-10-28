@@ -32,14 +32,13 @@ import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.Collection;
 
 
 /**
  * interface of a waypoint
  */
-public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>, Serializable
+public interface IWayPoint<T> extends IReturnSteppable<T>, Painter<COSMViewer>
 {
     /**
      * method to get the color of this source

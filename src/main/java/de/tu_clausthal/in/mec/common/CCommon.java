@@ -350,8 +350,8 @@ public final class CCommon
     {
         try
         {
-            final String l_string = CConfiguration.getInstance().getResourceBundle( p_language ).getString( getResourceStringLabel( p_class, p_label ) );
-            return MessageFormat.format( l_string, p_parameter );
+            return MessageFormat.format(
+                    CConfiguration.getInstance().getResourceBundle( p_language ).getString( getResourceStringLabel( p_class, p_label ) ), p_parameter );
         }
         catch ( final MissingResourceException l_exception )
         {

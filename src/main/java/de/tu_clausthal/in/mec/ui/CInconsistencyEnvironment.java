@@ -88,7 +88,7 @@ public final class CInconsistencyEnvironment
             final IMetric<?, CPath> l_current = CSimulation.getInstance().getWorld().<CInconsistencyLayer>getTyped( m_layername ).getMetric();
             for ( final EMetric l_metric : EMetric.values() )
                 put(
-                        l_metric.toString(), new HashMap()
+                        l_metric.toString(), new HashMap<String, Object>()
                         {{
                             put( "active", l_metric.equals( EMetric.isa( l_current ) ) );
                             put( "id", l_metric.name() );

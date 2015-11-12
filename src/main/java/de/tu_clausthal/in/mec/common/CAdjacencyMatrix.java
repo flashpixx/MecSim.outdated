@@ -42,7 +42,6 @@ import java.util.Set;
 /**
  * class of an adjacence matrix
  */
-@SuppressWarnings( "serial" )
 @JsonSerialize( using = CAdjacencyMatrix.CJson.class )
 public final class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>
 {

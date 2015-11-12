@@ -165,7 +165,6 @@ public final class CMainLoop implements Runnable
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
     public final void run()
     {
         CLogger.info( CCommon.getResourceString( this, "start" ) );
@@ -205,7 +204,7 @@ public final class CMainLoop implements Runnable
             }
         }
 
-        m_pause = true;
+        m_pool.shutdownNow();
         CLogger.info( CCommon.getResourceString( this, "stop" ) );
     }
 

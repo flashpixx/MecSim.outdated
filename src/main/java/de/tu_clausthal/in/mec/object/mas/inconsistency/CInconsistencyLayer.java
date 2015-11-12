@@ -41,9 +41,8 @@ import de.tu_clausthal.in.mec.object.mas.IAgent;
 import de.tu_clausthal.in.mec.runtime.benchmark.IBenchmark;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -62,9 +61,9 @@ public final class CInconsistencyLayer<T extends IAgent> extends ISingleEvaluate
      **/
     private final EAlgorithm m_algorithm;
     /**
-     * synchronized map with object and inconsistency value
+     * map with object and inconsistency value
      **/
-    private final Map<T, Double> m_data = Collections.synchronizedMap( new LinkedHashMap<>() );
+    private final Map<T, Double> m_data = new ConcurrentHashMap<>();
     /**
      * epsilon value to create an aperiodic markow-chain
      **/

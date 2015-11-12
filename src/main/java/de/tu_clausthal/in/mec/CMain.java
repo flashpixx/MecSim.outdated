@@ -28,9 +28,8 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.runtime.CSimulation;
 import de.tu_clausthal.in.mec.runtime.benchmark.CSummary;
 import de.tu_clausthal.in.mec.ui.CUI;
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.pmw.tinylog.Level;
@@ -73,15 +72,14 @@ public final class CMain
         l_clioptions.addOption( "loglevel", true, CCommon.getResourceString( CMain.class, "loglevel" ) );
         l_clioptions.addOption( "logfile", true, CCommon.getResourceString( CMain.class, "logfile" ) );
 
-        final CommandLineParser l_parser = new BasicParser();
         CommandLine l_cli = null;
         try
         {
-            l_cli = l_parser.parse( l_clioptions, p_args );
+            l_cli = new DefaultParser().parse( l_clioptions, p_args );
         }
-        catch ( Exception l_exception )
+        catch ( final Exception l_exception )
         {
-            System.out.println( CCommon.getResourceString( CMain.class, "parseerror" ) );
+            System.err.println( CCommon.getResourceString( CMain.class, "parseerror", l_exception.getLocalizedMessage() ) );
             System.exit( -1 );
         }
 

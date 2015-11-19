@@ -175,9 +175,9 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
                     {
                         return ( p_method.getName().toLowerCase().startsWith(
                                 c_webstatic
-                        ) || p_method.getName().toLowerCase().startsWith(
+                        )        || p_method.getName().toLowerCase().startsWith(
                                 c_webdynamic
-                        ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
+                        ) )    && ( !Modifier.isStatic( p_method.getModifiers() ) );
                     }
                 }
         ).entrySet() )

@@ -11,6 +11,7 @@
 !src/main/documentation/**/*.htm
 !src/main/documentation/**/*.doxyfile
 !src/main/documentation/**/*.graffle
+!src/main/documentation/**/*.pxm
 
 !src/main/resources/**/*.asl
 !src/main/resources/**/*.htm

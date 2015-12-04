@@ -35,15 +35,6 @@
             <timezone>Europe/Berlin</timezone>
         </developer>
         <developer>
-            <id>tho</id>
-            <name>Thomas Hornoff</name>
-            <email>thomas.hornoff@tu-clausthal.de</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>Europe/Berlin</timezone>
-        </developer>
-        <developer>
             <id>cku</id>
             <name>Christoph Kuper</name>
             <email>christoph.kuper@tu-clausthal.de</email>
@@ -54,6 +45,16 @@
         </developer>
     </developers>
 
+    <contributors>
+        <contributor>
+            <name>Thomas Hornoff</name>
+            <email>thomas.hornoff@tu-clausthal.de</email>
+            <roles>
+                <role>tester</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </contributor>
+    </contributors>
 
     <!-- main configuration -->
     <prerequisites>

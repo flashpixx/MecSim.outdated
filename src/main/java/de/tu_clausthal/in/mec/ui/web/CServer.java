@@ -30,11 +30,9 @@ import de.tu_clausthal.in.mec.common.CCommon;
 import de.tu_clausthal.in.mec.common.CReflection;
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil2;
-import fi.iki.elonen.IWebSocketFactory;
 import fi.iki.elonen.NanoHTTPD;
-import fi.iki.elonen.WebSocket;
-import fi.iki.elonen.WebSocketResponseHandler;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
@@ -297,7 +295,7 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
         catch ( final Throwable l_throwable )
         {
             CLogger.error( l_throwable );
-            return this.setDefaultHeader( new Response( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable ), p_session );
+            return this.setDefaultHeader( this.newFixedLengthResponse( Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "ERROR 500\n" + l_throwable ), p_session );
         }
     }
 
@@ -429,26 +427,26 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
         {
             case "htm":
             case "html":
-                l_response = new Response(
+                l_response = this.newFixedLengthResponse(
                         Response.Status.OK, l_mimetype + "; charset=" + ( new InputStreamReader(
                         l_physicalfile.openStream()
-                ).getEncoding() ), l_physicalfile.openStream()
+                ).getEncoding() ), IOUtils.toString( l_physicalfile.openStream() )
                 );
                 break;
 
             case "md":
                 if ( p_location.getMarkDownRenderer() != null )
-                    l_response = new Response(
+                    l_response = this.newFixedLengthResponse(
                             Response.Status.OK, p_location.getMarkDownRenderer().getMimeType(), p_location.getMarkDownRenderer().getHTML(
                             m_markdown, l_physicalfile
                     )
                     );
                 else
-                    l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                    l_response = this.newFixedLengthResponse( Response.Status.OK, l_mimetype, IOUtils.toString( l_physicalfile.openStream() ));
                 break;
 
             default:
-                l_response = new Response( Response.Status.OK, l_mimetype, l_physicalfile.openStream() );
+                l_response = this.newFixedLengthResponse( Response.Status.OK, l_mimetype, IOUtils.toString( l_physicalfile.openStream() ) );
         }
 
         return l_response;

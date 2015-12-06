@@ -504,9 +504,20 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
         private final ExecutorService m_pool = Executors.newCachedThreadPool();
 
         @Override
-        public void exec( final Runnable p_runnable )
+        public void closeAll()
         {
-            m_pool.submit( p_runnable );
+            m_pool.shutdownNow();
+        }
+
+        @Override
+        public void closed( final ClientHandler p_clientHandler )
+        {
+        }
+
+        @Override
+        public void exec( final ClientHandler p_clientHandler )
+        {
+            m_pool.submit( p_clientHandler );
         }
     }
 }

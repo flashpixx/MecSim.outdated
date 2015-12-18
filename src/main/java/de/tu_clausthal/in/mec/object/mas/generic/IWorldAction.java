@@ -36,7 +36,7 @@ public interface IWorldAction<N, M>
      *
      * @return name of the action
      */
-    public String getName();
+    String getName();
 
     /**
      * runs the action *
@@ -44,6 +44,6 @@ public interface IWorldAction<N, M>
      * @param p_agent agent which runs the action
      * @param p_args arguments of the action
      */
-    public void act( final N p_agent, final M p_args );
+    void act( final N p_agent, final M p_args );
 
 }

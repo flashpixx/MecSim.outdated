@@ -35,15 +35,6 @@
             <timezone>Europe/Berlin</timezone>
         </developer>
         <developer>
-            <id>tho</id>
-            <name>Thomas Hornoff</name>
-            <email>thomas.hornoff@tu-clausthal.de</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>Europe/Berlin</timezone>
-        </developer>
-        <developer>
             <id>cku</id>
             <name>Christoph Kuper</name>
             <email>christoph.kuper@tu-clausthal.de</email>
@@ -54,6 +45,16 @@
         </developer>
     </developers>
 
+    <contributors>
+        <contributor>
+            <name>Thomas Hornoff</name>
+            <email>thomas.hornoff@tu-clausthal.de</email>
+            <roles>
+                <role>tester</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </contributor>
+    </contributors>
 
     <!-- main configuration -->
     <prerequisites>
@@ -194,7 +195,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>4.0</version>
+            <version>4.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -227,13 +228,13 @@
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog</artifactId>
-            <version>1.0.2</version>
+            <version>1.1-beta-1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.6.3</version>
+            <version>2.7.0-rc2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

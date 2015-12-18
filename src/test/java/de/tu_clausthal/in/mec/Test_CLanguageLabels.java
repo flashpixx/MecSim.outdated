@@ -76,9 +76,13 @@ public class Test_CLanguageLabels
      */
     private final Set<String> m_labels = new HashSet<>();
     /**
+     * method to translate strings
+     */
+    private final String m_translatemethod = "CCommon.getResourceString";
+    /**
      * reg expression to extract label data *
      */
-    private final Pattern m_language = Pattern.compile( "CCommon.getResourceString.+\\)" );
+    private final Pattern m_language = Pattern.compile( m_translatemethod + ".+\\)" );
 
     /**
      * test-case all resource strings
@@ -342,7 +346,7 @@ public class Test_CLanguageLabels
             final String[] l_return = new String[2];
 
             // class name
-            l_return[0] = l_split[0].replace( "CCommon.getResourceString", "" ).replace( "(", "" ).trim();
+            l_return[0] = l_split[0].replace( m_translatemethod, "" ).replace( "(", "" ).trim();
             // label name
             l_return[1] = l_split[1].replace( ")", "" ).replace( "\"", "" ).split( ";" )[0].trim().toLowerCase();
 

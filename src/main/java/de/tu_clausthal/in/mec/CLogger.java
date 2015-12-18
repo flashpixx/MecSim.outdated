@@ -41,6 +41,23 @@ import java.util.Map;
  */
 public final class CLogger
 {
+    /**
+     * stack index of traces
+     */
+    private static final int c_stackindex;
+    /**
+     * object instance to bind web UI calls *
+     */
+    private static final CLogger s_instance = new CLogger();
+    /**
+     * defines the global log level
+     */
+    private static Level s_level = Level.OFF;
+    /**
+     * define ths flag, that the log is passend to the output
+     */
+    private static boolean s_logoutput = false;
+
     /** initialization **/
     static
     {
@@ -59,23 +76,6 @@ public final class CLogger
         Configurator.currentConfig().writer( null ).level( Level.OFF ).activate();
         Configurator.currentConfig().formatPattern( "{message}" ).activate();
     }
-
-    /**
-     * stack index of traces
-     */
-    private static final int c_stackindex;
-    /**
-     * object instance to bind web UI calls *
-     */
-    private static final CLogger s_instance = new CLogger();
-    /**
-     * defines the global log level
-     */
-    private static Level s_level = Level.OFF;
-    /**
-     * define ths flag, that the log is passend to the output
-     */
-    private static boolean s_logoutput = false;
 
     /**
      * private ctor - avoid instantiation

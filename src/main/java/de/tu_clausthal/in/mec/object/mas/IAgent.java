@@ -45,28 +45,28 @@ public interface IAgent<T> extends Painter, IReceiver
      *
      * @return root belief mask
      */
-    public IBeliefBaseMask<T> getBeliefBase();
+    IBeliefBaseMask<T> getBeliefBase();
 
     /**
      * returns the current cycle
      *
      * @return cycle number
      */
-    public int getCycle();
+    int getCycle();
 
     /**
      * returns the name of the agent
      *
      * @return name of the agent
      */
-    public String getName();
+    String getName();
 
     /**
      * returns the source / file of the agent
      *
      * @return source
      */
-    public String getSource();
+    String getSource();
 
     /**
      * register an object for running actions
@@ -74,7 +74,7 @@ public interface IAgent<T> extends Painter, IReceiver
      * @param p_name binding name of the action
      * @param p_object binding object
      */
-    public void bind( final String p_name, final Object p_object );
+    void bind( final String p_name, final Object p_object );
 
     /**
      * register a beliefbase mask
@@ -82,25 +82,25 @@ public interface IAgent<T> extends Painter, IReceiver
      * @param p_path path in which the mask is added
      * @param p_mask mask
      */
-    public void addBeliefBase( final CPath p_path, final IBeliefBaseMask<T> p_mask );
+    void addBeliefBase( final CPath p_path, final IBeliefBaseMask<T> p_mask );
 
     /**
      * release agent call *
      */
-    public void release();
+    void release();
 
     /**
      * unregister an action
      *
      * @param p_name binding name of the action
      */
-    public void unbind( final String p_name );
+    void unbind( final String p_name );
 
     /**
      * unregister a beliefbase mask
      *
      * @param p_path path of the mask (last element is the mask name)
      */
-    public void removeBeliefBase( final CPath p_path );
+    void removeBeliefBase( final CPath p_path );
 
 }

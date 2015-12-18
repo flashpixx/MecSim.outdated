@@ -42,38 +42,38 @@ public interface ILiteral<T> extends ITerm
      * @param p_prefix add a path to the functor
      * @return copy of the literal
      */
-    public ILiteral<T> clone( final CPath p_prefix );
+    ILiteral<T> clone( final CPath p_prefix );
 
     /**
      * returns the optional annotations
      *
      * @return annotation term
      */
-    public ITermCollection getAnnotation();
+    ITermCollection getAnnotation();
 
     /**
      * returns the functor / dataset of the literal
      *
      * @return function data
      */
-    public IAtom<String> getFunctor();
+    IAtom<String> getFunctor();
 
     /**
      * getter for language specific literal
      *
      * @return literal
      */
-    public T getLiteral();
+    T getLiteral();
 
     /**
      * returns the optional value term
      *
      * @return value term
      */
-    public ITermCollection getValues();
+    ITermCollection getValues();
 
     /**
      * getter of the literal for the negation
      */
-    public boolean isNegated();
+    boolean isNegated();
 }

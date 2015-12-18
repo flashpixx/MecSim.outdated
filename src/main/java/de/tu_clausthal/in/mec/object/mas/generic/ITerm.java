@@ -37,6 +37,6 @@ public interface ITerm
      *
      * @note use generic_type_class.isAssignableFrom(p_class)
      */
-    public boolean instanceOf( final Class<?> p_class );
+    boolean instanceOf( final Class<?> p_class );
 
 }

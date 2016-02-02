@@ -1,0 +1,7 @@
+general:
+  branches:
+    only:
+      - master
+    ignore:
+      - /dev-.*/
+      - /gh-.*/

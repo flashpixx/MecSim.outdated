@@ -26,6 +26,7 @@
 * [Maven 3.0](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org)
 * [Bower](http://bower.io/)
+* [Source code documentation](http://flashpixx.github.io/MecSim/)
 
 #### IDE Support
 
@@ -34,8 +35,6 @@
 
 
 ## Installation / Configuration
-
-Hourly a [current developer build](https://mecdev.rz-housing.tu-clausthal.de/jenkins/job/MecSim/) can be downloaded.
 
 The Maven package build creates a Jar and OS dependet package files in the target-path. The Jar must use more memory
 of the Java VM on graph downloading and converting, so the Jar must be started with the suffix ```-Xmx<Memory Size>```

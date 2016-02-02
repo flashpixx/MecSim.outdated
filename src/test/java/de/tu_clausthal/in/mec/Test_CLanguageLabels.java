@@ -65,12 +65,12 @@ public class Test_CLanguageLabels
      */
     private static final Set<String> c_searchpackages = new HashSet<String>()
     {{
-            for ( String l_package : new String[]{
-                    getPackagePath( "object", "mas", "inconsistency" )
-            } )
-                add( getPackagePath( CConfiguration.getPackage(), l_package ) );
+        for ( String l_package : new String[]{
+                getPackagePath( "object", "mas", "inconsistency" )
+        } )
+            add( getPackagePath( CConfiguration.getPackage(), l_package ) );
 
-        }};
+    }};
     /**
      * set with all labels *
      */
@@ -146,7 +146,7 @@ public class Test_CLanguageLabels
 
         try
                 (
-                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() );
+                        final FileInputStream l_stream = new FileInputStream( p_file.toFile() )
                 )
         {
             new MyMethodVisitor().visit( JavaParser.parse( l_stream ), null );

@@ -1,6 +1,7 @@
 *.*
 
 !.gitignore
+!circle.yml
 !.bowerrc
 !bower.json
 !*.md

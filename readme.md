@@ -1,8 +1,10 @@
 # MecSim - Micro Traffic Agent-Based Simulation
 
+![Circle CI](https://circleci.com/gh/flashpixx/MecSim.svg?style=shield)
+
 ![Screenshot](screen.png)
 
-## Features
+## <a name="feature">Feature</a>
 
 * native Java implementation
 * HTML5-based GUI with multilanguage support
@@ -12,7 +14,13 @@
 * Multi-Agent system with complete [Jason-Support](http://jason.sourceforge.net/)
 * Code Benchmarking with statistical analysis with [R](https://www.r-project.org/)
 
-## Requirements
+### <a name="download">Current Developer Download</a>
+
+* [Windows Executable](https://github.com/flashpixx/MecSim/raw/binary-master/MecSim-1.1.exe)
+* [Native Jar](https://github.com/flashpixx/MecSim/raw/binary-master/MecSim-1.1.jar)
+
+
+## <a name="requirement">Requirements</a>
 
 ### Running
 
@@ -26,6 +34,7 @@
 * [Maven 3.0](http://maven.apache.org/)
 * [Doxygen](http://www.doxygen.org/) with [GraphViz](http://www.graphviz.org)
 * [Bower](http://bower.io/)
+* [Source code documentation](http://flashpixx.github.io/MecSim/)
 
 #### IDE Support
 
@@ -33,9 +42,7 @@
 * [Eclipse](http://www.eclipse.org/)
 
 
-## Installation / Configuration
-
-Hourly a [current developer build](https://mecdev.rz-housing.tu-clausthal.de/jenkins/job/MecSim/) can be downloaded.
+## <a name="install">Installation / Configuration</a>
 
 The Maven package build creates a Jar and OS dependet package files in the target-path. The Jar must use more memory
 of the Java VM on graph downloading and converting, so the Jar must be started with the suffix ```-Xmx<Memory Size>```

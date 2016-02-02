@@ -52,23 +52,23 @@ public class Test_CTreeNode
     {
         final List<Pair<CPath, Double>> l_treedata = new LinkedList()
         {{
-                add( new ImmutablePair<>( new CPath( "sub1" ), new Double( 1 ) ) );
-                add( new ImmutablePair<>( new CPath( "sub1/subsub1.1" ), new Double( 1.1 ) ) );
-                add( new ImmutablePair<>( new CPath( "sub1/subsub1.2" ), new Double( 1.2 ) ) );
+            add( new ImmutablePair<>( new CPath( "sub1" ), new Double( 1 ) ) );
+            add( new ImmutablePair<>( new CPath( "sub1/subsub1.1" ), new Double( 1.1 ) ) );
+            add( new ImmutablePair<>( new CPath( "sub1/subsub1.2" ), new Double( 1.2 ) ) );
 
-                add( new ImmutablePair<>( new CPath( "sub2" ), new Double( 2 ) ) );
-                add( new ImmutablePair<>( new CPath( "sub2/subsub2.1" ), new Double( 2.1 ) ) );
+            add( new ImmutablePair<>( new CPath( "sub2" ), new Double( 2 ) ) );
+            add( new ImmutablePair<>( new CPath( "sub2/subsub2.1" ), new Double( 2.1 ) ) );
 
-                add( new ImmutablePair<>( new CPath( "sub3" ), new Double( 3 ) ) );
-                add( new ImmutablePair<>( new CPath( "sub3/subsub3.1" ), new Double( 3.1 ) ) );
-                add( new ImmutablePair<>( new CPath( "sub3/subsub3.2" ), new Double( 3.2 ) ) );
-                add( new ImmutablePair<>( new CPath( "sub3/subsub3.3" ), new Double( 3.3 ) ) );
-            }};
+            add( new ImmutablePair<>( new CPath( "sub3" ), new Double( 3 ) ) );
+            add( new ImmutablePair<>( new CPath( "sub3/subsub3.1" ), new Double( 3.1 ) ) );
+            add( new ImmutablePair<>( new CPath( "sub3/subsub3.2" ), new Double( 3.2 ) ) );
+            add( new ImmutablePair<>( new CPath( "sub3/subsub3.3" ), new Double( 3.3 ) ) );
+        }};
 
         final List<Double> l_data = new LinkedList()
         {{
-                add( new Double( 0 ) );
-            }};
+            add( new Double( 0 ) );
+        }};
         for ( final Pair<CPath, Double> l_item : l_treedata )
             l_data.add( l_item.getValue() );
 

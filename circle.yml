@@ -29,12 +29,17 @@ test:
         - mvn install
 
     post:
-      # create documentation branch
+      # move build components
       - git checkout master
       - cp -r src/main/resources/web/documentation/developer/ /tmp/html
+      - mv target/MecSim-1.1.jar /tmp
+      - mv target/MecSim-1.1.exe /tmp
+      - mv target/MecSim-1.1.dmg /tmp
+
+      # create documentation branch
       - git checkout gh-pages
-      - mv circle.yml /tmp
-      - mv .gitignore /tmp
+      - mv -f circle.yml /tmp
+      - mv -f .gitignore /tmp
       - git checkout master
       - git push origin :gh-pages
       - git branch -D gh-pages
@@ -48,13 +53,9 @@ test:
       - git push origin gh-pages
 
       # build developer executables
-      - git checkout master
-      - mv target/MecSim-1.1.jar /tmp
-      - mv target/MecSim-1.1.exe /tmp
-      - mv target/MecSim-1.1.dmg /tmp
       - git checkout binary-master
-      - mv circle.yml /tmp
-      - mv .gitignore /tmp
+      - mv -f circle.yml /tmp
+      - mv -f .gitignore /tmp
       - git checkout master
       - git push origin :binary-master
       - git branch -D binary-master

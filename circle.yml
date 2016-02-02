@@ -23,7 +23,7 @@ dependencies:
 
 test:
     post:
-      - mv target/documentation/html /tmp
+      - cp -r src/main/resources/web/documentation/developer/ /tmp/html
       - git checkout gh-pages
       - mv circle.yml /tmp
       - mv .gitignore /tmp

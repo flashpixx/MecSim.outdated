@@ -29,7 +29,7 @@
     </module>
 
     <module name = "Header">
-        <property name = "headerFile" value = "src/main/styleguide/java.header" />
+        <property name = "headerFile" value = "src/main/styleguide/header.txt" />
         <property name = "fileExtensions" value = "java" />
     </module>
 
@@ -79,7 +79,7 @@
 
         <module name = "AtclauseOrder">
             <property name = "tagOrder"
-                      value = "@author, @version, @see, @since, @param, @return, @throws, @bug, @todo, @exception, @serial, @serialField, @serialData, @deprecated" />
+                      value = " @param, @return, @exception, @throws, @see, @deprecated, @bug, @todo, @author, @version,  @since, @serial, @serialField, @serialData" />
         </module>
 
         <module name = "AvoidEscapedUnicodeCharacters" />
@@ -94,7 +94,9 @@
             <property name = "allowStaticMemberImports" value = "false" />
         </module>
 
-        <module name = "AvoidStaticImport" />
+        <module name = "AvoidStaticImport">
+            <property name = "excludes" value = "org.junit.Assert.*" />
+        </module>
 
         <module name = "BooleanExpressionComplexity">
             <property name = "max" value = "4" />
@@ -109,7 +111,7 @@
         </module>
 
         <module name = "ConstantName">
-            <property name = "format" value = "c_[a-zA-Z0-9]{3,}$" />
+            <property name = "format" value = "[A-Z0-9]{3,}$" />
         </module>
 
         <module name = "CovariantEquals" />
@@ -138,7 +140,9 @@
             <property name = "option" value = "space" />
         </module>
 
-        <module name = "EmptyLineSeparator" />
+        <module name = "EmptyLineSeparator">
+            <property name = "allowNoEmptyLineBetweenFields" value = "true" />
+        </module>
 
         <module name = "EmptyStatement" />
 
@@ -152,7 +156,7 @@
 
         <module name = "FallThrough" />
 
-        <!-- <module name="FinalClass"/> -->
+        <module name = "FinalClass" />
 
         <module name = "FinalLocalVariable" />
 
@@ -216,11 +220,12 @@
         <module name = "JavadocType">
             <property name = "scope" value = "public" />
             <property name = "allowUnknownTags" value = "true" />
+            <!-- Doxygen @tparam tag must be ignored -->
+            <property name = "allowMissingParamTags" value = "true" />
         </module>
 
-        <module name = "JavadocVariable">
-            <property name = "scope" value = "public" />
-        </module>
+        <!-- disables because Doxygen command are not supported
+        <module name = "JavadocVariable"/> -->
 
         <module name = "LeftCurly">
             <property name = "option" value = "nl" />
@@ -231,15 +236,18 @@
         </module>
 
         <module name = "LocalFinalVariableName">
-            <property name = "format" value = "^l_[a-zA-Z0-9]{1,}$" />
+            <property name = "format" value = "^l_[a-zA-Z0-9]{2,}$" />
         </module>
 
         <module name = "LocalVariableName">
-            <property name = "format" value = "^l_[a-zA-Z0-9_]{1,}$|i|j" />
+            <property name = "format" value = "^l_[a-zA-Z0-9]{2,}$|i|j" />
             <property name = "allowOneCharVarInForLoop" value = "true" />
         </module>
 
-        <module name = "MagicNumber" />
+        <module name = "MagicNumber">
+            <property name = "ignoreAnnotation" value = "true" />
+            <property name = "ignoreHashCodeMethod" value = "true" />
+        </module>
 
         <module name = "MemberName">
             <property name = "format" value = "^m_[a-zA-Z0-9]{2,}$" />
@@ -255,7 +263,7 @@
         </module>
 
         <module name = "MethodName">
-            <property name = "format" value = "^[a-z]{2}[a-zA-Z0-9_]*$" />
+            <property name = "format" value = "^[a-z]{2}[a-zA-Z0-9]*$" />
         </module>
 
         <module name = "MethodParamPad">
@@ -280,7 +288,9 @@
 
         <module name = "ModifierOrder" />
 
-        <module name = "MultipleStringLiterals" />
+        <module name = "MultipleStringLiterals">
+            <property name = "allowedDuplicates" value = "2" />
+        </module>
 
         <module name = "MultipleVariableDeclarations" />
 
@@ -301,7 +311,7 @@
 
         <module name = "NestedTryDepth" />
 
-        <module name = "NoClone" />
+        <!-- <module name = "NoClone" /> -->
 
         <module name = "NoFinalizer" />
 
@@ -328,7 +338,7 @@
         <module name = "PackageDeclaration" />
 
         <module name = "PackageName">
-            <property name = "format" value = "^[a-z]{2}(\.[a-z]{2}[a-z_]*)*$" />
+            <property name = "format" value = "^[a-z]{3,}(\.[a-z]{2,}[a-z0-9]*)*$" />
         </module>
 
         <module name = "ParameterAssignment" />
@@ -364,7 +374,10 @@
             <property name = "option" value = "alone" />
         </module>
 
-        <module name = "SeparatorWrap" />
+        <module name = "SeparatorWrap">
+            <property name = "tokens" value = "DOT" />
+            <property name = "option" value = "nl" />
+        </module>
 
         <module name = "SingleLineJavadoc" />
 
@@ -373,14 +386,14 @@
         <module name = "SimplifyBooleanReturn" />
 
         <module name = "StaticVariableName">
-            <property name = "format" value = "^s_[a-zA-Z0-9]{3,}$" />
+            <property name = "format" value = "^s_[a-zA-Z0-9]{2,}$" />
         </module>
 
         <module name = "StringLiteralEquality" />
 
         <!-- <module name="SummaryJavadocCheck"/> -->
 
-        <module name = "SuperClone" />
+        <!-- <module name = "SuperClone" /> -->
 
         <module name = "SuperFinalize" />
 
@@ -396,7 +409,20 @@
 
         <module name = "TrailingComment" />
 
-        <module name = "TypeName" />
+        <module name = "TypeName">
+            <property name = "tokens" value = "INTERFACE_DEF" />
+            <property name = "format" value = "^I[A-Z][a-zA-Z0-9]*$" />
+        </module>
+
+        <module name = "TypeName">
+            <property name = "tokens" value = "CLASS_DEF" />
+            <property name = "format" value = "^(((Test)?C)|I)[A-Z][a-zA-Z0-9]*$" />
+        </module>
+
+        <module name = "TypeName">
+            <property name = "tokens" value = "ENUM_DEF" />
+            <property name = "format" value = "^E[A-Z][a-zA-Z0-9]*$" />
+        </module>
 
         <module name = "TypecastParenPad" />
 
@@ -410,7 +436,10 @@
 
         <module name = "VariableDeclarationUsageDistance" />
 
-        <module name = "VisibilityModifier" />
+        <module name = "VisibilityModifier">
+            <property name = "allowPublicImmutableFields" value = "false" />
+            <property name = "protectedAllowed" value = "true" />
+        </module>
 
         <module name = "WhitespaceAfter">
             <property name = "tokens" value = "COMMA" />

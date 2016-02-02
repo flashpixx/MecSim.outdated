@@ -1,0 +1,71 @@
+general:
+  branches:
+    only:
+      - master
+
+machine:
+    timezone:
+      Europe/Berlin
+
+    environment:
+      GIT_AUTHOR_NAME: CircleCI
+      GIT_AUTHOR_EMAIL: info@flashpixx.de
+      GIT_COMMITTER_NAME: CircleCI
+      GIT_COMMITTER_EMAIL: info@flashpixx.de
+
+    java:
+      version: oraclejdk8
+
+dependencies:
+    pre:
+      - sudo apt-get install doxygen npm
+      - npm install -g bower
+
+    cache_directories:
+      - "~/.mecsim"
+
+test:
+    override:
+        - mvn install
+
+    post:
+      # move build components
+      - git checkout master
+      - cp -r src/main/resources/web/documentation/developer/ /tmp/html
+      - mv target/MecSim-1.1.jar /tmp
+      - mv target/MecSim-1.1.exe /tmp
+      #- mv target/MecSim-1.1.dmg /tmp
+
+      # create documentation branch
+      - git checkout gh-pages
+      - mv -f circle.yml /tmp
+      - mv -f .gitignore /tmp
+      - git checkout master
+      - git push origin :gh-pages
+      - git branch -D gh-pages
+      - git checkout --orphan gh-pages
+      - rm -Rf *
+      - mv /tmp/.gitignore .
+      - mv /tmp/circle.yml .
+      - mv /tmp/html/* .
+      - git add --all .
+      - git commit -m "current documentation"
+      - git push origin gh-pages
+
+      # build developer executables
+      - git checkout binary-master
+      - mv -f circle.yml /tmp
+      - mv -f .gitignore /tmp
+      - git checkout master
+      - git push origin :binary-master
+      - git branch -D binary-master
+      - git checkout --orphan binary-master
+      - rm -Rf *
+      - mv /tmp/.gitignore .
+      - mv /tmp/circle.yml .
+      - mv /tmp/MecSim-1.1.jar .
+      - mv /tmp/MecSim-1.1.exe .
+      #- mv /tmp/MecSim-1.1.dmg .
+      - git add --all .
+      - git commit -m "binaries master branch"
+      - git push origin binary-master

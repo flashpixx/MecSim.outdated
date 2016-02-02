@@ -61,10 +61,10 @@ public class Test_CPath
     {
         final ArrayList<String> l_part = new ArrayList()
         {{
-                add( "a" );
-                add( "b" );
-                add( "c" );
-            }};
+            add( "a" );
+            add( "b" );
+            add( "c" );
+        }};
         final String l_fullpath = StringUtils.join( l_part, "/" );
 
 

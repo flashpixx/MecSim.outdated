@@ -23,6 +23,17 @@
         </license>
     </licenses>
 
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/flashpixx/MecSim/issues</url>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/flashpixx/MecSim</url>
+        <connection>scm:git:git://github.com:flashpixx/MecSim.git</connection>
+        <developerConnection>scm:git:git@github.com:flashpixx/MecSim.git</developerConnection>
+    </scm>
+
     <developers>
         <developer>
             <id>pkr</id>

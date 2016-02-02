@@ -19,6 +19,8 @@ machine:
 dependencies:
     pre:
       - sudo apt-get install doxygen
+      - npm install
+      - npm install -g bower
 
 test:
     post:

@@ -21,12 +21,16 @@ dependencies:
       - sudo apt-get install doxygen npm
       - npm install -g bower
 
+    cache_directories:
+      - "~/.mecsim"
+
 test:
     override:
         - mvn install
 
     post:
       # create documentation branch
+      - git checkout master
       - cp -r src/main/resources/web/documentation/developer/ /tmp/html
       - git checkout gh-pages
       - mv circle.yml /tmp
@@ -44,6 +48,7 @@ test:
       - git push origin gh-pages
 
       # build developer executables
+      - git checkout master
       - mv target/MecSim-1.1.jar /tmp
       - mv target/MecSim-1.1.exe /tmp
       - mv target/MecSim-1.1.dmg /tmp

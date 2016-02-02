@@ -143,7 +143,7 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
     {
         try
         {
-            return m_virtuallocation.get( p_session ).<WebSocket>get( p_session );
+            return m_virtuallocation.get( p_session ).get( p_session );
         }
         catch ( final Throwable l_throwable )
         {
@@ -175,9 +175,9 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
                     {
                         return ( p_method.getName().toLowerCase().startsWith(
                                 c_webstatic
-                        )        || p_method.getName().toLowerCase().startsWith(
+                        ) || p_method.getName().toLowerCase().startsWith(
                                 c_webdynamic
-                        ) )    && ( !Modifier.isStatic( p_method.getModifiers() ) );
+                        ) ) && ( !Modifier.isStatic( p_method.getModifiers() ) );
                     }
                 }
         ).entrySet() )
@@ -421,7 +421,7 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
     {
         final Response l_response;
 
-        final URL l_physicalfile = p_location.<URL>get( p_session );
+        final URL l_physicalfile = p_location.get( p_session );
         final String l_mimetype = this.getMimeType( l_physicalfile );
         CLogger.info( p_session.getUri() + "   " + l_physicalfile + "   " + l_mimetype );
 
@@ -466,7 +466,7 @@ public final class CServer extends NanoHTTPD implements IWebSocketFactory
     private Response getVirtualStaticMethod( final IVirtualLocation p_location, final IHTTPSession p_session ) throws Throwable
     {
         CLogger.info( p_session.getUri() );
-        return p_location.<Response>get( p_session );
+        return p_location.get( p_session );
     }
 
     /**

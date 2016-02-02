@@ -111,7 +111,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>3.5</version>
+            <version>3.6</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -208,19 +208,19 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.13</version>
+            <version>1.7.14</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog</artifactId>
-            <version>1.1-beta-1</version>
+            <version>1.1-rc-1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.7.0-rc2</version>
+            <version>2.7.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -282,6 +282,17 @@
 
 
         <plugins>
+
+            <!-- test run with JRE arguments -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <argLine>-Xmx3g</argLine>
+                </configuration>
+            </plugin>
+
 
             <!-- build OSX executable -->
             <plugin>

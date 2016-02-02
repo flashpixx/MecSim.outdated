@@ -215,7 +215,7 @@ public final class CMessageSystem implements IVoidSteppable
     private void incrementMessageFlow( final CPath p_row, final CPath p_colum )
     {
         m_messageflow.set(
-                p_row, p_colum,           ( m_messageflow.exist( p_row, p_colum ) ? m_messageflow.get(
+                p_row, p_colum, ( m_messageflow.exist( p_row, p_colum ) ? m_messageflow.get(
                         p_row, p_colum
                 ) : new Integer( -1 ) ) + 1
         );

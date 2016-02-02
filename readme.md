@@ -1,5 +1,7 @@
 # MecSim - Micro Traffic Agent-Based Simulation
 
+![Circle CI](https://circleci.com/gh/flashpixx/MecSim.svg?style=shield)
+
 ![Screenshot](screen.png)
 
 ## Features

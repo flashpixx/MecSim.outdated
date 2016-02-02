@@ -34,7 +34,7 @@ test:
       - cp -r src/main/resources/web/documentation/developer/ /tmp/html
       - mv target/MecSim-1.1.jar /tmp
       - mv target/MecSim-1.1.exe /tmp
-      - mv target/MecSim-1.1.dmg /tmp
+      #- mv target/MecSim-1.1.dmg /tmp
 
       # create documentation branch
       - git checkout gh-pages
@@ -65,7 +65,7 @@ test:
       - mv /tmp/circle.yml .
       - mv /tmp/MecSim-1.1.jar .
       - mv /tmp/MecSim-1.1.exe .
-      - mv /tmp/MecSim-1.1.dmg .
+      #- mv /tmp/MecSim-1.1.dmg .
       - git add --all .
       - git commit -m "binaries master branch"
       - git push origin binary-master

@@ -1,4 +1,4 @@
 general:
   branches:
     ignore:
-      - dev-webserver
+      - /dev-.*/

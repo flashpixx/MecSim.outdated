@@ -21,8 +21,12 @@ dependencies:
       - sudo apt-get install doxygen npm
       - npm install -g bower
 
+    override:
+        - mvn install
+
 test:
     post:
+      # create documentation branch
       - cp -r src/main/resources/web/documentation/developer/ /tmp/html
       - git checkout gh-pages
       - mv circle.yml /tmp
@@ -39,3 +43,23 @@ test:
       - git commit -m "current documentation"
       - git push origin gh-pages
 
+      # build developer executables
+      - mv target/MecSim-1.1.jar /tmp
+      - mv target/MecSim-1.1.exe /tmp
+      - mv target/MecSim-1.1.dmg /tmp
+      - git checkout binary-master
+      - mv circle.yml /tmp
+      - mv .gitignore /tmp
+      - git checkout master
+      - git push origin :binary-master
+      - git branch -D binary-master
+      - git checkout --orphan binary-master
+      - rm -Rf *
+      - mv /tmp/.gitignore .
+      - mv /tmp/circle.yml .
+      - mv /tmp/MecSim-1.1.jar .
+      - mv /tmp/MecSim-1.1.exe .
+      - mv /tmp/MecSim-1.1.dmg .
+      - git add --all .
+      - git commit -m "binaries master branch"
+      - git push origin binary-master

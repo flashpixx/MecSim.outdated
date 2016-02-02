@@ -21,10 +21,10 @@ dependencies:
       - sudo apt-get install doxygen npm
       - npm install -g bower
 
+test:
     override:
         - mvn install
 
-test:
     post:
       # create documentation branch
       - cp -r src/main/resources/web/documentation/developer/ /tmp/html

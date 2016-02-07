@@ -25,12 +25,12 @@ dependencies:
       - sudo apt-get install doxygen npm
       - npm install -g bower
 
-    cache_directories:
-      - "~/.mecsim"
+    #cache_directories:
+    #  - "~/.mecsim"
 
 test:
     override:
-        - mvn install
+        - mvn install -Dbuild.number=${CIRCLE_BUILD_NUM} -Dbuild.commit=${CIRCLE_SHA1}
 
     post:
       # move build components

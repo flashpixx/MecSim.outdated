@@ -32,8 +32,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -125,11 +127,11 @@ public final class CPath implements Iterable<CPath>
         if ( ( p_varargs == null ) || ( p_varargs.length < 2 ) )
             throw new IllegalArgumentException( CCommon.getResourceString( CPath.class, "createpath" ) );
 
-        final List<String> l_pathlist = new LinkedList<>();
-        for ( int i = 1; i < p_varargs.length; ++i )
-            l_pathlist.addAll( Arrays.asList( StringUtils.split( p_varargs[i], p_varargs[0] ) ) );
-
-        return new CPath( l_pathlist );
+        return new CPath(
+                Arrays.asList( p_varargs ).subList( 1, p_varargs.length ).stream()
+                      .flatMap( i -> Arrays.stream( StringUtils.split( i, p_varargs[0] ) ) )
+                      .collect( Collectors.toList() )
+        );
     }
 
     /**
@@ -143,6 +145,17 @@ public final class CPath implements Iterable<CPath>
         final CPath l_path = new CPath( this );
         l_path.pushback( p_path );
         return l_path;
+    }
+
+    /**
+     * factor method to build path
+     *
+     * @param p_string input string
+     * @return path
+     */
+    public static CPath from( final String p_string )
+    {
+        return ( p_string == null ) || ( p_string.isEmpty() ) ? EMPTY : createSplitPath( DEFAULTSEPERATOR, p_string );
     }
 
     /**
@@ -255,6 +268,28 @@ public final class CPath implements Iterable<CPath>
             throw new IllegalArgumentException( CCommon.getResourceString( this, "separatornotempty" ) );
 
         m_separator = p_separator;
+        return this;
+    }
+
+    /**
+     * changes all elements to lower-case
+     *
+     * @return object
+     */
+    public final CPath toLower()
+    {
+        m_path = m_path.stream().map( i -> i.toLowerCase() ).collect( Collectors.toList() );
+        return this;
+    }
+
+    /**
+     * changes all elements to uppercase
+     *
+     * @return object
+     */
+    public final CPath toUpper()
+    {
+        m_path = m_path.stream().map( i -> i.toUpperCase() ).collect( Collectors.toList() );
         return this;
     }
 
@@ -464,6 +499,50 @@ public final class CPath implements Iterable<CPath>
         return this.startsWith( new CPath( p_path ) );
     }
 
+
+    /**
+     * stream over elements
+     *
+     * @return sequential stream
+     */
+    public final Stream<String> stream()
+    {
+        return m_path.stream();
+    }
+
+    /**
+     * parallel stream over elements
+     *
+     * @return parallel stream
+     */
+    public final Stream<String> parallelStream()
+    {
+        return m_path.parallelStream();
+    }
+
+
+    /**
+     * normalizes the path (remove dot and dot-dot elements)
+     *
+     * @return self reference
+     */
+    public final CPath normalize()
+    {
+        if ( m_path.isEmpty() )
+            return this;
+
+        m_path = m_path.stream().filter( i -> !i.equals( "." ) ).collect( Collectors.toList() );
+
+        final String l_last = m_path.get( m_path.size() - 1 );
+        m_path = IntStream.range( 0, m_path.size() - 1 ).boxed().filter( i -> !m_path.get( i + 1 ).equals( ".." ) ).map( i -> m_path.get( i ) ).collect(
+                Collectors.toList() );
+        if ( !l_last.equals( ".." ) )
+            m_path.add( l_last );
+
+        return this;
+    }
+
+
     /**
      * splits the string data
      *
@@ -471,12 +550,8 @@ public final class CPath implements Iterable<CPath>
      */
     private void initialize( final String p_fqn )
     {
-        for ( final String l_item : p_fqn.split( m_separator ) )
-            if ( !l_item.isEmpty() )
-                m_path.add( l_item );
-
+        m_path = Arrays.stream( p_fqn.split( m_separator ) ).filter( i -> !i.isEmpty() ).collect( Collectors.toList() );
         if ( m_path.size() == 0 )
             throw new IllegalArgumentException( CCommon.getResourceString( this, "pathempty" ) );
     }
-
 }

@@ -41,6 +41,8 @@ import java.util.Set;
 
 /**
  * class of an adjacence matrix
+ *
+ * @todo convert to colt structure
  */
 @JsonSerialize( using = CAdjacencyMatrix.CJson.class )
 public final class CAdjacencyMatrix<T, N> extends HashMap<Pair<T, T>, N>

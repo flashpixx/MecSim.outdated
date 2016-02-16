@@ -2,15 +2,15 @@
   "name" : "MecSim",
   "private" : true,
   "dependencies" : {
-    "jquery" : "~2.1.4",
+    "jquery" : "~2.2.0",
     "jquery-ui" : "~1.11.4",
-    "d3" : "~3.5.8",
-    "codemirror" : "~5.8.0",
+    "d3" : "~3.5.15",
+    "codemirror" : "~5.11.0",
     "bootstrap-switch" : "~3.3.2",
     "jquery-steps" : "~1.1.0",
-    "spectrum" : "~1.7.1",
+    "spectrum" : "~1.8.0",
     "jqwidgets" : "*",
-    "webui-popover" : "~1.2.2",
+    "webui-popover" : "~1.2.5",
     "reconnecting-websocket" : "https://github.com/joewalnes/reconnecting-websocket.git#master"
   }
 }

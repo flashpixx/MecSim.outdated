@@ -1,6 +1,7 @@
 *.*
 
 !.gitignore
+!.travis.yml
 !circle.yml
 !.bowerrc
 !bower.json

@@ -34,5 +34,6 @@
 !src/main/styleguide/**/*.md
 
 target/**
-src/main/resources/web/documentation/developer/**
+dependency-reduced-pom.xml
 src/main/resources/web/root/lib/**
+src/main/resources/web/documentation/developer/**

@@ -5,7 +5,6 @@
     <groupId>de.tu_clausthal.in.mec</groupId>
     <artifactId>MecSim</artifactId>
     <version>1.1</version>
-    <packaging>jar</packaging>
 
     <!-- project meta information -->
     <name>Clausthal University of Technology - Mobile and Enterprise Computing - ${project.artifactId}</name>
@@ -208,9 +207,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.collections</groupId>
-            <artifactId>google-collections</artifactId>
-            <version>1.0</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
             <scope>compile</scope>
         </dependency>
 
@@ -219,7 +218,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.16</version>
+            <version>1.7.18</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -231,7 +230,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.7.1-1</version>
+            <version>2.7.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -470,15 +469,18 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>2.6.1</version>
+                <version>3.0.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>src/main/resources/web/documentation/developer</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>src/main/resources/web/root/lib</directory>
+                            <directory>.</directory>
+                            <includes>
+                                <include>src/main/resources/web/documentation/developer/**</include>
+                                <directory>src/main/resources/web/root/lib/**</directory>
+                                <include>dependency-reduced-pom.xml</include>
+                            </includes>
                         </fileset>
                     </filesets>
                 </configuration>
@@ -522,22 +524,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <!-- Clean -->
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>.</directory>
-                            <includes>
-                                <include>dependency-reduced-pom.xml</include>
-                            </includes>
-                        </fileset>
-                    </filesets>
-                </configuration>
             </plugin>
 
             <!-- checkstyle is performtemplate at compile / validation phase

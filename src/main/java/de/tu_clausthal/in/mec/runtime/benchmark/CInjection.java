@@ -28,14 +28,13 @@ import de.tu_clausthal.in.mec.CConfiguration;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtMethod;
 import javassist.NotFoundException;
 import org.apache.commons.lang3.ClassUtils;
 
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
+import java.util.Arrays;
 
 
 /**
@@ -68,13 +67,13 @@ public final class CInjection implements ClassFileTransformer
     @Override
     public byte[] transform( final ClassLoader p_loader, final String p_classname, final Class<?> p_redefine, final ProtectionDomain p_protecteddomain,
             final byte[] p_binary
-    ) throws IllegalClassFormatException
+    )
     {
         try
         {
             return this.inject( p_classname );
         }
-        catch ( final NotFoundException | ClassNotFoundException | CannotCompileException | IOException | IllegalArgumentException l_exception )
+        catch ( final NotFoundException | IOException | CannotCompileException p_exception )
         {
         }
         return p_binary;
@@ -92,28 +91,40 @@ public final class CInjection implements ClassFileTransformer
      * @throws CannotCompileException compiling error
      * @throws IOException io exception
      * @throws IllegalArgumentException not usable class
+     * @bug
      */
-    private byte[] inject( final String p_classname )
-    throws NotFoundException, ClassNotFoundException, CannotCompileException, IOException, IllegalArgumentException
+    private byte[] inject( final String p_classname ) throws NotFoundException, IOException, CannotCompileException
     {
         // filtering only package classes - other classes are ignored (throw an exception)
         final String l_classname = p_classname.replace( "/", ClassUtils.PACKAGE_SEPARATOR ).replace( "$", ClassUtils.INNER_CLASS_SEPARATOR );
         if ( !l_classname.startsWith( CConfiguration.getPackage() ) )
             throw new IllegalArgumentException();
 
-
         final CtClass l_class = c_pool.getCtClass( l_classname );
         l_class.stopPruning( false );
 
-        for ( final CtMethod l_method : l_class.getDeclaredMethods() )
-        {
-            if ( l_method.getAnnotation( IBenchmark.class ) == null )
-                continue;
-
-            l_method.addLocalVariable( "l_bechmarktimer", m_timerclass );
-            l_method.insertBefore( "final l_bechmarktimer = new " + CTimer.class.getCanonicalName() + "().start();" );
-            l_method.insertAfter( "l_bechmarktimer.stop(\"" + l_method.getLongName().replace( CConfiguration.getPackage() + ".", "" ) + "\");" );
-        }
+        Arrays.stream( l_class.getDeclaredMethods() )
+              .filter( i -> {
+                  try
+                  {
+                      return i.getAnnotation( IBenchmark.class ) != null;
+                  }
+                  catch ( final ClassNotFoundException p_exception )
+                  {
+                      return false;
+                  }
+              } )
+              .forEach( i -> {
+                  try
+                  {
+                      i.addLocalVariable( "l_bechmarktimer", m_timerclass );
+                      i.insertBefore( "final l_bechmarktimer = new " + CTimer.class.getCanonicalName() + "().start();" );
+                      i.insertAfter( "l_bechmarktimer.stop(\"" + i.getLongName().replace( CConfiguration.getPackage() + ".", "" ) + "\");" );
+                  }
+                  catch ( final CannotCompileException p_exception )
+                  {
+                  }
+              } );
 
         l_class.stopPruning( true );
         return l_class.toBytecode();

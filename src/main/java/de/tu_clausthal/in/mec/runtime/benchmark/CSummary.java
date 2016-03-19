@@ -32,9 +32,12 @@ import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisti
 
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 
 /**
@@ -92,9 +95,7 @@ public final class CSummary
      */
     public void setTime( final String p_label, final long p_time )
     {
-        final DescriptiveStatistics l_statistic = m_result.putIfAbsent( p_label, new SynchronizedDescriptiveStatistics() );
-        if ( l_statistic != null )
-            l_statistic.addValue( p_time );
+        m_result.putIfAbsent( p_label, new SynchronizedDescriptiveStatistics() ).addValue( p_time );
     }
 
 
@@ -106,26 +107,30 @@ public final class CSummary
         if ( ( m_filename == null ) || ( m_filename.isEmpty() ) )
             return;
 
-        final Map<String, Map<String, Object>> l_benchmark = new HashMap<>();
-        for ( final Map.Entry<String, DescriptiveStatistics> l_item : m_result.entrySet() )
-            l_benchmark.put(
-                    l_item.getKey(), CCommon.getMap(
-                            "max", l_item.getValue().getMax(),
-                            "min", l_item.getValue().getMin(),
-                            "kurtosis", l_item.getValue().getKurtosis(),
-                            "arithmetic mean", l_item.getValue().getMean(),
-                            "geometric mean", l_item.getValue().getGeometricMean(),
-                            "50-percentile", l_item.getValue().getPercentile( 50 ),
-                            "25-percentile", l_item.getValue().getPercentile( 25 ),
-                            "75-percentile", l_item.getValue().getPercentile( 75 ),
-                            "standard deviation", l_item.getValue().getStandardDeviation(),
-                            "skewness", l_item.getValue().getSkewness(),
-                            "count", l_item.getValue().getN(),
-                            "sum", l_item.getValue().getSum(),
-                            "sum square", l_item.getValue().getSumsq(),
-                            "variance", l_item.getValue().getVariance()
-                    )
-            );
+        final Map<String, Map<String, Double>> l_benchmark = m_result.entrySet().parallelStream()
+                                                                     .map( i ->
+                                                                                   new AbstractMap.SimpleImmutableEntry<>(
+                                                                                           i.getKey(),
+                                                                                           Collections.unmodifiableMap( new HashMap<String, Double>()
+                                                                                           {{
+                                                                                               put( "max", i.getValue().getMax() );
+                                                                                               put( "min", i.getValue().getMin() );
+                                                                                               put( "kurtosis", i.getValue().getKurtosis() );
+                                                                                               put( "arithmetic mean", i.getValue().getMean() );
+                                                                                               put( "geometric mean", i.getValue().getGeometricMean() );
+                                                                                               put( "50-percentile", i.getValue().getPercentile( 50 ) );
+                                                                                               put( "25-percentile", i.getValue().getPercentile( 25 ) );
+                                                                                               put( "75-percentile", i.getValue().getPercentile( 75 ) );
+                                                                                               put( "standard deviation", i.getValue().getStandardDeviation() );
+                                                                                               put( "skewness", i.getValue().getSkewness() );
+                                                                                               put( "count", new Double( i.getValue().getN() ) );
+                                                                                               put( "sum", i.getValue().getSum() );
+                                                                                               put( "sum square", i.getValue().getSumsq() );
+                                                                                               put( "variance", i.getValue().getVariance() );
+                                                                                           }} )
+                                                                                   )
+                                                                     )
+                                                                     .collect( Collectors.toMap( Map.Entry::getKey, Map.Entry::getValue ) );
 
         if ( l_benchmark.isEmpty() )
             return;

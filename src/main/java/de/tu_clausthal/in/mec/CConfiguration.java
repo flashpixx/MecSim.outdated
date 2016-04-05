@@ -162,7 +162,8 @@ public final class CConfiguration
                             "traffic", new CNameHashMap.CImmutable()
                             {{
                                 // cell sampling of the graph data in meter
-                                put( "cellsampling", 2 );
+                                // use 4.5 meter of the size of a car and 1.25m gap
+                                put( "cellsampling", 7 );
                                 // time sampling in seconds - each simulation step is equal to this time
                                 // the traffic simualtion defines 300s as minimum for smoothing stochastical distortions
                                 put( "timesampling", 300 );

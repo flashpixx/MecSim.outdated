@@ -87,11 +87,9 @@ public final class CInjection implements ClassFileTransformer
      * @return byte code
      *
      * @throws NotFoundException class loading error
-     * @throws ClassNotFoundException class loading error
      * @throws CannotCompileException compiling error
      * @throws IOException io exception
-     * @throws IllegalArgumentException not usable class
-     * @bug
+     * @bug class exception
      */
     private byte[] inject( final String p_classname ) throws NotFoundException, IOException, CannotCompileException
     {

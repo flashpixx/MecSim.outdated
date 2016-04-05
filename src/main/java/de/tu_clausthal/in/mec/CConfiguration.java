@@ -164,7 +164,8 @@ public final class CConfiguration
                                 // cell sampling of the graph data in meter
                                 put( "cellsampling", 2 );
                                 // time sampling in seconds - each simulation step is equal to this time
-                                put( "timesampling", 10 );
+                                // the traffic simualtion defines 300s as minimum for smoothing stochastical distortions
+                                put( "timesampling", 300 );
                                 put(
                                         "routing", new CNameHashMap.CImmutable()
                                         {{

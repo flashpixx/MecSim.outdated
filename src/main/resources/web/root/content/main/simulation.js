@@ -135,7 +135,7 @@ Simulation.prototype.afterDOMAdded = function()
         jQuery( self.generateSubID("threadsleeptime", "#") ).slider({
             value  : po.time,
             min    : 1,
-            max    : 150,
+            max    : 1500,
             change : function( po_event, po_ui )
             {
                 MecSim.ajax({

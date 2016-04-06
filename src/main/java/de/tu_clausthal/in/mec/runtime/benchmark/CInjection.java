@@ -29,7 +29,6 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import org.apache.commons.lang3.ClassUtils;
 
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
@@ -89,15 +88,14 @@ public final class CInjection implements ClassFileTransformer
      * @throws NotFoundException class loading error
      * @throws CannotCompileException compiling error
      * @throws IOException io exception
-     * @note package name must be set manually, because other classes are not loaded
+     * @warning package name must be set manually, because configuration class is not loaded
+     * @bug getDeclaredMethods returns an empty array
      */
     private byte[] inject( final String p_classname ) throws NotFoundException, IOException, CannotCompileException
     {
-        final CtClass l_class = c_pool.getCtClass( p_classname );
-
         // filtering only package classes - other classes are ignored and the binary is returned
-        final String l_classname = p_classname.replace( "/", ClassUtils.PACKAGE_SEPARATOR ).replace( "$", ClassUtils.INNER_CLASS_SEPARATOR );
-        if ( !l_classname.startsWith( "de.tu_clausthal.in.mec" ) )
+        final CtClass l_class = c_pool.getCtClass( p_classname );
+        if ( !l_class.getName().startsWith( "de/tu_clausthal/in/mec" ) )
             return l_class.toBytecode();
 
         l_class.stopPruning( false );
@@ -105,6 +103,7 @@ public final class CInjection implements ClassFileTransformer
               .filter( i -> {
                   try
                   {
+                      System.out.println( i + "   " + i.getAnnotation( IBenchmark.class ) );
                       return i.getAnnotation( IBenchmark.class ) != null;
                   }
                   catch ( final ClassNotFoundException p_exception )
@@ -123,7 +122,6 @@ public final class CInjection implements ClassFileTransformer
                   {
                   }
               } );
-
         l_class.stopPruning( true );
         return l_class.toBytecode();
     }

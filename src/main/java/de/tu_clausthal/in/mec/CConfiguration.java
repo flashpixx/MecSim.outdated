@@ -74,6 +74,7 @@ public final class CConfiguration
     private static final CConfiguration c_instance = new CConfiguration();
     /**
      * name of the main package
+     * @warning package name is also used within the injection benchmark class
      */
     private static final String c_mainpackage = "de.tu_clausthal.in.mec";
     /**

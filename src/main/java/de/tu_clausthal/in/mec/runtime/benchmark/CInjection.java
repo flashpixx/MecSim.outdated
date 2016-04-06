@@ -89,13 +89,13 @@ public final class CInjection implements ClassFileTransformer
      * @throws NotFoundException class loading error
      * @throws CannotCompileException compiling error
      * @throws IOException io exception
-     * @bug class exception
+     * @note package name must be set manually, because other classes are not loaded
      */
     private byte[] inject( final String p_classname ) throws NotFoundException, IOException, CannotCompileException
     {
         // filtering only package classes - other classes are ignored (throw an exception)
         final String l_classname = p_classname.replace( "/", ClassUtils.PACKAGE_SEPARATOR ).replace( "$", ClassUtils.INNER_CLASS_SEPARATOR );
-        if ( !l_classname.startsWith( CConfiguration.getPackage() ) )
+        if ( !l_classname.startsWith( "de.tu_clausthal.in.mec" ) )
             throw new IllegalArgumentException();
 
         final CtClass l_class = c_pool.getCtClass( l_classname );

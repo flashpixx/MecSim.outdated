@@ -75,8 +75,8 @@ public final class CInjection implements ClassFileTransformer
         }
         catch ( final NotFoundException | IOException | CannotCompileException p_exception )
         {
+            return p_binary;
         }
-        return p_binary;
     }
 
 
@@ -93,14 +93,14 @@ public final class CInjection implements ClassFileTransformer
      */
     private byte[] inject( final String p_classname ) throws NotFoundException, IOException, CannotCompileException
     {
-        // filtering only package classes - other classes are ignored (throw an exception)
+        final CtClass l_class = c_pool.getCtClass( p_classname );
+
+        // filtering only package classes - other classes are ignored and the binary is returned
         final String l_classname = p_classname.replace( "/", ClassUtils.PACKAGE_SEPARATOR ).replace( "$", ClassUtils.INNER_CLASS_SEPARATOR );
         if ( !l_classname.startsWith( "de.tu_clausthal.in.mec" ) )
-            throw new IllegalArgumentException();
+            return l_class.toBytecode();
 
-        final CtClass l_class = c_pool.getCtClass( l_classname );
         l_class.stopPruning( false );
-
         Arrays.stream( l_class.getDeclaredMethods() )
               .filter( i -> {
                   try

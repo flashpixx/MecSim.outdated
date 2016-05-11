@@ -1,0 +1,25 @@
+var a00199 =
+[
+    [ "IWayPointBase", "d8/d72/a00199.htm#a32fba3358348cd4acb985d498a6ed6aa", null ],
+    [ "IWayPointBase", "d8/d72/a00199.htm#a8338f82f8f6b6793976bb78c16a9a3f7", null ],
+    [ "getColor", "d8/d72/a00199.htm#a0fd4cb3a124027fd4478003226cd5414", null ],
+    [ "getName", "d8/d72/a00199.htm#ab04039c56f04dcb4489bc3c81fa79ca0", null ],
+    [ "getPosition", "d8/d72/a00199.htm#a7accdd792593685a19816b2f5ad13e16", null ],
+    [ "getScaledImage", "d8/d72/a00199.htm#a4f351328f429bf4df89dd9ef46e18a19", null ],
+    [ "hasFactoryGenerator", "d8/d72/a00199.htm#a06b10984f6d73679b37ac6e3f25c9677", null ],
+    [ "initializeImage", "d8/d72/a00199.htm#ad216ef70276944ac552911812dea82f9", null ],
+    [ "inspect", "d8/d72/a00199.htm#af45f5ed063a7acf29e8efc1a3779c3cc", null ],
+    [ "onClick", "d8/d72/a00199.htm#ad370abe0809fc548492e3bbcc2d64834", null ],
+    [ "paint", "d8/d72/a00199.htm#a1129ff3e414f60db3d1c4f2f5ec993dc", null ],
+    [ "step", "d8/d72/a00199.htm#ab2646e01d88f96979ada782d4dab2161", null ],
+    [ "m_color", "d8/d72/a00199.htm#a62f7ce7e61c8f8165893903c18deb4da", null ],
+    [ "m_factory", "d8/d72/a00199.htm#a3654b028fa53c8870abb53b13804054b", null ],
+    [ "m_generator", "d8/d72/a00199.htm#af14ea68b7109569ba394c7b4f83bdaad", null ],
+    [ "m_initializeimage", "d8/d72/a00199.htm#a74949ca44d56ab4d41202a7e678cdeec", null ],
+    [ "m_inspect", "d8/d72/a00199.htm#a0aa5d0742617b4191592eac490d96c46", null ],
+    [ "m_lastZoom", "d8/d72/a00199.htm#a00a88d5847a09347b57c994eab880e0a", null ],
+    [ "m_name", "d8/d72/a00199.htm#a5c52cd819dbaf003447c063fed1dc785", null ],
+    [ "m_position", "d8/d72/a00199.htm#a99003b8c2a149d3e917414902252018c", null ],
+    [ "m_scaledimage", "d8/d72/a00199.htm#a277714fa0212b188ea94340ed82721fc", null ],
+    [ "m_visible", "d8/d72/a00199.htm#ab8048188969f40a1eb2dc1743bb6a377", null ]
+];

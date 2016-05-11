@@ -1,0 +1,12 @@
+*.*
+
+!.gitignore
+!circle.yml
+!*.htm*
+!*.png
+!*.svg
+!*.css
+!*.js
+
+target/**
+

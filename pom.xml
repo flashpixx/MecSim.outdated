@@ -68,7 +68,7 @@
 
     <!-- main configuration -->
     <prerequisites>
-        <maven>3.0.0</maven>
+        <maven>3.0.1</maven>
     </prerequisites>
 
     <properties>
@@ -185,7 +185,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>2.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -230,7 +230,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.7.3</version>
+            <version>2.7.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -292,7 +292,7 @@
     <!-- main build -->
     <build>
         <!-- default goal is set to package and checking dependency updates -->
-        <defaultGoal>package versions:display-dependency-updates</defaultGoal>
+        <defaultGoal>package versions:display-dependency-updates versions:display-plugin-updates</defaultGoal>
 
         <!-- using newer build plugins -->
         <pluginManagement>
@@ -300,12 +300,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.14</version>
+                    <version>2.16</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>6.3</version>
+                            <version>6.17</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -330,7 +330,7 @@
             <plugin>
                 <groupId>sh.tak.appbundler</groupId>
                 <artifactId>appbundle-maven-plugin</artifactId>
-                <version>1.0.4</version>
+                <version>1.1.0</version>
                 <configuration>
                     <jvmOptions>
                         <jvmOption>-Xmx5g</jvmOption>
@@ -356,7 +356,7 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>1.7.8</version>
+                <version>1.7.10</version>
                 <executions>
                     <execution>
                         <id>native-windows</id>
@@ -531,7 +531,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.14</version>
+                <version>2.16</version>
                 <executions>
                     <execution>
                         <id>validate</id>

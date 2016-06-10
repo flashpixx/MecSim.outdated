@@ -72,7 +72,7 @@ public final class CMain
         l_clioptions.addOption( "loglevel", true, CCommon.getResourceString( CMain.class, "loglevel" ) );
         l_clioptions.addOption( "logfile", true, CCommon.getResourceString( CMain.class, "logfile" ) );
 
-        CommandLine l_cli = null;
+        final CommandLine l_cli;
         try
         {
             l_cli = new DefaultParser().parse( l_clioptions, p_args );
@@ -81,14 +81,15 @@ public final class CMain
         {
             System.err.println( CCommon.getResourceString( CMain.class, "parseerror", l_exception.getLocalizedMessage() ) );
             System.exit( -1 );
+            return;
         }
 
 
         // --- process CLI arguments and push configuration ------------------------------------------------------------
         if ( l_cli.hasOption( "help" ) )
         {
-            final HelpFormatter l_formatter = new HelpFormatter();
-            l_formatter.printHelp( ( new java.io.File( CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() ).getName() ), l_clioptions );
+            new HelpFormatter().printHelp(
+                    new java.io.File( CMain.class.getProtectionDomain().getCodeSource().getLocation().getPath() ).getName(), l_clioptions );
             System.exit( 0 );
         }
 
